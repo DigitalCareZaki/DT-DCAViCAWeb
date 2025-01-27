@@ -1,0 +1,22 @@
+'use server';
+
+import type { ServerComponent, UserRole } from '@types';
+import Form from './Calendar';
+import { getCalendar } from '@service';
+
+const Form1: ServerComponent = async () => {
+
+  var data = await getCalendar();
+  console.log(data);
+  // sort the data.data.slots
+  data.data.slots.sort((a, b) => {
+    return a.day - b.day;
+  });
+  return (
+    <>
+      <Form data={data.data}></Form>
+    </>
+  );
+};
+
+export default Form1;

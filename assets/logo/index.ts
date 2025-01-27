@@ -1,0 +1,14 @@
+export { default as logoPrimary } from './logo-primary.svg';
+export { default as logoSecondary } from './logo-secondary.svg';
+export { default as logoDigitalCare } from './logo-digital-care.svg';
+export { default as dashboardIcon } from './dashboard-icon.svg';
+export { default as userIcon } from './user-icon.svg';
+export { default as apointmentIcon } from './apointment-icon.svg';
+export { default as chatIcon } from './chat-icon.svg';
+export { default as messageIcon } from './messages-icon.svg';
+export { default as settingIcon } from './setting-icon.svg';
+export { default as hospitalIcon } from './hospital.svg';
+export { default as logoAvicaBlue } from './logo-avica-blue.svg';
+export { default as logoAvicaOrange } from './logo-avica.orange.svg';
+export { default as logoAvicaPatient } from './logo-avica-patient.svg';
+export { default as logoAvicaAdmin } from './logo-avica-admin.svg';

@@ -1,0 +1,155 @@
+'use client';
+
+import { useRef, useEffect } from 'react';
+import { io, type Socket } from 'socket.io-client';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  handleEventReducer,
+  addToParticipantsReducer,
+  addToChatsReducer,
+  setToRoomChatsReducer,
+  showModalReducer,
+  setNewNotificationsReducer,
+} from '@slice';
+
+import type { ClientComponentProps, ChildrenComponentProps } from '@types';
+import type {
+  StoreChatState,
+  ReduxProps,
+  StoreSocketState,
+} from '@store-types';
+
+const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
+  children,
+  user,
+}) => {
+  const isDynamicMessage = useRef<boolean>(false);
+  const { selectedRooms } = useSelector<ReduxProps, StoreChatState>(
+    (state) => state.chats
+  );
+
+  const { emit: emitters } = useSelector<ReduxProps, StoreSocketState>(
+    (state) => state.socket
+  );
+
+  const socket = useRef<Socket | null>(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    // Haris
+    // wss://mobility-health-backend-production.up.railway.app
+
+    // Softsols
+    // wss://avica.up.railway.app
+
+    socket.current = io(
+      'wss://avica.up.railway.app',
+      {
+        transports: ['websocket'],
+        autoConnect: false,
+        query: { ...user },
+      }
+    );
+
+    if (!socket.current.connected) {
+      socket.current.connect();
+
+      socket.current.on(`${user.id}:recieve_notification`, (payload) => {
+        // console.log('payload: ', payload);
+        // console.log('notification recieved');
+        dispatch(setNewNotificationsReducer({ data: payload }));
+        dispatch(
+          showModalReducer({
+            type: 'SUCCESS',
+            message: 'You recieved new notification',
+            show: true,
+          })
+        );
+      });
+    }
+
+    return () => {
+      // unmounting
+    };
+  }, [user]);
+
+  useEffect(() => {
+    if (!socket.current) return;
+    if (!emitters?.event?.length) return;
+
+    if (['appointment', 'message'].includes(emitters.event)) {
+      socket.current.emit(emitters.event, emitters.payload);
+    }
+
+    if (
+      ['meeting-controlls', 'meeting-chat'].includes(emitters.event) &&
+      emitters.payload
+    ) {
+      socket.current.emit(
+        `${emitters.payload.appointment_id}:${emitters.event}`,
+        emitters.payload
+      );
+
+      // console.log(
+      //   'emitting: ',
+      //   `${emitters.payload.appointment_id}:${emitters.event}`
+      // );
+    }
+
+    if (emitters.event === 'room-init') {
+      socket.current.emit(emitters.event, emitters.payload);
+    }
+
+    if (emitters.event === 'send_notification') {
+      socket.current.emit(emitters.event, emitters.payload);
+    }
+
+    if (!isDynamicMessage.current) {
+      socket.current.on(
+        `${emitters.payload?.appointment_id}:totalParticiapnts`,
+        (data) => {
+          // console.log('totalparticipants');
+          dispatch(addToParticipantsReducer({ data }));
+        }
+      );
+
+      socket.current.on(
+        `${emitters.payload?.appointment_id}:meeting-chat-client`,
+        (data: any) => {
+          // console.log('client-chat: ', data);
+          dispatch(addToChatsReducer({ chat: data }));
+        }
+      );
+    }
+
+    dispatch(handleEventReducer({ event: null, payload: null }));
+    isDynamicMessage.current = true;
+
+    // return () => {
+    //   isDynamicMessage.current = false;
+    // };
+
+  }, [emitters]);
+
+  useEffect(() => {
+    if (!socket.current) return;
+    if (!selectedRooms?.id) return;
+
+    socket.current.on(selectedRooms.id, (data) => {
+      // console.log('room-chats: ', data);
+      dispatch(
+        setToRoomChatsReducer({
+          key: selectedRooms?.id,
+          data: data[selectedRooms?.id],
+        })
+      );
+    });
+  }, [selectedRooms]);
+
+  return <>{children}</>;
+};
+
+export default WebSocketProvider;
