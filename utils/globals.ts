@@ -1,11 +1,17 @@
 String.prototype.convertURI = function (internal: boolean = false) {
   if (internal) {
-    return `https://avica-frontend.vercel.app${this.toString()}`;
+    // dev frontend url
+    return `https://avica-web.vercel.app${this.toString()}`;
+    
+    // return `https://avica-frontend.vercel.app${this.toString()}`;
     // return `https://mobility-health-frontend.vercel.app${this.toString()}`;
     // return `http://localhost:3000${this.toString()}`;
   }
 
-  return `https://avica.up.railway.app${this.toString()}`;
+  // return `https://avica.up.railway.app${this.toString()}`;
+  
+  // dev backend url
+  return `https://avica-dev.up.railway.app${this.toString()}`;
   // return `https://mobility-health-backend-production.up.railway.app${this.toString()}`;
   // return `http://localhost:8080${this.toString()}`;
 };
