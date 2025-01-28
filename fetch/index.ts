@@ -8,6 +8,7 @@ export default async function fetchWrapper(
   init?: RequestInit | undefined,
   dynamicHeader?: boolean
 ): Promise<Response> {
+  console.log('fetchWrapper API >>>>>>>>>> ', input);
   const requestHeaders = new Headers();
   const clientHeaders = headers();
 
