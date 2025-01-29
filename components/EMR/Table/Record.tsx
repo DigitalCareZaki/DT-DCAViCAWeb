@@ -19,6 +19,7 @@ const Record: ClientComponentProps<any> = ({
   created,
   attachment,
   onDelete,
+  showPatientNameColumn,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -72,6 +73,18 @@ const Record: ClientComponentProps<any> = ({
       <td className="px-6 py-4">{title}</td>
       <td className="px-6 py-4">{family_history ?? 'N/A'}</td> */}
 
+      {/* Patient Name */}
+      {showPatientNameColumn && (
+        <td className="px-6 py-4">
+          {getName({
+            first_name: patient.user.first_name,
+            last_name: patient.user.last_name,
+            middle_name: patient.user.middle_name,
+          })}
+        </td>
+      )}
+
+
       {/* Title */}
       <td className="px-6 py-4">{title}</td>
       {/* Description */}
@@ -82,6 +95,10 @@ const Record: ClientComponentProps<any> = ({
       <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td>
       {/* Attachment */}
       <td className="px-6 py-4">{attachment ? 'Yes' : 'No'}</td>
+
+      {/* Created At */}
+      <td className="px-6 py-4">{new Date(created).toLocaleDateString() || 'N/A'}</td>
+
       {/* Actions (Download and Delete Buttons) */}
       <td className="flex space-x-4 px-6 py-4">
         {/* Download Button */}

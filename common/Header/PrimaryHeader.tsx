@@ -78,11 +78,24 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
             Patient Education
           </span>
         </Link>
-        <Link href={getPath('/emr/add')}>
+        {/* <Link href={getPath('/emr/add')}>
           <span className="text-link-primary text-lg 2xl:text-2xl">
             Lab Reports
           </span>
-        </Link>
+        </Link> */}
+        {user.type == 'DOCTOR' ? (
+          <Link href={getPath('/emr')}>
+            <span className="text-link-primary text-lg 2xl:text-2xl">
+              Lab Reports
+            </span>
+          </Link>
+        ) : (
+          <Link href={getPath('/emr/add')}>
+            <span className="text-link-primary text-lg 2xl:text-2xl">
+              Lab Reports
+            </span>
+          </Link>
+        )}
         {user.type !== 'PATIENT' && (
           <Link passHref href={getPath('/rag')}>
             <span className="text-link-primary text-lg 2xl:text-2xl">RAG</span>
