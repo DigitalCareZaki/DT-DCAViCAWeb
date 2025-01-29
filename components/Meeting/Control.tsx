@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-
 import { FaPhone } from '@react-icons/all-files/fa/FaPhone';
 import { FaMicrophone } from '@react-icons/all-files/fa/FaMicrophone';
 import { FaHandPaper } from '@react-icons/all-files/fa/FaHandPaper';
@@ -10,7 +9,7 @@ import { MdCameraAlt } from '@react-icons/all-files/md/MdCameraAlt';
 import { MdOutlineScreenShare } from "react-icons/md";
 import { MdShowChart } from '@react-icons/all-files/md/MdShowChart';
 import { HiDotsVertical } from '@react-icons/all-files/hi/HiDotsVertical';
-
+import { FaInfoCircle } from '@react-icons/all-files/fa/FaInfoCircle';
 import {
   toggleDoctorAppointmentPatientVitalsReducer,
   toggleMicReducer,
@@ -25,10 +24,30 @@ import type { ControlProps } from './types';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+// Modal Component
+const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; id: string }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="w-96 rounded-lg bg-white p-6">
+        <h2 className="text-lg font-bold">Modal Title</h2>
+        <p>Meeting ID: {id}</p>
+        <button
+          onClick={onClose}
+          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Control: ClientComponentProps<ControlProps> = ({ id }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [user] = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   const [controlls, setControlls] = useState({
     muteMicrophone: false,
@@ -131,6 +150,8 @@ const Control: ClientComponentProps<ControlProps> = ({ id }) => {
       <button title="Options" className="meeting-bar-btn ">
         <HiDotsVertical size={16} />
       </button>
+
+
       <button
         onClick={handleShowVitals}
         title="Patient Vitals"
@@ -138,6 +159,19 @@ const Control: ClientComponentProps<ControlProps> = ({ id }) => {
       >
         <MdShowChart size={16} />
       </button>
+
+      {/* New Button for Modal */}
+      <button
+        // onClick={handleShowVitals}
+        // title="Patient Vitals"
+        onClick={() => setIsModalOpen(true)}
+        title="More Info"
+        className="meeting-bar-btn"
+      >
+        {/* <MdShowChart size={16} /> */}
+        <FaInfoCircle size={16} />
+      </button>
+
       <button
         onClick={handleToggleMic}
         title="Microphone"
@@ -185,6 +219,8 @@ const Control: ClientComponentProps<ControlProps> = ({ id }) => {
       >
         <FaPhone size={16} />
       </button>
+      {/* Modal */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} id={id} />
     </div>
   );
 };

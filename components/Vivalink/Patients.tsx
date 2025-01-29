@@ -57,6 +57,48 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
   );
 
   return (
+    // <>
+    //   <div className="flex w-full flex-wrap items-center justify-center gap-6">
+    //     <RenderPatients
+    //       patients={data}
+    //       selectedPatient={selectedPatient}
+    //       handleSetSelectedPatient={handleSetSelectedPatient}
+    //     />
+    //   </div>
+    //   {
+    //     loading && (
+    //       <div className="flex items-center justify-center">
+    //         <div className="loader"></div>
+    //         Loading, Please Wait...
+    //       </div>
+    //     )
+    //   }
+    //   <div className="flex items-center justify-center">
+    //     <div style={{
+    //       width: '90vw',
+    //     }}>
+    //       {selectedPatient.ecg && selectedPatient.ecg.length && (
+    //         <div style={
+    //           {
+    //             overflowX: 'auto',
+    //             width: '100%',
+    //           }
+    //         }>
+    //           <ECGPlot
+    //             data={
+    //               // combine all the ecg data into a single array
+    //               selectedPatient.ecg.reduce(
+    //                 (acc, curr) => [...acc, ...curr],
+    //                 []
+    //               )
+    //             }
+    //           ></ECGPlot>
+    //         </div>
+
+    //       )}
+    //     </div>
+    //   </div>
+    // </>
     <>
       <div className="flex w-full flex-wrap items-center justify-center gap-6">
         <RenderPatients
@@ -77,25 +119,34 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
         <div style={{
           width: '90vw',
         }}>
-          {selectedPatient.ecg && selectedPatient.ecg.length && (
-            <div style={
-              {
-                overflowX: 'auto',
-                width: '100%',
-              }
-            }>
-              <ECGPlot
-                data={
-                  // combine all the ecg data into a single array
-                  selectedPatient.ecg.reduce(
-                    (acc, curr) => [...acc, ...curr],
-                    []
-                  )
+          <div style={{ minWidth: '200px', padding: '1rem', borderRight: '1px solid #ccc' }}>
+            {selectedPatient.name && (
+              <>
+                <p><strong>Sampling Frequency:</strong> {selectedPatient.samplingFrequency}</p>
+                <p><strong>Time Per Point:</strong> {selectedPatient.timePerPoint}</p>
+              </>
+            )}
+          </div>
+          {
+            selectedPatient.ecg && selectedPatient.ecg.length && (
+              <div style={
+                {
+                  overflowX: 'auto',
+                  width: '100%',
                 }
-              ></ECGPlot>
-            </div>
-
-          )}
+              }>
+                <ECGPlot
+                  data={
+                    // combine all the ecg data into a single array
+                    selectedPatient.ecg.reduce(
+                      (acc, curr) => [...acc, ...curr],
+                      []
+                    )
+                  }
+                ></ECGPlot>
+              </div>
+            )
+          }
         </div>
       </div>
     </>
