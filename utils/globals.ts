@@ -1,12 +1,12 @@
 String.prototype.convertURI = function (internal: boolean = false) {
   if (internal) {
     // dev frontend url
-    return `https://avica-web.vercel.app${this.toString()}`;
+    // return `https://avica-web.vercel.app${this.toString()}`;
     
     // live frontend url
     // return `https://avica-frontend.vercel.app${this.toString()}`;
     // return `https://mobility-health-frontend.vercel.app${this.toString()}`;
-    // return `http://localhost:3000${this.toString()}`;
+    return `http://localhost:3000${this.toString()}`;
   }
 
   // live backend url
