@@ -10,6 +10,7 @@ import { MdOutlineScreenShare } from "react-icons/md";
 import { MdShowChart } from '@react-icons/all-files/md/MdShowChart';
 import { HiDotsVertical } from '@react-icons/all-files/hi/HiDotsVertical';
 import { FaInfoCircle } from '@react-icons/all-files/fa/FaInfoCircle';
+import { InputBasic, ButtonPrimary } from '@common';
 import {
   toggleDoctorAppointmentPatientVitalsReducer,
   toggleMicReducer,
@@ -18,7 +19,8 @@ import {
   toggleScreenSharingReducer,
 } from '@slice';
 import { useUser } from '@selectors';
-
+import { useForm } from 'react-hook-form';
+import { vestResolver } from '@hookform/resolvers/vest';
 import type { ClientComponentProps } from '@types';
 import type { ControlProps } from './types';
 import { useState } from 'react';
@@ -27,17 +29,151 @@ import { twMerge } from 'tailwind-merge';
 // Modal Component
 const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; id: string }) => {
   if (!isOpen) return null;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    getValues,
+  } = useForm({
+    // resolver: vestResolver(),
+  });
+  const onSubmit = () => {
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 rounded-lg bg-white p-6">
-        <h2 className="text-lg font-bold">Modal Title</h2>
-        <p>Meeting ID: {id}</p>
-        <button
-          onClick={onClose}
-          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+      <div className="w-1/3 rounded-lg bg-white">
+        {/* <h2 className="text-lg font-bold">Modal Title</h2> */}
+        {/* <p>Meeting ID: {id}</p> */}
+
+        <div className="rounded-xl bg-white p-4 relative">
+          {/* Cancel Icon */}
+          <button
+            onClick={onClose} // Call the close function when clicked
+            className="absolute top-3 right-3 text-gray-500 hover:text-black"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="h-full w-full rounded-b-2xl text-lg"
         >
-          Close
-        </button>
+          <div className="flex h-fit w-full flex-col gap-3 rounded-2xl p-5">
+            <div>
+              <span className="text-xl font-semibold text-black">
+                AViCA Teleconsultation Report
+              </span>
+            </div>
+            <div className="flex w-full flex-col gap-4 p-4">
+              <InputBasic
+                name="observations"
+                placeholder="Enter Observations"
+                defaultBorder
+                // inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
+                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+                label="Observations"
+                // inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+                hideInfo
+                labelClassName="text-black text-lg"
+                hookProps={register('observations')}
+                error={!!errors?.Observations}
+                // errorMessage={errors?.Observations?.message}
+                errorClassName="text-rose-200"
+              />
+              <InputBasic
+                name="diagnosis"
+                placeholder="Enter Diagnosis"
+                defaultBorder
+                // inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
+                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+                label="Diagnosis"
+                // inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+                hideInfo
+                labelClassName="text-black text-lg"
+                hookProps={register('diagnosis')}
+                error={!!errors?.diagnosis}
+                // errorMessage={errors?.description?.message}
+                errorClassName="text-rose-200"
+              />
+              {/* </div> */}
+              {/* <div className="flex w-full flex-col gap-4 p-4"> */}
+              <InputBasic
+                name="prescribedMedications"
+                placeholder="Prescribed Medications"
+                defaultBorder
+                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+                label="Prescribed Medications"
+                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+                hideInfo
+                labelClassName="text-black text-lg"
+                hookProps={register("prescribedMedications")}
+                error={!!errors?.prescribedMedications}
+                errorClassName="text-rose-200"
+              />
+              <InputBasic
+                name="procedureRecommended"
+                placeholder="Procedure Recommended"
+                defaultBorder
+                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+                label="Procedure Recommended"
+                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+                hideInfo
+                labelClassName="text-black text-lg"
+                hookProps={register("procedureRecommended")}
+                error={!!errors?.procedureRecommended}
+                errorClassName="text-rose-200"
+              />
+              <InputBasic
+                name="followupDate"
+                placeholder="Follow Up Date"
+                defaultBorder
+                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+                label="Follow Up Date"
+                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+                hideInfo
+                labelClassName="text-black text-lg"
+                hookProps={register("followupDate")}
+                error={!!errors?.followupDate}
+                errorClassName="text-rose-200"
+              />
+              {/* </div> */}
+              <div className="w-full mt-8">
+                {/* <ButtonPrimary
+                type="button"
+                onClick={onClose}
+                className="h-14 text-lg w-[60%] doctor:bg-fuchsia-500 patient:bg-fuchsia-500 nurse:bg-fuchsia-500"
+                name="Close"
+              // loading={loading}
+              /> */}
+                <ButtonPrimary
+                  type="submit"
+                  // className="h-14 text-lg w-[60%] doctor:bg-fuchsia-500 patient:bg-fuchsia-500 nurse:bg-fuchsia-500"
+                  className="h-14 text-lg w-[50%] !mx-auto"
+                  name="Submit"
+                // loading={loading}
+                />
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -151,15 +287,6 @@ const Control: ClientComponentProps<ControlProps> = ({ id }) => {
         <HiDotsVertical size={16} />
       </button>
 
-
-      <button
-        onClick={handleShowVitals}
-        title="Patient Vitals"
-        className="meeting-bar-btn"
-      >
-        <MdShowChart size={16} />
-      </button>
-
       {/* New Button for Modal */}
       <button
         // onClick={handleShowVitals}
@@ -171,6 +298,16 @@ const Control: ClientComponentProps<ControlProps> = ({ id }) => {
         {/* <MdShowChart size={16} /> */}
         <FaInfoCircle size={16} />
       </button>
+
+      <button
+        onClick={handleShowVitals}
+        title="Patient Vitals"
+        className="meeting-bar-btn"
+      >
+        <MdShowChart size={16} />
+      </button>
+
+
 
       <button
         onClick={handleToggleMic}
