@@ -41,7 +41,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
 
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-6">
-      <div className="mb-4 w-full sm:mb-0 sm:w-auto">
+      {/* <div className="mb-4 w-full sm:mb-0 sm:w-auto">
         <InputBasic
           label=""
           placeholder="Search for the records"
@@ -50,7 +50,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
           loading={loading}
           onChange={handleSearch}
         />
-      </div>
+      </div> */}
       <div className="flex w-full flex-wrap gap-4 sm:w-auto">
         {user.role === 'PATIENT' && (
           <>

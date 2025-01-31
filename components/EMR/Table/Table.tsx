@@ -13,13 +13,7 @@ const Table: ClientComponent = () => {
   const pathname = usePathname()
   console.log('pathName >>', pathname);
 
-  const { records } = useSelector<ReduxProps, StoreEMRState>(
-    (state) => state.emr
-  );
-  const showPatientNameColumn = pathname === '/doctor/emr';
-
-
-  console.log('records: ', records);
+  const { records } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
