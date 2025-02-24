@@ -150,3 +150,5 @@ export { default as createTechnicalSupportQuery } from './technicalSupport/creat
 
 // stats - for doctor and nurse
 export { default as getAppointmentStats } from './doctors/getAppointmentStats';
+
+export { default as getAllPatientsReports } from './emr/getAllPatientsReports';
