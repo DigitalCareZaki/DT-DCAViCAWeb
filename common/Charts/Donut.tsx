@@ -62,7 +62,8 @@ export default function Donut({ title, values }: DonutProps): JSX.Element {
           width={200}
           height={150}
         />
-        <p>{values.filter((val) => val).length}</p>
+        {/* <p>{values.filter((val) => val).length}</p> */}
+        <p>{values.reduce((acc, num) => acc + num, 0)}</p>
       </div>
     </Suspense>
   );

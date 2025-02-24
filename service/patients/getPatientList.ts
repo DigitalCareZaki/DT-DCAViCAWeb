@@ -10,7 +10,7 @@ async function getPatientList(
   const res = await fetch(`/api/v1/web/${userType}/patients`.convertURI());
 
   const data = await res.json();
-
+  console.log(data, '=====>>data');
   return {
     data: data,
     success: res.ok,

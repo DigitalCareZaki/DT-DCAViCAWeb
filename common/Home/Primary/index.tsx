@@ -16,7 +16,7 @@ const HomePrimary: ServerComponentProps<Props> = async ({
 }) => {
   const userType = await getUserTypeHeaders();
   const data = await getPatientList(userType?.toLowerCase());
-
+  console.log(data, '===>>> outside');
   if (typeof userType !== 'string') return <></>;
 
   if (!data.success) return <></>;

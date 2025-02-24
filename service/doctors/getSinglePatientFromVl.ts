@@ -5,11 +5,16 @@ import fetch from '@fetch';
 import type { GetSinglePatientECGData } from '@types-services';
 
 async function getSingleVlPatient(
-  patchSn: string
+  patchSn: string,
+  duration: string = '1 minute'
 ): Promise<GetSinglePatientECGData> {
-  const res = await fetch(`/api/v1/vl/patients/${patchSn}`.convertURI(), {
-    cache: 'no-store',
-  });
+  console.log(duration, '======>duration');
+  const res = await fetch(
+    `/api/v1/vl/patients/${patchSn}?duration=${duration}`.convertURI(),
+    {
+      cache: 'no-store',
+    }
+  );
 
   const data = await res.json();
 

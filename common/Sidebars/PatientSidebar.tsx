@@ -250,7 +250,7 @@ const Sidebar: ClientComponent = () => {
             className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
           >
             <BsFileText size={18} />
-            {sidebar && <span className="text-xs">Reports</span>}
+            {sidebar && <span className="text-xs">EMR</span>}
           </Link>
         </div>
         <div

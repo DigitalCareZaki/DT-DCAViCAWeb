@@ -159,7 +159,7 @@ const Form: ClientComponent = () => {
             right: -1000,
           }}
           onSubmit={onSubmit}
-          className="xs:w-[26rem] absolute right-0 top-24 flex h-[35rem] w-full max-w-[26rem] flex-col justify-between rounded-lg rounded-r-none border bg-white p-6 shadow-2xl transition"
+          className="xs:w-[26rem] absolute right-0 top-24 flex h-[35rem] w-full max-w-[26rem] flex-col  rounded-lg rounded-r-none border bg-white p-6 shadow-2xl transition"
         >
           <>
             <div className="w-fit">

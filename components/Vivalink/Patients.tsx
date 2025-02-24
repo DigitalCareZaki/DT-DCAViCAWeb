@@ -20,8 +20,56 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     timePerPoint: 0,
     samplingFrequency: 0,
   });
-
+  const [selectedDuration, setSelectedDuration] = useState("");
   const [loading, setLoading] = useState(false);
+  const durations = {
+    duration: ["1 minute", "2 minute", "3 minute"],
+
+  };
+
+
+  // const getDuration = async (e: any) => {
+  //   debugger;
+  //   const duration = e.target.value;
+  //   setSelectedDuration(duration);
+  //   const patchSn = data[name]?.[0]?.replace('/', '%2F');
+  //     if (!patchSn) return;
+  //     const res = await getDoctorSinglePatientFromVl(patchSn, duration);
+  // };
+  const getDuration = async (e: any) => {
+    const duration = e.target.value;
+    setSelectedDuration(duration);
+
+    // Make sure a patient is selected
+    if (!selectedPatient.name) {
+      console.error("No patient selected!");
+      return;
+    }
+
+    // Retrieve patchSn correctly
+    const patchSn = data[selectedPatient.name]?.[0]?.replace('/', '%2F');
+
+    if (!patchSn) {
+      console.error("Patch SN not found!");
+      return;
+    }
+
+    // Call API with the correct patchSn and duration
+    try {
+      const res = await getDoctorSinglePatientFromVl(patchSn, duration);
+      console.log("API Response:", res);
+      setSelectedPatient({
+        name: selectedPatient.name,
+        ecg: res.data.ecg,
+        samplingFrequency: res.data.samplingFrequency,
+        timePerPoint: res.data.timePerPoint,
+      });
+
+    } catch (error) {
+      console.error("Error fetching patient data:", error);
+    }
+  };
+
   const handleSetSelectedPatient = useCallback(
     async (name: string) => {
       if (name === selectedPatient.name) return;
@@ -37,9 +85,9 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
 
       const patchSn = data[name][0]?.replace('/', '%2F');
 
-      if (!patchSn) return;
 
-      const res = await getDoctorSinglePatientFromVl(patchSn);
+      if (!patchSn) return;
+      const res = await getDoctorSinglePatientFromVl(patchSn, '1 minute');
 
       if (!res.success) return;
 
@@ -55,6 +103,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     },
     [data]
   );
+
 
   return (
     <>
@@ -84,6 +133,26 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                 width: '100%',
               }
             }>
+              <div className="mt-5 mb-5 flex items-center gap-3">
+                <label htmlFor="duration" className="font-semibold text-gray-700">
+                  Select Duration:
+                </label>
+                <select
+                  id="duration"
+                  className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={selectedDuration}
+                  onChange={getDuration}
+                >
+                  <option value="" disabled>
+                    Select a duration
+                  </option>
+                  {durations.duration.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <ECGPlot
                 data={
                   // combine all the ecg data into a single array
@@ -93,10 +162,15 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                   )
                 }
               ></ECGPlot>
+
+
+
             </div>
+
 
           )}
         </div>
+
       </div>
     </>
   );
