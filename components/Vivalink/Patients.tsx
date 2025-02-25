@@ -20,7 +20,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     timePerPoint: 0,
     samplingFrequency: 0,
   });
-  const [selectedDuration, setSelectedDuration] = useState("");
+  const [selectedDuration, setSelectedDuration] = useState("1 minute");
   const [loading, setLoading] = useState(false);
   const durations = {
     duration: ["1 minute", "2 minute", "3 minute"],
@@ -176,7 +176,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
               </>
             )}
           </div>
-          {
+          {/* {
             selectedPatient.ecg && selectedPatient.ecg.length && (
               <div style={
                 {
@@ -195,7 +195,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                 ></ECGPlot>
               </div>
             )
-          }
+          } */}
           {selectedPatient.ecg && selectedPatient.ecg.length && (
             <div style={
               {

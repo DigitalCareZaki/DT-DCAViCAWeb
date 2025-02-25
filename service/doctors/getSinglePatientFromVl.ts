@@ -6,7 +6,7 @@ import type { GetSinglePatientECGData } from '@types-services';
 
 async function getSingleVlPatient(
   patchSn: string,
-  duration: string = '1 minute'
+  duration: string
 ): Promise<GetSinglePatientECGData> {
   console.log(duration, '======>duration');
   const res = await fetch(
