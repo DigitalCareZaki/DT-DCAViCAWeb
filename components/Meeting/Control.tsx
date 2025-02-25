@@ -28,7 +28,6 @@ import { twMerge } from 'tailwind-merge';
 
 // Modal Component
 const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; id: string }) => {
-  if (!isOpen) return null;
 
   const {
     register,
@@ -39,8 +38,10 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
   } = useForm({
     // resolver: vestResolver(),
   });
-  const onSubmit = () => {
-  }
+  const onSubmit = () => { }
+
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-1/3 rounded-lg bg-white">
