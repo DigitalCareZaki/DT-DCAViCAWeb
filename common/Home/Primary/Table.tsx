@@ -8,7 +8,7 @@ import type { ServerComponentProps } from '@types';
 import type { TableProps } from './types';
 
 const Table: ServerComponentProps<TableProps> = async ({ userType, data }) => {
-  console.log(data, '===>>> table server');
+
   return (
     <div className="relative overflow-x-auto pb-8 shadow-md sm:rounded-lg">
       <ServerTable
