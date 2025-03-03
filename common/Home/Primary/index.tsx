@@ -28,8 +28,8 @@ const HomePrimary: ServerComponentProps<Props> = async ({
 
       {/* Header and Table Section */}
       <div className="flex h-auto w-full flex-col gap-8 text-white">
-        <Header data={data.data} />
-        <Table userType={userType.toLowerCase()} data={data.data} />
+        <Header data={data?.data} />
+        <Table userType={userType.toLowerCase()} data={data?.data} />
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Table: ServerComponentProps<TableProps> = async ({ userType, data }) => {
         heads={[
           'Patient Name',
           'Patient Email',
-          'EMR',
+          // 'EMR',
           'Glucose',
           'Blood Pressure',
           'Temperature',
