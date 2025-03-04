@@ -9,7 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.5",
     "@hookform/resolvers": "^3.3.2",
+    "@mui/icons-material": "^6.4.6",
+    "@mui/material": "^6.4.6",
+    "@mui/styled-engine-sc": "^6.4.6",
+    "@mui/x-data-grid": "^7.27.2",
     "@react-icons/all-files": "^4.1.0",
     "@react-pdf/renderer": "^4.1.5",
     "@reduxjs/toolkit": "^2.0.1",
@@ -43,6 +50,7 @@
     "slate-hyperscript": "^0.100.0",
     "slate-react": "^0.106.0",
     "socket.io-client": "^4.7.5",
+    "styled-components": "^6.1.15",
     "tailwind-datepicker-react": "^1.4.3",
     "tailwind-merge": "^2.2.0",
     "vest": "^5.4.0",
