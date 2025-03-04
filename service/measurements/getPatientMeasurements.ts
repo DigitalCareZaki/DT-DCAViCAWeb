@@ -22,7 +22,7 @@ async function getPatientsMeasurements(
   const url = `/api/v1/web/measurements/patients/${id}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
   const res = await fetch(url.convertURI());
-  console.log(res, '==========>>>res');
+  console.log(res, '==========>>>res Sameer');
   // const res = await fetch(
   //   `/api/v1/web/measurements/patients/${id}${type === 'ALL' ? '' : `?type=${type}`}`.convertURI()
   // );

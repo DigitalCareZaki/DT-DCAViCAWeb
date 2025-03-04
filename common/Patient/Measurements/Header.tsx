@@ -72,54 +72,67 @@ const Header: ClientComponentProps<{
                 />
               </div>
             )}
-            <ExportButton
-              data={data.map((el) => ({
-                ...el,
-                patient: `${el.patient.user.first_name} ${el.patient.user.last_name}`,
-                doctor: `${el.doctor?.user?.first_name ?? 'N/A'} ${el.doctor?.user.last_name}`,
-                nurse: `${el.nurse?.user?.first_name ?? 'N/A'} ${el.nurse?.user.last_name}`,
-                created_at: new Date(el.created_at).toLocaleTimeString(),
-              }))}
-              headers={[
-                {
-                  label: 'Title',
-                  key: 'title',
-                },
-                {
-                  label: 'Status',
-                  key: 'status',
-                },
-                {
-                  label: 'Mode',
-                  key: 'mode',
-                },
-                {
-                  label: 'Type',
-                  key: 'type',
-                },
-                {
-                  label: 'Values',
-                  key: 'values',
-                },
-                {
-                  label: 'Unit',
-                  key: 'unit',
-                },
-                {
-                  label: 'Patient',
-                  key: 'patient',
-                },
-                {
-                  label: 'Doctor',
-                  key: 'doctor',
-                },
-                {
-                  label: 'Nurse',
-                  key: 'nurse',
-                },
-              ]}
-              filename="RAG Data"
-            />
+
+            {Array.isArray(data) && data.length > 0 &&
+              <ExportButton
+                // data={data.map((el) => ({
+                //   ...el,
+                //   patient: `${el.patient.user.first_name} ${el.patient.user.last_name}`,
+                //   doctor: `${el.doctor?.user?.first_name ?? 'N/A'} ${el.doctor?.user.last_name}`,
+                //   nurse: `${el.nurse?.user?.first_name ?? 'N/A'} ${el.nurse?.user.last_name}`,
+                //   created_at: new Date(el.created_at).toLocaleTimeString(),
+                // }))}
+
+                data={data.map((el) => ({
+                  ...el,
+                  patient: `N/A`,
+                  doctor: `N/A`,
+                  nurse: `N/A`,
+                  created_at: new Date(el.created_at).toLocaleTimeString(),
+                }))}
+
+                headers={
+                  [
+                    {
+                      label: 'Title',
+                      key: 'title',
+                    },
+                    {
+                      label: 'Status',
+                      key: 'status',
+                    },
+                    {
+                      label: 'Mode',
+                      key: 'mode',
+                    },
+                    {
+                      label: 'Type',
+                      key: 'type',
+                    },
+                    {
+                      label: 'Values',
+                      key: 'values',
+                    },
+                    {
+                      label: 'Unit',
+                      key: 'unit',
+                    },
+                    {
+                      label: 'Patient',
+                      key: 'patient',
+                    },
+                    {
+                      label: 'Doctor',
+                      key: 'doctor',
+                    },
+                    {
+                      label: 'Nurse',
+                      key: 'nurse',
+                    },
+                  ]}
+                filename="RAG Data"
+              />
+            }
           </div>
         </div>
       </div>

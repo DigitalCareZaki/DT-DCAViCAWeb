@@ -14,6 +14,8 @@ import type { ClientComponentProps, PatientMeasurementProps } from '@types';
 const Table: ClientComponentProps<TableProps> = ({ data, user }) => {
   const dispatch = useDispatch();
 
+  console.log('data  Table ClientComponentProps>>', data);
+
   const setData = (measurements: PatientMeasurementProps[]) =>
     dispatch(setPatientMeasurementListingReducer({ measurements }));
 

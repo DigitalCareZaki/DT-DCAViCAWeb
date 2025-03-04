@@ -18,6 +18,9 @@ const Measurements: ServerComponentProps<Props> = async ({
   leftPadding,
   hideActions, user,
 }) => {
+
+  console.log('Measurements >>', data)
+
   return (
     <div
       className={twMerge(

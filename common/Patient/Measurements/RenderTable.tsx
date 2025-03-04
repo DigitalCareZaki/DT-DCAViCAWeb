@@ -27,27 +27,27 @@ const RenderStatus = {
 const RenderTable: ClientComponentProps<{
   user: UserProps;
 }> = ({ user }) => {
-  var { patientMeasurementListing } = useSelector<
-    ReduxProps,
+  var { patientMeasurementListing } = useSelector<ReduxProps,
     StorePatientState
   >((state) => state.patients);
 
-  const [data, setData] = useState<PatientMeasurementProps[]>([]);
-  const [selectedMeasurement, setSelectedMeasurement] = useState<PatientMeasurementProps | null>(null);
+  const [data, setData] = useState<any>([]);
+  const [selectedMeasurement, setSelectedMeasurement] = useState<any>(null);
+
   useEffect(() => {
     console.log("upserted");
-    var newData = patientMeasurementListing.map((item) => {
-      return item;
-    });
+    // var newData = patientMeasurementListing.map((item) => {
+    //   return item;
+    // });
 
-    setData(newData);
+    setData(patientMeasurementListing.data);
   }, [patientMeasurementListing]);
   const [forceRender, setForceRender] = useState(false);
-  console.log("Render triggered");
+  console.log("Render triggered", patientMeasurementListing);
 
   return (
     <>
-      {data.map((el) => (
+      {data?.map((el: any) => (
         <tr
           key={el.id}
           className="cursor-pointer border-b transition duration-150 odd:bg-white even:bg-gray-50 hover:bg-gray-100"
@@ -67,7 +67,7 @@ const RenderTable: ClientComponentProps<{
           <td className="px-6 py-4">{el.type}</td>
           <td className="px-6 py-4 ">
             <div className='flex items-center'>
-              {el.status ? RenderStatus[el.status] : 'Pending'}
+              {el.status ? RenderStatus[el.status as keyof typeof RenderStatus] : 'Pending'}
               {
                 el.updated_status != null ? <FaStar className="text-green-400 ml-2 w-4" /> : null
               }
@@ -105,7 +105,7 @@ const RenderTable: ClientComponentProps<{
                     return;
                   }
 
-                  var newData = data.map((item) => {
+                  var newData = data.map((item: any) => {
                     if (item.id == el.id) {
                       console.log("updated ", val);
                       return { ...item, updated_status: val, updated_status_by: user.name ?? (user.first_name ?? "") };

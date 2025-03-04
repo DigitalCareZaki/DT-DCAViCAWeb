@@ -11,7 +11,7 @@ export interface StorePatientState {
   patientsContactsListings: PatientContactsProps[];
   patientsDoctosListings: PatientDoctorsProps[];
   patientNurseListing: PatientNursesProps[];
-  patientMeasurementListing: PatientMeasurementProps[];
+  patientMeasurementListing: any;
   patientMedicationListing: PatientMedicationProps[];
 }
 

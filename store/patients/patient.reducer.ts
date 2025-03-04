@@ -60,7 +60,8 @@ export const setPatientMeasurementListing: SetPatientMeasurementListingProps = (
   state,
   payload
 ) => {
-  state.patientMeasurementListing = [...payload.payload.measurements];
+  console.log('payload.payload.measurements', payload.payload.measurements);
+  state.patientMeasurementListing = payload.payload.measurements;
 };
 
 export const pushIntoPatientMeasurementListing: PushIntoPatientMeasurementListingProps =
