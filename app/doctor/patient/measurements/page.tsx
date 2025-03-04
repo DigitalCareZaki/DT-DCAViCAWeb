@@ -10,7 +10,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   if (!patient) throw new Error('Patient not defined');
 
-  const res = await getPatientMeasurements(patient, type);
+  const res = await getPatientMeasurements(patient, type, 1, 10);
 
   if (!res.success) return <></>;
 

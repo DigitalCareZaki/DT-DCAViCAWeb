@@ -54,8 +54,12 @@ export const getPatientNurses = async (
 
 export const searchNurse = async (search: string) => searchNurseService(search);
 
-export const getPatientMeasurements = async (id: string, type: string) =>
-  getPatientMeasurementsService(id, type);
+export const getPatientMeasurements = async (
+  id: string,
+  type: string,
+  page: number,
+  pageSize: number
+) => getPatientMeasurementsService(id, type, page, pageSize);
 
 export const getPatientMedications = async (id: string, search?: string) =>
   getPatientMedicationsService(id, search);
