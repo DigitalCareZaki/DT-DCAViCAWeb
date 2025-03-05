@@ -8,7 +8,7 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const Dashboard: ServerComponentProps<Props> = async ({ patient, type }) => {
-  const measurements = await getPatientMeasurements(patient, type);
+  const measurements = await getPatientMeasurements(patient, type, 1, 100);
   const res = await getSinglePatientRag(patient);
 
   if (!measurements.success || !res.success) return <></>;
