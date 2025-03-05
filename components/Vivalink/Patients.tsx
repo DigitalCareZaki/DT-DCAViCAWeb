@@ -14,11 +14,12 @@ import type { Props, SelectedPatient } from './types';
 import ECGPlot from './EcgPlot';
 
 const Patients: ClientComponentProps<Props> = ({ data }) => {
-  const [selectedPatient, setSelectedPatient] = useState<SelectedPatient>({
+  const [selectedPatient, setSelectedPatient] = useState<any>({
     name: undefined,
     ecg: [],
-    timePerPoint: 0,
-    samplingFrequency: 0,
+    timePerPoint: "",
+    samplingFrequency: "",
+    otherAttributes: {},
   });
   const [selectedDuration, setSelectedDuration] = useState("1 minute");
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
         ecg: res.data.ecg,
         samplingFrequency: res.data.samplingFrequency,
         timePerPoint: res.data.timePerPoint,
+        otherAttributes: res.data?.otherAttributes
       });
 
     } catch (error) {
@@ -77,8 +79,9 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
       setSelectedPatient({
         name: undefined,
         ecg: [],
-        timePerPoint: 0,
-        samplingFrequency: 0,
+        timePerPoint: "",
+        samplingFrequency: "",
+        otherAttributes: {}
       })
 
       setLoading(true);
@@ -99,6 +102,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
         ecg: res.data.ecg,
         samplingFrequency: res.data.samplingFrequency,
         timePerPoint: res.data.timePerPoint,
+        otherAttributes: res.data.otherAttributes
       });
     },
     [data]
@@ -165,44 +169,19 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
         )
       }
       <div className="flex items-center justify-center">
-        <div style={{
-          width: '90vw',
-        }}>
+        <div style={{ width: '90vw' }}>
           <div style={{ minWidth: '200px', padding: '1rem', borderRight: '1px solid #ccc' }}>
             {selectedPatient.name && (
               <>
-                <p><strong>Sampling Frequency:</strong> {selectedPatient.samplingFrequency}</p>
-                <p><strong>Time Per Point:</strong> {selectedPatient.timePerPoint}</p>
+                <p><strong>Sampling Frequency:</strong> {selectedPatient?.samplingFrequency}</p>
+                <p><strong>Time Per Point:</strong> {selectedPatient?.timePerPoint}</p>
+                <p><strong>Respiratory Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.rr}</p>
+                <p><strong>Heart Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.hr}</p>
               </>
             )}
           </div>
-          {/* {
-            selectedPatient.ecg && selectedPatient.ecg.length && (
-              <div style={
-                {
-                  overflowX: 'auto',
-                  width: '100%',
-                }
-              }>
-                <ECGPlot
-                  data={
-                    // combine all the ecg data into a single array
-                    selectedPatient.ecg.reduce(
-                      (acc, curr) => [...acc, ...curr],
-                      []
-                    )
-                  }
-                ></ECGPlot>
-              </div>
-            )
-          } */}
-          {selectedPatient.ecg && selectedPatient.ecg.length && (
-            <div style={
-              {
-                overflowX: 'auto',
-                width: '100%',
-              }
-            }>
+          {selectedPatient.ecg && selectedPatient.ecg.length > 0 && (
+            <>
               <div className="mt-5 mb-5 flex items-center gap-3">
                 <label htmlFor="duration" className="font-semibold text-gray-700">
                   Select Duration:
@@ -223,19 +202,20 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                   ))}
                 </select>
               </div>
-              <ECGPlot
-                data={
+              <div style={{ overflowX: 'auto', width: '100%' }}>
+
+                <ECGPlot data={
                   // combine all the ecg data into a single array
                   selectedPatient.ecg.reduce(
-                    (acc, curr) => [...acc, ...curr],
+                    (acc: any, curr: any) => [...acc, ...curr],
                     []
                   )
-                }
-              ></ECGPlot>
+                }></ECGPlot>
 
 
 
-            </div>
+              </div>
+            </>
 
 
           )}
