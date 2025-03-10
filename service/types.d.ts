@@ -165,7 +165,7 @@ export type GetSearchNurse = {
 
 export type GetPatientsMeasurementsProps = {
   success: boolean;
-  data: Array<PatientMeasurementProps>;
+  data: any;
 };
 
 export type GetPatientMedicationProps = {

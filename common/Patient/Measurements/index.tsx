@@ -19,7 +19,7 @@ const Measurements: ServerComponentProps<Props> = async ({
   hideActions, user,
 }) => {
 
-  console.log('Measurements >>', data)
+  console.log('Measurements yaha kia a raha han >>', data)
 
   return (
     <div
@@ -30,7 +30,7 @@ const Measurements: ServerComponentProps<Props> = async ({
       )}
     >
       <Header hideActions={hideActions} data={data} />
-      <Banner patient={patient} type={type} />
+      {/* <Banner patient={patient} type={type} /> */}
       <Table data={data} user={user} />
       <Form />
     </div>

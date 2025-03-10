@@ -13,6 +13,7 @@ export interface StorePatientState {
   patientNurseListing: PatientNursesProps[];
   patientMeasurementListing: any;
   patientMedicationListing: PatientMedicationProps[];
+  pagination: any;
 }
 
 export type ReducerFunc = (
@@ -52,7 +53,7 @@ export type PushIntoPatientNurseListingProps = (
 
 export type SetPatientMeasurementListingProps = (
   state: StorePatientState,
-  payload: PayloadAction<{ measurements: PatientMeasurementProps[] }>
+  payload: PayloadAction<{ measurements: any }>,  
 ) => void;
 
 export type PushIntoPatientMeasurementListingProps = (

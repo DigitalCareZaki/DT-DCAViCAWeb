@@ -1,11 +1,12 @@
 import type { StorePatientState } from './types';
 
-const initialState: StorePatientState = {
+const initialState: any = {
   patientsContactsListings: [],
   patientsDoctosListings: [],
   patientNurseListing: [],
   patientMeasurementListing: [],
   patientMedicationListing: [],
+  pagination: {}, // Add this line to store pagination data
 };
 
 export default initialState;

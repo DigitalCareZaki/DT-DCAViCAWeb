@@ -12,7 +12,7 @@ import type {
 export type MeasurementCardType = MeasurementType | 'ALL';
 
 export type Props = {
-  data: PatientMeasurementProps[];
+  data: any;
   patient: string | null;
   type: string;
   fullHeight?: boolean;
@@ -36,7 +36,7 @@ export type CardProps = {
 };
 
 export type TableProps = {
-  data: PatientMeasurementProps[];
+  data: any;
   user: UserProps;
 };
 

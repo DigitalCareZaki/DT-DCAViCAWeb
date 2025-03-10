@@ -24,16 +24,17 @@ const RenderStatus = {
   ),
 };
 
-const RenderTable: ClientComponentProps<{
-  user: UserProps;
-}> = ({ user }) => {
-  var { patientMeasurementListing } = useSelector<ReduxProps,
-    StorePatientState
-  >((state) => state.patients);
+const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
+
+  const { patientMeasurementListing, pagination } = useSelector<ReduxProps, StorePatientState>(
+    (state) => state.patients
+  );
 
   const [data, setData] = useState<any>([]);
   const [selectedMeasurement, setSelectedMeasurement] = useState<any>(null);
 
+
+  console.log('render table redux pagination', pagination);
   useEffect(() => {
     console.log("upserted");
     // var newData = patientMeasurementListing.map((item) => {

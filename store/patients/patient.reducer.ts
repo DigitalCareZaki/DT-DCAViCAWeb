@@ -10,6 +10,7 @@ import type {
   SetPatientMedicationListingProps,
   PushIntoPatientMedicationListingProps,
 } from './types';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 export const setPatientContactList: SetPatientContactListing = (
   state,
@@ -56,12 +57,13 @@ export const pushIntoPatientNurseListing: PushIntoPatientNurseListingProps = (
   nurse.push(payload.payload.nurse);
 };
 
-export const setPatientMeasurementListing: SetPatientMeasurementListingProps = (
-  state,
-  payload
+export const setPatientMeasurementListing = (
+  state: any,
+  payload: PayloadAction<{ measurements: any; pagination: any }>
 ) => {
   console.log('payload.payload.measurements', payload.payload.measurements);
   state.patientMeasurementListing = payload.payload.measurements;
+  state.pagination = payload.payload.pagination; // This will now work
 };
 
 export const pushIntoPatientMeasurementListing: PushIntoPatientMeasurementListingProps =
