@@ -12,7 +12,7 @@ import { getPatientMeasurements } from '@service';
 import type { ClientComponentProps } from '@types';
 import { twMerge } from 'tailwind-merge';
 
-const Table: ClientComponentProps<any> = ({ data, user }) => {
+const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(data.pagination);
@@ -32,8 +32,8 @@ const Table: ClientComponentProps<any> = ({ data, user }) => {
     setCurrentPage(page);
 
     const measurements = await getPatientMeasurements(
-      "cd4c8eaf-d734-4ff0-9364-d8eda51e4c56",
-      selectedTab,
+      patient,
+      selectedTab === 'ALL' ? '' : selectedTab,
       page,
       pagination.perPage
     );
@@ -49,8 +49,8 @@ const Table: ClientComponentProps<any> = ({ data, user }) => {
     setCurrentPage(1); // Reset page to first page
 
     const measurements = await getPatientMeasurements(
-      "cd4c8eaf-d734-4ff0-9364-d8eda51e4c56",
-      tab,
+      patient,
+      tab === 'ALL' ? '' : tab,
       1, // Reset to first page
       pagination?.perPage
     );

@@ -31,7 +31,7 @@ const Measurements: ServerComponentProps<Props> = async ({
     >
       <Header hideActions={hideActions} data={data} />
       {/* <Banner patient={patient} type={type} /> */}
-      <Table data={data} user={user} />
+      <Table data={data} user={user} patient={patient} />
       <Form />
     </div>
   );
