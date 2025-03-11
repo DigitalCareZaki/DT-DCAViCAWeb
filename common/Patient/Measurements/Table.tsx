@@ -11,13 +11,13 @@ import { getPatientMeasurements } from '@service';
 
 import type { ClientComponentProps } from '@types';
 import { twMerge } from 'tailwind-merge';
-
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(data.pagination);
-  const [selectedTab, setSelectedTab] = useState('ALL'); // Default tab
-  const [loading, setLoading] = useState(false); // Loader state
+  const [selectedTab, setSelectedTab] = useState('ALL');
+  const [loading, setLoading] = useState(false);
 
   const setData = (measurements: any, paginationData: any) => {
     dispatch(setPatientMeasurementListingReducer({ measurements, pagination: paginationData }));
@@ -40,24 +40,24 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
 
     setData(measurements?.data, measurements?.data?.pagination);
     setPagination(measurements?.data?.pagination);
-    setLoading(false); // Hide loader
+    setLoading(false);
   };
 
   const handleTabChange = async (tab: string) => {
-    setLoading(true); // Show loader
+    setLoading(true);
     setSelectedTab(tab);
-    setCurrentPage(1); // Reset page to first page
+    setCurrentPage(1);
 
     const measurements = await getPatientMeasurements(
       patient,
       tab === 'ALL' ? '' : tab,
-      1, // Reset to first page
+      1,
       pagination?.perPage
     );
 
     setData(measurements?.data, measurements?.data?.pagination);
     setPagination(measurements?.data?.pagination);
-    setLoading(false); // Hide loader
+    setLoading(false);
   };
 
   return (
@@ -69,7 +69,7 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
               key={tab}
               onClick={() => handleTabChange(tab)}
               className={twMerge(
-                'hover:theme-bg-color flex h-full w-full cursor-pointer flex-row items-center justify-center rounded-lg bg-white p-3 transition duration-150 hover:text-white',
+                'hover:theme-bg-color flex h-full font-semibold w-full cursor-pointer flex-row items-center justify-center rounded-lg bg-white p-3 transition duration-150 hover:text-white',
                 selectedTab === tab && 'theme-bg-color text-white'
               )}
             // className={`px-4 py-2 rounded min-w-[350px] text-center ${selectedTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200'
@@ -112,22 +112,26 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
 
         {/* Pagination Controls */}
         {!loading && (
-          <div className="flex justify-between mt-4">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={!pagination?.hasPrevPage}
-              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span>Page {pagination?.currentPage} of {pagination?.totalPages}</span>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={!pagination?.hasNextPage}
-              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
+          <div className="flex justify-center mt-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={!pagination?.hasPrevPage}
+                className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 flex items-center justify-center"
+              >
+                <FaArrowLeft className="w-5 h-5 text-gray-700" />
+              </button>
+              <span className="text-gray-700 font-medium">
+                Page {pagination?.currentPage} of {pagination?.totalPages}
+              </span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={!pagination?.hasNextPage}
+                className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 flex items-center justify-center"
+              >
+                <FaArrowRight className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
           </div>
         )}
 
