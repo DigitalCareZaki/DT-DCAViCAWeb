@@ -46,6 +46,17 @@ export default function Form(): JSX.Element {
           </span>
         </Link>
       </div>
+      {/* SMS Consent Checkbox */}
+      <div className="flex items-center px-4 text-ssx text-secondary">
+        <div className="flex items-center gap-2 ">
+          <InputSelect />
+          <span className="tracking-wider text-xs">I consent to receive SMS notifications and updates from Avica, and I can opt out anytime.</span>
+        </div>
+        {/* <input type="checkbox" className="cursor-pointer" />
+        <span className="tracking-wider">
+          I consent to receive SMS notifications and updates from Avica, and I can opt out anytime.
+        </span> */}
+      </div>
       <ButtonPrimary
         name="Login"
         loading={loading}
