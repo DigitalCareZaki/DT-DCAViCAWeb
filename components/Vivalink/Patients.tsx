@@ -177,6 +177,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                 <p><strong>Time Per Point:</strong> {selectedPatient?.timePerPoint}</p>
                 <p><strong>Respiratory Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.rr}</p>
                 <p><strong>Heart Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.hr}</p>
+                <p><strong>Record Time:</strong> {new Date(selectedPatient?.otherAttributes?.recordTime).toLocaleString()}</p>
               </>
             )}
           </div>
