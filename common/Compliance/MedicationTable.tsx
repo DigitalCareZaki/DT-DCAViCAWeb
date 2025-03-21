@@ -23,6 +23,9 @@ const RenderTable = ({
   selected: string;
   setMed: (id: string, data: PatientCompliance) => void;
 }) =>
+
+
+
   medications.map((el) => (
     <tr
       key={el.id}
@@ -75,9 +78,11 @@ const MedicationTable: ClientComponent = () => {
     setSelectedId(selected.id ?? '');
   }, [selected.id]);
 
+
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
       <ClientTable heads={['Medication Name']}>
+
         <RenderTable
           medications={medications}
           setMed={setMed}
