@@ -18,7 +18,7 @@ const RenderTable: ClientComponent = () => {
 
   return (
     <>
-      {patientMedicationListing.map((el) => (
+      {patientMedicationListing?.map((el) => (
         <tr
           key={el.id}
           className="cursor-pointer border-b transition duration-150 odd:bg-white even:bg-gray-50 hover:bg-gray-100"

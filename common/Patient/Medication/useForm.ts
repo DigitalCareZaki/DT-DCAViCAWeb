@@ -25,7 +25,7 @@ import type { ModalState } from '@store-types';
 const useFormHook = (
   patient: string,
   handleHideForm: () => void
-): useFormProps => {
+): any => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -93,7 +93,10 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  
+
   const onSubmit = handleSubmit(async (data) => {
+    console.log('check the data if exist what',data);
     try {
       setLoading(true);
 

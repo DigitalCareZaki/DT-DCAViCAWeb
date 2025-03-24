@@ -47,6 +47,8 @@ const Form: ClientComponent = () => {
     handleSetCurrentMedicineName,
   ] = useForm(params?.get('patient')?.toString() ?? '', handleHideForm);
 
+
+
   return (
     <AnimatePresence>
       {global.modals.doctorMedicationForm && (
@@ -84,7 +86,7 @@ const Form: ClientComponent = () => {
                   inputWrapperClassName="doctor:focus-within:border-theme-doctor-primary"
                   inputClassName="bg-transparent placeholder:font-normal placeholder:text-gray-300"
                   icon="IoSearch"
-                  // onClear={onClear}
+                  // onClear={onClear} 
                   onChange={handleSearchMedication}
                   externalValue={currentMedicineName}
                   setExternalValue={handleSetCurrentMedicineName}

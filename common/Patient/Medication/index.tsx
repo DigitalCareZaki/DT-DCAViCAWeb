@@ -23,10 +23,11 @@ const Medication: ServerComponentProps<Props> = async ({
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
       <Header
         hideCreateMedicationBtn={hideCreateMedicationBtn}
-        data={res.data}
+        data={res?.data}
       />
       <Table data={res.data} />
       <Form />
+
     </div>
   );
 };
