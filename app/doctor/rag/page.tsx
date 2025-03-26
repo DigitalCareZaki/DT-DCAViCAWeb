@@ -5,8 +5,12 @@ import { allPatientsMeasurements } from '@service';
 import type { PageProps } from '@types';
 
 export default async function Page({ searchParams }: PageProps) {
+
   const type = searchParams?.type?.toString() || 'ALL';
-  const res = await allPatientsMeasurements(type);
+  const page = parseInt(searchParams?.page as string) || 1;
+  const pageSize = parseInt(searchParams?.pageSize as string) || 10;
+
+  const res = await allPatientsMeasurements(type, page, pageSize);
 
   if (!res.success) return <></>;
 

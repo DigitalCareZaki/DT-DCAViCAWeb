@@ -8,6 +8,7 @@ import { setPatientMeasurementListingReducer } from '@slice';
 
 import RenderTable from './RenderTable';
 import { getPatientMeasurements } from '@service';
+import { allPatientsMeasurements } from '@service';
 
 import type { ClientComponentProps } from '@types';
 import { twMerge } from 'tailwind-merge';
@@ -27,16 +28,59 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
     setData(data, data.pagination);
   }, [data]);
 
+  // const handlePageChange = async (page: number) => {
+  //   setLoading(true); // Show loader
+  //   setCurrentPage(page);
+
+  //   const measurements = await getPatientMeasurements(
+  //     patient,
+  //     selectedTab === 'ALL' ? '' : selectedTab,
+  //     page,
+  //     pagination.perPage
+  //   );
+
+  //   setData(measurements?.data, measurements?.data?.pagination);
+  //   setPagination(measurements?.data?.pagination);
+  //   setLoading(false);
+  // };
+
+  // const handleTabChange = async (tab: string) => {
+  //   setLoading(true);
+  //   setSelectedTab(tab);
+  //   setCurrentPage(1);
+
+  //   const measurements = await getPatientMeasurements(
+  //     patient,
+  //     tab === 'ALL' ? '' : tab,
+  //     1,
+  //     pagination?.perPage
+  //   );
+
+  //   setData(measurements?.data, measurements?.data?.pagination);
+  //   setPagination(measurements?.data?.pagination);
+  //   setLoading(false);
+  // };
+
   const handlePageChange = async (page: number) => {
-    setLoading(true); // Show loader
+    setLoading(true);
     setCurrentPage(page);
 
-    const measurements = await getPatientMeasurements(
-      patient,
-      selectedTab === 'ALL' ? '' : selectedTab,
-      page,
-      pagination.perPage
-    );
+    let measurements;
+
+    if (patient) {
+      measurements = await getPatientMeasurements(
+        patient,
+        selectedTab === 'ALL' ? '' : selectedTab,
+        page,
+        pagination.perPage
+      );
+    } else {
+      measurements = await allPatientsMeasurements(
+        selectedTab === 'ALL' ? '' : selectedTab,
+        page,
+        pagination.perPage
+      );
+    }
 
     setData(measurements?.data, measurements?.data?.pagination);
     setPagination(measurements?.data?.pagination);
@@ -48,18 +92,27 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
     setSelectedTab(tab);
     setCurrentPage(1);
 
-    const measurements = await getPatientMeasurements(
-      patient,
-      tab === 'ALL' ? '' : tab,
-      1,
-      pagination?.perPage
-    );
+    let measurements;
+
+    if (patient) {
+      measurements = await getPatientMeasurements(
+        patient,
+        tab === 'ALL' ? '' : tab,
+        1,
+        pagination?.perPage
+      );
+    } else {
+      measurements = await allPatientsMeasurements(
+        tab === 'ALL' ? '' : tab,
+        1,
+        pagination?.perPage
+      );
+    }
 
     setData(measurements?.data, measurements?.data?.pagination);
     setPagination(measurements?.data?.pagination);
     setLoading(false);
   };
-
   return (
     <>
       <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
