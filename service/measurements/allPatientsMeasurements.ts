@@ -7,8 +7,8 @@ import type { GetPatientsMeasurementsProps } from '../types';
 
 async function getPatientsMeasurements(
   type: string,
-  page: number,
-  pageSize: number
+  page?: any,
+  pageSize?: any
 ): Promise<GetPatientsMeasurementsProps> {
   const queryParams = new URLSearchParams();
 
