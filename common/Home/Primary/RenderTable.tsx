@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 import Link from 'next/link';
 import { MdCheck } from '@react-icons/all-files/md/MdCheck';

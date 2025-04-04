@@ -23,8 +23,8 @@ export async function getUserTypeHeaders(): Promise<string | null> {
   return headers().get('user-type');
 }
 
-export const getPatientList = async (userType: string = 'doctor') =>
-  getPatientListService(userType);
+export const getPatientList = async (userType: string = 'doctor', page: number, limit: number) =>
+  getPatientListService(userType, page, limit);
 
 export const getPatientProfile = async (
   id: string,
