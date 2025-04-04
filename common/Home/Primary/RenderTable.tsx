@@ -23,7 +23,7 @@ const RenderTable: ServerComponentProps<any> = async ({
 }) => {
   return (
     <>
-      {data?.map((el: any, i: any) => (
+      {data?.data?.map((el: any, i: any) => (
         <tr
           key={i}
           className="cursor-pointer border-b text-sm odd:bg-white even:bg-gray-50 hover:bg-gray-200 md:text-base xl:text-lg"
