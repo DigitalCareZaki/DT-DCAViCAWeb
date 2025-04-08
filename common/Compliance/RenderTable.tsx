@@ -17,11 +17,11 @@ const RenderTable: ClientComponentProps<any> = ({
 
 }) => {
 
-  console.log('data kia data a rhaa han>>>>>>>', data);
+  console.log('data kia data a rhaa han>>>>>>>', data?.data);
 
   return (
     <>
-      {data?.map((el: any, i: number) => (
+      {data?.data?.map((el: any, i: number) => (
         <tr
           key={i}
           className={twMerge(

@@ -13,8 +13,8 @@ async function getPatientList(
 
   const queryParams = new URLSearchParams();
 
-  queryParams.set('page', page.toString());
-  queryParams.set('limit', limit.toString());
+  queryParams.set('page', page?.toString());
+  queryParams.set('limit', limit?.toString());
 
   const url = `/api/v1/web/measurements/latestReadings?${queryParams.toString()}`;
     

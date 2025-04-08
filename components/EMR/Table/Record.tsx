@@ -90,7 +90,7 @@ const Record: ClientComponentProps<any> = ({
       {/* Description */}
       <td className="px-6 py-4">{description ?? 'N/A'}</td>
       {/* Created Time */}
-      <td className="px-6 py-4">{new Date(created).toLocaleTimeString()}</td>
+      <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td>
       {/* Date */}
       <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td>
       {/* Attachment */}
