@@ -18,7 +18,6 @@ const HomePrimary: ServerComponentProps<Props> = async ({
   const initialData = await getPatientList(userType?.toLowerCase(), 1, 10);
   if (typeof userType !== 'string') return <></>;
 
-  console.log('primary kia data a raha han >>', initialData);
 
   if (!initialData.success) return <></>;
 

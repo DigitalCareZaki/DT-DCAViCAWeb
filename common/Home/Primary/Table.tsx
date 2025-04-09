@@ -16,25 +16,27 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
   const [data, setData] = useState(initialData);
   const [pagination, setPagination] = useState(initialPagination);
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false); // 👈
   const limit = 10;
 
-  // Fetch data when page changes
-  useEffect(() => {
-    if (page === 1) return; // Don't fetch again for the first load
-
-    const fetchData = async () => {
-      const response = await getPatientList(userType, page, limit);
-      if (response.success) {
-        setData(response.data);
-        setPagination(response.data.pagination);
-      }
-    };
-
-    fetchData();
-  }, [page, userType]);
+  const fetchData = async (page: number) => {
+    setIsLoading(true); // 👈 show loader
+    const response = await getPatientList(userType, page, limit);
+    if (response.success) {
+      setData(response?.data);
+      setPagination(response?.data?.pagination);
+    }
+    setIsLoading(false); // 👈 hide loader
+  };
 
   return (
     <div className="relative overflow-x-auto pb-8 shadow-md sm:rounded-lg">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+          <div className="loader border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
+        </div>
+      )}
+
       <ClientTable
         heads={[
           'Patient Name',
@@ -55,7 +57,11 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
         <div className="flex justify-center mt-4">
           <button
             disabled={!pagination?.hasPrevPage}
-            onClick={() => setPage((prev) => prev - 1)}
+            onClick={() => {
+              fetchData(page - 1);
+              setPage((prev) => prev - 1)
+            }
+            }
             className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 flex items-center justify-center"
           >
             <FaArrowLeft className="w-5 h-5 text-gray-700" />
@@ -63,7 +69,10 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
           <span className="px-4 py-2 text-black">{`Page ${pagination.currentPage} of ${pagination.totalPages}`}</span>
           <button
             disabled={!pagination?.hasNextPage}
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={() => {
+              fetchData(page + 1);
+              setPage((prev) => prev + 1)
+            }}
             className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 flex items-center justify-center"
           >
             <FaArrowRight className="w-5 h-5 text-gray-700" />
