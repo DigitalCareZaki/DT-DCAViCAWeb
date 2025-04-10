@@ -40,31 +40,34 @@ const Telemedicine: ClientComponentProps<TelemedSidebarProps> = ({
           </div>
         </TooltipBasic>
       </Link>
-      <TooltipBasic
+      {/* <TooltipBasic
         title="Reports"
         className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
       >
         <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
           <TbReportAnalytics size={20} />
         </div>
-      </TooltipBasic>
-      <TooltipBasic
-        title="Analytics"
-        className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
-      >
-        <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
-          <RiUserSmileLine size={20} />
-        </div>
-      </TooltipBasic>
+      </TooltipBasic> */}
+
+      <Link passHref href={`/${userType?.toLowerCase()}/telemed/analytics`}>
+        <TooltipBasic
+          title="Analytics"
+          className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
+        >
+          <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
+            <RiUserSmileLine size={20} />
+          </div>
+        </TooltipBasic>
+      </Link>
       <div className="h-[1px] w-full rounded-full bg-gray-200" />
-      <TooltipBasic
+      {/* <TooltipBasic
         title="Notifications"
         className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
       >
         <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
           <MdOutlineNotifications size={20} />
         </div>
-      </TooltipBasic>
+      </TooltipBasic> */}
       <Link passHref href={`/${userType?.toLowerCase()}/telemed/settings`}>
         <TooltipBasic
           title="Settings"

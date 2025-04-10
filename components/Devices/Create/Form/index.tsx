@@ -12,11 +12,14 @@ import {
 } from '@common';
 
 import useForm from './useForm';
-
+import { useRouter } from 'next/navigation';
 import type { ClientComponentProps } from '@types';
 import type { CreateDeviceProps } from './types';
 
 const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
+
+  const router = useRouter();
+
   const categories = useMemo(
     () => [
       {
@@ -115,6 +118,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
+
       </div>
 
       {/* Submit Button */}
@@ -122,6 +126,12 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         title={data ? 'Update' : 'Save'}
         name={data ? 'Update' : 'Save'}
         loading={loading}
+      />
+      <ButtonPrimary
+        title={'Close'}
+        name={'Close'}
+        onClick={() => router.back()}
+      // loading={loading}
       />
     </form>
   );

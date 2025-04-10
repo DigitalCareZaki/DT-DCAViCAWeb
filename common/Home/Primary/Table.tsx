@@ -16,17 +16,17 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
   const [data, setData] = useState(initialData);
   const [pagination, setPagination] = useState(initialPagination);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false); // 👈
+  const [isLoading, setIsLoading] = useState(false);
   const limit = 10;
 
   const fetchData = async (page: number) => {
-    setIsLoading(true); // 👈 show loader
+    setIsLoading(true);
     const response = await getPatientList(userType, page, limit);
     if (response.success) {
       setData(response?.data);
       setPagination(response?.data?.pagination);
     }
-    setIsLoading(false); // 👈 hide loader
+    setIsLoading(false);
   };
 
   return (
