@@ -49,7 +49,7 @@ const Telemedicine: ClientComponentProps<TelemedSidebarProps> = ({
         </div>
       </TooltipBasic>
       <TooltipBasic
-        title="Patients"
+        title="Analytics"
         className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
       >
         <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
