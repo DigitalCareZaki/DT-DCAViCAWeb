@@ -2,7 +2,7 @@
 
 import { PageInfo } from '@common';
 import Form from './Form';
-
+import Table from './Table';
 import type { ServerComponent } from '@types';
 
 const Pincode: ServerComponent = async () => {
@@ -10,7 +10,8 @@ const Pincode: ServerComponent = async () => {
     <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4 font-poppins">
       <PageInfo />
       <div className="mt-10 flex h-full w-full justify-center pb-40">
-        <Form />
+        <Table />
+        {/* <Form /> */}
       </div>
     </div>
   );
