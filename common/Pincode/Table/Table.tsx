@@ -26,7 +26,7 @@ const Table: ClientComponent = () => {
           'Ended',
           'Status',
           'Created by',
-          'Actions',
+          // 'Actions',
         ]}
       >
         <ClientGenerator data={records}>

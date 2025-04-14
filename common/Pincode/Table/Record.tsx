@@ -100,9 +100,9 @@ const Record: ClientComponentProps<any> = ({
       <td className="px-6 py-4">{new Date(created).toLocaleDateString() || 'N/A'}</td>
 
       {/* Actions (Download and Delete Buttons) */}
-      <td className="flex space-x-4 px-6 py-4">
-        {/* Download Button */}
-        <div
+      {/* <td className="flex space-x-4 px-6 py-4"> */}
+      {/* Download Button */}
+      {/* <div
           onClick={handleDownload}
           className="theme-bg-color flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%]"
         >
@@ -111,16 +111,16 @@ const Record: ClientComponentProps<any> = ({
           ) : (
             <IoDownload size={16} />
           )}
-        </div>
+        </div> */}
 
-        {/* Delete Button */}
-        <div
+      {/* Delete Button */}
+      {/* <div
           onClick={handleDelete}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white transition duration-200 hover:scale-[110%]"
         >
           <IoMdTrash size={16} />
-        </div>
-      </td>
+        </div> */}
+      {/* </td> */}
     </tr>
   );
 };
