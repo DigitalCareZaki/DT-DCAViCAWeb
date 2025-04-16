@@ -20,6 +20,12 @@ const Table: ClientComponentProps<TableProps> = ({ records }) => {
   const fetchReports = async (pageNumber: number) => {
     setLoading(true); // ✅ start loader
     const response = await getAllPatientsReports(pageNumber, 10);
+
+    if (!response.success) {
+      setLoading(false); // ✅ stop loader
+      return;
+    }
+
     if (response.success) {
       setLoading(false); // ✅ stop loader
 

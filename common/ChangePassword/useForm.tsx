@@ -13,7 +13,7 @@ import { changePassword as changePasswordService } from '@service';
 
 import { Props, useFormProps } from './types';
 import type { ModalState } from '@store-types';
-
+import { redirect } from 'next/navigation';
 const useFormHook = (): useFormProps => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -64,6 +64,7 @@ const useFormHook = (): useFormProps => {
         message: 'Password changed successfully',
         show: true,
       });
+
     } catch (err: any) {
     } finally {
       setLoading(false);

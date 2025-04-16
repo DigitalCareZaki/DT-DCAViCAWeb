@@ -16,12 +16,18 @@ const Table: ClientComponentProps<TableProps> = ({ records }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [loading, setLoading] = useState(false); // ✅ loader state
+  const [loading, setLoading] = useState(false);
   const fetchReports = async (pageNumber: number) => {
-    setLoading(true); // ✅ start loader
+    setLoading(true);
     const response = await getAllPatientsReports(pageNumber, 10);
+
+    if (!response.success) {
+      setLoading(false);
+      return;
+    }
+
     if (response.success) {
-      setLoading(false); // ✅ stop loader
+      setLoading(false);
 
       dispatch(setEmrRecordsSlice({ records: response.data.data }));
       setHasNextPage(response.data.pagination?.hasNextPage);
