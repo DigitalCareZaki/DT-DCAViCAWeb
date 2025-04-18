@@ -127,6 +127,9 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
                 <option value={1}>Contacted Doctor</option>
                 <option value={2}>Contacted Other</option>
                 <option value={3}>No, action Required</option>
+                <option value={4}>False alarm</option>
+                <option value={5}>Close alert</option>
+
               </select>
               <IoChevronDownCircleOutline
                 aria-hidden="true"
