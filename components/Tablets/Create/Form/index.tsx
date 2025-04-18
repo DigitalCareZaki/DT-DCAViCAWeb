@@ -12,7 +12,7 @@ import {
 } from '@common';
 
 import useForm from './useForm';
-
+import { useRouter } from 'next/navigation'
 import type { ClientComponentProps } from '@types';
 import type { CreateTabletProps } from './types';
 
@@ -45,6 +45,8 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
 
   const [register, onSubmit, errors, loading, selectedValues, handleSelect] =
     useForm(data, categories);
+
+  const router = useRouter();
 
   return (
     <form
@@ -109,6 +111,16 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
         name={data ? 'Update' : 'Save'}
         loading={loading}
       />
+
+      {/* Close Button */}
+      <ButtonPrimary
+        type='button'
+        title={'Close'}
+        name={'Close'}
+        loading={loading}
+        onClick={() => router.back()}
+      />
+
     </form>
   );
 };

@@ -10,7 +10,7 @@ import {
 } from '@common';
 
 import useForm from './useForm';
-
+import { useRouter } from 'next/navigation';
 import SelectPatient from './SelectPatient';
 import SelectedPatient from './SelectedPatient';
 
@@ -31,6 +31,8 @@ const Form: ClientComponent = () => {
     handleSelectPatient,
     handleRemovePatient,
   ] = useForm(params?.get('id') ?? '');
+
+  const router = useRouter();
 
   return (
     <form
@@ -87,6 +89,8 @@ const Form: ClientComponent = () => {
       </div>
 
       <ButtonPrimary title="Update" name="Update" loading={loading} />
+      <ButtonPrimary type='button' title="Close" name="Close" loading={loading} onClick={() => router.back()} />
+
     </form>
   );
 };

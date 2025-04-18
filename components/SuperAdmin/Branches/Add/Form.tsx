@@ -10,7 +10,7 @@ import {
 import useForm from './useForm';
 import { Country, City } from './Elements';
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
 import type { ClientComponent } from '@types';
 
 const Form: ClientComponent = () => {
@@ -24,6 +24,8 @@ const Form: ClientComponent = () => {
     countries,
     cities,
   ] = useForm();
+
+  const router = useRouter();
 
   return (
     <div className="mt-10 flex h-full w-full justify-center pb-40">
@@ -119,14 +121,16 @@ const Form: ClientComponent = () => {
         </div>
         <div className="col-span-2 flex w-full flex-col gap-4">
           <ButtonPrimary title="Save" name="Save" className="rounded-lg" />
-          <Link passHref href="/superadmin/users">
-            <ButtonPrimary
-              name="Close"
-              className="h-10 rounded-lg border bg-white"
-              type="button"
-              outlined
-            />
-          </Link>
+          {/* <Link passHref href="/superadmin/users"> */}
+          <ButtonPrimary
+            name="Close"
+            title="Close"
+            onClick={() => router.back()}
+            className="h-10 rounded-lg border bg-white"
+            type="button"
+            outlined
+          />
+          {/* </Link> */}
         </div>
       </form>
     </div>

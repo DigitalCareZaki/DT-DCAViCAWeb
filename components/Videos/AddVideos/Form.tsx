@@ -1,13 +1,15 @@
 'use client';
 
 import useForm from './useForm';
-
+import { useRouter } from 'next/navigation';
 import { InputBasic, ButtonPrimary, DropdownSecondary } from '@common';
 
 import type { ClientComponent } from '@types';
 
 const Form: ClientComponent = () => {
   const [register, onSubmit, errors, loading, handleSelect, selectors] = useForm();
+
+  const router = useRouter();
 
   return (
     <form
@@ -124,6 +126,8 @@ const Form: ClientComponent = () => {
       </div>
 
       <ButtonPrimary title={'Save'} name={'Save'} loading={loading} />
+      <ButtonPrimary title="Close" name="Close" loading={loading} onClick={() => router.back()} />
+
     </form>
   );
 };
