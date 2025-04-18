@@ -10,7 +10,7 @@ import {
 import useForm from './useForm';
 import Branch from './Branch';
 import City from './City';
-
+import { useRouter } from 'next/navigation'
 import type { ClientComponent } from '@types';
 
 const Form: ClientComponent = () => {
@@ -24,6 +24,9 @@ const Form: ClientComponent = () => {
     handleSelect,
     cities,
   ] = useForm();
+
+  const router = useRouter();
+
 
   return (
     <form
@@ -131,6 +134,8 @@ const Form: ClientComponent = () => {
       </div>
 
       <ButtonPrimary title="Save" name="Save" loading={loading} />
+      <ButtonPrimary title="Close" name="Close" loading={loading} onClick={() => router.back()} outlined />
+
     </form>
   );
 };
