@@ -1,3 +1,4 @@
+
 export { default as getPatientList } from './patients/getPatientList';
 export { default as getPatientProfile } from './patients/getPatientProfile';
 export { default as getPatientContacts } from './patients/getPatientContacts';
@@ -43,6 +44,7 @@ export { default as composeMessage } from './messages/composeMessage';
 export { default as sendMessageAction } from './messages/sendMessageAction';
 
 export { default as searchOrganizationMedicine } from './doctors/getOrganizationMedicine';
+export { default as getTelemedCardsNo } from './telemed/getTelemedCards'
 export { default as searchTelemedUsers } from './telemed/searchUser';
 export { default as addTelemed } from './telemed/addTelemed';
 export { default as getSelfAppointments } from './telemed/getSelfAppointments';

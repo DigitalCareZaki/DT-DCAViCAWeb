@@ -25,7 +25,9 @@ const Measurements: ServerComponentProps<Props> = async ({
     <div
       className={twMerge(
         'flex w-full flex-col gap-6 pt-6',
-        fullHeight ? 'h-screen' : 'h-full',
+        // fullHeight ? 'h-screen' : 'h-full', // old code
+        fullHeight ? 'h-full' : 'h-full',
+
         leftPadding && 'px-10 pr-0'
       )}
     >
