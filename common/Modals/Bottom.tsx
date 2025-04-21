@@ -26,7 +26,7 @@ const ModalBottom: ClientComponent = () => {
   useEffect(() => {
     if (!modal.show) return;
 
-    let timeoutid: NodeJS.Timeout | undefined = undefined;
+    let timeoutid: any | undefined = undefined;
 
     timeoutid = setTimeout(() => {
       handleModal({ type: undefined, show: false, message: undefined });
@@ -61,9 +61,9 @@ const ModalBottom: ClientComponent = () => {
           className={twMerge(
             'absolute bottom-10 left-[45%] z-[9999999] flex w-80 items-center justify-center gap-2 rounded-full px-10 py-3 text-xs font-bold shadow-xl backdrop-blur-sm',
             modal.type === 'ERROR' &&
-              'bg-rose-500/50 text-rose-900 shadow-rose-500/30',
+            'bg-rose-500/50 text-rose-900 shadow-rose-500/30',
             modal.type === 'SUCCESS' &&
-              'bg-emerald-500/50 text-emerald-900 shadow-emerald-500/30'
+            'bg-emerald-500/50 text-emerald-900 shadow-emerald-500/30'
           )}
         >
           {RenderIcon[modal.type as 'SUCCESS']}

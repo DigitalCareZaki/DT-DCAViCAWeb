@@ -11,7 +11,7 @@ const PincodeProvider: ClientComponentProps<ChildrenComponentProps> = ({
   children,
   user,
 }) => {
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<any | null>(null);
   const [requiredPincode, setIsRequiredPincode] = useState<boolean>(false);
 
   const handleReset = useCallback(() => {

@@ -12,7 +12,7 @@ import type { ClientComponentProps } from '@types';
 
 const UpdateStatus: ClientComponentProps<{ id: string }> = ({ id }) => {
   const dispatch = useDispatch();
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<any | null>(null);
   const [isHover, setIsHover] = useState<boolean>(false);
 
   const onMouseEnter = useCallback(() => {
@@ -48,28 +48,28 @@ const UpdateStatus: ClientComponentProps<{ id: string }> = ({ id }) => {
         | 'PENDING'
         | 'ONGOING'
     ) =>
-    async () => {
-      try {
-        setIsHover(false);
-        await updateMeetingStatus(status, id);
+      async () => {
+        try {
+          setIsHover(false);
+          await updateMeetingStatus(status, id);
 
-        dispatch(
-          showModalReducer({
-            show: true,
-            message: 'Status Updated',
-            type: 'SUCCESS',
-          })
-        );
-      } catch (err) {
-        dispatch(
-          showModalReducer({
-            show: true,
-            message: 'Error at updating status',
-            type: 'ERROR',
-          })
-        );
-      }
-    };
+          dispatch(
+            showModalReducer({
+              show: true,
+              message: 'Status Updated',
+              type: 'SUCCESS',
+            })
+          );
+        } catch (err) {
+          dispatch(
+            showModalReducer({
+              show: true,
+              message: 'Error at updating status',
+              type: 'ERROR',
+            })
+          );
+        }
+      };
 
   return (
     <div className="relative flex flex-col gap-2">

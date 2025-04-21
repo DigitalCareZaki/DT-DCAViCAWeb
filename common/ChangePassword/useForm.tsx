@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-
+import { deleteCookie } from 'cookies-next';
 import { showModalReducer } from '@slice';
 
 import { vestResolver } from '@hookform/resolvers/vest';
@@ -13,11 +13,11 @@ import { changePassword as changePasswordService } from '@service';
 
 import { Props, useFormProps } from './types';
 import type { ModalState } from '@store-types';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 const useFormHook = (): useFormProps => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -29,8 +29,14 @@ const useFormHook = (): useFormProps => {
     mode: 'onChange',
   });
 
-  const handleShowModal = (payload: ModalState) => {
+  const handleShowModal = async (payload: ModalState) => {
     dispatch(showModalReducer(payload));
+    handleLogout();
+  };
+
+  const handleLogout = async () => {
+    deleteCookie('jwt');
+    router.push('/login');
   };
 
   const onSubmit = handleSubmit(async () => {
@@ -65,8 +71,12 @@ const useFormHook = (): useFormProps => {
         show: true,
       });
 
+
+
     } catch (err: any) {
     } finally {
+      // cookie clear
+
       setLoading(false);
     }
   });

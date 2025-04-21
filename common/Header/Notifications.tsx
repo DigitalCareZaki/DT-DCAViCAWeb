@@ -18,7 +18,7 @@ const Notifications: ClientComponent = () => {
     StoreNotificationProps
   >((state) => state.notifications);
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<any | null>(null);
   const [show, setShow] = useState<boolean>(false);
 
   const handleHide = () => setShow(false);
