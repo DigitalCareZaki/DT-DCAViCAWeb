@@ -6,7 +6,7 @@ import type { AddDeviceProps } from '../types';
 
 import '@init-globals';
 
-const createDevice = async (data: any): Promise<AddDeviceProps> => {
+const createDevice = async (data: any): Promise<any> => {
   try {
     const decodedData = await JSON.parse(
       Buffer.from(data, 'base64').toString('utf-8')

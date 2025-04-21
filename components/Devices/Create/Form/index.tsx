@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Category from './Category';
 
@@ -15,11 +15,13 @@ import useForm from './useForm';
 import { useRouter } from 'next/navigation';
 import type { ClientComponentProps } from '@types';
 import type { CreateDeviceProps } from './types';
-
+import fetch from '@fetch';
+import fetchWrapper from '@fetch';
 const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
   const router = useRouter();
 
+  // const [selectedSerial, setSelectedSerial] = useState<string[]>([]);
   const categories = useMemo(
     () => [
       {
@@ -46,8 +48,23 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     []
   );
 
-  const [register, onSubmit, errors, loading, selectedValues, handleSelect] =
+
+
+  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial] =
     useForm(data, categories);
+
+  const handleSelectField = (field: string, value: any) => {
+    selectedValues[field] = value;
+    console.log('field', field, 'value', value);
+
+    console.log('inside the if condition', value.name);
+    setSelectedSerial(value.name || []);
+    console.log('setValue serial_number', value.name);
+    setValue('serial_number', value.name);
+
+  };
+
+
 
   return (
     <form
@@ -85,23 +102,8 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           />
         </div>
       </div>
-
       {/* Second row: Device serial and category */}
       <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
-        <div className="w-full sm:w-1/2">
-          <InputBasic
-            title="Device serial"
-            label="Serial number"
-            placeholder="Enter device serial number"
-            icon="SiNamecheap"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            inputClassName="bg-background"
-            hookProps={register('serial_number')}
-            error={!!errors.serial_number?.message?.length}
-            errorMessage={errors.serial_number?.message || '&'}
-          />
-        </div>
         <div className="w-full sm:w-1/2">
           <DropdownSecondary
             title="Select device category"
@@ -113,14 +115,45 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             errorMessage={errors.category?.message || '&'}
             selected={selectedValues?.category?.name}
           >
-            <ClientGenerator data={categories} handleSelect={handleSelect}>
+            <ClientGenerator data={categories} handleSelect={handleSelectByAbd}>
               <Category />
             </ClientGenerator>
           </DropdownSecondary>
         </div>
 
-      </div>
+        <div className="w-full sm:w-1/2">
+          <DropdownSecondary
+            title="Select serial number"
+            label="Serial Number"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="MdPin"
+            // error={!!errors.serial_number?.message?.length}
+            // errorMessage={errors?.serial_number?.message || '&'}
+            selected={selectedValues?.serial_number?.name || ''}
+          >
+            {serials?.length > 0 ? (
+              serials?.map((serial: any, index: number) => {
+                const item = { name: serial, value: serial };
+                return (
+                  <div
+                    key={index}
+                    onClick={() => handleSelectField('serial_number', item)}
+                    className="px-4 py-2 hover:bg-accent cursor-pointer"
+                  >
+                    {serial}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="px-4 py-2 text-muted">No serials available</div>
+            )}
+          </DropdownSecondary>
+        </div>
 
+
+
+      </div>
       {/* Submit Button */}
       <ButtonPrimary
         title={data ? 'Update' : 'Save'}

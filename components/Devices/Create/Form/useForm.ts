@@ -26,13 +26,15 @@ const useFormHook = (
       })
     | undefined,
   categories: { name: string; value: string }[]
-): UseFormProps => {
+): any => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [user] = useUser();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedSerial, setSelectedSerial] = useState<string>('');
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [serials, setSerials] = useState<string[]>([]);
   const [selectedValues, setSelectedValues] = useState<SelectedValuesProps>({
     category: {
       name: undefined,
@@ -50,6 +52,46 @@ const useFormHook = (
   } = useForm<DeviceProps>({
     resolver: vestResolver(validator),
   });
+
+  const handleSelectByAbd = useCallback(
+    async (name: string, value: string) => {
+      setValue('category', value as MeasurementType);
+      clearErrors('category');
+  
+      setSelectedValues({
+        category: {
+          name,
+          value: value as MeasurementType,
+        },
+      });
+  
+      try {
+        const res = await fetch(`https://avica.up.railway.app/api/v1/web/devices/devices/${value}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+  
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Something went wrong');
+        console.log('res khan>>>',data);
+        const serials = data?.map((item: any) => item.serial_number).filter(Boolean);
+        console.log('check api serial >>>>', serials);
+        setSerials(serials);
+      
+
+
+  
+      } catch (error) {
+        console.error('API call error:', error);
+        setSerials([]);
+      }
+    },
+    [setValue, clearErrors, user?.token]
+  );
+
 
   const handleSelect = useCallback((name: string, value: string) => {
     setValue('category', value as MeasurementType);
@@ -69,17 +111,17 @@ const useFormHook = (
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      setLoading(true);
-
+      setLoading(true);  
+      console.log('data >>>',data);    
       // create case
       if (!prevData) {
         const res = await createDevice(
           btoa(
             JSON.stringify({
-              title: data.title,
-              description: data.description,
-              serial_number: data.serial_number,
               category: data.category,
+              serial_number: data.serial_number,
+              description: data.description,
+              title: data.title,
             })
           )
         );
@@ -99,8 +141,8 @@ const useFormHook = (
             JSON.stringify({
               title: data.title,
               description: data.description,
-              serial_number: data.serial_number,
               category: data.category,
+              serial_number: data.serial_number,
             })
           ),
           prevData.id
@@ -145,7 +187,7 @@ const useFormHook = (
     return () => {};
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, handleSelect];
+  return [register, onSubmit, errors, loading, selectedValues, setValue,handleSelect,handleSelectByAbd,serials,setSelectedSerial,selectedSerial];
 };
 
 export default useFormHook;

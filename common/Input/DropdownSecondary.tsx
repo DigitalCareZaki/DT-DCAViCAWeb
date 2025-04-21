@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import type { ClientComponentProps } from '@types';
 import type { DropdownSecondaryProps } from './types';
 
-const DropdownSecondary: ClientComponentProps<DropdownSecondaryProps> = ({
+const DropdownSecondary: ClientComponentProps<any> = ({
   labelVariant,
   label,
   hideInfo,
