@@ -17,17 +17,26 @@ import {
   toggleCameraReducer,
   handleEventReducer,
   toggleScreenSharingReducer,
+  showModalReducer,
 } from '@slice';
+
 import { useUser } from '@selectors';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import type { ClientComponentProps } from '@types';
+import type { ModalState } from '@store-types';
+import { telemedReportValidator } from './validator';
+
+
 import type { ControlProps } from './types';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-
+import { addMeetingForm } from '@service';
 // Modal Component
 const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; id: string }) => {
+
+  const [user] = useUser();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -36,9 +45,79 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
     setError,
     getValues,
   } = useForm({
-    // resolver: vestResolver(),
+    resolver: vestResolver(telemedReportValidator),
   });
-  const onSubmit = () => { }
+
+  const handleShowModal = async (payload: ModalState) => {
+    dispatch(showModalReducer(payload));
+
+    // Auto-close if success
+    if (payload.type === 'SUCCESS') {
+      setTimeout(() => {
+        onClose();
+        dispatch(showModalReducer({ type: undefined, message: '', show: false }));
+      }, 2000);
+    }
+  };
+
+  const onSubmit = async (data: any) => {
+    try {
+      if (!user?.token) {
+        console.error('User token is missing');
+        handleShowModal({
+          type: 'ERROR',
+          message: 'User token is missing',
+          show: true,
+        });
+        return;
+      }
+
+      const payload = {
+        appointmentId: id,
+        observations: data?.observations,
+        diagnosis: data?.diagnosis,
+        medications: data?.prescribedMedications,
+        procedure: data?.procedureRecommended,
+        follow_up_date: data?.followupDate
+      };
+
+      const res = await fetch('https://avica.up.railway.app/api/v1/web/telemed/report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        // Show error modal
+        handleShowModal({
+          type: 'ERROR',
+          message: result?.message ?? 'Something went wrong',
+          show: true,
+        });
+        return;
+      }
+
+      // Show success modal
+      handleShowModal({
+        type: 'SUCCESS',
+        message: result?.message ?? 'Report submitted successfully',
+        show: true,
+      });
+
+    } catch (error: any) {
+      console.error('Submit error:', error);
+      handleShowModal({
+        type: 'ERROR',
+        message: error?.message ?? 'An unexpected error occurred',
+        show: true,
+      });
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -95,7 +174,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
                 labelClassName="text-black text-lg"
                 hookProps={register('observations')}
                 error={!!errors?.Observations}
-                // errorMessage={errors?.Observations?.message}
+                errorMessage={errors?.Observations}
                 errorClassName="text-rose-200"
               />
               <InputBasic
@@ -111,7 +190,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
                 labelClassName="text-black text-lg"
                 hookProps={register('diagnosis')}
                 error={!!errors?.diagnosis}
-                // errorMessage={errors?.description?.message}
+                errorMessage={errors?.description}
                 errorClassName="text-rose-200"
               />
               {/* </div> */}
@@ -143,6 +222,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
                 errorClassName="text-rose-200"
               />
               <InputBasic
+                type='date'
                 name="followupDate"
                 placeholder="Follow Up Date"
                 defaultBorder

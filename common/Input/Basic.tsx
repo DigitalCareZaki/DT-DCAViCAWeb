@@ -10,7 +10,7 @@ import { CircleSpinner } from 'react-spinners-kit';
 import type { ClientComponentProps } from '@types';
 import type { InputBaseProps } from './types';
 
-const InputBasic: ClientComponentProps<InputBaseProps> = ({
+const InputBasic: ClientComponentProps<any> = ({
   iconSize = 18, // Increase the default icon size for better readability
   icon,
   password,
