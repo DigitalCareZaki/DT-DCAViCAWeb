@@ -13,12 +13,35 @@ import { allPatientsMeasurements } from '@service';
 import type { ClientComponentProps } from '@types';
 import { twMerge } from 'tailwind-merge';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
+
+
 const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(data.pagination);
   const [selectedTab, setSelectedTab] = useState('ALL');
   const [loading, setLoading] = useState(false);
+
+  const allHeads = [
+    'Title',
+    'Date',
+    'Time',
+    'Measurement Type',
+    'Status',
+    'Update',
+    'Log',
+    'Mode',
+    'Values',
+    'Unit',
+    'Source',
+    'Patient',
+    'Created By',
+  ];
+
+  const filteredHeads = user?.role === 'PATIENT'
+    ? allHeads.filter(head => head !== 'Patient')
+    : allHeads;
+
 
   const setData = (measurements: any, paginationData: any) => {
     dispatch(setPatientMeasurementListingReducer({ measurements, pagination: paginationData }));
@@ -113,6 +136,8 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
     setPagination(measurements?.data?.pagination);
     setLoading(false);
   };
+
+
   return (
     <>
       <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
@@ -142,21 +167,7 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
           )}
 
           <ClientTable
-            heads={[
-              'Title',
-              'Date',
-              'Time',
-              'Measurement Type',
-              'Status',
-              'Update',
-              'Log',
-              'Mode',
-              'Values',
-              'Unit',
-              'Source',
-              'Patient',
-              'Created By',
-            ]}
+            heads={filteredHeads}
           >
             {!loading ? <RenderTable user={user} /> : <></>}
 

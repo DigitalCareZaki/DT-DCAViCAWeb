@@ -153,13 +153,22 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
           <td className="px-6 py-4">{el.values.toString()}</td>
           <td className="px-6 py-4">{el.unit.toString()}</td>
           <td className="px-6 py-4">{el.reading_source.toString()}</td>
-          <td className="px-6 py-4">
-            {getName({
-              first_name: el.patient.user.first_name,
-              middle_name: el.patient.user.middle_name,
-              last_name: el.patient.user.last_name,
-            })}
-          </td>
+          {
+            user.role?.toLowerCase() != "patient" &&
+            <td className="px-6 py-4">
+              {/*  if the login patient this column will be hidden */}
+
+              {
+                getName({
+                  first_name: el.patient.user.first_name,
+                  middle_name: el.patient.user.middle_name,
+                  last_name: el.patient.user.last_name,
+                })
+
+              }
+            </td>
+          }
+
           <td className="px-6 py-4">
             {el?.doctor
               ? 'Dr.' +
