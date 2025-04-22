@@ -9,11 +9,14 @@ import {
 
 import useForm from './useForm';
 import { City } from '../../../SuperAdmin/Users/AddPatients/Elements';
-
+import { useRouter } from 'next/navigation';
 import type { ClientComponent } from '@types';
 import Image from 'next/image';
 
 const Form: ClientComponent = () => {
+
+  const router = useRouter();
+
   const [
     register,
     onSubmit,
@@ -122,6 +125,8 @@ const Form: ClientComponent = () => {
         errorMessage={errors.website?.message || '&'}
       />
       <ButtonPrimary type="submit" loading={loading} name="Save" />
+      <ButtonPrimary type="button" loading={loading} name="Close" onClick={() => router.back()} />
+
     </form>
   );
 };

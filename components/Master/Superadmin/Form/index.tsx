@@ -5,7 +5,7 @@ import { IoFemale } from '@react-icons/all-files/io5/IoFemale';
 import { FaTransgender } from '@react-icons/all-files/fa/FaTransgender';
 import { FaQuestion } from '@react-icons/all-files/fa/FaQuestion';
 import { MdTitle } from '@react-icons/all-files/md/MdTitle';
-
+import { useRouter } from 'next/navigation';
 import {
   InputBasic,
   DropdownSecondary,
@@ -35,6 +35,8 @@ const Form: ClientComponent = () => {
     cities,
     countries,
   ] = useForm();
+
+  const router = useRouter();
 
   return (
     <form
@@ -340,6 +342,8 @@ const Form: ClientComponent = () => {
       </div>
 
       <ButtonPrimary title="Save" name="Save" loading={loading} />
+      <ButtonPrimary title="Close" name="Close" type='button' loading={loading} onClick={() => router.back()} />
+
     </form>
   );
 };
