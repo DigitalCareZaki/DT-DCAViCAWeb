@@ -2,14 +2,13 @@
 
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-
+import { useEffect, useState } from 'react';
 import { getName, getProfilePicture } from '@init-globals';
 import { selectMessageReducer } from '@slice';
-
 import type { ClientComponentProps } from '@types';
 import type { PreviewProps } from './types';
 
-const Preview: ClientComponentProps<PreviewProps> = ({ ...data }) => {
+const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
 
   const onClick = () =>
@@ -18,6 +17,26 @@ const Preview: ClientComponentProps<PreviewProps> = ({ ...data }) => {
         ...(data as any),
       })
     );
+
+  const [dateTimeString, setDateTimeString] = useState<string>('');
+
+  useEffect(() => {
+    if (data?.created_at) {
+      const dateObj = new Date(data.created_at);
+
+      const time = dateObj.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
+
+      const date = dateObj.toDateString(); // e.g., Tue Apr 22 2025
+
+      setDateTimeString(`${date} ${time}`);
+    }
+  }, [data?.created_at]);
+
+  console.log('res data check>>>>>>', data);
 
   return (
     <div className="relative flex w-full flex-col border-b py-3">
@@ -49,8 +68,8 @@ const Preview: ClientComponentProps<PreviewProps> = ({ ...data }) => {
                 last_name: data.sender?.last_name ?? '',
               })}
             </span>
-            <span className="w-[30%] truncate text-ellipsis text-[10px] font-semibold text-gray-400">
-              4 days ago
+            <span className="w-[60%] truncate text-ellipsis text-[10px] font-semibold text-gray-400">
+              {dateTimeString}
             </span>
           </div>
           <div className="flex w-full">
