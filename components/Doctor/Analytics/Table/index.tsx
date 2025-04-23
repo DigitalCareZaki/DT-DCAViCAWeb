@@ -3,23 +3,23 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setEmrRecordsSlice } from '@slice';
+import { setPatientAppointmentsListingReducer } from '@slice';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
 import TableRender from './Table';
 
 import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
-import { getAllPatientsReports, getPatientEMRRecords } from '@service';
+import { getPatientAppointments } from '@service';
 
-const Table: ClientComponentProps<TableProps> = ({ records }) => {
+const Table: ClientComponentProps<any> = ({ id, records }: any) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
   const fetchReports = async (pageNumber: number) => {
     setLoading(true);
-    const response = await getAllPatientsReports(pageNumber, 10);
+    const response = await getPatientAppointments(id, pageNumber, 10);
 
     if (!response.success) {
       setLoading(false);
@@ -29,7 +29,7 @@ const Table: ClientComponentProps<TableProps> = ({ records }) => {
     if (response.success) {
       setLoading(false);
 
-      dispatch(setEmrRecordsSlice({ records: response.data.data }));
+      // dispatch(setPatientAppointmentsListingReducer({ appointments: response.data.data }));
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };
@@ -49,7 +49,7 @@ const Table: ClientComponentProps<TableProps> = ({ records }) => {
   useEffect(() => {
     if (!records?.length) return;
 
-    dispatch(setEmrRecordsSlice({ records }));
+    // dispatch(setPatientAppointmentsListingReducer({ appointments: records }));
   }, [records]);
 
   return (
