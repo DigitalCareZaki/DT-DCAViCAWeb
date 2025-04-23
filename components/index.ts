@@ -16,7 +16,7 @@ export { default as DoctorProfile } from './Doctor/Profile';
 export { default as DoctorTelemed } from './Doctor/Telemed';
 export { default as DoctorViewAppointment } from './Doctor/Telemed/ViewAppointment';
 export { default as ViewMeeting } from './Doctor/Telemed/View';
-export {default as Analytics} from './Doctor/Analytics';
+export { default as Analytics } from './Doctor/Analytics';
 export { default as DoctorAddAppointment } from './Doctor/Telemed/AddAppointment';
 export { default as DoctorTelemedMeetings } from './Doctor/Telemed/Meetings';
 export { default as DoctorTelemedAddMeeting } from './Doctor/Telemed/Meetings/AddMeeting';
@@ -43,6 +43,8 @@ export { default as NurseCompliance } from './Nurse/Compliance';
 // Nurse Patients
 export { default as NursePatientProfile } from './Nurse/Patients/Profile';
 export { default as NursePatientContacts } from './Nurse/Patients/Contacts';
+
+export { default as TelemedicineNurses } from './Nurse/Patients/Telemedicine';
 export { default as NursePatientDoctors } from './Nurse/Patients/Doctors';
 export { default as NursePatientNurses } from './Nurse/Patients/Nurses';
 export { default as NursePatientMeasurements } from './Nurse/Patients/Measurements';

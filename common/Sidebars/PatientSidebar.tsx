@@ -153,6 +153,24 @@ const Sidebar: ClientComponent = () => {
             {sidebar && <span className="text-xs">Doctors</span>}
           </Link>
         </div>
+
+        <div
+          title="Telemedicine "
+          className={twMerge(
+            'patient-profile-bar-icon',
+            sidebar && 'flex bg-background px-2'
+          )}
+        >
+          <Link
+            passHref
+            href={getPath(`/patient/telemedicine?patient=${params?.get('patient')}`)}
+            className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
+          >
+            <IoIosMedical size={18} />
+            {sidebar && <span className="text-xs">Telemedicine</span>}
+          </Link>
+        </div>
+
         <div
           title="Nurses"
           className={twMerge(

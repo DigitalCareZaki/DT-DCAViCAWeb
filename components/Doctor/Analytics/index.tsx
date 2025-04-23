@@ -1,7 +1,7 @@
 'use server';
 
 import { PageInfo } from '@common';
-import { getRequestedAppointments, getUser } from '@service';
+import { getPatientAppointments, getUser } from '@service';
 import Table from './Table';
 import type { ServerComponentProps } from '@types';
 import { PrimaryHeader, ServerGenerator } from '@common';
@@ -12,10 +12,12 @@ const Analytics: ServerComponentProps<any> = async () => {
 
 
     const user = await getUser();
-    const res = await getRequestedAppointments();
+    console.log('testing user >>>', user);
 
-    console.log('check analytics res >>>>', res.data);
-    if (!res.success) return <></>;
+    // const res = await getPatientAppointments();
+
+    // console.log('check analytics res >>>>', res.data);
+    // if (!res.success) return <></>;
 
 
 

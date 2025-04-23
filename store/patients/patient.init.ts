@@ -6,6 +6,7 @@ const initialState: any = {
   patientNurseListing: [],
   patientMeasurementListing: [],
   patientMedicationListing: [],
+  patientAppointmentListing: [],
   pagination: {}, // Add this line to store pagination data
 };
 

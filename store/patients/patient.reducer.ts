@@ -66,6 +66,16 @@ export const setPatientMeasurementListing = (
   state.pagination = payload.payload.pagination; // This will now work
 };
 
+export const setPatientAppointmentsListing = (
+  state: any,
+  payload: PayloadAction<{ appointments: any; pagination: any }>
+) => {
+  state.setPatientAppointmentsListing = payload.payload.appointments;
+  state.pagination = payload.payload.pagination;
+};
+
+
+
 export const pushIntoPatientMeasurementListing: PushIntoPatientMeasurementListingProps =
   (state, payload) => {
     const measurements = state.patientMeasurementListing;

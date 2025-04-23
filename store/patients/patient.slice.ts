@@ -11,6 +11,7 @@ import {
   setPatientMeasurementListing,
   pushIntoPatientMeasurementListing,
   setPatientMedicationListing,
+  setPatientAppointmentsListing,
   pushIntoPatientMedicationListing,
 } from './patient.reducer';
 
@@ -25,6 +26,7 @@ const patientSlice = createSlice({
     setPatientNurseListing,
     pushIntoPatientNurseListing,
     setPatientMeasurementListing,
+    setPatientAppointmentsListing,
     pushIntoPatientMeasurementListing,
     setPatientMedicationListing,
     pushIntoPatientMedicationListing,
@@ -39,6 +41,7 @@ export const {
   setPatientNurseListing: setPatientNurseListingReducer,
   pushIntoPatientNurseListing: pushIntoPatientNurseListingReducer,
   setPatientMeasurementListing: setPatientMeasurementListingReducer,
+  setPatientAppointmentsListing: setPatientAppointmentsListingReducer,
   pushIntoPatientMeasurementListing: pushIntoPatientMeasurementListingReducer,
   setPatientMedicationListing: setPatientMedicationListingReduer,
   pushIntoPatientMedicationListing: pushIntoPatientMedicationListingReducer,
