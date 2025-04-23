@@ -44,7 +44,6 @@ const RenderTable: ClientComponent = () => {
       head: [['Field', 'Details']],
       body: [
         ['Patient Name', `${organizer?.first_name || ''} ${organizer?.last_name || ''}`.trim() || 'N/A'],
-        ['Observation ID', observation?.id || 'N/A'],
         ['Observations', observation?.Observations || 'N/A'],
         ['Diagnosis', observation?.Diagnosis || 'N/A'],
         ['Medications', observation?.Medications || 'N/A'],
