@@ -4,7 +4,7 @@ import fetch from '@fetch';
 
 async function addDoctor(
   data: any
-): Promise<{ success: boolean; [key: string]: string | boolean }> {
+): Promise<{ success: boolean;[key: string]: string | boolean }> {
   try {
     const decodedData = await JSON.parse(
       Buffer.from(data, 'base64').toString('utf-8')

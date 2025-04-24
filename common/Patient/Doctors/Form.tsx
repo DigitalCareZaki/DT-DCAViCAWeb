@@ -61,6 +61,7 @@ const Form: ClientComponent = () => {
   }, 1000);
 
   const handleSelectedDoctor = (data: SearchDoctorProps) => {
+    console.log('Selected doctor data >>>>', data);
     setSelectedDoctor(data);
     setShowDropdown((prev) => prev + 1);
   };
@@ -80,23 +81,41 @@ const Form: ClientComponent = () => {
 
       const res = await addPatientDoctor(btoa(JSON.stringify(data)));
 
+      console.log('check res >>>>', res);
       if (!res?.success) {
+        alert(res?.message.toString());
+
         setError(res?.message.toString());
         return;
       }
 
-      pushIntoPatientDoctors({
-        user: {
-          ...(res.user as any),
-        },
-        departments: {
-          ...(res.departments as any),
-        },
-        specialities: {
-          ...(res.specialities as any),
-        },
-      });
+      alert(res?.message);
       handleHideForm();
+
+
+      // old code iski api theak nhi han payload aisa chahiye  user: {
+      //     ...(res.user as any),
+      //   },
+      //   departments: {
+      //     ...(res.departments as any),
+      //   },
+      //   specialities: {
+      //     ...(res.specialities as any),
+      //   },
+
+
+      // pushIntoPatientDoctors({
+      //   user: {
+      //     ...(res.user as any),
+      //   },
+      //   departments: {
+      //     ...(res.departments as any),
+      //   },
+      //   specialities: {
+      //     ...(res.specialities as any),
+      //   },
+      // });
+      // handleHideForm();
     } catch (err) {
     } finally {
       setSaving(false);

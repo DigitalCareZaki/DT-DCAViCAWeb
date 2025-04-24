@@ -77,7 +77,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
           {user.role?.toLowerCase() != "doctor" && <td className="px-6 py-4">
             {el.updated_status != null ? (
               <div className="text-md text-gray-500">
-                {el.updated_status == 0 ? 'Called Patient' : el.updated_status == 1 ? 'Contacted Doctor' : el.updated_status == 2 ? 'Contacted Other' : 'No, action Required'}
+                {el.updated_status == 0 ? 'Called Patient' : el.updated_status == 1 ? 'Contacted Doctor' : el.updated_status == 2 ? 'Contacted Other' : el.updated_status == 3 ? 'No, action Required' : el.updated_status == 4 ? 'False alarm' : 'Close alert'}
               </div>
             ) : (
               <div className="text-md text-gray-500">No Update</div>
