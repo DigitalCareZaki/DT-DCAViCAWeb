@@ -31,7 +31,7 @@ const DoctorPatientDoctorsHeader: ClientComponent = () => {
       const res = await getPatientDoctors(params?.get('patient') || '', value);
 
       setData(res.data);
-    } catch (err) {}
+    } catch (err) { }
   }, 1000);
 
   return (

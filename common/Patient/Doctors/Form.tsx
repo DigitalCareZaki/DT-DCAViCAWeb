@@ -52,7 +52,7 @@ const Form: ClientComponent = () => {
       const res = await searchDoctor(value);
 
       // uncomment this after resolving issue - 404 not found
-      // setData(res.data);
+      setData(res.data);
     } catch (err: any) {
       console.log(err?.message);
     } finally {
@@ -76,6 +76,7 @@ const Form: ClientComponent = () => {
         patient_id: params?.get('patient')?.toString(),
         doctor_id: selectedDoctor?.user.id,
       };
+
 
       const res = await addPatientDoctor(btoa(JSON.stringify(data)));
 
