@@ -75,47 +75,29 @@ const Form: ClientComponent = () => {
       setSaving(true);
       const data = {
         patient_id: params?.get('patient')?.toString(),
-        doctor_id: selectedDoctor?.user.id,
+        doctor_id: selectedDoctor?.user?.id,
       };
-
 
       const res = await addPatientDoctor(btoa(JSON.stringify(data)));
 
-      console.log('check res >>>>', res);
       if (!res?.success) {
         alert(res?.message.toString());
-
         setError(res?.message.toString());
         return;
       }
 
-      alert(res?.message);
+      pushIntoPatientDoctors({
+        user: {
+          ...(res.user as any),
+        },
+        departments: {
+          ...(res.departments as any),
+        },
+        specialities: {
+          ...(res.specialities as any),
+        },
+      });
       handleHideForm();
-
-
-      // old code iski api theak nhi han payload aisa chahiye  user: {
-      //     ...(res.user as any),
-      //   },
-      //   departments: {
-      //     ...(res.departments as any),
-      //   },
-      //   specialities: {
-      //     ...(res.specialities as any),
-      //   },
-
-
-      // pushIntoPatientDoctors({
-      //   user: {
-      //     ...(res.user as any),
-      //   },
-      //   departments: {
-      //     ...(res.departments as any),
-      //   },
-      //   specialities: {
-      //     ...(res.specialities as any),
-      //   },
-      // });
-      // handleHideForm();
     } catch (err) {
     } finally {
       setSaving(false);
