@@ -11,12 +11,10 @@ import { IoDownload } from '@react-icons/all-files/io5/IoDownload';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 const RenderTable: ClientComponent = () => {
+
   const { setPatientAppointmentsListing } = useSelector<any, any>(
     (state) => state.patients
   );
-  const [loading, setLoading] = useState<boolean>(false);
-  console.log('testing Check>>>', setPatientAppointmentsListing);
-
   const handleDownload = (observation: any, organizer: any) => {
     const doc = new jsPDF();
 
@@ -30,7 +28,7 @@ const RenderTable: ClientComponent = () => {
       startY: 40,
       theme: 'grid',
       headStyles: {
-        fillColor: [22, 160, 133], // Teal
+        fillColor: [22, 160, 133],
         textColor: 255,
         fontStyle: 'bold',
       },
@@ -91,7 +89,6 @@ const RenderTable: ClientComponent = () => {
               {organizer?.first_name} {organizer?.last_name}
             </td>
 
-            {/* Actions */}
             <td className="px-6 py-4">
               <div
                 onClick={() => handleDownload(observation, organizer)}

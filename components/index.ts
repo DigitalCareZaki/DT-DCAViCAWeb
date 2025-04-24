@@ -16,7 +16,7 @@ export { default as DoctorProfile } from './Doctor/Profile';
 export { default as DoctorTelemed } from './Doctor/Telemed';
 export { default as DoctorViewAppointment } from './Doctor/Telemed/ViewAppointment';
 export { default as ViewMeeting } from './Doctor/Telemed/View';
-export { default as Analytics } from './Doctor/Analytics';
+export { default as AnalyticsWrapper } from './Doctor/Analytics';
 export { default as DoctorAddAppointment } from './Doctor/Telemed/AddAppointment';
 export { default as DoctorTelemedMeetings } from './Doctor/Telemed/Meetings';
 export { default as DoctorTelemedAddMeeting } from './Doctor/Telemed/Meetings/AddMeeting';

@@ -4,13 +4,13 @@ import fetch from '@fetch';
 
 
 async function getPatientAppointments(
-    id: string,
+    patientId?: string,
     page?: number,
     limit?: number,
 ): Promise<any> {
 
     const res = await fetch(
-        `/api/v1/web/telemed/patientappointments/${id}?page=${page}&limit=${limit}`.convertURI()
+        `/api/v1/web/telemed/patientappointments?patientId=${patientId}&page=${page}&limit=${limit}`.convertURI()
     );
 
     const data = await res.json();

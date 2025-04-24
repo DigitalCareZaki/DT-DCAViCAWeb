@@ -13,17 +13,16 @@ import type { TableProps } from './types';
 import type { ClientComponentProps, PatientNursesProps } from '@types';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
-const Table: ClientComponentProps<any> = ({ data }) => {
+const Table: ClientComponentProps<any> = ({ data, patient }) => {
+
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(data?.pagination);
   const [loading, setLoading] = useState(false);
-  console.log('table Data >>>', data);
+  console.log('table Data pagiatnion>>>', data.pagination);
 
-  const setData = (appointments: any, paginationData: any) => {
-    console.log('appointments >>>', appointments);
-    dispatch(setPatientAppointmentsListingReducer({ appointments, pagination: paginationData }));
-  }
+  const setData = (appointments: any, paginationData: any) => dispatch(setPatientAppointmentsListingReducer({ appointments, pagination: paginationData }));
+
 
   useEffect(() => {
     setData(data.data, data.pagination);
@@ -34,11 +33,11 @@ const Table: ClientComponentProps<any> = ({ data }) => {
     setCurrentPage(page);
 
     let appointments = await getPatientAppointments(
-      'patient',
+      patient,
       page,
       pagination.perPage
     );
-
+    console.log('inside the pagination function >>>', appointments);
     setData(appointments?.data, appointments?.data?.pagination);
     setPagination(appointments?.data?.pagination);
     setLoading(false);

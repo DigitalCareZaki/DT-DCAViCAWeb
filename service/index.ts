@@ -10,6 +10,7 @@ export { default as getPatientNurses } from './patients/getPatientNurses';
 export { default as searchNurse } from './searchNurse';
 export { default as addPatientNurse } from './patients/addPatientNurse';
 export { default as getPatientAppointments } from './patients/getPatientAppointment';
+export { default as getAnalytics } from './telemed/getAnalytics';
 
 export { default as getDoctorProfile } from './doctors/getDoctorProfile';
 export { default as updateDoctorProfile } from './doctors/updateDoctorProfile';
