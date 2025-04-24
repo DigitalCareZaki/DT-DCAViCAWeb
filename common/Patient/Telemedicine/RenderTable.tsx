@@ -89,14 +89,14 @@ const RenderTable: ClientComponent = () => {
               {organizer?.first_name} {organizer?.last_name}
             </td>
 
-            <td className="px-6 py-4">
+            {/* <td className="px-6 py-4">
               <div
                 onClick={() => handleDownload(observation, organizer)}
                 className="theme-bg-color flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%]"
               >
                 <IoDownload size={16} />
               </div>
-            </td>
+            </td> */}
           </tr>
         );
       })}
