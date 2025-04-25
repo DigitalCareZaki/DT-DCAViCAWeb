@@ -15,7 +15,11 @@ const RenderTable: ClientComponent = () => {
   const { setPatientAppointmentsListing } = useSelector<any, any>(
     (state) => state.patients
   );
+
+  console.log('setPatientAppointmentsListing >>>>', setPatientAppointmentsListing);
+
   const handleDownload = (observation: any, organizer: any) => {
+    console.log(' observation?.follow_up_date >>>', observation);
     const doc = new jsPDF();
 
     // Header Title
@@ -42,15 +46,13 @@ const RenderTable: ClientComponent = () => {
       head: [['Field', 'Details']],
       body: [
         ['Patient Name', `${organizer?.first_name || ''} ${organizer?.last_name || ''}`.trim() || 'N/A'],
-        ['Observations', observation?.Observations || 'N/A'],
-        ['Diagnosis', observation?.Diagnosis || 'N/A'],
-        ['Medications', observation?.Medications || 'N/A'],
-        ['Procedure', observation?.Procedure || 'N/A'],
+        ['Observations', observation?.observations || 'N/A'],
+        ['Diagnosis', observation?.diagnosis || 'N/A'],
+        ['Medications', observation?.medications || 'N/A'],
+        ['Procedure', observation?.procedure || 'N/A'],
         [
           'Follow-up Date',
-          observation?.Follow_up_date
-            ? new Date(observation.Follow_up_date).toLocaleDateString()
-            : 'N/A',
+          observation?.follow_up_date ? new Date(observation.follow_up_date).toLocaleDateString() : 'N/A',
         ],
       ],
     });
@@ -66,7 +68,7 @@ const RenderTable: ClientComponent = () => {
   return (
     <>
       {setPatientAppointmentsListing?.map((el: any) => {
-        const appointment = el?.appointment;
+        const appointment = el;
         const organizer = appointment?.organizer;
         const observation = appointment?.appointmentObservation;
 

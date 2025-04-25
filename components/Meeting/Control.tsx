@@ -26,7 +26,7 @@ import { vestResolver } from '@hookform/resolvers/vest';
 import type { ClientComponentProps } from '@types';
 import type { ModalState } from '@store-types';
 import { telemedReportValidator } from './validator';
-
+import { toast } from 'react-hot-toast';
 
 import type { ControlProps } from './types';
 import { useState } from 'react';
@@ -63,11 +63,12 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
     try {
       if (!user?.token) {
         console.error('User token is missing');
-        handleShowModal({
-          type: 'ERROR',
-          message: 'User token is missing',
-          show: true,
-        });
+        toast.error('User token is missing');
+        // handleShowModal({
+        //   type: 'ERROR',
+        //   message: 'User token is missing',
+        //   show: true,
+        // });
         return;
       }
 
@@ -80,7 +81,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         follow_up_date: data?.followupDate
       };
 
-      const res = await fetch('https://avica.up.railway.app/api/v1/web/telemed/report', {
+      const res = await fetch('http://localhost:8080/api/v1/web/telemed/report', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,46 +92,168 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
 
       const result = await res.json();
 
+      console.log('res', res);
       if (!res.ok) {
         // Show error modal
-        handleShowModal({
-          type: 'ERROR',
-          message: result?.message ?? 'Something went wrong',
-          show: true,
-        });
+
+        toast.error(result?.message ?? 'Something went wrong');
+
+        // handleShowModal({
+        //   type: 'ERROR',
+        //   message: result?.message ?? 'Something went wrong',
+        //   show: true,
+        // });
         return;
       }
-
+      console.log('Report submitted successfully');
+      toast.success('Report Submitted Successfully');
       // Show success modal
-      handleShowModal({
-        type: 'SUCCESS',
-        message: result?.message ?? 'Report submitted successfully',
-        show: true,
-      });
+      // handleShowModal({
+      //   type: 'SUCCESS',
+      //   message: result?.message ?? 'Report submitted successfully',
+      //   show: true,
+      // });
 
     } catch (error: any) {
       console.error('Submit error:', error);
-      handleShowModal({
-        type: 'ERROR',
-        message: error?.message ?? 'An unexpected error occurred',
-        show: true,
-      });
+      toast.error(error?.message ?? 'An unexpected error occurred');
+      // handleShowModal({
+      //   type: 'ERROR',
+      //   message: error?.message ?? 'An unexpected error occurred',
+      //   show: true,
+      // });
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-1/3 rounded-lg bg-white">
+    // <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-auto px-2">
+    //   <div className="w-1/2 max-w-2xl mx-auto my-8 rounded-lg bg-white shadow-lg sm:w-[80%]">
+    //     {/* Close Button */}
+    //     <div className="relative p-4 border-b border-gray-200">
+    //       <button
+    //         onClick={onClose}
+    //         className="absolute top-4 right-4 text-gray-500 hover:text-black"
+    //       >
+    //         <svg
+    //           xmlns="http://www.w3.org/2000/svg"
+    //           fill="none"
+    //           viewBox="0 0 24 24"
+    //           strokeWidth={2}
+    //           stroke="currentColor"
+    //           className="w-6 h-6"
+    //         >
+    //           <path
+    //             strokeLinecap="round"
+    //             strokeLinejoin="round"
+    //             d="M6 18L18 6M6 6l12 12"
+    //           />
+    //         </svg>
+    //       </button>
+    //       <h2 className="text-xl font-semibold text-black text-center">
+    //         Avica Teleconsultation Report
+    //       </h2>
+    //     </div>
+
+    //     <form
+    //       onSubmit={handleSubmit(onSubmit)}
+    //       className="w-full p-6 space-y-4"
+    //     >
+    //       <InputBasic
+    //         name="observations"
+    //         placeholder="Enter Observations"
+    //         defaultBorder
+    //         inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+    //         label="Observations"
+    //         inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+    //         hideInfo
+    //         labelClassName="text-black text-lg"
+    //         hookProps={register('observations')}
+    //         error={!!errors?.Observations}
+    //         errorMessage={errors?.Observations}
+    //         errorClassName="text-rose-200"
+    //       />
+
+    //       <InputBasic
+    //         name="diagnosis"
+    //         placeholder="Enter Diagnosis"
+    //         defaultBorder
+    //         inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+    //         label="Diagnosis"
+    //         inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+    //         hideInfo
+    //         labelClassName="text-black text-lg"
+    //         hookProps={register('diagnosis')}
+    //         error={!!errors?.diagnosis}
+    //         errorMessage={errors?.diagnosis}
+    //         errorClassName="text-rose-200"
+    //       />
+
+    //       <InputBasic
+    //         name="prescribedMedications"
+    //         placeholder="Prescribed Medications"
+    //         defaultBorder
+    //         inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+    //         label="Prescribed Medications"
+    //         inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+    //         hideInfo
+    //         labelClassName="text-black text-lg"
+    //         hookProps={register("prescribedMedications")}
+    //         error={!!errors?.prescribedMedications}
+    //         errorClassName="text-rose-200"
+    //       />
+
+    //       <InputBasic
+    //         name="procedureRecommended"
+    //         placeholder="Procedure Recommended"
+    //         defaultBorder
+    //         inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+    //         label="Procedure Recommended"
+    //         inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+    //         hideInfo
+    //         labelClassName="text-black text-lg"
+    //         hookProps={register("procedureRecommended")}
+    //         error={!!errors?.procedureRecommended}
+    //         errorClassName="text-rose-200"
+    //       />
+
+    //       <InputBasic
+    //         type="date"
+    //         name="followupDate"
+    //         placeholder="Follow Up Date"
+    //         defaultBorder
+    //         inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+    //         label="Follow Up Date"
+    //         inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+    //         hideInfo
+    //         labelClassName="text-black text-lg"
+    //         hookProps={register("followupDate")}
+    //         error={!!errors?.followupDate}
+    //         errorClassName="text-rose-200"
+    //       />
+
+    //       <div className="flex justify-center pt-4">
+    //         <ButtonPrimary
+    //           type="submit"
+    //           className="h-14 text-lg w-[50%]"
+    //           name="Submit"
+    //         />
+    //       </div>
+    //     </form>
+    //   </div>
+    // </div>
+
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-auto px-2">
+      <div className="w-1/2 max-w-2xl mx-auto my-8 rounded-lg bg-white shadow-lg sm:w-[80%]">
         {/* <h2 className="text-lg font-bold">Modal Title</h2> */}
         {/* <p>Meeting ID: {id}</p> */}
 
-        <div className="rounded-xl bg-white p-4 relative">
+        <div className="relative p-4 border-gray-200">
           {/* Cancel Icon */}
           <button
             onClick={onClose} // Call the close function when clicked
-            className="absolute top-3 right-3 text-gray-500 hover:text-black"
+            className="absolute top-4 right-4 text-gray-500 hover:text-black"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -156,102 +279,102 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
           <div className="flex h-fit w-full flex-col gap-3 rounded-2xl p-5">
             <div>
               <span className="text-xl font-semibold text-black">
-                AViCA Teleconsultation Report
+                Avica Teleconsultation Report
               </span>
             </div>
-            <div className="flex w-full flex-col gap-4 p-4">
-              <InputBasic
-                name="observations"
-                placeholder="Enter Observations"
-                defaultBorder
-                // inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
-                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
-                label="Observations"
-                // inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
-                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
-                hideInfo
-                labelClassName="text-black text-lg"
-                hookProps={register('observations')}
-                error={!!errors?.Observations}
-                errorMessage={errors?.Observations}
-                errorClassName="text-rose-200"
-              />
-              <InputBasic
-                name="diagnosis"
-                placeholder="Enter Diagnosis"
-                defaultBorder
-                // inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
-                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
-                label="Diagnosis"
-                // inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
-                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
-                hideInfo
-                labelClassName="text-black text-lg"
-                hookProps={register('diagnosis')}
-                error={!!errors?.diagnosis}
-                errorMessage={errors?.description}
-                errorClassName="text-rose-200"
-              />
-              {/* </div> */}
-              {/* <div className="flex w-full flex-col gap-4 p-4"> */}
-              <InputBasic
-                name="prescribedMedications"
-                placeholder="Prescribed Medications"
-                defaultBorder
-                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
-                label="Prescribed Medications"
-                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
-                hideInfo
-                labelClassName="text-black text-lg"
-                hookProps={register("prescribedMedications")}
-                error={!!errors?.prescribedMedications}
-                errorClassName="text-rose-200"
-              />
-              <InputBasic
-                name="procedureRecommended"
-                placeholder="Procedure Recommended"
-                defaultBorder
-                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
-                label="Procedure Recommended"
-                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
-                hideInfo
-                labelClassName="text-black text-lg"
-                hookProps={register("procedureRecommended")}
-                error={!!errors?.procedureRecommended}
-                errorClassName="text-rose-200"
-              />
-              <InputBasic
-                type='date'
-                name="followupDate"
-                placeholder="Follow Up Date"
-                defaultBorder
-                inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
-                label="Follow Up Date"
-                inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
-                hideInfo
-                labelClassName="text-black text-lg"
-                hookProps={register("followupDate")}
-                error={!!errors?.followupDate}
-                errorClassName="text-rose-200"
-              />
-              {/* </div> */}
-              <div className="w-full mt-8">
-                {/* <ButtonPrimary
+            {/* <div className="flex w-full flex-col gap-4 p-4"> */}
+            <InputBasic
+              name="observations"
+              placeholder="Enter Observations"
+              defaultBorder
+              // inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
+              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+              label="Observations"
+              // inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+              hideInfo
+              labelClassName="text-black text-lg"
+              hookProps={register('observations')}
+              error={!!errors?.Observations}
+              errorMessage={errors?.Observations}
+              errorClassName="text-rose-200"
+            />
+            <InputBasic
+              name="diagnosis"
+              placeholder="Enter Diagnosis"
+              defaultBorder
+              // inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
+              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+              label="Diagnosis"
+              // inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+              hideInfo
+              labelClassName="text-black text-lg"
+              hookProps={register('diagnosis')}
+              error={!!errors?.diagnosis}
+              errorMessage={errors?.description}
+              errorClassName="text-rose-200"
+            />
+            {/* </div> */}
+            {/* <div className="flex w-full flex-col gap-4 p-4"> */}
+            <InputBasic
+              name="prescribedMedications"
+              placeholder="Prescribed Medications"
+              defaultBorder
+              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+              label="Prescribed Medications"
+              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+              hideInfo
+              labelClassName="text-black text-lg"
+              hookProps={register("prescribedMedications")}
+              error={!!errors?.prescribedMedications}
+              errorClassName="text-rose-200"
+            />
+            <InputBasic
+              name="procedureRecommended"
+              placeholder="Procedure Recommended"
+              defaultBorder
+              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+              label="Procedure Recommended"
+              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+              hideInfo
+              labelClassName="text-black text-lg"
+              hookProps={register("procedureRecommended")}
+              error={!!errors?.procedureRecommended}
+              errorClassName="text-rose-200"
+            />
+            <InputBasic
+              type='date'
+              name="followupDate"
+              placeholder="Follow Up Date"
+              defaultBorder
+              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
+              label="Follow Up Date"
+              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-lg px-2 py-1 focus:border-black"
+              hideInfo
+              labelClassName="text-black text-lg"
+              hookProps={register("followupDate")}
+              error={!!errors?.followupDate}
+              errorClassName="text-rose-200"
+            />
+            {/* </div> */}
+            <div className="w-full mt-8">
+              {/* <ButtonPrimary
                 type="button"
                 onClick={onClose}
                 className="h-14 text-lg w-[60%] doctor:bg-fuchsia-500 patient:bg-fuchsia-500 nurse:bg-fuchsia-500"
                 name="Close"
               // loading={loading}
               /> */}
-                <ButtonPrimary
-                  type="submit"
-                  // className="h-14 text-lg w-[60%] doctor:bg-fuchsia-500 patient:bg-fuchsia-500 nurse:bg-fuchsia-500"
-                  className="h-14 text-lg w-[50%] !mx-auto"
-                  name="Submit"
-                // loading={loading}
-                />
-              </div>
+              <ButtonPrimary
+                type="submit"
+                // className="h-14 text-lg w-[60%] doctor:bg-fuchsia-500 patient:bg-fuchsia-500 nurse:bg-fuchsia-500"
+                className="h-14 text-lg w-[50%] !mx-auto"
+                name="Submit"
+              // loading={loading}
+              />
             </div>
+            {/* </div> */}
           </div>
         </form>
       </div>

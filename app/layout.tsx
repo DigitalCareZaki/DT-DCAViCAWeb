@@ -4,7 +4,7 @@ import { StoreProvider } from '@providers';
 import '@init-globals';
 
 import { getUserTypeHeaders } from './actions';
-
+import { Toaster } from "react-hot-toast";
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -22,7 +22,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className={res?.toLowerCase()}>
       <body>
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider>
+          {children}
+          <Toaster />
+        </StoreProvider>
       </body>
     </html>
   );
