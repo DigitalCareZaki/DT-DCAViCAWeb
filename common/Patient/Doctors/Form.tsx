@@ -13,7 +13,7 @@ import {
 import { debounce, getName } from '@init-globals';
 import { searchDoctor } from '@actions';
 import { addPatientDoctor } from '@service';
-
+import toast from 'react-hot-toast';
 import type {
   ClientComponent,
   SearchDoctorProps,
@@ -74,14 +74,14 @@ const Form: ClientComponent = () => {
     try {
       setSaving(true);
       const data = {
-        patient_id: params?.get('patient')?.toString(),
-        doctor_id: selectedDoctor?.user?.id,
+        doctorId: selectedDoctor?.user.id,
+        patientId: params?.get('patient')?.toString(),
       };
 
       const res = await addPatientDoctor(btoa(JSON.stringify(data)));
 
       if (!res?.success) {
-        alert(res?.message.toString());
+        toast.error(res?.message.toString());
         setError(res?.message.toString());
         return;
       }
@@ -102,7 +102,7 @@ const Form: ClientComponent = () => {
     } finally {
       setSaving(false);
     }
-  }, []);
+  }, [selectedDoctor]);
 
   return (
     <AnimatePresence>
