@@ -34,12 +34,12 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
       );
 
       setNurse(res.data);
-    } catch (err) {}
+    } catch (err) { }
   }, 1000);
 
   return (
     <div className="flex w-full justify-between">
-      <span className="screen-title">Nurses</span>
+      <span className="screen-title"></span>
       <div className="flex w-fit items-center gap-4">
         <div className="flex w-60">
           <InputBasic
