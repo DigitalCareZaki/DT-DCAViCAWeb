@@ -295,8 +295,8 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
               hideInfo
               labelClassName="text-black text-lg"
               hookProps={register('observations')}
-              error={!!errors?.Observations}
-              errorMessage={errors?.Observations}
+              error={!!errors?.observations}
+              errorMessage={errors?.observations?.message}
               errorClassName="text-rose-200"
             />
             <InputBasic
