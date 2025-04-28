@@ -12,7 +12,7 @@ import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 import { getAllPatientsReports, getPatientEMRRecords } from '@service';
 
-const Table: ClientComponentProps<TableProps> = ({ records }) => {
+const Table: ClientComponentProps<any> = ({ records }: any) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -29,7 +29,7 @@ const Table: ClientComponentProps<TableProps> = ({ records }) => {
     if (response.success) {
       setLoading(false); // ✅ stop loader
 
-      dispatch(setEmrRecordsSlice({ appointments: response.data.data }));
+      dispatch(setEmrRecordsSlice({ appointments: response?.data.data }));
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };

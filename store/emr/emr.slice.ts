@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import initialState from './emr.init';
 import { setEmrRecords } from './emr.reducer';
 
-const emrSlice = createSlice({
+const emrSlice: any = createSlice({
   name: 'emr',
   initialState,
   reducers: {
