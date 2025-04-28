@@ -81,7 +81,9 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         follow_up_date: data?.followupDate
       };
 
-      const res = await fetch('http://localhost:8080/api/v1/web/telemed/report', {
+
+
+      const res = await fetch('/api/v1/web/telemed/report'.convertURI(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
