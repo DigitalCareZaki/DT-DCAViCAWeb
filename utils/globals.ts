@@ -10,10 +10,10 @@ String.prototype.convertURI = function (internal: boolean = false) {
   }
 
   // live backend url
-  // return `https://avica.up.railway.app${this.toString()}`;
+  return `https://avica.up.railway.app${this.toString()}`;
 
   // dev backend url
-  return `https://avica-dev.up.railway.app${this.toString()}`;
+  // return `https://avica-dev.up.railway.app${this.toString()}`;
   // return `https://mobility-health-backend-production.up.railway.app${this.toString()}`;
   // return `http://localhost:8080${this.toString()}`;
 };
