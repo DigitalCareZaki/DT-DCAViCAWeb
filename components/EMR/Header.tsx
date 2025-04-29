@@ -19,6 +19,10 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
 
+
+  console.log('header patient id >>>>', patient_id);
+
+
   const handleSearch = debounce(
     async (event: ChangeEvent<HTMLInputElement>[]) => {
       const value = event[0].target.value;
@@ -54,7 +58,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
       <div className="flex w-full flex-wrap gap-4 sm:w-auto">
         {user.role === 'PATIENT' && (
           <>
-            <Link passHref href="/patient/emr/add">
+            <Link passHref href={`/patient/emr/add?type=FAMILY_HISTORY?patient_id=${patient_id}`}>
               <ButtonPrimary
                 title="add record"
                 name="Add Family History"
@@ -63,7 +67,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
                 className="w-full bg-red-500 px-4 py-2 font-semibold text-white shadow-md transition duration-300 ease-in-out hover:bg-red-600 sm:w-48"
               />
             </Link>
-            <Link passHref href="/patient/emr/add">
+            <Link passHref href={`/patient/emr/add?type=PARENT_HISTORY?patient_id=${patient_id}`}>
               <ButtonPrimary
                 title="add record"
                 name="Add Patient History"
@@ -73,7 +77,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
               />
             </Link>
 
-            <Link passHref href="/patient/emr/add">
+            <Link passHref href={`/patient/emr/add?type=SURGICAL_HISTORY?patient_id=${patient_id}`}>
               <ButtonPrimary
                 title="add record"
                 name="Add Surgical History"
@@ -83,7 +87,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
               />
             </Link>
 
-            <Link passHref href="/patient/emr/add">
+            <Link passHref href={`/patient/emr/add?type=MEDICATION_HISTORY?patient_id=${patient_id}`}>
               <ButtonPrimary
                 title="add record"
                 name="Add Medication History"
@@ -93,7 +97,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
               />
             </Link>
 
-            <Link passHref href="/patient/emr/add">
+            <Link passHref href={`/patient/emr/add?type=DIAGNOSIS?patient_id=${patient_id}`}>
               <ButtonPrimary
                 title="add record"
                 name="Diagnosis"
@@ -103,7 +107,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
               />
             </Link>
 
-            <Link passHref href="/patient/emr/add">
+            <Link passHref href={`/patient/emr/add?type=RECORD?patient_id=${patient_id}`}>
               <ButtonPrimary
                 title="add record"
                 name="Add Record"

@@ -12,7 +12,7 @@ export type UseFormProps = [
 
 export interface AddEMRRecordProps {
   title: string;
-  familyHistory: string;
+  description: string;
   startDate: Date;
   endDate: Date;
 }

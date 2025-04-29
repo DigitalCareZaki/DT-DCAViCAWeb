@@ -12,7 +12,7 @@ import { validator } from './validator';
 import type { AddEMRRecordProps, UseFormProps } from './types';
 import type { ModalState } from '@store-types';
 
-const useFormHook = (): UseFormProps => {
+const useFormHook = (type: string, patient_id: any): UseFormProps => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -53,12 +53,16 @@ const useFormHook = (): UseFormProps => {
       }
 
       const payload = {
+        patient_id: patient_id,
         uri: res.url,
         title: data.title,
-        family_history: data.familyHistory,
+        description: data.description,
+        type,
       };
 
+
       const result = await addPatientEMRRecord(btoa(JSON.stringify(payload)));
+
 
       if (!result.success) {
         throw new Error(res?.message ?? 'Failed to add EMR record');

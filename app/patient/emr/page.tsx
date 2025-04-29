@@ -1,9 +1,12 @@
 import { EMR } from '@components';
+import { getUser } from '@service';
+export default async function Page() {
 
-export default function Page(): JSX.Element {
+  const user = await getUser();
+
   return (
     <main className="h-full w-full">
-      <EMR />
+      <EMR patient_id={user?.id} />
     </main>
   );
 }

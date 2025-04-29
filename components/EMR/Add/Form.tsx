@@ -1,26 +1,39 @@
 'use client';
 
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useSearchParams, useRouter } from 'next/navigation'; // Import useRouter
 import { InputBasic, ButtonPrimary, FilePicker } from '@common';
 
 import useForm from './useForm';
 
 import type { ClientComponent } from '@types';
 
+
+
 const Form: ClientComponent = () => {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const rawType = searchParams?.get('type') || 'record';
+  const type = rawType.split('?')[0];
+  const patient_id = rawType.split('?patient_id=')[1];
+
   const [register, onSubmit, errors, loading, handleSelectFile, selectedFile] =
-    useForm();
+    useForm(type, patient_id);
 
   const handleClose = () => {
     router.push('/patient/emr');
   };
+
+  console.log('selected heading >>', type)
 
   return (
     <form
       onSubmit={onSubmit}
       className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6"
     >
+      <h2 className="text-xl font-bold text-center text-red-500">{type}</h2>
+
+
       <div className="flex w-full items-center justify-center">
         <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-red-500">
           <FilePicker
@@ -50,6 +63,34 @@ const Form: ClientComponent = () => {
         errorMessage={errors.title?.message || '&'}
       />
       <InputBasic
+        title="Description"
+        label="Description"
+        placeholder="Enter the Description"
+        icon="SiNamecheap"
+        borderTheme
+        inputWrapperClassName="bg-background"
+        inputClassName="bg-background"
+        hookProps={register('description')}
+        error={!!errors.description?.message}
+        errorMessage={errors.description?.message || '&'}
+      />
+
+      {/* <InputBasic
+        title="Description"
+        label="Description"
+        placeholder="Enter the Description"
+        icon="SiNamecheap"
+        borderTheme
+        inputWrapperClassName="bg-background"
+        inputClassName="bg-background"
+        hookProps={register('description')}
+        error={!!errors.description?.message}
+        errorMessage={errors.description?.message || '&'}
+      /> */}
+
+
+      {/* old code  */}
+      {/* <InputBasic
         title="Family History"
         label="Family History"
         placeholder="Enter the family history"
@@ -61,7 +102,8 @@ const Form: ClientComponent = () => {
         error={!!errors.familyHistory?.message}
         errorMessage={errors.familyHistory?.message || '&'}
       />
-      <InputBasic
+      */}
+      {/* <InputBasic
         title="Start Date"
         label="Start Date"
         icon="SiNamecheap"
@@ -83,7 +125,7 @@ const Form: ClientComponent = () => {
         hookProps={register('endDate')}
         error={!!errors.endDate?.message}
         errorMessage={errors.endDate?.message || '&'}
-      />
+      /> */}
       {/* Button Section with Save and Close */}
       <div className="flex justify-end gap-4">
         <ButtonPrimary title="Save" name="Save" loading={loading} />
