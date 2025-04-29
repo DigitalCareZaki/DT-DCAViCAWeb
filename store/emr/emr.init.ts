@@ -1,6 +1,6 @@
 import type { StoreEMRState } from './types';
 
-const initState: any = {
+const initState: StoreEMRState = {
   records: [],
 };
 

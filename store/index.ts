@@ -13,6 +13,8 @@ import { complianceSlice } from './compliance';
 import { departmentSlice } from './departments';
 import { logsSlice } from './logs';
 import { notificationSlice } from './notifications';
+import { changepasswordSlice } from './changepassword';
+// import { changepasswordSlice } from './changepassword';
 
 const store = configureStore({
   reducer: {
@@ -25,6 +27,7 @@ const store = configureStore({
     meeting: meetingSlice,
     socket: socketSlice,
     chats: chatSlice,
+    changePasswords: changepasswordSlice,
     emr: emrSlice,
     compliance: complianceSlice,
     departments: departmentSlice,

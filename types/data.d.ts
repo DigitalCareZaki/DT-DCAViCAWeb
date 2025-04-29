@@ -645,6 +645,14 @@ export interface MessageSearchUserProps {
   middle_name: string;
 }
 
+export interface ChangePasswordRecord {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  createdAt: string;
+};
+
 export interface EMRRecordsProps {
   title: string;
   uri: string;

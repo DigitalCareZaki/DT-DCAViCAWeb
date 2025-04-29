@@ -3,34 +3,39 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setEmrRecordsSlice } from '@slice';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
 import TableRender from './Table';
 
 import type { ClientComponentProps } from '@types';
+import { changePasswordRecordsSlice } from '@slice';
 import type { TableProps } from './types';
-import { getAllPatientsReports, getPatientEMRRecords } from '@service';
+import { getPasswordLists } from '@service';
 
-const Table: ClientComponentProps<any> = ({ records }) => {
+const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [loading, setLoading] = useState(false); // ✅ loader state
-  const fetchReports = async (pageNumber: number) => {
+  const [loading, setLoading] = useState(false);
+
+
+  console.log('check changepasswordData >>>>', changepasswordData);
+
+
+  const fetchPasswords = async (pageNumber: number) => {
     setLoading(true); // ✅ start loader
-    const response = await getAllPatientsReports(pageNumber, 10);
+    const response = await getPasswordLists(pageNumber, 10);
     if (response.success) {
       setLoading(false); // ✅ stop loader
 
-      dispatch(setEmrRecordsSlice({ records: response.data.data }));
+      dispatch(changePasswordRecordsSlice({ passwords: response?.data?.data }));
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };
 
-  useEffect(() => {
-    fetchReports(page);
-  }, [page]);
+  // useEffect(() => {
+  //   fetchPasswords(page);
+  // }, [page]);
 
   const handleNext = () => {
     if (hasNextPage) setPage(prev => prev + 1);
@@ -41,10 +46,10 @@ const Table: ClientComponentProps<any> = ({ records }) => {
   };
 
   useEffect(() => {
-    if (!records?.length) return;
-
-    dispatch(setEmrRecordsSlice({ records }));
-  }, [records]);
+    // if (!changepasswordData?.length) return;
+    console.log('inside the useEffect >>>>', changepasswordData?.data);
+    dispatch(changePasswordRecordsSlice({ passwords: changepasswordData?.data }));
+  }, [changepasswordData]);
 
   return (
     <div className="h-full w-full">

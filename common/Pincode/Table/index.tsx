@@ -17,20 +17,20 @@ const Table: ClientComponentProps<any> = ({ records }) => {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false); // ✅ loader state
-  const fetchReports = async (pageNumber: number) => {
-    setLoading(true); // ✅ start loader
-    const response = await getAllPatientsReports(pageNumber, 10);
-    if (response.success) {
-      setLoading(false); // ✅ stop loader
+  // const fetchReports = async (pageNumber: number) => {
+  //   setLoading(true); // ✅ start loader
+  //   const response = await getAllPatientsReports(pageNumber, 10);
+  //   if (response.success) {
+  //     setLoading(false); // ✅ stop loader
 
-      dispatch(setEmrRecordsSlice({ records: response.data.data }));
-      setHasNextPage(response.data.pagination?.hasNextPage);
-    }
-  };
+  //     dispatch(setEmrRecordsSlice({ records: response.data.data }));
+  //     setHasNextPage(response.data.pagination?.hasNextPage);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchReports(page);
-  }, [page]);
+  // useEffect(() => {
+  //   fetchReports(page);
+  // }, [page]);
 
   const handleNext = () => {
     if (hasNextPage) setPage(prev => prev + 1);
@@ -40,11 +40,11 @@ const Table: ClientComponentProps<any> = ({ records }) => {
     if (page > 1) setPage(prev => prev - 1);
   };
 
-  useEffect(() => {
-    if (!records?.length) return;
+  // useEffect(() => {
+  //   if (!records?.length) return;
 
-    dispatch(setEmrRecordsSlice({ records }));
-  }, [records]);
+  //   dispatch(setEmrRecordsSlice({ records }));
+  // }, [records]);
 
   return (
     <div className="h-full w-full">

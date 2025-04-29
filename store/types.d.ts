@@ -12,6 +12,7 @@ import type { StoreComplianceState } from './compliance/types';
 import type { StoreDepartmentState } from './departments/types';
 import type { StoreLogsState } from './logs/types';
 import type { StoreNotificationProps } from './notifications/types';
+import { StoreChangePasswordState } from './changepassword/types';
 
 export type ReduxProps = {
   user: StoreUserState;
@@ -28,6 +29,7 @@ export type ReduxProps = {
   departments: StoreDepartmentState;
   logs: StoreLogsState;
   notifications: StoreNotificationProps;
+  changePasswords: StoreChangePasswordState;
 };
 
 export {
@@ -46,4 +48,5 @@ export {
   StoreDepartmentState,
   StoreLogsState,
   StoreNotificationProps,
+  StoreChangePasswordState,
 };

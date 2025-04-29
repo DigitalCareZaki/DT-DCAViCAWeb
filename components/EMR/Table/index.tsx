@@ -29,7 +29,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
     if (response.success) {
       setLoading(false); // ✅ stop loader
 
-      dispatch(setEmrRecordsSlice({ appointments: response?.data.data }));
+      dispatch(setEmrRecordsSlice({ records: response?.data.data }));
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };
@@ -49,7 +49,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
   useEffect(() => {
     if (!records?.length) return;
 
-    dispatch(setEmrRecordsSlice({ appointments: records }));
+    dispatch(setEmrRecordsSlice({ records: records }));
   }, [records]);
 
   return (

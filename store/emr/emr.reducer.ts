@@ -1,5 +1,9 @@
-import type { SetEMRRecords } from './types';
+import type { StoreEMRState } from './types';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-export const setEmrRecords: any = (state: any, payload: any) => {
-  state.appointments = [...payload.payload.appointments];
+export const setEmrRecords = (
+  state: StoreEMRState,
+  action: PayloadAction<{ records: StoreEMRState['records'] }>
+) => {
+  state.records = action.payload.records;
 };

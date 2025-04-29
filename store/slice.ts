@@ -2,6 +2,7 @@ export * from './global/global.slice';
 export * from './user/user.slice';
 export * from './patients/patient.slice';
 export * from './articles/articles.slice';
+export * from './changepassword/changepassword.slice';
 export * from './telemed/telemed.slice';
 export * from './superadmin/organization.slice';
 export * from './meeting/meeting.slice';
