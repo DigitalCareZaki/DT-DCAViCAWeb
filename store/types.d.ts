@@ -14,6 +14,7 @@ import type { StoreLogsState } from './logs/types';
 import type { StoreNotificationProps } from './notifications/types';
 import { StoreChangePasswordState } from './changepassword/types';
 import { StoreContactState } from './contact/types';
+import { StoreChangePincodeState } from './pincode/types';
 
 export type ReduxProps = {
   user: StoreUserState;
@@ -32,6 +33,7 @@ export type ReduxProps = {
   notifications: StoreNotificationProps;
   changePasswords: StoreChangePasswordState;
   contacts: StoreContactState;
+  pincodes: StoreChangePincodeState;
 };
 
 export {
@@ -52,4 +54,5 @@ export {
   StoreNotificationProps,
   StoreChangePasswordState,
   StoreContactState,
+  StoreChangePincodeState,
 };

@@ -8,116 +8,11 @@ import { getPasswordList } from '@actions';
 import Table from './Table';
 const ChangePassword: ServerComponent = async () => {
 
-  // if (!patient) throw new Error('Patient id not define');
 
   // const type = await getUserTypeHeaders();
-  const check = await getPasswordList(1, 10);
+  const data = await getPasswordList(1, 10);
 
-  if (!check.success) return <></>;
-  console.log('check testing  >>>>>', check.data);
-
-  const data: any = {
-    data: [
-      {
-        id: 1,
-        title: 'Title One',
-        description: 'Description One',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 2,
-        title: 'Title Two',
-        description: 'Description Two',
-        status: 'False',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 3,
-        title: 'Title Three',
-        description: 'Description Three',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 4,
-        title: 'Title Four',
-        description: 'Description Four',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 5,
-        title: 'Title Five',
-        description: 'Description Five',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 6,
-        title: 'Title Six',
-        description: 'Description Six',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 7,
-        title: 'Title Seven',
-        description: 'Description Seven',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 8,
-        title: 'Title Eight',
-        description: 'Description Eight',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 9,
-        title: 'Title Nine',
-        description: 'Description Nine',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 10,
-        title: 'Title Ten',
-        description: 'Description Ten',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 11,
-        title: 'Title Eleven',
-        description: 'Description Eleven',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-      {
-        id: 12,
-        title: 'Title Twelve',
-        description: 'Description Twelve',
-        status: 'Active',
-        createdAt: '2023-05-12T12:00:00.000Z',
-      },
-
-    ],
-    pagination: {
-      totalItems: 12,
-      perPage: 10,
-      currentPage: 1,
-      totalPages: 1,
-      hasPrevPage: false,
-      hasNextPage: false,
-      prevPage: null,
-      nextPage: null
-    }
-  }
-
-
-
+  if (!data.success) return <></>;
 
   return (
     <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4 font-poppins">
@@ -129,7 +24,7 @@ const ChangePassword: ServerComponent = async () => {
       </div>
 
       <div className="mt-10 flex h-full w-full justify-center pb-40">
-        <Table changepasswordData={check?.data} />
+        <Table changepasswordData={data?.data} />
       </div>
     </div>
     // <div className="flex h-full w-full flex-col gap-6 pt-6">

@@ -653,6 +653,15 @@ export interface ChangePasswordRecord {
   createdAt: string;
 };
 
+export interface PinCodeRecord {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  createdAt: string;
+};
+
+
 export interface EMRRecordsProps {
   title: string;
   uri: string;

@@ -6,30 +6,31 @@ import { ClientGenerator, ClientTable } from '@common';
 import Record from './Record';
 import { usePathname } from 'next/navigation'
 import type { ClientComponent } from '@types';
-import type { ReduxProps, StoreEMRState } from '@store-types';
+import type { ReduxProps, StoreChangePincodeState } from '@store-types';
 
 const Table: ClientComponent = () => {
 
   const pathname = usePathname()
   console.log('pathName >>', pathname);
 
-  const { records } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
+  const { pincodes } = useSelector<ReduxProps, StoreChangePincodeState>((state) => state.pincodes);
+
+  console.log('use selector inside the nesting >>>', pincodes);
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
       <ClientTable
         heads={[
           '',
-          'Title',
-          'Description',
-          'Started',
-          'Ended',
-          'Status',
-          'Created by',
+          'user',
+          'email',
+          'phone number',
+          'updated at',
+          'created at',
           // 'Actions',
         ]}
       >
-        <ClientGenerator data={records}>
+        <ClientGenerator data={pincodes}>
           <Record />
         </ClientGenerator>
       </ClientTable>

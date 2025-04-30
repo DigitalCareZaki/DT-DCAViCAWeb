@@ -3,34 +3,37 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setEmrRecordsSlice } from '@slice';
+import { setPincodeRecordsSlice } from '@slice';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
 import TableRender from './Table';
 
 import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
-import { getAllPatientsReports, getPatientEMRRecords } from '@service';
+import { getPasswordLists } from '@service';
 
-const Table: ClientComponentProps<any> = ({ records }) => {
+const Table: ClientComponentProps<any> = ({ pinCodes, data }) => {
+
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false); // ✅ loader state
-  // const fetchReports = async (pageNumber: number) => {
-  //   setLoading(true); // ✅ start loader
-  //   const response = await getAllPatientsReports(pageNumber, 10);
-  //   if (response.success) {
-  //     setLoading(false); // ✅ stop loader
 
-  //     dispatch(setEmrRecordsSlice({ records: response.data.data }));
-  //     setHasNextPage(response.data.pagination?.hasNextPage);
-  //   }
-  // };
 
-  // useEffect(() => {
-  //   fetchReports(page);
-  // }, [page]);
+  const fetchPinCodes = async (pageNumber: number) => {
+    setLoading(true); // ✅ start loader
+    const response = await getPasswordLists(pageNumber, 10);
+    if (response.success) {
+      setLoading(false); // ✅ stop loader
+      const pincodeData = response?.data?.data?.filter((item: any) => item.type === 'PIN');
+      dispatch(setPincodeRecordsSlice({ pincodes: pincodeData }));
+      setHasNextPage(response.data.pagination?.hasNextPage);
+    }
+  };
+
+  useEffect(() => {
+    fetchPinCodes(page);
+  }, [page]);
 
   const handleNext = () => {
     if (hasNextPage) setPage(prev => prev + 1);
@@ -40,11 +43,10 @@ const Table: ClientComponentProps<any> = ({ records }) => {
     if (page > 1) setPage(prev => prev - 1);
   };
 
-  // useEffect(() => {
-  //   if (!records?.length) return;
-
-  //   dispatch(setEmrRecordsSlice({ records }));
-  // }, [records]);
+  useEffect(() => {
+    if (!pinCodes?.length) return;
+    dispatch(setPincodeRecordsSlice({ pincodes: pinCodes }));
+  }, [pinCodes]);
 
   return (
     <div className="h-full w-full">

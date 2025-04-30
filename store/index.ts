@@ -15,7 +15,7 @@ import { logsSlice } from './logs';
 import { notificationSlice } from './notifications';
 import { changepasswordSlice } from './changepassword';
 import { contactsSlice } from './contact';
-// import { changepasswordSlice } from './changepassword';
+import { pincodeSlice } from './pincode';
 
 const store = configureStore({
   reducer: {
@@ -35,6 +35,7 @@ const store = configureStore({
     logs: logsSlice,
     notifications: notificationSlice,
     contacts: contactsSlice,
+    pincodes: pincodeSlice,
   },
 });
 

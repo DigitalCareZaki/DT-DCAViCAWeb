@@ -14,3 +14,4 @@ export * from './departments/department.slice';
 export * from './logs/logs.slice';
 export * from './notifications/notifications.slice';
 export * from './contact/contact.slice';
+export * from './pincode/pincode.slice';
