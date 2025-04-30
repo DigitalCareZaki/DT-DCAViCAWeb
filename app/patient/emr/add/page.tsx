@@ -1,9 +1,10 @@
 import { AddEMR } from '@components';
 
-export default function Page(): JSX.Element {
+const Page = ({ searchParams }: any) => {
   return (
     <main className="h-full w-full">
-      <AddEMR />
+      <AddEMR searchParams={searchParams} />
     </main>
   );
 }
+export default Page;

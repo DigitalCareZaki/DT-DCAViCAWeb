@@ -31,7 +31,7 @@ const Form: ClientComponent = () => {
       onSubmit={onSubmit}
       className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6"
     >
-      <h2 className="text-xl font-bold text-center text-red-500">{type}</h2>
+      {/* <h2 className="text-xl font-bold text-center text-red-500">{type}</h2> */}
 
 
       <div className="flex w-full items-center justify-center">

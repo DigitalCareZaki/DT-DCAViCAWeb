@@ -26,7 +26,6 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
   const handleSearch = debounce(
     async (event: ChangeEvent<HTMLInputElement>[]) => {
       const value = event[0].target.value;
-
       try {
         setLoading(true);
         const res = await getPatientEMRRecords(patient_id ?? '', value);
