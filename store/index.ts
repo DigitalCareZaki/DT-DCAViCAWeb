@@ -14,6 +14,7 @@ import { departmentSlice } from './departments';
 import { logsSlice } from './logs';
 import { notificationSlice } from './notifications';
 import { changepasswordSlice } from './changepassword';
+import { contactsSlice } from './contact';
 // import { changepasswordSlice } from './changepassword';
 
 const store = configureStore({
@@ -33,6 +34,7 @@ const store = configureStore({
     departments: departmentSlice,
     logs: logsSlice,
     notifications: notificationSlice,
+    contacts: contactsSlice,
   },
 });
 

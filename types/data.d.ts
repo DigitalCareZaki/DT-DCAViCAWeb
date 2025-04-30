@@ -669,6 +669,16 @@ export interface EMRRecordsProps {
   };
 }
 
+
+export interface ContactsProps {
+  id: string;
+  name: string;
+  email: string;
+  number: string;
+  relationship: string;
+  created_at: string;
+}
+
 export interface MeasurementValuesProps {
   id: string;
   values: number[];

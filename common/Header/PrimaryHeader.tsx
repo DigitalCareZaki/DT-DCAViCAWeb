@@ -336,7 +336,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
 
               <Link
                 className="h-full w-full"
-                href={getPath('/profile')}
+                href={getPath('/contacts')}
                 passHref
               >
                 <ProfileDropDownOption

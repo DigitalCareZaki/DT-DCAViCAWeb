@@ -31,6 +31,7 @@ export { default as DoctorPatientNurses } from './Doctor/Patients/Nurses';
 export { default as DoctorPatientMeasurements } from './Doctor/Patients/Measurements';
 export { default as DoctorPatientMedication } from './Doctor/Patients/Medication';
 export { default as DoctorPatientAlerts } from './Doctor/Patients/Alerts';
+export { default as Contacts } from './Contact'
 
 // Nurse
 export { default as NurseHome } from './Nurse/Home';
