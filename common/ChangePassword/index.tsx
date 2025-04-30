@@ -4,15 +4,17 @@ import Form from './Form';
 import { ButtonPrimary, PageInfo } from '@common';
 import ChangePasswordModal from './ChangePasswordModal';
 import type { ServerComponent } from '@types';
+import { getPasswordList } from '@actions';
 import Table from './Table';
 const ChangePassword: ServerComponent = async () => {
 
   // if (!patient) throw new Error('Patient id not define');
 
   // const type = await getUserTypeHeaders();
-  // const data = await getPatientDoctors(patient, undefined, type?.toLowerCase());
+  const check = await getPasswordList(1, 10);
 
-  // if (!data.success) return <></>;
+  if (!check.success) return <></>;
+  console.log('check testing  >>>>>', check.data);
 
   const data: any = {
     data: [
@@ -127,7 +129,7 @@ const ChangePassword: ServerComponent = async () => {
       </div>
 
       <div className="mt-10 flex h-full w-full justify-center pb-40">
-        <Table changepasswordData={data} />
+        <Table changepasswordData={check?.data} />
       </div>
     </div>
     // <div className="flex h-full w-full flex-col gap-6 pt-6">

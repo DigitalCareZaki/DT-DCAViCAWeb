@@ -4,7 +4,7 @@ import fetch from '@fetch';
 import '@init-globals';
 
 async function getPasswordLists(page = 1, limit = 10) {
-    const url = `/api/v1/web/doctor/all-reports?page=${page}&limit=${limit}`;
+    const url = `/api/v1/web/auth/pinpassword?page=${page}&limit=${limit}`;
     const res = await fetch(url.convertURI());
     const data = await res.json();
 

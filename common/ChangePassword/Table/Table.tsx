@@ -23,12 +23,11 @@ const Table: ClientComponent = () => {
       <ClientTable
         heads={[
           '',
-          'Title',
-          'Description',
-          'Started',
-          'Ended',
-          'Status',
-          'Created by',
+          'user',
+          'email',
+          'phone number',
+          'updated at',
+          'created at',
           // 'Actions',
         ]}
       >

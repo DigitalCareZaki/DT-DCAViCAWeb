@@ -33,9 +33,9 @@ const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchPasswords(page);
-  // }, [page]);
+  useEffect(() => {
+    fetchPasswords(page);
+  }, [page]);
 
   const handleNext = () => {
     if (hasNextPage) setPage(prev => prev + 1);
@@ -46,7 +46,7 @@ const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
   };
 
   useEffect(() => {
-    // if (!changepasswordData?.length) return;
+    if (!changepasswordData?.length) return;
     console.log('inside the useEffect >>>>', changepasswordData?.data);
     dispatch(changePasswordRecordsSlice({ passwords: changepasswordData?.data }));
   }, [changepasswordData]);

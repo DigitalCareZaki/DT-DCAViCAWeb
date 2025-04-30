@@ -14,12 +14,12 @@ import { CircleSpinner } from 'react-spinners-kit';
 const Record: ClientComponentProps<any> = ({
   patient,
   uri,
-  title,
+  updated_at,
+  user,
   description,
-  created,
+  created_at,
   attachment,
   onDelete,
-  showPatientNameColumn,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -74,30 +74,34 @@ const Record: ClientComponentProps<any> = ({
       <td className="px-6 py-4">{family_history ?? 'N/A'}</td> */}
 
       {/* Patient Name */}
-      {showPatientNameColumn && (
-        <td className="px-6 py-4">
-          {getName({
-            first_name: patient?.user?.first_name,
-            last_name: patient?.user?.last_name,
-            middle_name: patient?.user?.middle_name,
-          })}
-        </td>
-      )}
+
+      <td className="px-6 py-4">
+        {getName({
+          first_name: user?.first_name,
+          last_name: user?.last_name,
+          middle_name: user?.middle_name,
+        })}
+      </td>
+
+      <td className="px-6 py-4">{user?.email}</td>
+
+      <td className="px-6 py-4">{user?.phone_number}</td>
+
 
 
       {/* Title */}
-      <td className="px-6 py-4">{title}</td>
+      <td className="px-6 py-4">{new Date(updated_at).toLocaleDateString()}</td>
       {/* Description */}
-      <td className="px-6 py-4">{description ?? 'N/A'}</td>
+      {/* <td className="px-6 py-4">{description ?? 'N/A'}</td> */}
       {/* Created Time */}
-      <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td>
+      <td className="px-6 py-4">{new Date(created_at).toLocaleDateString()}</td>
       {/* Date */}
-      <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td>
+      {/* <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td> */}
       {/* Attachment */}
-      <td className="px-6 py-4">{attachment ? 'Yes' : 'No'}</td>
+      {/* <td className="px-6 py-4">{attachment ? 'Yes' : 'No'}</td> */}
 
       {/* Created At */}
-      <td className="px-6 py-4">{new Date(created).toLocaleDateString() || 'N/A'}</td>
+      {/* <td className="px-6 py-4">{new Date(created).toLocaleDateString() || 'N/A'}</td> */}
 
       {/* Actions (Download and Delete Buttons) */}
       {/* <td className="flex space-x-4 px-6 py-4"> */}
