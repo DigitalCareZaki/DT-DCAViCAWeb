@@ -13,7 +13,7 @@ const PatientTodayMedications: ServerComponentProps<Props> = async ({
 }) => {
   if (!patient) throw new Error('Patient not defined');
 
-  const res = await getTodayMedicationAlerts();
+  const res = await getTodayMedicationAlerts(1, 5);
 
   if (!res.success) return <></>;
 

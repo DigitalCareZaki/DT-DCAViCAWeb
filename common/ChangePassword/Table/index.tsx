@@ -27,8 +27,8 @@ const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
     const response = await getPasswordLists(pageNumber, 10);
     if (response.success) {
       setLoading(false); // ✅ stop loader
-
-      dispatch(changePasswordRecordsSlice({ passwords: response?.data?.data }));
+      const changepasswordData = response?.data?.data?.filter((item: any) => item.type === 'PASSWORD');
+      dispatch(changePasswordRecordsSlice({ passwords: changepasswordData }));
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };
@@ -47,8 +47,8 @@ const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
 
   useEffect(() => {
     if (!changepasswordData?.length) return;
-    console.log('inside the useEffect >>>>', changepasswordData?.data);
-    dispatch(changePasswordRecordsSlice({ passwords: changepasswordData?.data }));
+    console.log('inside the useEffect >>>>', changepasswordData);
+    dispatch(changePasswordRecordsSlice({ passwords: changepasswordData }));
   }, [changepasswordData]);
 
   return (

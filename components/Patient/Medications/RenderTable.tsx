@@ -3,11 +3,11 @@
 import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 
-const RenderTable: ClientComponentProps<TableProps> = ({ data }) => {
+const RenderTable: ClientComponentProps<any> = ({ data }: any) => {
   return (
     <>
-      {data.map((el) =>
-        el.patient_medication_alerts.map((item) => (
+      {data.map((el: any) =>
+        el.patient_medication_alerts.map((item: any) => (
           <tr
             key={el.id}
             className="cursor-pointer border-b transition duration-150 odd:bg-white even:bg-gray-50 hover:bg-gray-100"

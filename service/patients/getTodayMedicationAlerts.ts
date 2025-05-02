@@ -6,9 +6,9 @@ import type { GetPatientTodayMedicationAlerts } from '../types';
 
 import '@init-globals';
 
-async function getTodayMedicationAlerts(): Promise<GetPatientTodayMedicationAlerts> {
+async function getTodayMedicationAlerts(page: any, limit: any): Promise<any> {
   const res = await fetch(
-    `/api/v1/web/patient/medications/alerts`.convertURI()
+    `/api/v1/web/patient/medications/alerts?page=${page}&limit=${limit}`.convertURI()
   );
 
   const data = await res.json();
