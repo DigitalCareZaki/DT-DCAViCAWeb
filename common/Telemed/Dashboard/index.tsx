@@ -23,7 +23,6 @@ const Dashboard: ServerComponent = async () => {
   const res = await getTelemedCardsNo();
   if (!res.success) return <></>;
 
-  console.log('res >>>>', res.data);
 
   return (
     <div className="hidescrollbar flex !h-full w-full flex-col gap-6 !overflow-y-scroll px-4">

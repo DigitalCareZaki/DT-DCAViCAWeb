@@ -34,7 +34,6 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
   const [selectedMeasurement, setSelectedMeasurement] = useState<any>(null);
 
 
-  console.log('render table redux pagination', pagination);
   useEffect(() => {
     console.log("upserted");
     // var newData = patientMeasurementListing.map((item) => {
@@ -44,7 +43,6 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
     setData(patientMeasurementListing.data);
   }, [patientMeasurementListing]);
   const [forceRender, setForceRender] = useState(false);
-  console.log("Render triggered", patientMeasurementListing);
 
   return (
     <>
@@ -98,7 +96,6 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
                     return;
                   }
 
-                  console.log("selected ", val);
 
                   var ret = await updateMeasurementStatus(el.id, val, user.name ?? (user.first_name ?? ""));
                   if (ret != true) {
@@ -108,7 +105,6 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
 
                   var newData = data.map((item: any) => {
                     if (item.id == el.id) {
-                      console.log("updated ", val);
                       return { ...item, updated_status: val, updated_status_by: user.name ?? (user.first_name ?? "") };
                     }
                     return item;

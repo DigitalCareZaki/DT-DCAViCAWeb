@@ -48,7 +48,6 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     const screenSharingUser = remoteUsers.find((user) => {
       return user.uid.toString().startsWith("screen_"); // Example check
     });
-    console.log("screenSharingUser ", screenSharingUser);
   }, [remoteUsers]);
 
 
@@ -239,7 +238,6 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
       }
 
       const { token } = await response.json();
-      console.log("token ", token);
 
       return token;
     } catch (error) {

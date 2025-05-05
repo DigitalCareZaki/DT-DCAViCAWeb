@@ -19,7 +19,6 @@ const TelemedicineNurses: ServerComponentProps<any> = async ({
 
   if (!res.success) return <></>;
 
-  console.log('res getPatientAppointments >>>', res?.data);
 
 
   return (

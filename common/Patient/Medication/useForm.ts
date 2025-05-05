@@ -96,7 +96,6 @@ const useFormHook = (
 
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('check the data if exist what', data);
     try {
       setLoading(true);
 

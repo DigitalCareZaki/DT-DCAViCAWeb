@@ -8,7 +8,6 @@ async function getSingleVlPatient(
   patchSn: string,
   duration: string
 ) {
-  console.log(duration, '======>duration');
   const res = await fetch(
     `/api/v1/vl/patients/${patchSn}?duration=${duration}`.convertURI(),
     {

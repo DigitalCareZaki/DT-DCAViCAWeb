@@ -11,12 +11,8 @@ import type { ReduxProps, StoreChangePasswordState } from '@store-types';
 const Table: ClientComponent = () => {
 
   const pathname = usePathname()
-  console.log('pathName >>', pathname);
 
   const { changePasswords } = useSelector<ReduxProps, StoreChangePasswordState>((state) => state.changePasswords);
-
-
-  console.log('changePasswords insdie the table render>>', changePasswords);
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">

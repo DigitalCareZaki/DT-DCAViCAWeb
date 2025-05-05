@@ -20,7 +20,6 @@ const Charts: ClientComponentProps<Props> = ({
   compliance,
   rag,
 }) => {
-  console.log(appointments, compliance, rag, '=====>>>data');
   return (
     <>
       {/* Appointments and Compliance Section */}

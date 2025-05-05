@@ -94,7 +94,6 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
 
       const result = await res.json();
 
-      console.log('res', res);
       if (!res.ok) {
         // Show error modal
 
@@ -107,7 +106,6 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         // });
         return;
       }
-      console.log('Report submitted successfully');
       toast.success('Report Submitted Successfully');
       onClose();
       // Show success modal

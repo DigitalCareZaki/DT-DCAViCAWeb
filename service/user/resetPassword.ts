@@ -19,9 +19,6 @@ async function resetPassword(payload: any): Promise<ResetPassword> {
 
   const data = await res.json();
 
-  console.log(data);
-  console.log('reset-password');
-
   return {
     success: res.ok,
     message: data?.message,

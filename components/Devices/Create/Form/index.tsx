@@ -55,11 +55,8 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
   const handleSelectField = (field: string, value: any) => {
     selectedValues[field] = value;
-    console.log('field', field, 'value', value);
 
-    console.log('inside the if condition', value.name);
     setSelectedSerial(value.name || []);
-    console.log('setValue serial_number', value.name);
     setValue('serial_number', value.name);
 
   };

@@ -19,7 +19,6 @@ const Table: ClientComponentProps<any> = ({ data, patient }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(data?.pagination);
   const [loading, setLoading] = useState(false);
-  console.log('table Data pagiatnion>>>', data.pagination);
 
   const setData = (appointments: any, paginationData: any) => dispatch(setPatientAppointmentsListingReducer({ appointments, pagination: paginationData }));
 
@@ -37,7 +36,6 @@ const Table: ClientComponentProps<any> = ({ data, patient }) => {
       page,
       pagination.perPage
     );
-    console.log('inside the pagination function >>>', appointments);
     setData(appointments?.data, appointments?.data?.pagination);
     setPagination(appointments?.data?.pagination);
     setLoading(false);

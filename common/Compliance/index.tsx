@@ -16,7 +16,6 @@ const Compliance: ServerComponent = async () => {
   if (!user) return <></>;
 
   const data = await getPatientList(user.toLocaleUpperCase(), 1, 10);
-  console.log('compliance kia data a raha han >>', data);
 
   if (!data.success) return <></>;
 

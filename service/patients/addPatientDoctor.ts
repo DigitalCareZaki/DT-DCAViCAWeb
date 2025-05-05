@@ -20,7 +20,6 @@ async function addDoctor(
 
     const body = await res.json();
 
-    console.log('check >>>>>', body);
 
 
     if (res.status !== 200) {

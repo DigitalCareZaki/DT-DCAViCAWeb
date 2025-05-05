@@ -7,7 +7,6 @@ import type { HeaderProps } from './types';
 
 const Header: ClientComponentProps<any> = ({ data }) => {
 
-  console.log('check the data >>>', data);
 
   return (
     <div className="flex h-fit w-full flex-col items-start gap-4 p-4 md:flex-row md:items-center md:justify-between md:gap-0">

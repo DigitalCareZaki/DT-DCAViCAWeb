@@ -18,10 +18,6 @@ const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
-  console.log('check changepasswordData >>>>', changepasswordData);
-
-
   const fetchPasswords = async (pageNumber: number) => {
     setLoading(true); // ✅ start loader
     const response = await getPasswordLists(pageNumber, 10);
@@ -47,7 +43,6 @@ const Table: ClientComponentProps<any> = ({ changepasswordData }) => {
 
   useEffect(() => {
     if (!changepasswordData?.length) return;
-    console.log('inside the useEffect >>>>', changepasswordData);
     dispatch(changePasswordRecordsSlice({ passwords: changepasswordData }));
   }, [changepasswordData]);
 

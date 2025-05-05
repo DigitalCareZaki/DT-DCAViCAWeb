@@ -24,7 +24,6 @@ const Form: ClientComponent = () => {
     router.push('/patient/emr');
   };
 
-  console.log('selected heading >>', type)
 
   return (
     <form

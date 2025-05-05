@@ -26,7 +26,6 @@ const Discussion: ClientComponent = () => {
     });
   }, [chats]);
 
-  console.log('chats: ', chats);
 
   return (
     <div

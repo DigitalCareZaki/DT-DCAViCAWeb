@@ -11,7 +11,6 @@ import type { ReduxProps, StoreContactState } from '@store-types';
 const Table: ClientComponent = () => {
 
   const pathname = usePathname()
-  console.log('pathName >>', pathname);
 
   const { contacts } = useSelector<ReduxProps, StoreContactState>((state) => state.contacts);
 

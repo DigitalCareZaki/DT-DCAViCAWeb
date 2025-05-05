@@ -66,7 +66,6 @@ const Form: ClientComponentProps<DiscussionProps> = ({ id }) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
         // Handle the selected file here
-        console.log('Selected file:', file.name);
         setFile(file);
         // You can add further processing or state updates here
       }

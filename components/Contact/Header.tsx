@@ -19,10 +19,6 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
 
-
-  console.log('header patient id >>>>', patient_id);
-
-
   const handleSearch = debounce(
     async (event: ChangeEvent<HTMLInputElement>[]) => {
       const value = event[0].target.value;

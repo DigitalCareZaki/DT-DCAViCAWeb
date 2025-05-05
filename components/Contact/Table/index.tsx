@@ -52,7 +52,6 @@ const Table: ClientComponentProps<any> = ({ getAllContacts }: any) => {
 
   useEffect(() => {
     // if (!getAllContacts?.length) return;
-    console.log('chech what api is return ', getAllContacts);
     dispatch(setContactsSlice({ contacts: getAllContacts }));
   }, [getAllContacts]);
 

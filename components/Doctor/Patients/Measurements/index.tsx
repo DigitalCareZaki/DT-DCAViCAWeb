@@ -18,7 +18,6 @@ const MeasurementsWrapper: ServerComponentProps<Props> = async ({
 
   var user = await getUser();
 
-  console.log('child >>', data)
 
   return (
     <PatientMeasurements

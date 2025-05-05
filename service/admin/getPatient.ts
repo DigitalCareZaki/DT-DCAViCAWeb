@@ -11,7 +11,7 @@ async function getPatient(): Promise<{
   const res = await fetch('/api/v1/web/admin/patient'.convertURI());
 
   const data = await res.json();
-  console.log(data, '=====>>data');
+
 
   return {
     success: res.ok,

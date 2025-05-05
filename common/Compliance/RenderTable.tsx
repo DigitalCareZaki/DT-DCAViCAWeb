@@ -17,7 +17,6 @@ const RenderTable: ClientComponentProps<any> = ({
 
 }) => {
 
-  console.log('data kia data a rhaa han>>>>>>>', data?.data);
 
   return (
     <>

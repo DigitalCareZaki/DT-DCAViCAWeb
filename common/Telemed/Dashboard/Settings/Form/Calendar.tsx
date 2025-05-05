@@ -38,7 +38,6 @@ const Form: ClientComponentProps<SlotParentProps> = ({
     });
 
     const onSelectTimeSlot = (startTime: Date, endTime: Date) => {
-        console.log("hi");
 
         setSelectedDate((prev) => ({
             startTime,
@@ -124,18 +123,15 @@ const Form: ClientComponentProps<SlotParentProps> = ({
             slots: temp,
         });
 
-        console.log("updated");
 
     }
 
 
 
     const handleChange = (selectedDate: Date) => {
-        console.log(selectedDate)
     }
 
     const handleChangeEnd = (selectedDate: Date) => {
-        console.log(selectedDate)
     }
     return (
         <>

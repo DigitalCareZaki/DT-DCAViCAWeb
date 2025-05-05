@@ -19,7 +19,6 @@ const Measurements: ServerComponentProps<Props> = async ({
   hideActions, user,
 }) => {
 
-  console.log('Measurements yaha kia a raha han >>', data)
 
   return (
     <div

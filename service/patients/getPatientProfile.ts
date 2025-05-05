@@ -8,8 +8,6 @@ async function getPatientProfile(
   id: string,
   userType: string = 'doctor'
 ): Promise<GetPatientProfile> {
-  console.log(`/api/v1/web/${userType}/patients/profile/${id}`.convertURI());
-  console.log('URL');
 
   const res = await fetch(
     `/api/v1/web/${userType}/patients/profile/${id}`.convertURI()

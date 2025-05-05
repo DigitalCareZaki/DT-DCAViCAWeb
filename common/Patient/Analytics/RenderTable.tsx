@@ -16,10 +16,7 @@ const RenderTable: ClientComponent = () => {
     (state) => state.patients
   );
 
-  console.log('setPatientAppointmentsListing >>>>', setPatientAppointmentsListing);
-
   const handleDownload = (observation: any, organizer: any) => {
-    console.log(' observation?.follow_up_date >>>', observation);
     const doc = new jsPDF();
 
     // Header Title

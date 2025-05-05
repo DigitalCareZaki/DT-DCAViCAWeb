@@ -11,7 +11,6 @@ import type { ReduxProps, StoreEMRState } from '@store-types';
 const Table: ClientComponent = () => {
 
   const pathname = usePathname()
-  console.log('pathName >>', pathname);
 
   const { records } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
 

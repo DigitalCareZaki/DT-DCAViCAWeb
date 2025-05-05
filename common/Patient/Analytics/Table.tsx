@@ -35,7 +35,6 @@ const Table: ClientComponentProps<any> = ({ data }) => {
       page,
       pagination.perPage
     );
-    console.log('inside the pagination function >>>', appointments);
     setData(appointments?.data, appointments?.data?.pagination);
     setPagination(appointments?.data?.pagination);
     setLoading(false);

@@ -11,11 +11,9 @@ import type { ReduxProps, StoreChangePincodeState } from '@store-types';
 const Table: ClientComponent = () => {
 
   const pathname = usePathname()
-  console.log('pathName >>', pathname);
 
   const { pincodes } = useSelector<ReduxProps, StoreChangePincodeState>((state) => state.pincodes);
 
-  console.log('use selector inside the nesting >>>', pincodes);
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">

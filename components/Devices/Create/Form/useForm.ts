@@ -22,8 +22,8 @@ import type { MeasurementType } from '@types';
 const useFormHook = (
   prevData:
     | (DeviceProps & {
-        id: string;
-      })
+      id: string;
+    })
     | undefined,
   categories: { name: string; value: string }[]
 ): any => {
@@ -57,14 +57,14 @@ const useFormHook = (
     async (name: string, value: string) => {
       setValue('category', value as MeasurementType);
       clearErrors('category');
-  
+
       setSelectedValues({
         category: {
           name,
           value: value as MeasurementType,
         },
       });
-  
+
       try {
         const res = await fetch(`https://avica.up.railway.app/api/v1/web/devices/devices/${value}`, {
           method: 'GET',
@@ -73,17 +73,15 @@ const useFormHook = (
             Authorization: `Bearer ${user?.token}`,
           },
         });
-  
+
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Something went wrong');
-        console.log('res khan>>>',data);
         const serials = data?.map((item: any) => item.serial_number).filter(Boolean);
-        console.log('check api serial >>>>', serials);
         setSerials(serials);
-      
 
 
-  
+
+
       } catch (error) {
         console.error('API call error:', error);
         setSerials([]);
@@ -111,8 +109,7 @@ const useFormHook = (
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      setLoading(true);  
-      console.log('data >>>',data);    
+      setLoading(true);
       // create case
       if (!prevData) {
         const res = await createDevice(
@@ -184,10 +181,10 @@ const useFormHook = (
       });
     }
 
-    return () => {};
+    return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue,handleSelect,handleSelectByAbd,serials,setSelectedSerial,selectedSerial];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial];
 };
 
 export default useFormHook;

@@ -43,7 +43,6 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
     });
 
     const onSelectTimeSlot = (startTime: Date, endTime: Date) => {
-        console.log("hi");
 
         setSelectedDate((prev) => ({
             startTime,

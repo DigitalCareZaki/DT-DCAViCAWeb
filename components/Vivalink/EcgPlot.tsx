@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 const ECGPlot = ({ data }: { data: { time: number; mv: number }[] }) => {
-  console.log(data);
 
 
   const xAxis = data.map((point) => point.time);

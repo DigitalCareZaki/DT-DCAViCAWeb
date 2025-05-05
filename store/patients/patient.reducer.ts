@@ -61,7 +61,6 @@ export const setPatientMeasurementListing = (
   state: any,
   payload: PayloadAction<{ measurements: any; pagination: any }>
 ) => {
-  console.log('payload.payload.measurements', payload.payload.measurements);
   state.patientMeasurementListing = payload.payload.measurements;
   state.pagination = payload.payload.pagination; // This will now work
 };

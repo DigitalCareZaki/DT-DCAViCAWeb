@@ -8,7 +8,6 @@ import { getUser } from '@service';
 export default async function Page() {
 
     const user = await getUser();
-    console.log('user >>>>', user);
 
     return (
         <main className="h-full w-full">

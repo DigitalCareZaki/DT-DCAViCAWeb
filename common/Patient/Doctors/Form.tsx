@@ -61,7 +61,6 @@ const Form: ClientComponent = () => {
   }, 1000);
 
   const handleSelectedDoctor = (data: SearchDoctorProps) => {
-    console.log('Selected doctor data >>>>', data);
     setSelectedDoctor(data);
     setShowDropdown((prev) => prev + 1);
   };

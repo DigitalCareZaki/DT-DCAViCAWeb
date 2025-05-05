@@ -70,7 +70,6 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     var startMinutes = startTime!.getMinutes() + startTime!.getHours() * 60;
 
     var endMinutes = endTime!.getMinutes() + endTime!.getHours() * 60;
-    console.log("yholo1");
 
     console.log(startMinutes);
 

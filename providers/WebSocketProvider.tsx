@@ -58,8 +58,6 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
       socket.current.connect();
 
       socket.current.on(`${user.id}:recieve_notification`, (payload) => {
-        // console.log('payload: ', payload);
-        // console.log('notification recieved');
         dispatch(setNewNotificationsReducer({ data: payload }));
         dispatch(
           showModalReducer({
