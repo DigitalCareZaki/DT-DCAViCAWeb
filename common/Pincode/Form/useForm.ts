@@ -44,7 +44,7 @@ const useFormHook: UseFormHookProps = () => {
             show: true,
           })
         );
-        router.push('/');
+        router.back();
 
         return;
       }
