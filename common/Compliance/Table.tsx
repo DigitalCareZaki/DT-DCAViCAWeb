@@ -59,7 +59,7 @@ const Table: ClientComponentProps<ComplianceRenderProps> = ({ data }) => {
       {loading ? (
         <Loading />
       ) : (
-        <ClientTable heads={['Patient Name', 'Patient Email', 'EMR']}>
+        <ClientTable heads={['Patient Name', 'Patient Email', 'PHR']}>
           <RenderTable
             data={data}
             selectedPatient={selectedPatient}

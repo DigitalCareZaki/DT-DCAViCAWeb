@@ -17,7 +17,7 @@ const Record: ClientComponentProps<any> = ({
   title,
   description,
   created,
-  attachment,
+  type,
   onDelete,
   showPatientNameColumn,
 }) => {
@@ -28,12 +28,12 @@ const Record: ClientComponentProps<any> = ({
     if (uri) {
       const link = document.createElement('a');
       link.href = uri;
+      link.target = '_blank';
       link.download = uri;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
-
     setLoading(false);
   }, [uri]);
 
@@ -94,16 +94,17 @@ const Record: ClientComponentProps<any> = ({
       {/* Date */}
       {/* <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td> */}
       {/* Attachment */}
-      <td className="px-6 py-4">{attachment ? 'Yes' : 'No'}</td>
+      <td className="px-6 py-4">{type.toUpperCase()}</td>
 
       {/* Created At */}
-      <td className="px-6 py-4">{new Date(created).toLocaleDateString() || 'N/A'}</td>
+      <td className="px-6 py-4">{new Date(created).toLocaleString()}</td>
 
       {/* Actions (Download and Delete Buttons) */}
       <td className="flex space-x-4 px-6 py-4">
         {/* Download Button */}
         <div
           onClick={handleDownload}
+
           className="theme-bg-color flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%]"
         >
           {loading ? (

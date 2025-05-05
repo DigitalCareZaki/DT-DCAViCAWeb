@@ -138,7 +138,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         {user.type === 'PATIENT' && (
           <>
             <Link href={getPath('/emr')}>
-              <span className="text-link-primary">EMR</span>
+              <span className="text-link-primary">PHR</span>
             </Link>
           </>
         )}
