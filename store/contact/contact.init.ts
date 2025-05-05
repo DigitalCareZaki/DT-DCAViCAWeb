@@ -1,7 +1,7 @@
 import type { StoreContactState } from './types';
 
 const initState: StoreContactState = {
-  records: [],
+  contacts: [],
 };
 
 export default initState;
