@@ -45,7 +45,7 @@ export { default as getInbox } from './messages/getInbox';
 export { default as composeMessage } from './messages/composeMessage';
 export { default as sendMessageAction } from './messages/sendMessageAction';
 export { default as getPatientContactsForDoctor } from './contact/getContactList';
-
+export { default as getBranchesSuperAdmin } from './superadmin/getBranchesSuperAdmin';
 
 export { default as searchOrganizationMedicine } from './doctors/getOrganizationMedicine';
 export { default as getTelemedCardsNo } from './telemed/getTelemedCards'

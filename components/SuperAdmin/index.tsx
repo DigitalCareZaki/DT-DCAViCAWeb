@@ -4,7 +4,7 @@ import { PageInfo } from '@common';
 
 import Analytics from './Home/Analytics';
 import Table from './Home/Table';
-
+import BranchTable from './Home/BranchTable';
 import type { ServerComponent } from '@types';
 
 const SuperAdmin: ServerComponent = async () => {
@@ -14,6 +14,9 @@ const SuperAdmin: ServerComponent = async () => {
       <Analytics />
       <div className="flex h-full w-full flex-col text-white">
         <Table />
+      </div>
+      <div className="flex h-full w-full flex-col text-white">
+        <BranchTable />
       </div>
     </div>
   );
