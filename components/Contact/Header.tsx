@@ -24,11 +24,11 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
       const value = event[0].target.value;
       try {
         setLoading(true);
-        const res = await getPatientEMRRecords(patient_id ?? '', value);
+        // const res = await getPatientEMRRecords(patient_id ?? '', value);
 
-        if (!res.success) return;
+        // if (!res.success) return;
 
-        dispatch(setEmrRecordsSlice({ records: res.data }));
+        // dispatch(setEmrRecordsSlice({ records: res.data }));
       } catch (err: any) {
         console.log(err?.message);
       } finally {
