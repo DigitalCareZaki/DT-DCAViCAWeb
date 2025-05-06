@@ -23,6 +23,8 @@ export { default as DoctorTelemedAddMeeting } from './Doctor/Telemed/Meetings/Ad
 export { default as DoctorEducation } from './Doctor/Education';
 export { default as DoctorCompliance } from './Doctor/Compliance';
 export { default as DoctorCreateEducation } from './Doctor/Education/CreateEducation';
+export { default as DoctorEMR } from './DoctorEMR';
+
 // Doctor Patients
 export { default as DoctorPatientProfile } from './Doctor/Patients/Profile';
 export { default as DoctorPatientContacts } from './Doctor/Patients/Contacts';

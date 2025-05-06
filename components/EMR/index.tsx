@@ -8,27 +8,25 @@ import type { ServerComponentProps } from '@types';
 import type { EMRProps } from './types';
 
 const EMR: ServerComponentProps<EMRProps> = async ({ patient_id }) => {
-  let records = [];
 
-  if (!patient_id) {
-    const getAllReports = await getAllPatientsReports();
-    if (getAllReports.success) {
-      records = getAllReports.data;
-    }
-  } else {
-    const getPatientReports = await getPatientEMRRecords(patient_id);
-    if (getPatientReports.success) {
-      records = getPatientReports.data;
-    }
+
+  let records: any = [];
+
+
+  const getPatientReports = await getPatientEMRRecords(patient_id);
+  if (getPatientReports.success) {
+    records = getPatientReports.data;
+    console.log('kon si api chal rahe han patient par', records);
   }
+
 
   return (
     <div className="hidescrollbar mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pb-96 font-poppins">
-      <PageInfo />
-      {/* <Header patient_id={patient_id} />
-      <Table records={res.data} /> */}
+      {/* <PageInfo /> */}
+      {/* <Header patient_id={patient_id} /> */}
+      {/* <Table records={res.data} /> */}
       <Header patient_id={patient_id || 'N/A'} />
-      <Table records={records} />
+      <Table records={records} patient_id={patient_id} />
     </div>
   );
 };

@@ -11,7 +11,7 @@ import { validator } from './validator';
 
 import type { AddEMRRecordProps, UseFormProps } from './types';
 import type { ModalState } from '@store-types';
-
+import { setEmrRecordsSlice } from '@slice';
 const useFormHook = (type: string, patient_id: any): UseFormProps => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -68,13 +68,17 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
         throw new Error(res?.message ?? 'Failed to add EMR record');
       }
 
+      console.log('testing add record data >>', result);
+
+      // dispatch(setEmrRecordsSlice(result.));
+
       handleShowModal({
         type: 'SUCCESS',
         message: 'Record added',
         show: true,
       });
 
-      router.push('/patient/emr');
+      router.back();
     } catch (err: any) {
       handleShowModal({
         type: 'ERROR',

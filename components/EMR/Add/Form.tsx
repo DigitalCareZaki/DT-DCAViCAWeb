@@ -21,7 +21,7 @@ const Form: ClientComponent = () => {
     useForm(type, patient_id);
 
   const handleClose = () => {
-    router.push('/patient/emr');
+    router.back();
   };
 
 

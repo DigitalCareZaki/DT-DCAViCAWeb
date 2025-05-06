@@ -12,14 +12,14 @@ import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 import { getAllPatientsReports, getPatientEMRRecords } from '@service';
 
-const Table: ClientComponentProps<any> = ({ records }: any) => {
+const Table: ClientComponentProps<any> = ({ records, patient_id }: any) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false); // ✅ loader state
-  const fetchReports = async (pageNumber: number) => {
+  const fetchReports = async (pageNumber: any) => {
     setLoading(true); // ✅ start loader
-    const response = await getAllPatientsReports(pageNumber, 10);
+    const response = await getPatientEMRRecords(patient_id, pageNumber, 10);
 
     if (!response.success) {
       setLoading(false); // ✅ stop loader
@@ -29,7 +29,8 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
     if (response.success) {
       setLoading(false); // ✅ stop loader
 
-      dispatch(setEmrRecordsSlice({ records: response?.data.data }));
+      dispatch(setEmrRecordsSlice({ records: response?.data?.data }));
+      console.log('response.data.pagination?.hasNextPage >>', response.data.pagination?.hasNextPage);
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };
@@ -49,7 +50,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
   useEffect(() => {
     if (!records?.length) return;
 
-    dispatch(setEmrRecordsSlice({ records: records }));
+    dispatch(setEmrRecordsSlice({ records: records?.data?.data }));
   }, [records]);
 
   return (

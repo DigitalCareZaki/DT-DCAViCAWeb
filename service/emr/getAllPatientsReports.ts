@@ -3,7 +3,7 @@
 import fetch from '@fetch';
 import '@init-globals';
 
-async function getAllPatientsReports(page = 1, limit = 10) {
+async function getAllPatientsReports(page: any, limit: any) {
   const url = `/api/v1/web/doctor/all-reports?page=${page}&limit=${limit}`;
   const res = await fetch(url.convertURI());
   const data = await res.json();
