@@ -83,6 +83,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'avica.up.railway.app',
       },
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+      },
+      
     ],
   },
 };

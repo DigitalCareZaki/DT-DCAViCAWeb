@@ -23,10 +23,8 @@ const Table: ClientComponent = () => {
           '',
           'Title',
           'Description',
-          // 'Started',
-          // 'Ended',
           'Report Type',
-          'Date & Time',
+          'Created At',
           'Actions',
         ]}
       >
