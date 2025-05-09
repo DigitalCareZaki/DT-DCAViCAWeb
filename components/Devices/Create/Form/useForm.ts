@@ -115,10 +115,10 @@ const useFormHook = (
         const res = await createDevice(
           btoa(
             JSON.stringify({
-              category: data.category,
-              serial_number: data.serial_number,
-              description: data.description,
               title: data.title,
+              description: data.description,
+              category: data.category,
+              serial_number: data.serial_number
             })
           )
         );

@@ -21,7 +21,7 @@ export const validator = create((data: DeviceProps) => {
   });
 
   test('serial_number', 'Serial is required', () => {
-    enforce(data.title).isNotEmpty();
+    enforce(data.serial_number).isNotEmpty();
   });
 
   test('category', 'Category is required', () => {

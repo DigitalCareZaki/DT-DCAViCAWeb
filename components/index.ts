@@ -24,6 +24,7 @@ export { default as DoctorEducation } from './Doctor/Education';
 export { default as DoctorCompliance } from './Doctor/Compliance';
 export { default as DoctorCreateEducation } from './Doctor/Education/CreateEducation';
 export { default as DoctorEMR } from './DoctorEMR';
+export { default as DoctorDevices } from './DoctorDevices';
 
 // Doctor Patients
 export { default as DoctorPatientProfile } from './Doctor/Patients/Profile';

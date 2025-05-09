@@ -119,33 +119,18 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         </div>
 
         <div className="w-full sm:w-1/2">
-          <DropdownSecondary
-            title="Select serial number"
-            label="Serial Number"
+          <InputBasic
+            title="Serial number"
+            label="Serial number"
+            placeholder="Enter device serial number"
+            icon="SiNamecheap"
             borderTheme
             inputWrapperClassName="bg-background"
-            icon="MdPin"
-            // error={!!errors.serial_number?.message?.length}
-            // errorMessage={errors?.serial_number?.message || '&'}
-            selected={selectedValues?.serial_number?.name || ''}
-          >
-            {serials?.length > 0 ? (
-              serials?.map((serial: any, index: number) => {
-                const item = { name: serial, value: serial };
-                return (
-                  <div
-                    key={index}
-                    onClick={() => handleSelectField('serial_number', item)}
-                    className="px-4 py-2 hover:bg-accent cursor-pointer"
-                  >
-                    {serial}
-                  </div>
-                );
-              })
-            ) : (
-              <div className="px-4 py-2 text-muted">No serials available</div>
-            )}
-          </DropdownSecondary>
+            inputClassName="bg-background"
+            hookProps={register('serial_number')}
+            error={!!errors.serial_number?.message?.length}
+            errorMessage={errors.serial_number?.message || '&'}
+          />
         </div>
 
 
