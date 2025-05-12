@@ -48,8 +48,6 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     []
   );
 
-
-
   const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial] =
     useForm(data, categories);
 
@@ -60,8 +58,6 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     setValue('serial_number', value.name);
 
   };
-
-
 
   return (
     <form

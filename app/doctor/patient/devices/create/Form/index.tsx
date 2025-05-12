@@ -50,16 +50,10 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
 
 
-  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial] =
+  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, handleSelectField] =
     useForm(data, categories);
 
-  const handleSelectField = (field: string, value: any) => {
-    selectedValues[field] = value;
 
-    setSelectedSerial(value.name || []);
-    setValue('serial_number', value.name);
-
-  };
 
 
 
@@ -93,8 +87,8 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             borderTheme
             inputWrapperClassName="bg-background"
             icon="MdPin"
-            // error={!!errors.serial_number?.message?.length}
-            // errorMessage={errors?.serial_number?.message || '&'}
+            error={!!errors.serial_number?.message?.length}
+            errorMessage={errors?.serial_number?.message || '&'}
             selected={selectedValues?.serial_number?.name || ''}
           >
             {serials?.length > 0 ? (

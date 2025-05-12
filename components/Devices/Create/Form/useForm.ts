@@ -78,10 +78,6 @@ const useFormHook = (
         if (!res.ok) throw new Error(data.message || 'Something went wrong');
         const serials = data?.map((item: any) => item.serial_number).filter(Boolean);
         setSerials(serials);
-
-
-
-
       } catch (error) {
         console.error('API call error:', error);
         setSerials([]);

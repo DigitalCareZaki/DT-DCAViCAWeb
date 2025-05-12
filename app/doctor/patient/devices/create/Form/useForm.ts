@@ -35,6 +35,8 @@ const useFormHook = (
 
   const [loading, setLoading] = useState<boolean>(false);
   const [serials, setSerials] = useState<string[]>([]);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string>('');
+  const [deviceList, setDeviceList] = useState<any[]>([]); // new state
   const [selectedValues, setSelectedValues] = useState<SelectedValuesProps>({
     category: {
       name: undefined,
@@ -66,7 +68,7 @@ const useFormHook = (
       });
 
       try {
-        const res = await fetch(`https://avica.up.railway.app/api/v1/web/devices/devices/${value}`, {
+        const res = await fetch(`/api/v1/web/devices/devices/${value}`.convertURI(), {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -76,18 +78,76 @@ const useFormHook = (
 
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Something went wrong');
+
         const serials = data?.map((item: any) => item.serial_number).filter(Boolean);
         setSerials(serials);
-
-
-
-
+        setDeviceList(data); // ✅ store full device list
       } catch (error) {
         console.error('API call error:', error);
         setSerials([]);
       }
     },
     [setValue, clearErrors, user?.token]
+  );
+
+  const handleSelectField = useCallback(
+    async (field: string, value: any) => {
+      setSelectedValues((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+
+      if (field === 'serial_number') {
+        const selectedSerial = value.name;
+        setSelectedSerial(selectedSerial);
+        setValue('serial_number', selectedSerial);
+        clearErrors('serial_number');
+
+        // Find the selected device in deviceList
+        const selectedDevice = deviceList.find(
+          (device) => device.serial_number === selectedSerial
+        );
+
+        if (selectedDevice?.id) {
+          setSelectedDeviceId(selectedDevice.id);
+          console.log('Selected device ID:', selectedDevice.id);
+
+          // ✅ Call the API with the selected device ID
+          try {
+            const res = await fetch(
+              `/api/v1/web/devices/?device_id=${selectedDevice.id}`.convertURI(),
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${user?.token}`,
+                },
+              }
+            );
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'API call failed');
+
+            console.log('Device info from API:', data);
+
+            // Optional: set other form values
+            setValue('title', data.title);
+            setValue('description', data.description);
+
+          } catch (error) {
+            console.error('Error fetching device info:', error);
+          }
+
+        } else {
+          setSelectedDeviceId('');
+          console.warn('Device not found for serial:', selectedSerial);
+        }
+      }
+
+      console.log('Selected Field:', field);
+      console.log('Selected Value:', value);
+    },
+    [setValue, clearErrors, deviceList, user?.token]
   );
 
 
@@ -184,7 +244,7 @@ const useFormHook = (
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, handleSelectField];
 };
 
 export default useFormHook;
