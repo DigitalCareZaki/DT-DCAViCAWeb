@@ -28,8 +28,8 @@ const useFormHook = (
   categories: { name: string; value: string }[]
 ): any => {
 
-  const searchParams = useSearchParams(); // Get search params
-  const patientId = searchParams?.get('patient_id'); // Extract patient_id
+  const searchParams = useSearchParams();
+  const patientId = searchParams?.get('patient_id');
   const dispatch = useDispatch();
   const router = useRouter();
   const [user] = useUser();
@@ -84,7 +84,7 @@ const useFormHook = (
 
         const serials = data?.map((item: any) => item.serial_number).filter(Boolean);
         setSerials(serials);
-        setDeviceList(data); // ✅ store full device list
+        setDeviceList(data);
       } catch (error) {
         console.error('API call error:', error);
         setSerials([]);
@@ -114,7 +114,7 @@ const useFormHook = (
           setSelectedDeviceId(selectedDevice.id);
           setValue('title', selectedDevice.title || '');
           setValue('description', selectedDevice.description || '');
-          setDisableFields(true); // ⬅️ Disable fields after setting
+          setDisableFields(true);
         } else {
           setValue('title', '');
           setValue('description', '');
@@ -193,8 +193,8 @@ const useFormHook = (
         message: `Device ${prevData ? 'updated' : 'added'} successfully`,
         show: true,
       });
-      router.back();
-      // router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+      router.push(`/${user.role?.toLocaleLowerCase()}/patient/devices?patient=${patientId}`);
+      // router.back();
     } catch (err) {
       console.error('err >>>>', err);
     } finally {

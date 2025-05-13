@@ -8,13 +8,15 @@ import { getUser, getDevices, getAllDevicesForPatient } from '@service';
 import type { Props } from './types';
 import type { ServerComponentProps } from '@types';
 
-const DoctorDevices: ServerComponentProps<Props> = async ({ patient }) => {
+const DoctorDevices: ServerComponentProps<Props> = async ({ patient }: any) => {
   const user = await getUser();
+
   if (!user?.role) return <></>;
 
   const res = patient
     ? await getAllDevicesForPatient(patient)
     : await getDevices();
+
   if (!res.success) return <></>;
 
   return (
