@@ -50,7 +50,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
 
 
-  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, handleSelectField] =
+  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, handleSelectField, disableFields] =
     useForm(data, categories);
 
 
@@ -110,10 +110,44 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           </DropdownSecondary>
         </div>
       </div>
+      {selectedValues?.serial_number?.name && (
+        <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 mt-5">
+          <div className="w-full sm:w-1/2">
+            <InputBasic
+              title="Device title"
+              label="Title"
+              placeholder="Enter device title"
+              icon="SiNamecheap"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              inputClassName="bg-background"
+              hookProps={register('title')}
+              disabled={disableFields}
+              error={!!errors.title?.message?.length}
+              errorMessage={errors.title?.message || '&'}
+            />
+          </div>
+          <div className="w-full sm:w-1/2">
+            <InputBasic
+              title="Device description"
+              label="Description"
+              placeholder="Enter device description"
+              icon="SiNamecheap"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              inputClassName="bg-background"
+              hookProps={register('description')}
+              disabled={disableFields}
+              error={!!errors.description?.message?.length}
+              errorMessage={errors.description?.message || '&'}
+            />
+          </div>
+        </div>
+      )}
 
 
       {/* First row: Device title and description */}
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+      {/* <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
         <div className="w-full sm:w-1/2">
           <InputBasic
             title="Device title"
@@ -124,6 +158,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={register('title')}
+            disabled={disableFields}
             error={!!errors.title?.message?.length}
             errorMessage={errors.title?.message || '&'}
           />
@@ -138,11 +173,12 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={register('description')}
+            disabled={disableFields}
             error={!!errors.description?.message?.length}
             errorMessage={errors.description?.message || '&'}
           />
         </div>
-      </div>
+      </div> */}
       {/* Second row: Device serial and category */}
 
       {/* Submit Button */}

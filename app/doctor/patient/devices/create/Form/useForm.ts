@@ -8,13 +8,13 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createDevice, updateDevice } from '@service';
+import { assignDevice, updateDevice } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
-
+import { useSearchParams } from 'next/navigation';
 import type { UseFormProps, SelectedValuesProps, DeviceProps } from './types';
 import type { ModalState } from '@store-types';
 import type { MeasurementType } from '@types';
@@ -27,16 +27,19 @@ const useFormHook = (
     | undefined,
   categories: { name: string; value: string }[]
 ): any => {
+
+  const searchParams = useSearchParams(); // Get search params
+  const patientId = searchParams?.get('patient_id'); // Extract patient_id
   const dispatch = useDispatch();
   const router = useRouter();
   const [user] = useUser();
 
   const [selectedSerial, setSelectedSerial] = useState<string>('');
-
+  const [disableFields, setDisableFields] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [serials, setSerials] = useState<string[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>('');
-  const [deviceList, setDeviceList] = useState<any[]>([]); // new state
+  const [deviceList, setDeviceList] = useState<any[]>([]);
   const [selectedValues, setSelectedValues] = useState<SelectedValuesProps>({
     category: {
       name: undefined,
@@ -103,51 +106,23 @@ const useFormHook = (
         setValue('serial_number', selectedSerial);
         clearErrors('serial_number');
 
-        // Find the selected device in deviceList
         const selectedDevice = deviceList.find(
           (device) => device.serial_number === selectedSerial
         );
 
-        if (selectedDevice?.id) {
+        if (selectedDevice) {
           setSelectedDeviceId(selectedDevice.id);
-          console.log('Selected device ID:', selectedDevice.id);
-
-          // ✅ Call the API with the selected device ID
-          try {
-            const res = await fetch(
-              `/api/v1/web/devices/?device_id=${selectedDevice.id}`.convertURI(),
-              {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${user?.token}`,
-                },
-              }
-            );
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || 'API call failed');
-
-            console.log('Device info from API:', data);
-
-            // Optional: set other form values
-            setValue('title', data.title);
-            setValue('description', data.description);
-
-          } catch (error) {
-            console.error('Error fetching device info:', error);
-          }
-
+          setValue('title', selectedDevice.title || '');
+          setValue('description', selectedDevice.description || '');
+          setDisableFields(true); // ⬅️ Disable fields after setting
         } else {
-          setSelectedDeviceId('');
-          console.warn('Device not found for serial:', selectedSerial);
+          setValue('title', '');
+          setValue('description', '');
+          setDisableFields(false);
         }
       }
-
-      console.log('Selected Field:', field);
-      console.log('Selected Value:', value);
     },
-    [setValue, clearErrors, deviceList, user?.token]
+    [setValue, clearErrors, deviceList]
   );
 
 
@@ -170,18 +145,16 @@ const useFormHook = (
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
-      // create case
       if (!prevData) {
-        const res = await createDevice(
+        const res = await assignDevice(
           btoa(
             JSON.stringify({
-              category: data.category,
-              serial_number: data.serial_number,
-              description: data.description,
-              title: data.title,
+              device_id: selectedDeviceId,
+              issued_to: patientId,
             })
           )
         );
+        console.log('res >>>>', res);
 
         if (!res.success) {
           handleShowModal({
@@ -220,8 +193,10 @@ const useFormHook = (
         message: `Device ${prevData ? 'updated' : 'added'} successfully`,
         show: true,
       });
-      router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+      router.back();
+      // router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
     } catch (err) {
+      console.error('err >>>>', err);
     } finally {
       setLoading(false);
     }
@@ -244,7 +219,7 @@ const useFormHook = (
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, handleSelectField];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, handleSelectField, disableFields];
 };
 
 export default useFormHook;
