@@ -9,16 +9,12 @@ import type { EMRProps } from './types';
 
 const EMR: ServerComponentProps<EMRProps> = async ({ patient_id }) => {
 
-
   let records: any = [];
-
 
   const getPatientReports = await getPatientEMRRecords(patient_id);
   if (getPatientReports.success) {
     records = getPatientReports.data;
-    console.log('kon si api chal rahe han patient par', records);
   }
-
 
   return (
     <div className="hidescrollbar mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pb-96 font-poppins">

@@ -132,7 +132,6 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     setValue('height', data.patient.height);
     setValue('weight', data.patient.weight);
 
-    console.log(data);
   }, [data]);
 
   useEffect(() => {

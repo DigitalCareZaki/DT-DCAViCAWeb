@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 
-import { Devices } from '@components';
+import { NurseDevices } from '@components';
 
 import type { PageProps } from '@types';
 
 export default function Page({ searchParams }: PageProps): JSX.Element {
   return (
     <main className="h-full w-full">
-      <Devices patient={searchParams?.patient?.toString() || null} />
+      <NurseDevices patient={searchParams?.patient?.toString() || null} />
     </main>
   );
 }

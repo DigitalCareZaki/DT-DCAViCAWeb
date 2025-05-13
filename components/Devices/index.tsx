@@ -10,15 +10,11 @@ import type { ServerComponentProps } from '@types';
 
 const Devices: ServerComponentProps<Props> = async ({ patient }) => {
   const user = await getUser();
-  console.log('get device user >>>', user);
   if (!user?.role) return <></>;
-
 
   const res = patient
     ? await getAllDevicesForPatient(patient)
     : await getDevices();
-
-  console.log('res device user >>>', res);
 
   if (!res.success) return <></>;
 

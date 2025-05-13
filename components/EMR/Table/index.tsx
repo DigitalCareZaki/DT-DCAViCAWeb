@@ -28,9 +28,7 @@ const Table: ClientComponentProps<any> = ({ records, patient_id }: any) => {
 
     if (response.success) {
       setLoading(false); // ✅ stop loader
-
       dispatch(setEmrRecordsSlice({ records: response?.data?.data }));
-      console.log('response.data.pagination?.hasNextPage >>', response.data.pagination?.hasNextPage);
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };

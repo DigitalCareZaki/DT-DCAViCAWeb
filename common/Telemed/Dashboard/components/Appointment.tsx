@@ -134,7 +134,6 @@ const Appointment: ClientComponentProps<Appointment> = ({
     setStatusState(status);
   }, [status]);
 
-  console.log(`/${user.role?.toLowerCase()}/telemed/meetings/view/${id}`);
 
   return (
     <div

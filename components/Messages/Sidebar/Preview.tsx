@@ -36,8 +36,6 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
     }
   }, [data?.created_at]);
 
-  console.log('res data check>>>>>>', data);
-
   return (
     <div className="relative flex w-full flex-col border-b py-3">
       <div

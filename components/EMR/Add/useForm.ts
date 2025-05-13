@@ -68,8 +68,6 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
         throw new Error(res?.message ?? 'Failed to add EMR record');
       }
 
-      console.log('testing add record data >>', result);
-
       // dispatch(setEmrRecordsSlice(result.));
 
       handleShowModal({

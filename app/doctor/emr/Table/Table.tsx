@@ -14,8 +14,6 @@ const Table: ClientComponent = () => {
 
   const { records } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
 
-  console.log('records kia a raha han', records)
-
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
       <ClientTable

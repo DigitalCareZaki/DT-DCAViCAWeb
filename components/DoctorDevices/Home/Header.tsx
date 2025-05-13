@@ -8,8 +8,6 @@ import type { Props } from './types';
 
 const Header: ServerComponentProps<any> = async ({ userRole, data, patientId }) => {
 
-  console.log('check patient id kia a rahe han >>>', patientId);
-
   return (
     <div className="flex w-full justify-between px-4 py-4 sm:px-6 lg:px-8">
       <span className="screen-title text-xl font-semibold text-gray-800 sm:text-2xl lg:text-3xl">
