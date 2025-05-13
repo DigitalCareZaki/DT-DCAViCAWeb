@@ -42,6 +42,12 @@ const data = {
       Icon: MdEmail,
     },
     {
+      title: 'SMS History',
+      id: 'sms-history',
+      path: '/settings/sms-history',
+      Icon: MdEmail,
+    },
+    {
       title: 'Logs',
       id: 'logs',
       path: '/settings/logs',

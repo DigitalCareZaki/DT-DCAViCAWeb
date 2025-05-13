@@ -204,6 +204,10 @@ export const routes = [
     title: 'Email History',
   },
   {
+    pathname: '/superadmin/settings/sms-history',
+    title: 'SMS History',
+  },
+  {
     pathname: '/superadmin/settings/logs',
     title: 'Logs',
   },

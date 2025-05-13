@@ -39,5 +39,6 @@ export { default as Logs } from './Logs';
 export { default as Notification } from './Notifications';
 export { default as Emails } from './Emails';
 export { default as Pincode } from './Pincode';
+export { default as SmsHistory } from './Sms';
 
 export { default as ExportButton } from './Export';
