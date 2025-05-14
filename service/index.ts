@@ -160,3 +160,7 @@ export { default as createTechnicalSupportQuery } from './technicalSupport/creat
 export { default as getAppointmentStats } from './doctors/getAppointmentStats';
 
 export { default as getAllPatientsReports } from './emr/getAllPatientsReports';
+
+
+export { default as selectSpecitlity } from './selectSpecitlity';
+export { default as selectDoctor } from './selectDoctor';

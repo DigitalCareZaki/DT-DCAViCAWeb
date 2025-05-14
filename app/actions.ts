@@ -14,6 +14,7 @@ import {
   getUser as getUserService,
   getCompliancePerPill as getCompliancePerPillService,
   getPasswordLists,
+  selectSpecitlity,
 } from '@service';
 
 import '@init-globals';
@@ -40,6 +41,7 @@ export const getPatientContacts = async (
 
 export const searchDoctor = async (search: string) =>
   searchDoctorService(search);
+
 
 export const getPasswordList = async (page: number, limit: number) => getPasswordLists(page, limit);
 

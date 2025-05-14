@@ -48,8 +48,8 @@ const DoctorPatientDoctorsHeader: ClientComponent = () => {
         </div>
         <div className="w-36">
           <ButtonPrimary
-            title="Add Doctor"
-            name="Add Doctor"
+            title="Assign Doctor"
+            name="Assign Doctor"
             className="h-10 rounded-lg"
             variant="icon"
             icon="IoMdAdd"
