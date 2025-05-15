@@ -286,6 +286,24 @@ const Sidebar: ClientComponent = () => {
             <IoIosSettings size={18} />
             {sidebar && <span className="text-xs">Settings</span>}
           </Link>
+
+        </div>
+        <div
+          title="Notifications"
+          className={twMerge(
+            'patient-profile-bar-icon',
+            sidebar && 'flex bg-background px-2'
+          )}
+        >
+          <Link
+            passHref
+            href={getPath(`/patient/notifications`)}
+            className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
+          >
+            <IoIosSettings size={18} />
+            {sidebar && <span className="text-xs">Notifications</span>}
+          </Link>
+
         </div>
       </div>
     </motion.div>
