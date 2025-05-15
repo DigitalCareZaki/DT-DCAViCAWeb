@@ -1,11 +1,14 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonPrimary, InputDropdown } from '@common';
+import {
+  ButtonPrimary, InputDropdown, DropdownSecondary,
+  ClientGenerator
+} from '@common';
 import {
   toggleDoctorPatientNurseReducer,
   pushIntoPatientNurseListingReducer,
@@ -13,7 +16,10 @@ import {
 import { debounce, getName } from '@init-globals';
 import { searchNurse } from '@actions';
 import { addPatientNurse } from '@service';
-
+import { selectSpecitlity } from '@service';
+import { selectDoctor } from '@service';
+import Speciality from './Speciality';
+import Doctor from './Doctor';
 import type {
   ClientComponent,
   SearchNursesProps,
@@ -26,6 +32,11 @@ const Form: ClientComponent = () => {
 
   const [showDropdown, setShowDropdown] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [specialities, setSpecialities] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [selectedSpeciality, setSelectedSpeciality] = useState<{ name: string; id: string } | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<{ name: string; id: string } | null>(null);
+
   const [data, setData] = useState<SearchNursesProps[]>([]);
   const [selectedNurse, setSelectedNurse] = useState<
     SearchNursesProps | null | undefined
@@ -42,6 +53,47 @@ const Form: ClientComponent = () => {
   const handleHideForm = () => dispatch(toggleDoctorPatientNurseReducer());
   const pushIntoPatientNurses = (nurse: PatientNursesProps) =>
     dispatch(pushIntoPatientNurseListingReducer({ nurse }));
+
+
+  useEffect(() => {
+    const fetchSpecialities = async () => {
+      const res = await selectSpecitlity();
+      console.log('res Data :>>>', res);
+      if (res.success) {
+        const mapped = res.data.map((item: any) => ({
+          name: item.title,
+          value: item.id,
+        }));
+        setSpecialities(mapped);
+      }
+      setLoading(false);
+    };
+
+    fetchSpecialities();
+  }, []);
+
+
+  const handleSpecialitySelect = async (name: string, value: string) => {
+    setSelectedSpeciality({ name, id: value });
+    setSelectedDoctor(null); // reset doctor
+
+    const res = await selectDoctor(value);
+
+    if (res.success) {
+      const mapped = res?.data?.map((item: any) => ({
+        name: `${item?.user?.first_name} ${item?.user?.last_name}`,
+        value: item?.user?.id,
+      }));
+      setDoctors(mapped);
+    }
+  };
+
+  const handleDoctorSelect = (name: string, value: string) => {
+    setSelectedDoctor({ name, id: value });
+
+    // 👇 Use this doctor ID for further actions
+    console.log('Selected Doctor:', { name, id: value });
+  };
 
   const onChange = debounce(async (event: ChangeEvent<HTMLInputElement>[]) => {
     const value = event[0].target.value;
@@ -121,7 +173,37 @@ const Form: ClientComponent = () => {
               <div className="h-[3px] w-full rounded-full bg-theme-doctor-primary" />
             </div>
             <div className="relative mt-10 flex h-full w-full flex-col gap-4">
-              <InputDropdown
+              <DropdownSecondary
+                title="Select Speciality"
+                label="Speciality"
+                borderTheme
+                inputWrapperClassName="bg-background"
+                icon="MdPin"
+                selected={selectedSpeciality?.name}
+              >
+                {!loading && (
+                  <ClientGenerator data={specialities} handleSelect={handleSpecialitySelect}>
+                    <Speciality />
+                  </ClientGenerator>
+                )}
+              </DropdownSecondary>
+
+              {selectedSpeciality && (
+                <DropdownSecondary
+                  title="Select Doctor"
+                  label="Doctor"
+                  borderTheme
+                  inputWrapperClassName="bg-background"
+                  icon="MdPin"
+                  selected={selectedDoctor?.name}
+                >
+                  <ClientGenerator data={doctors} handleSelect={handleDoctorSelect}>
+                    <Doctor />
+                  </ClientGenerator>
+                </DropdownSecondary>
+              )}
+
+              {/* <InputDropdown
                 loading={loading}
                 label="Search Nurse"
                 placeholder="Search nurse by name, email, employee id or npi number"
@@ -144,7 +226,7 @@ const Form: ClientComponent = () => {
                     </div>
                   ))}
                 </>
-              </InputDropdown>
+              </InputDropdown> */}
             </div>
             <div className="mt-4 flex w-full flex-col items-center gap-2">
               <span className="w-full text-start text-ssx font-semibold text-red-500">

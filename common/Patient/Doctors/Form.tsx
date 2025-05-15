@@ -133,11 +133,7 @@ const Form: ClientComponent = () => {
         return;
       }
 
-      console.log('data what coming >>', data);
-
       const res = await addPatientDoctor(btoa(JSON.stringify(data)));
-
-      console.log('res what coming >>', res);
 
       if (!res?.success) {
         toast.error(res?.message.toString());
