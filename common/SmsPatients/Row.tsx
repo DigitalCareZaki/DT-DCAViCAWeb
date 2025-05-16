@@ -13,7 +13,7 @@ const Row: ClientComponentProps<any> = ({ ...el }) => {
 
   return (
     <tr
-      key={el.id}
+      key={el?.id}
       className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
     >
       {/* <th
@@ -31,7 +31,16 @@ const Row: ClientComponentProps<any> = ({ ...el }) => {
       </th> */}
       <td className="px-6 py-4">{el?.to ?? 'N/A'}</td>
       <td className="px-6 py-4">{el?.body ?? 'N/A'}</td>
-      <td className="px-6 py-4">{sender ?? 'N/A'}</td>
+      <td className="px-6 py-4">
+        {/* <div>
+          <Image
+            src={getProfilePicture(el?.sender?.uri)}
+            alt="profile-picture"
+            className="h-full w-full rounded-full object-cover"
+            fill
+          />
+        </div> */}
+        {sender ?? 'N/A'}</td>
       <td className="px-6 py-4">{receiver ?? 'N/A'}</td>
       {/* <td className="px-6 py-4">
         <div
