@@ -297,7 +297,7 @@ const Sidebar: ClientComponent = () => {
         >
           <Link
             passHref
-            href={getPath(`/patient/notifications`)}
+            href={getPath(`/patient/notifications?patient=${params?.get('patient')}`)}
             className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
           >
             <IoIosSettings size={18} />

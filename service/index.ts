@@ -1,6 +1,8 @@
 
 export { default as getPatientList } from './patients/getPatientList';
 export { default as getPatientProfile } from './patients/getPatientProfile';
+export { default as getPatientNotifications } from './patientNotifications/getPatientNotifications';
+
 export { default as getPatientContacts } from './patients/getPatientContacts';
 export { default as addPatientContact } from './patients/addPatientContact';
 export { default as searchDoctor } from './searchDoctor';
@@ -160,7 +162,6 @@ export { default as createTechnicalSupportQuery } from './technicalSupport/creat
 export { default as getAppointmentStats } from './doctors/getAppointmentStats';
 
 export { default as getAllPatientsReports } from './emr/getAllPatientsReports';
-
 
 export { default as selectSpecitlity } from './selectSpecitlity';
 export { default as selectDoctor } from './selectDoctor';

@@ -24,6 +24,7 @@ export { default as EducationDetail } from './Education/Detail';
 export { default as PageInfo } from './PageInfo';
 
 export { default as ChangePassword } from './ChangePassword';
+export { default as PatientNotification } from './PatientNotifications';
 
 export { default as EducationLeftBar } from './Education/LeftBar';
 export { default as EducationRightBar } from './Education/Rightbar';
@@ -31,7 +32,6 @@ export { default as EducationContent } from './Education/Content';
 export { default as EducationLeftBarSkeleton } from './Education/LeftBar/Skeleton';
 export { default as EducationRightBarSkeleton } from './Education/Rightbar/Skeleton';
 export { default as EducationContentSkeleton } from './Education/Content/Skeleton';
-
 export { default as EditorBasic } from './Editor';
 
 export { default as SettingsTelemed } from './Telemed/Dashboard/Settings';
