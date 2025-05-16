@@ -25,6 +25,7 @@ export { default as PageInfo } from './PageInfo';
 
 export { default as ChangePassword } from './ChangePassword';
 export { default as PatientNotification } from './PatientNotifications';
+export { default as SmsPatients } from './SmsPatients';
 
 export { default as EducationLeftBar } from './Education/LeftBar';
 export { default as EducationRightBar } from './Education/Rightbar';

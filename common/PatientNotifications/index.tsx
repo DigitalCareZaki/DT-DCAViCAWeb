@@ -6,7 +6,11 @@ import { getPatientNotifications } from '@service';
 import Table from './Table';
 import type { ServerComponent } from '@types';
 
-const PatientNotification: any = async ({ patient }: any) => {
+type PatientNotificationProps = {
+  patient: any; // Replace `any` with the proper type if you know it
+};
+
+const PatientNotification = async ({ patient }: PatientNotificationProps): Promise<JSX.Element> => {
 
   console.log('PatientNotification component >>>', patient);
 

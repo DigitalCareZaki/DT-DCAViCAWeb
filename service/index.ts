@@ -2,7 +2,7 @@
 export { default as getPatientList } from './patients/getPatientList';
 export { default as getPatientProfile } from './patients/getPatientProfile';
 export { default as getPatientNotifications } from './patientNotifications/getPatientNotifications';
-
+export { default as getPatientsSms } from './patientSms/getPatientSms';
 export { default as getPatientContacts } from './patients/getPatientContacts';
 export { default as addPatientContact } from './patients/addPatientContact';
 export { default as searchDoctor } from './searchDoctor';
