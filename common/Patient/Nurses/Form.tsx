@@ -17,7 +17,7 @@ import { debounce, getName } from '@init-globals';
 import { searchNurse } from '@actions';
 import { addPatientNurse } from '@service';
 import { selectSpecitlity } from '@service';
-import { selectDoctor } from '@service';
+import { selectNurse } from '@service';
 import Speciality from './Speciality';
 import Doctor from './Doctor';
 import type {
@@ -35,12 +35,12 @@ const Form: ClientComponent = () => {
   const [specialities, setSpecialities] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [selectedSpeciality, setSelectedSpeciality] = useState<{ name: string; id: string } | null>(null);
-  const [selectedDoctor, setSelectedDoctor] = useState<{ name: string; id: string } | null>(null);
+  const [selectedNurse, setSelectedNurse] = useState<{ name: string; id: string } | null>(null);
 
   const [data, setData] = useState<SearchNursesProps[]>([]);
-  const [selectedNurse, setSelectedNurse] = useState<
-    SearchNursesProps | null | undefined
-  >(undefined);
+  // const [selectedNurse, setSelectedNurse] = useState<
+  //   SearchNursesProps | null | undefined
+  // >(undefined);
   const [saving, setSaving] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -58,7 +58,6 @@ const Form: ClientComponent = () => {
   useEffect(() => {
     const fetchSpecialities = async () => {
       const res = await selectSpecitlity();
-      console.log('res Data :>>>', res);
       if (res.success) {
         const mapped = res.data.map((item: any) => ({
           name: item.title,
@@ -75,11 +74,12 @@ const Form: ClientComponent = () => {
 
   const handleSpecialitySelect = async (name: string, value: string) => {
     setSelectedSpeciality({ name, id: value });
-    setSelectedDoctor(null); // reset doctor
+    setSelectedNurse(null); // reset doctor
 
-    const res = await selectDoctor(value);
+    const res = await selectNurse(value);
 
     if (res.success) {
+      console.log('iski user id chahiye >>', res.data);
       const mapped = res?.data?.map((item: any) => ({
         name: `${item?.user?.first_name} ${item?.user?.last_name}`,
         value: item?.user?.id,
@@ -89,7 +89,7 @@ const Form: ClientComponent = () => {
   };
 
   const handleDoctorSelect = (name: string, value: string) => {
-    setSelectedDoctor({ name, id: value });
+    setSelectedNurse({ name, id: value });
 
     // 👇 Use this doctor ID for further actions
     console.log('Selected Doctor:', { name, id: value });
@@ -111,23 +111,22 @@ const Form: ClientComponent = () => {
     }
   }, 1000);
 
-  const handleSelectedNurse = (data: SearchNursesProps) => {
-    setSelectedNurse(data);
-    setShowDropdown((prev) => prev + 1);
-  };
+  // const handleSelectedNurse = (data: SearchNursesProps) => {
+  //   setSelectedNurse(data);
+  //   setShowDropdown((prev) => prev + 1);
+  // };
 
-  const onClear = useCallback(() => {
-    setSelectedNurse(null);
-  }, []);
+  // const onClear = useCallback(() => {
+  //   setSelectedNurse(null);
+  // }, []);
 
   const onSave = useCallback(async () => {
     try {
       setSaving(true);
       const data = {
         patient_id: params?.get('patient')?.toString(),
-        nurse_id: selectedNurse?.user.id,
+        nurse_id: selectedNurse?.id,
       };
-
       const res = await addPatientNurse(btoa(JSON.stringify(data)));
 
       if (!res?.success) {
@@ -148,7 +147,7 @@ const Form: ClientComponent = () => {
     } finally {
       setSaving(false);
     }
-  }, [params, selectedNurse?.user.id]);
+  }, [params, selectedNurse?.id]);
 
   return (
     <AnimatePresence>
@@ -190,12 +189,12 @@ const Form: ClientComponent = () => {
 
               {selectedSpeciality && (
                 <DropdownSecondary
-                  title="Select Doctor"
-                  label="Doctor"
+                  title="Select Nurse"
+                  label="Nurse"
                   borderTheme
                   inputWrapperClassName="bg-background"
                   icon="MdPin"
-                  selected={selectedDoctor?.name}
+                  selected={selectedNurse?.name}
                 >
                   <ClientGenerator data={doctors} handleSelect={handleDoctorSelect}>
                     <Doctor />
@@ -237,7 +236,7 @@ const Form: ClientComponent = () => {
                 className="h-10 rounded-lg bg-t-color-secondary"
                 onClick={onSave}
                 type="button"
-                disabled={!selectedNurse?.user.id}
+                disabled={!selectedNurse?.id}
                 loading={saving}
               />
               <ButtonPrimary

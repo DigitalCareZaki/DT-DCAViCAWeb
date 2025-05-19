@@ -49,6 +49,8 @@ export { default as sendMessageAction } from './messages/sendMessageAction';
 export { default as getPatientContactsForDoctor } from './contact/getContactList';
 export { default as getBranchesSuperAdmin } from './superadmin/getBranchesSuperAdmin';
 export { default as getSmsHistory } from './sms/getSmsHistory';
+export { default as selectNurse } from './selectNurse';
+
 
 export { default as searchOrganizationMedicine } from './doctors/getOrganizationMedicine';
 export { default as getTelemedCardsNo } from './telemed/getTelemedCards'
