@@ -168,3 +168,4 @@ export { default as getAllPatientsReports } from './emr/getAllPatientsReports';
 
 export { default as selectSpecitlity } from './selectSpecitlity';
 export { default as selectDoctor } from './selectDoctor';
+export { default as getDoctorEmailsHistory } from './doctorEmails/getDoctorEmailsHistory';
