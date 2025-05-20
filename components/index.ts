@@ -45,6 +45,7 @@ export { default as NurseAddAppointment } from './Nurse/Telemed/AddAppointment';
 export { default as NurseEducation } from './Nurse/Education';
 export { default as NurseCompliance } from './Nurse/Compliance';
 export { default as NurseDevices } from './NurseDevices';
+export { default as NursesRoleWrapper } from './Nurse/Patients/NursesRole';
 // Nurse Patients
 export { default as NursePatientProfile } from './Nurse/Patients/Profile';
 export { default as NursePatientContacts } from './Nurse/Patients/Contacts';

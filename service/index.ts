@@ -50,8 +50,9 @@ export { default as getPatientContactsForDoctor } from './contact/getContactList
 export { default as getBranchesSuperAdmin } from './superadmin/getBranchesSuperAdmin';
 export { default as getSmsHistory } from './sms/getSmsHistory';
 export { default as selectNurse } from './selectNurse';
-
-
+export { default as selectNurseRoleSpecitlity } from './selectSpecitlityNurseRole';
+export { default as selectNurseByDoctor } from './selectNurseByDoctor';
+export { default as addNurseRolePatient } from './patients/addNurseRolePatient';
 export { default as searchOrganizationMedicine } from './doctors/getOrganizationMedicine';
 export { default as getTelemedCardsNo } from './telemed/getTelemedCards'
 export { default as searchTelemedUsers } from './telemed/searchUser';

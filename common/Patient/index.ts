@@ -7,3 +7,4 @@ export { default as PatientTelemedicine } from './Telemedicine';
 export { default as PatientMeasurements } from './Measurements';
 export { default as PatientMedication } from './Medication';
 export { default as PatientAlerts } from './Alerts';
+export { default as NursesPatient } from './NursesRole';
