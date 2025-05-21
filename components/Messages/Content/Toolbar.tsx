@@ -27,11 +27,16 @@ const Toolbar: ClientComponent = () => {
     (state) => state.global
   );
 
+  const messages = message.data?.threadMessages || [];
+  const rootMessage = messages[0];
+
+
+
   const onSuccessStarred = useCallback(() => {
     dispatch(
       updateMessageReducer({
         ...(message.data as any),
-        starred: !message.data?.starred,
+        starred: rootMessage?.starred,
       })
     );
   }, [dispatch, message.data]);
@@ -41,10 +46,11 @@ const Toolbar: ClientComponent = () => {
   }, [dispatch, message.data]);
 
   const handleReply = useCallback(() => {
+    console.log('rootMessage >>>>>', rootMessage);
     dispatch(
       composeEmailReducer({
-        to: message.data?.sender.email,
-        subject: `Reply: ${message.data?.subject}`,
+        to: rootMessage?.sender.email,
+        subject: `Reply: ${rootMessage?.subject}`,
       })
     );
     dispatch(toggleComposeMessageReducer());
@@ -54,8 +60,8 @@ const Toolbar: ClientComponent = () => {
     dispatch(
       composeEmailReducer({
         to: '',
-        subject: `Fwd: ${message.data?.subject}`,
-        content: message.data?.content,
+        subject: `Fwd: ${rootMessage?.subject}`,
+        content: rootMessage?.content,
       })
     );
     dispatch(toggleComposeMessageReducer());
@@ -91,10 +97,10 @@ const Toolbar: ClientComponent = () => {
       <div className="flex items-center justify-between gap-4 py-2">
         <Action
           label="Starred"
-          actionType={message.data?.starred ? 'unstarred' : 'starred'}
+          actionType={rootMessage?.starred ? 'unstarred' : 'starred'}
           icon={<FaRegStar size={20} />}
-          messageId={message.data?.id ?? ''}
-          active={message.data?.starred}
+          messageId={rootMessage?.id ?? ''}
+          active={rootMessage?.starred}
           activeIcon={<FaStar size={20} />}
           onSuccess={onSuccessStarred}
         />
@@ -102,8 +108,8 @@ const Toolbar: ClientComponent = () => {
           label="Delete"
           actionType="delete"
           icon={<RiDeleteBin6Line size={20} />}
-          messageId={message.data?.id ?? ''}
-          active={message.data?.deleted}
+          messageId={rootMessage?.id ?? ''}
+          active={rootMessage?.deleted}
           activeIcon={<MdDelete size={20} />}
           onSuccess={onSuccessDeleted}
           disableOnActive

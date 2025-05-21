@@ -393,20 +393,31 @@ export type PatientProfileData = {
 };
 
 export interface InboxDataProps {
+  threadMessages: ThreadMessageProps[];
+}
+
+export interface ThreadMessageProps {
   id: string;
   subject: string;
   content: string;
+  attachments: string[];
+  starred: boolean;
+  deleted: boolean;
+  sender_id: string;
+  reciever_id: string;
+  parent_id: string | null;
+  created_at: string;
+  updated_at: string;
   sender: {
+    id: string;
     first_name: string;
     last_name: string;
-    middle_name: string;
-    uri: null | string;
+    middle_name: string | null;
+    uri: string | null;
     email: string;
+    // optionally other sender fields
   };
-  attachments: string[];
-  created_at: string;
-  deleted: boolean;
-  starred: boolean;
+  replies: ThreadMessageProps[]; // nested replies if needed
 }
 
 export interface SearchTelemedResProps {

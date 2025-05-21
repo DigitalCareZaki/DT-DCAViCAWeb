@@ -7,7 +7,7 @@ import {
   ComposeEmailFunc,
 } from './types';
 
-export const setGlobalState: ReducerFunc = (state, payload) => {};
+export const setGlobalState: ReducerFunc = (state, payload) => { };
 
 export const toggleDoctorContactForm: ReducerFuncSecondary = (state) => {
   state.modals.doctorContactForm = !state.modals.doctorContactForm;

@@ -7,17 +7,39 @@ import { getName, getProfilePicture } from '@init-globals';
 import { selectMessageReducer } from '@slice';
 import type { ClientComponentProps } from '@types';
 import type { PreviewProps } from './types';
+import { getThreadMessages } from '@service';
 
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
 
-  const onClick = () => {
-    dispatch(
-      selectMessageReducer({
-        ...(data as any),
-      })
-    );
-  }
+
+  const onClick = async () => {
+    console.log('Clicked message data >>>>>', data);
+
+    // Step 1: Get thread messages by ID
+    const response = await getThreadMessages(data?.id);
+
+    if (response.success) {
+      // Step 2: Add thread messages to the data
+      const enrichedData = {
+        threadMessages: response.data, // attach the full thread
+      };
+
+      // Step 3: Dispatch to Redux
+      dispatch(selectMessageReducer(enrichedData as any));
+    } else {
+      console.error('Failed to fetch thread messages');
+    }
+  };
+
+  // const onClick = () => {
+  //   console.log('onClick data >>>>>', data);
+  //   dispatch(
+  //     selectMessageReducer({
+  //       ...(data as any),
+  //     })
+  //   );
+  // }
 
   const [dateTimeString, setDateTimeString] = useState<string>('');
 
