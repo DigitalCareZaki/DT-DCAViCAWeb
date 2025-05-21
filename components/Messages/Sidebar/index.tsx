@@ -15,6 +15,9 @@ const Sidebar: ServerComponentProps<SidebarProps> = async ({
 }) => {
   const res = await getInbox(type, search);
 
+  console.log('iska res check>>>>>', res);
+
+
   if (!res.success) return <></>;
 
   return (

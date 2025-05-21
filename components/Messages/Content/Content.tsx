@@ -12,6 +12,10 @@ const Content: ClientComponent = () => {
     (state) => state.global
   );
 
+
+  console.log('is msg ma kia a raha han message >>>>>', message);
+
+
   if (!message.show) return <NoContentSelected />;
 
   return (

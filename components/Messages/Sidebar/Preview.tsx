@@ -11,12 +11,13 @@ import type { PreviewProps } from './types';
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
 
-  const onClick = () =>
+  const onClick = () => {
     dispatch(
       selectMessageReducer({
         ...(data as any),
       })
     );
+  }
 
   const [dateTimeString, setDateTimeString] = useState<string>('');
 
