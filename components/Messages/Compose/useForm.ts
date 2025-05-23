@@ -67,6 +67,7 @@ const useFormHook = (): UseFormProps => {
 
   const handleSelectUser = (value: string) => {
     setValue('send_to', value);
+    console.log('value >>>>>', value);
     setForceRender((prev) => prev + 1);
   };
 
@@ -83,12 +84,19 @@ const useFormHook = (): UseFormProps => {
 
       setLoading(true);
 
+      // Always include parent_id in the payload
+      const payload = {
+        ...data,
+        attachments: Array.isArray(composeMessageState.attachments) && composeMessageState.attachments.length > 0
+          ? composeMessageState.attachments
+          : [],
+        parent_id: composeMessageState.parent_id || null,
+      };
+      console.log('data >>>>>>', payload);
+
       const res = await composeMessage(
         btoa(
-          JSON.stringify({
-            ...data,
-            attachments: [],
-          })
+          JSON.stringify(payload)
         )
       );
 

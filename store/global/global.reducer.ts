@@ -53,6 +53,8 @@ export const composeEmail: ComposeEmailFunc = (state, payload) => {
     to: payload.payload?.to ?? '',
     subject: payload.payload?.subject ?? '',
     content: payload.payload?.content ?? '',
+    attachments: payload.payload?.attachments ?? [],
+    parent_id: payload.payload?.parent_id ?? '',
   };
 };
 

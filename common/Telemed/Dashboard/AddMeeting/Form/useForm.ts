@@ -153,7 +153,7 @@ const useFormHook: UseFormProps = () => {
         show: true,
       });
 
-      router.push('/doctor/telemed');
+      router.back();
     } catch (err: any) {
       handleShowModal({
         show: true,

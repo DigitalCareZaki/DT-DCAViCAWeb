@@ -27,6 +27,8 @@ export type StoreGlobalState = {
     to: string;
     subject: string;
     content: string;
+    attachments: any[];
+    parent_id: string;
   };
 };
 
@@ -50,7 +52,7 @@ export type ShowModalFunc = (
 
 export type ComposeEmailFunc = (
   state: StoreGlobalState,
-  payload: PayloadAction<{ to?: string; subject?: string; content?: string }>
+  payload: PayloadAction<{ to?: string; subject?: string; content?: string, attachments?: string[], parent_id?: string }>
 ) => void;
 
 export type SelectMessageFunc = (
