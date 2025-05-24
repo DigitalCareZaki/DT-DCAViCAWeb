@@ -5,6 +5,7 @@ import {
   SelectMessageFunc,
   UpdateMessageFunc,
   ComposeEmailFunc,
+  SetInboxFunc, // ADDED
 } from './types';
 
 export const setGlobalState: ReducerFunc = (state, payload) => { };
@@ -77,4 +78,8 @@ export const updateMessage: UpdateMessageFunc = (state, payload) => {
 
 export const toggleAddMeasurementForm: ReducerFuncSecondary = (state) => {
   state.modals.addMeasurementForm = !state.modals.addMeasurementForm;
+};
+
+export const setInbox: SetInboxFunc = (state, payload) => {
+  state.inbox = payload.payload;
 };

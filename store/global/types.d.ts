@@ -30,6 +30,7 @@ export type StoreGlobalState = {
     attachments: any[];
     parent_id: string;
   };
+  inbox?: InboxDataProps[]; // ADDED: inbox list for robust unread indicator
 };
 
 export type ModalState = {
@@ -63,4 +64,9 @@ export type SelectMessageFunc = (
 export type UpdateMessageFunc = (
   state: StoreGlobalState,
   payload: PayloadAction<InboxDataProps>
+) => void;
+
+export type SetInboxFunc = (
+  state: StoreGlobalState,
+  payload: PayloadAction<InboxDataProps[]>
 ) => void;

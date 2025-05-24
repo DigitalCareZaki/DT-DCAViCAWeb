@@ -4,11 +4,13 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getName, getProfilePicture } from '@init-globals';
-import { selectMessageReducer } from '@slice';
+import { selectMessageReducer, setInboxReducer } from '@slice';
 import type { ClientComponentProps } from '@types';
 import type { PreviewProps } from './types';
 import { getThreadMessages } from '@service';
 import readMessage from '../../../service/messages/readMessage';
+import readThread from '../../../service/messages/readThread';
+import getInbox from '../../../service/messages/getInbox';
 import { FaCircle } from 'react-icons/fa';
 
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
@@ -23,6 +25,22 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
     if (data.root_id === null && isRead === false && data.id) {
       await readMessage(data.id);
       setIsRead(true);
+      // Refetch inbox and update Redux state
+      const inboxRes = await getInbox('inbox');
+      if (inboxRes.success) {
+        dispatch(setInboxReducer(inboxRes.data));
+      }
+    }
+
+    // Mark as read if needed
+    if (data.root_id !== null && isRead === false && data.root_id) {
+      await readThread(data.root_id);
+      setIsRead(true);
+      // Refetch inbox and update Redux state
+      const inboxRes = await getInbox('inbox');
+      if (inboxRes.success) {
+        dispatch(setInboxReducer(inboxRes.data));
+      }
     }
 
     // Fetch thread messages in the background
@@ -90,11 +108,23 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
                 New
               </span>
             )}
-            {data.root_id !== null && data.replies && Array.isArray(data.replies) && data.replies.filter((r: any) => !r.is_read).length > 0 && (
+            {data.root_id !== null && isRead === false && (
+              <span title="New message" className="ml-2 text-xs text-green-500 font-bold">
+                New Replies
+              </span>
+              // <span title="Unread replies" className="ml-2 text-xs text-red-500 font-bold">
+              //   <FaCircle size={8} className="text-red-500" />
+              // </span>
+            )}
+            {/* {data.root_id !== null && data.replies.filter((r: any) => !r.is_read).length > 0 && (
+              <span title="Unread replies" className="ml-2 text-xs text-red-500 font-bold">
+                <FaCircle size={8} className="text-red-500" />
+              </span>
+            )}
               <span title="New replies" className="ml-2 text-xs text-green-500 font-bold">
                 +{data.replies.filter((r: any) => !r.is_read).length}
               </span>
-            )}
+            )} */}
           </div>
           <div className="flex w-full">
             <span className="text-sm font-bold text-gray-600">

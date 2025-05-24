@@ -17,6 +17,7 @@ import {
   updateMessage,
   composeEmail,
   toggleAddMeasurementForm,
+  setInbox,
 } from './global.reducer';
 
 const globalSlice = createSlice({
@@ -38,6 +39,7 @@ const globalSlice = createSlice({
     updateMessage,
     composeEmail,
     toggleAddMeasurementForm,
+    setInbox,
   },
 });
 
@@ -51,13 +53,14 @@ export const {
   toggleDoctorPatientAlertForm: toggleDoctorPatientAlertReducer,
   toggleDoctorAppointmentCall: toggleDoctorAppointmentReducer,
   toggleDoctorAppointmentPatientVitals:
-    toggleDoctorAppointmentPatientVitalsReducer,
+  toggleDoctorAppointmentPatientVitalsReducer,
   showModal: showModalReducer,
   toggleComposeMessage: toggleComposeMessageReducer,
   selectMessage: selectMessageReducer,
   updateMessage: updateMessageReducer,
   composeEmail: composeEmailReducer,
   toggleAddMeasurementForm: toggleAddMeasurementFormReducer,
+  setInbox: setInboxReducer,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
