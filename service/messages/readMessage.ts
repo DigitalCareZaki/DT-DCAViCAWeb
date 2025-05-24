@@ -1,0 +1,18 @@
+// Mark a message as read by ID
+'use server';
+
+import fetch from '@fetch';
+
+export async function readMessage(messageId: string) {
+    const res = await fetch(`/api/v1/web/message/update-message/${messageId}`.convertURI(), {
+        method: 'PATCH',
+        cache: 'no-cache',
+    });
+    const data = await res.json();
+    console.log('Update MEssage >>>', data);
+    return {
+        success: res.ok,
+        data,
+    };
+}
+export default readMessage;

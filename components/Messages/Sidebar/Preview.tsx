@@ -2,44 +2,36 @@
 
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getName, getProfilePicture } from '@init-globals';
 import { selectMessageReducer } from '@slice';
 import type { ClientComponentProps } from '@types';
 import type { PreviewProps } from './types';
 import { getThreadMessages } from '@service';
+import readMessage from '../../../service/messages/readMessage';
+import { FaCircle } from 'react-icons/fa';
 
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
-
+  const [isRead, setIsRead] = useState(data.is_read);
 
   const onClick = async () => {
-    console.log('Clicked message data >>>>>', data);
+    // Optimistically show the message immediately
+    dispatch(selectMessageReducer({ ...data, threadMessages: [] }));
 
-    // Step 1: Get thread messages by ID
-    const response = await getThreadMessages(data?.id);
-
-    if (response.success) {
-      // Step 2: Add thread messages to the data
-      const enrichedData = {
-        threadMessages: response.data, // attach the full thread
-      };
-
-      // Step 3: Dispatch to Redux
-      dispatch(selectMessageReducer(enrichedData as any));
-    } else {
-      console.error('Failed to fetch thread messages');
+    // Mark as read if needed
+    if (data.root_id === null && isRead === false && data.id) {
+      await readMessage(data.id);
+      setIsRead(true);
     }
-  };
 
-  // const onClick = () => {
-  //   console.log('onClick data >>>>>', data);
-  //   dispatch(
-  //     selectMessageReducer({
-  //       ...(data as any),
-  //     })
-  //   );
-  // }
+    // Fetch thread messages in the background
+    getThreadMessages(data?.id).then((response) => {
+      if (response.success) {
+        dispatch(selectMessageReducer({ ...data, threadMessages: response.data }));
+      }
+    });
+  };
 
   const [dateTimeString, setDateTimeString] = useState<string>('');
 
@@ -92,10 +84,21 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
             <span className="w-[60%] truncate text-ellipsis text-[10px] font-semibold text-gray-400">
               {dateTimeString}
             </span>
+            {/* NEW/UNREAD INDICATOR */}
+            {data.root_id === null && isRead === false && (
+              <span title="New message" className="ml-2 text-xs text-red-500 font-bold">
+                New
+              </span>
+            )}
+            {data.root_id !== null && data.replies && Array.isArray(data.replies) && data.replies.filter((r: any) => !r.is_read).length > 0 && (
+              <span title="New replies" className="ml-2 text-xs text-green-500 font-bold">
+                +{data.replies.filter((r: any) => !r.is_read).length}
+              </span>
+            )}
           </div>
           <div className="flex w-full">
             <span className="text-sm font-bold text-gray-600">
-              {data.subject?.slice(0, 30)}
+              {data.subject ? data.subject.slice(0, 30) : <span className="italic text-gray-400">(No Subject)</span>}
             </span>
           </div>
           <div className="flex w-full">

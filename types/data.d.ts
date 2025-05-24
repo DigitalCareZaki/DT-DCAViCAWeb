@@ -406,6 +406,8 @@ export interface ThreadMessageProps {
   sender_id: string;
   reciever_id: string;
   parent_id: string | null;
+  root_id: string | null; // ADDED: root_id for thread grouping
+  is_read: boolean; // ADDED: is_read to track read status
   created_at: string;
   updated_at: string;
   sender: {
