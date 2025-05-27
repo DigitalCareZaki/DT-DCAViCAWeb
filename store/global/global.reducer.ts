@@ -65,10 +65,13 @@ export const showModal: ShowModalFunc = (state, payload) => {
   };
 };
 
-export const selectMessage: SelectMessageFunc = (state, payload) => {
+export const selectMessage: SelectMessageFunc = (state, action: any) => {
+  const payload = action.payload;
+  const loading = action.loading ?? action.payload?.loading ?? false;
   state.message = {
     show: true,
-    data: payload.payload,
+    data: payload,
+    loading,
   };
 };
 

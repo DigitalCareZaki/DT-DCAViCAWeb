@@ -18,8 +18,8 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const [isRead, setIsRead] = useState(data.is_read);
 
   const onClick = async () => {
-    // Optimistically show the message immediately
-    dispatch(selectMessageReducer({ ...data, threadMessages: [] }));
+    // Show skeleton loader in Content
+    dispatch(selectMessageReducer({ ...data, threadMessages: [], loading: true }));
 
     // Mark as read if needed
     if (data.root_id === null && isRead === false && data.id) {
@@ -32,11 +32,9 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
       }
     }
 
-    // Mark as read if needed
     if (data.root_id !== null && isRead === false && data.root_id) {
       await readThread(data.root_id);
       setIsRead(true);
-      // Refetch inbox and update Redux state
       const inboxRes = await getInbox('inbox');
       if (inboxRes.success) {
         dispatch(setInboxReducer(inboxRes.data));
@@ -46,7 +44,9 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
     // Fetch thread messages in the background
     getThreadMessages(data?.id).then((response) => {
       if (response.success) {
-        dispatch(selectMessageReducer({ ...data, threadMessages: response.data }));
+        dispatch(selectMessageReducer({ ...data, threadMessages: response.data, loading: false }));
+      } else {
+        dispatch(selectMessageReducer({ ...data, threadMessages: [], loading: false }));
       }
     });
   };
@@ -104,12 +104,18 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
             </span>
             {/* NEW/UNREAD INDICATOR */}
             {data.root_id === null && isRead === false && (
-              <span title="New message" className="ml-2 text-xs text-red-500 font-bold">
+              <span
+                title="New message"
+                className="ml-2 px-2 py-0.5 text-xs font-semibold text-white bg-blue-600 rounded-full shadow-sm"
+              >
                 New
               </span>
             )}
             {data.root_id !== null && isRead === false && (
-              <span title="New message" className="ml-2 text-xs text-green-500 font-bold">
+              <span
+                title="New message"
+                className="inline-block ml-2 px-2 py-0.5 text-xs font-medium text-white bg-green-600 rounded-full whitespace-nowrap"
+              >
                 New Replies
               </span>
               // <span title="Unread replies" className="ml-2 text-xs text-red-500 font-bold">
@@ -119,10 +125,6 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
             {/* {data.root_id !== null && data.replies.filter((r: any) => !r.is_read).length > 0 && (
               <span title="Unread replies" className="ml-2 text-xs text-red-500 font-bold">
                 <FaCircle size={8} className="text-red-500" />
-              </span>
-            )}
-              <span title="New replies" className="ml-2 text-xs text-green-500 font-bold">
-                +{data.replies.filter((r: any) => !r.is_read).length}
               </span>
             )} */}
           </div>

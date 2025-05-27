@@ -22,6 +22,7 @@ export type StoreGlobalState = {
   message: {
     show: boolean;
     data: InboxDataProps | undefined;
+    loading?: boolean;
   };
   composeMessage: {
     to: string;

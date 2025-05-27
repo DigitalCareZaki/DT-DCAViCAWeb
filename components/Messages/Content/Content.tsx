@@ -7,6 +7,7 @@ import Image from 'next/image';
 import type { ClientComponent } from '@types';
 import type { ReduxProps, StoreGlobalState } from '@store-types';
 import { getProfilePicture, getName } from '@init-globals';
+import MessageContentSkeleton from './MessageContentSkeleton';
 
 const Content: ClientComponent = () => {
   const { message } = useSelector<ReduxProps, StoreGlobalState>(
@@ -16,6 +17,8 @@ const Content: ClientComponent = () => {
 
   console.log('is msg ma kia a raha han message >>>>>', message);
 
+
+  if (message.loading) return <MessageContentSkeleton />;
 
   if (!message.show) return <NoContentSelected />;
 
