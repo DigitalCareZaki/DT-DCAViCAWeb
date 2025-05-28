@@ -11,6 +11,7 @@ import {
   showModalReducer,
   toggleComposeMessageReducer,
   handleEventReducer,
+  composeEmailReducer,
 } from '@slice';
 import { debounce, getName } from '@init-globals';
 
@@ -47,6 +48,12 @@ const useFormHook = (): UseFormProps => {
     dispatch(showModalReducer({ ...props }));
 
   const closeComposeMessage = () => dispatch(toggleComposeMessageReducer());
+
+  const closeComposeReply = () => {
+    // Clear parent_id and close modal if open
+    dispatch(composeEmailReducer({ to: '', subject: '', parent_id: '' }));
+    dispatch(toggleComposeMessageReducer());
+  };
 
   const handleSearchChange = debounce(
     async (e: ChangeEvent<HTMLInputElement>[]) => {
@@ -131,7 +138,12 @@ const useFormHook = (): UseFormProps => {
         })
       );
 
-      closeComposeMessage();
+      // Close reply section if replying, otherwise close modal
+      if (composeMessageState.parent_id) {
+        closeComposeReply();
+      } else {
+        closeComposeMessage();
+      }
     } catch (err: any) {
       handleShowSnackbar({
         message: err?.message ?? 'Something went wrong',

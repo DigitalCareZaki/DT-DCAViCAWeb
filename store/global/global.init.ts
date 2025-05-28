@@ -26,6 +26,8 @@ const initialState: StoreGlobalState = {
     to: '',
     subject: '',
     content: '',
+    attachments: [],
+    parent_id: '',
   },
 };
 

@@ -7,13 +7,19 @@ import {
   InputDropdown,
   ClientGenerator,
 } from '@common';
+import { useContext } from 'react';
+import type { FC } from 'react';
 
 import useForm from './useForm';
 import User from './User';
 
 import type { ClientComponent } from '@types';
 
-const Form: ClientComponent = () => {
+interface FormProps {
+  inline?: boolean;
+}
+
+const Form: FC<FormProps> = ({ inline = false }) => {
   const [
     register,
     onSubmit,
@@ -29,7 +35,11 @@ const Form: ClientComponent = () => {
   ] = useForm();
 
   return (
-    <div className="h-[80vh] overflow-auto bg-white p-4">
+    <div
+      className={
+        inline ? 'bg-white p-2' : 'h-[80vh] overflow-auto bg-white p-4'
+      }
+    >
       <form onSubmit={onSubmit} className="relative flex w-full flex-col gap-2">
         <InputDropdown
           label="To"
@@ -68,8 +78,19 @@ const Form: ClientComponent = () => {
             defaultValue={defaultContent}
           />
         </div>
-        <div className="flex w-full items-center justify-between">
-          <ButtonPrimary name="Send" icon="IoSend" loading={loading} />
+        <div
+          className={
+            inline
+              ? 'flex w-full justify-end mt-2'
+              : 'flex w-full items-center justify-between'
+          }
+        >
+          <ButtonPrimary
+            name="Send"
+            icon="IoSend"
+            loading={loading}
+            className={inline ? 'w-auto px-6' : ''}
+          />
         </div>
       </form>
     </div>
