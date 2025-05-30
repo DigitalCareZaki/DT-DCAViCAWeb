@@ -39,9 +39,9 @@ const Dashboard: ServerComponent = async () => {
         <RequestedAppointments />
       </Suspense>
 
-      <Suspense fallback={<MyAppointmentsSkeleton />}>
+      {/* <Suspense fallback={<MyAppointmentsSkeleton />}>
         <MyAppointments />
-      </Suspense>
+      </Suspense> */}
     </div>
   );
 };

@@ -2,29 +2,27 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log("hii >>>>>>>>>>>>");
-  
+
+
   try {
     if (!req.headers.authorization) {
-      console.log("hii1");
+
       res.status(401).json({ success: false, message: 'JWT missing' });
       return;
     }
 
     const token = req.headers.authorization.split('Bearer ').at(1);
 
-    console.log('token >>>>>>>>>>>>>>>>>>>>>>>', token);
 
     if (!token) {
-  console.log("hii2");
-  res.status(401).json({ success: false, message: 'Invalid jwt' });
+
+      res.status(401).json({ success: false, message: 'Invalid jwt' });
       return;
     }
 
-    console.log('process.env.NEXT_PUBLIC_JWT_SECRET >>>>>>>>>>>>>>>>>>>>>>>', process.env.NEXT_PUBLIC_JWT_SECRET);
 
     if (!process.env.NEXT_PUBLIC_JWT_SECRET) {
-      console.log("hii3");
+
       res.status(401).json({ success: false, message: 'JWT secret not found' });
       return;
     }
@@ -38,8 +36,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ignoreExpiration: false,
       }
     );
-
-    console.log('data >>>>>>>>>>>>>>>>>>>>>>>', data);
 
     if (!data?.payload) {
       res.status(401).json({ success: false, message: 'Invalid jwt' });

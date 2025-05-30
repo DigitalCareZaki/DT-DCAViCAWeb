@@ -39,6 +39,7 @@ const Header: ClientComponent = () => {
                 })
               )
             );
+            console.log('file upload >>>', res);
           })();
         },
         header: true,

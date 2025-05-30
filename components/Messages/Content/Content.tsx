@@ -15,17 +15,12 @@ const Content: ClientComponent = () => {
     (state) => state.global
   );
 
-
-  console.log('is msg ma kia a raha han message >>>>>', message);
-
-
   if (message.loading) return <MessageContentSkeleton />;
 
   if (!message.show) return <NoContentSelected />;
 
   // Ensure mainMessage is always an array
   const mainMessageArray = Array.isArray(message.data) ? message.data : [message.data];
-  console.log('mainMessageArray >>>>>', mainMessageArray);
 
   // Find if we are replying (parent_id set)
   const isReplying = !!composeMessage.parent_id;
