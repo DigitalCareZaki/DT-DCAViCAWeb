@@ -62,17 +62,20 @@ const useFormHook = (
             range:
               data.type === 'BLOODPRESSURE'
                 ? [
-                    parseInt(data.range_low_1),
-                    parseInt(data.range_high_1),
-                    parseInt(data.range_low_2),
-                    parseInt(data.range_high_2),
-                  ]
+                  parseInt(data.range_low_1),
+                  parseInt(data.range_high_1),
+                  parseInt(data.range_low_2),
+                  parseInt(data.range_high_2),
+                ]
                 : [parseInt(data.range_low_1), parseInt(data.range_high_1)],
             send_sms: false,
             send_email: false,
           })
         )
       );
+
+      console.log('Response from createPatientReadingRange: Sameer>>>', res);
+
 
       if (!res.success) {
         setError('Something went wrong');

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useState } from 'react';
 
 import { FaTransgender } from '@react-icons/all-files/fa/FaTransgender';
 import { FaQuestion } from '@react-icons/all-files/fa/FaQuestion';
@@ -19,6 +20,7 @@ import type { ClientComponentProps, PatientProfileData } from '@types';
 
 const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
   const router = useRouter(); // Initialize the router here
+  const [profileData, setProfileData] = useState<PatientProfileData>(data);
   const [
     register,
     onSubmit,
@@ -28,7 +30,22 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     handleSelect,
     selectors,
     handleFilePicker,
-  ] = useForm(data);
+  ] = useForm(profileData);
+
+  // Define the expected result type from onSubmit
+  type SubmitResult = {
+    success: boolean;
+    updatedData?: PatientProfileData;
+  };
+
+  // Update local state after successful save
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const result = await (onSubmit(e) as unknown as Promise<SubmitResult | void>);
+    if (result && result.success && result.updatedData) {
+      setProfileData(result.updatedData);
+    }
+  };
 
   const handleClose = () => {
     router.push('/patient'); // Redirect to PatientLayout page
@@ -36,7 +53,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
 
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={handleSave}
       className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-12"
     >
       <div className="flex w-full items-center justify-center">
@@ -351,7 +368,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
           title="Save"
           name="Save"
           loading={loading}
-          // Add onClick or other props if needed
+        // Add onClick or other props if needed
         />
         <ButtonPrimary
           title="Close"
