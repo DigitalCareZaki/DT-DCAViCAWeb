@@ -72,7 +72,7 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
             />
           </div>
           <div className="w-1/2">
-            <InputBasic
+            {/* <InputBasic
               label="Institution"
               placeholder="Agha Khan"
               borderTheme
@@ -81,7 +81,7 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
               error={!!errors.institution?.message?.length}
               errorMessage={errors.institution?.message || '&'}
 
-            />
+            /> */}
           </div>
         </div>
 

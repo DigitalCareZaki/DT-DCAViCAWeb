@@ -74,6 +74,8 @@ const useFormHook = (
         patient
       );
 
+      console.log('check test what coming >>>', res);
+
       if (!res.success) {
         setResError(res?.message);
 
