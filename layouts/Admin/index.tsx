@@ -37,14 +37,19 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
 
   if (route?.includes('/admin/settings')) {
     return (
-      <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6">
-        <PrimaryHeader user={user!} />
-        <div className="flex h-full w-full">
-          <DynamicSidebar renderKey="settings" />
-          <div className="h-full flex-grow pl-4">{children}</div>
-        </div>
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="relative gap-4 bg-background p-6"
+        >
+          <PrimaryHeader user={user!} />
+          <div className="flex h-full w-full">
+            <DynamicSidebar renderKey="settings" />
+            <div className="h-full flex-grow pl-4">{children}</div>
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
