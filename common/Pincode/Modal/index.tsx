@@ -4,7 +4,7 @@ import useForm from '../Form/useForm';
 
 
 const Modal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; }) => {
-    const [register, onSubmit, errors, loading] = useForm();
+    const [register, onSubmit, errors, loading] = useForm(onClose); // Pass onClose to useForm so it closes modal on success
 
     if (!isOpen) return null;
 

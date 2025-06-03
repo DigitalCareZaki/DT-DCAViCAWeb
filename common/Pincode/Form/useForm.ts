@@ -13,7 +13,7 @@ import { validator } from './validator';
 
 import type { FormProps, UseFormHookProps } from './types';
 
-const useFormHook: UseFormHookProps = () => {
+const useFormHook: UseFormHookProps = (onClose?: () => void) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,8 +44,7 @@ const useFormHook: UseFormHookProps = () => {
             show: true,
           })
         );
-        router.back();
-
+        if (onClose) onClose(); // 🔴 Call it here
         return;
       }
 
