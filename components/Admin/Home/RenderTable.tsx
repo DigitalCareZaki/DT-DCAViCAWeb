@@ -33,7 +33,7 @@ const RenderTable: ServerComponentProps<Props> = async ({ data, userType }) => {
           </th>
           <td className="px-6 py-4">{el?.email}</td>
           <td className="px-6 py-4">{el?.patient.emr}</td>
-          <td className="px-6 py-4">
+          {/* <td className="px-6 py-4">
             <div className="flex h-5 w-5 items-center justify-center rounded-full text-white admin:bg-theme-admin-primary nurse:bg-theme-nurse-primary">
               <MdCheck size={14} color="purple" />
             </div>
@@ -62,7 +62,7 @@ const RenderTable: ServerComponentProps<Props> = async ({ data, userType }) => {
             <div className="flex h-5 w-5 items-center justify-center rounded-full text-white admin:bg-theme-admin-primary nurse:bg-theme-nurse-primary">
               <MdCheck size={14} color="purple" />
             </div>
-          </td>
+          </td> */}
           <td className="px-6 py-4">{el?.patient.height}</td>
           <td className="px-6 py-4">{el?.patient.weight}</td>
         </tr>
