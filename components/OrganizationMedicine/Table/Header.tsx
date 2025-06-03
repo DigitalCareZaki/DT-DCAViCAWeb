@@ -1,11 +1,11 @@
 'use client';
 
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 
 import Papa from 'papaparse';
 
 import { ButtonPrimary } from '@common';
-
+import MedicineModal from './MedicineModal';
 import { addOrganizationMedicine } from '@service';
 import { useUser } from '@selectors';
 
@@ -14,6 +14,7 @@ import type { ClientComponent } from '@types';
 const Header: ClientComponent = () => {
   const [user] = useUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDownload = () => {
     const csvContent = 'data:text/csv;charset=utf-8,Name\n';
@@ -49,13 +50,25 @@ const Header: ClientComponent = () => {
   };
 
   const handleAddMedicinesClick = () => {
-    fileInputRef.current?.click();
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleAddMedicine = async (medicine: string) => {
+    await addOrganizationMedicine(
+      btoa(
+        JSON.stringify({ names: [medicine] })
+      )
+    );
+    setIsModalOpen(false);
   };
 
   if (!user?.role) return <></>;
 
   return (
     <div className="mt-10 flex w-full justify-end gap-4">
+      <MedicineModal isOpen={isModalOpen} onClose={handleCloseModal} onAdd={handleAddMedicine} />
       <input
         type="file"
         ref={fileInputRef}
