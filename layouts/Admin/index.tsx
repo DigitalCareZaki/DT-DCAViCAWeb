@@ -62,11 +62,16 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
   }
 
   return (
-    <main style={mainStyle} className="h-full w-screen gap-4 bg-background p-6">
-      <PrimaryHeader user={user!} />
-      {children}
-      <ModalBottom />
-    </main>
+    <div className="relative h-screen w-screen overflow-hidden">
+      <main
+        style={mainStyle}
+        className="relative gap-4 bg-background p-6"
+      >
+        <PrimaryHeader user={user!} />
+        {children}
+        <ModalBottom />
+      </main>
+    </div>
   );
 };
 
