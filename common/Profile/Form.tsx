@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import ProfileCard from './ProfileCard';
 import useForm from './useForm';
+import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
 import type { FormProps } from './types';
@@ -14,6 +15,7 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
   const router = useRouter();
   const [onSubmit, register, errors, loading, error, handleFileProps] =
     useForm(data);
+  const [user] = useUser();
 
   const handleClose = () => {
     router.push('/doctor'); // Redirect to PatientLayout page
@@ -200,31 +202,34 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
           </div>
         </div>
 
-        <div className="flex w-full items-center gap-4">
-          <div className="w-1/2">
-            <InputBasic
-              label="PMDC Number"
-              placeholder="112233"
-              borderTheme
-              defaultBorder
-              hookProps={register('pmdcNumber')}
-              error={!!errors.pmdcNumber?.message?.length}
-              errorMessage={errors.pmdcNumber?.message || '&'}
-            />
-          </div>
+        {user?.role !== undefined && user.role == 'admin' as any && (
+          <div className="flex w-full items-center gap-4">
+            <div className="w-1/2">
+              <InputBasic
+                label="PMDC Number"
+                placeholder="112233"
+                borderTheme
+                defaultBorder
+                hookProps={register('pmdcNumber')}
+                error={!!errors.pmdcNumber?.message?.length}
+                errorMessage={errors.pmdcNumber?.message || '&'}
+              />
+            </div>
 
-          <div className="w-1/2">
-            <InputBasic
-              label="Contract Type"
-              placeholder="Permanent/Temporary"
-              borderTheme
-              defaultBorder
-              hookProps={register('contractType')}
-              error={!!errors.contractType?.message?.length}
-              errorMessage={errors.contractType?.message || '&'}
-            />
+            <div className="w-1/2">
+              <InputBasic
+                label="Contract Type"
+                placeholder="Permanent/Temporary"
+                borderTheme
+                defaultBorder
+                hookProps={register('contractType')}
+                error={!!errors.contractType?.message?.length}
+                errorMessage={errors.contractType?.message || '&'}
+              />
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="mt-10 w-full">
           <h3 className="text-lg font-semibold mb-4">Location</h3>
           <div className="w-full h-64">
