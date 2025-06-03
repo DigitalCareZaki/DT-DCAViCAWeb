@@ -6,7 +6,7 @@ import Papa from 'papaparse';
 
 import { ButtonPrimary } from '@common';
 import MedicineModal from './MedicineModal';
-import { addOrganizationMedicine } from '@service';
+import { addOrganizationMedicine, addAdminOrganizationMedicine } from '@service';
 import { useUser } from '@selectors';
 
 import type { ClientComponent } from '@types';
@@ -56,9 +56,9 @@ const Header: ClientComponent = () => {
     setIsModalOpen(false);
   };
   const handleAddMedicine = async (medicine: string) => {
-    await addOrganizationMedicine(
+    await addAdminOrganizationMedicine(
       btoa(
-        JSON.stringify({ names: [medicine] })
+        JSON.stringify({ name: medicine })
       )
     );
     setIsModalOpen(false);

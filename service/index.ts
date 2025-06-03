@@ -157,6 +157,7 @@ export { default as getAllTabletsForPatient } from './tablets/getAllTabletsForPa
 // organization medicine
 export { default as getOrganizationMedicines } from './superadmin/getOrganizationMedicines';
 export { default as addOrganizationMedicine } from './superadmin/addOrganizationMedicines';
+export { default as addAdminOrganizationMedicine } from './superadmin/addAdminMedicines';
 
 // technical support
 export { default as createTechnicalSupportQuery } from './technicalSupport/createSupportQuery';
