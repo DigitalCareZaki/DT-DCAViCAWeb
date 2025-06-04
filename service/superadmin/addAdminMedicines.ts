@@ -18,8 +18,6 @@ async function addAdminOrganizationMedicine(data: any): Promise<any> {
       body: JSON.stringify(decodedData),
     });
 
-    console.log('res kia a raha han ', res);
-
     const body = await res.json();
 
 

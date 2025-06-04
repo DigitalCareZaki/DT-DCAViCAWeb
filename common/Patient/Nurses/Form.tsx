@@ -79,7 +79,6 @@ const Form: ClientComponent = () => {
     const res = await selectNurse(value);
 
     if (res.success) {
-      console.log('iski user id chahiye >>', res.data);
       const mapped = res?.data?.map((item: any) => ({
         name: `${item?.user?.first_name} ${item?.user?.last_name}`,
         value: item?.user?.id,

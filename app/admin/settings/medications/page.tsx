@@ -1,4 +1,4 @@
-import { OrganizationMedicine } from '@components';
+import OrganizationMedicine from 'components/OrganizationMedicine/OrganizationMedicineClient';
 
 export default function Page(): JSX.Element {
   return (

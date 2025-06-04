@@ -74,7 +74,6 @@ const useFormHook = (): UseFormProps => {
 
   const handleSelectUser = (value: string) => {
     setValue('send_to', value);
-    console.log('value >>>>>', value);
     setForceRender((prev) => prev + 1);
   };
 
@@ -99,7 +98,6 @@ const useFormHook = (): UseFormProps => {
           : [],
         parent_id: composeMessageState.parent_id || null,
       };
-      console.log('data >>>>>>', payload);
 
       const res = await composeMessage(
         btoa(

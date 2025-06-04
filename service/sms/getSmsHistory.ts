@@ -8,7 +8,6 @@ async function getSmsHistory(page: any, limit: any): Promise<any> {
 
   const data = await res.json();
 
-  console.log('check how to do this', data);
 
   return {
     success: res.ok,

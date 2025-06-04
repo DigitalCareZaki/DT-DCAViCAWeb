@@ -58,7 +58,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     // Call API with the correct patchSn and duration
     try {
       const res = await getDoctorSinglePatientFromVl(patchSn, duration);
-      console.log("API Response:", res);
+
       setSelectedPatient({
         name: selectedPatient.name,
         ecg: res.data.ecg,
@@ -93,8 +93,6 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
       const res = await getDoctorSinglePatientFromVl(patchSn, '1 minute');
 
       if (!res.success) return;
-
-      console.log(res);
 
       setLoading(false);
       setSelectedPatient({

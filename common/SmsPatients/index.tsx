@@ -14,8 +14,6 @@ const SmsPatients = async ({ patient }: PatientNotificationProps): Promise<JSX.E
 
   const res = await getPatientsSms(patient);
 
-  console.log(' SMS Patients >>>>>', res);
-
 
   if (!res.success) return <></>;
 

@@ -3,10 +3,12 @@
 import { ChangeEvent, useRef, useState } from 'react';
 
 import Papa from 'papaparse';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonPrimary } from '@common';
 import MedicineModal from './MedicineModal';
 import { addOrganizationMedicine, addAdminOrganizationMedicine } from '@service';
+import { addOrganizationMedicineAndUpdate } from '../../../store/organizationMedicine.thunks';
 import { useUser } from '@selectors';
 
 import type { ClientComponent } from '@types';
@@ -15,6 +17,7 @@ const Header: ClientComponent = () => {
   const [user] = useUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleDownload = () => {
     const csvContent = 'data:text/csv;charset=utf-8,Name\n';
@@ -40,7 +43,6 @@ const Header: ClientComponent = () => {
                 })
               )
             );
-            console.log('file upload >>>', res);
           })();
         },
         header: true,
@@ -56,11 +58,7 @@ const Header: ClientComponent = () => {
     setIsModalOpen(false);
   };
   const handleAddMedicine = async (medicine: string) => {
-    await addAdminOrganizationMedicine(
-      btoa(
-        JSON.stringify({ name: medicine })
-      )
-    );
+    await dispatch<any>(addOrganizationMedicineAndUpdate(medicine));
     setIsModalOpen(false);
   };
 

@@ -23,7 +23,6 @@ async function getPatientsMeasurements(
 
   const res = await fetch(url.convertURI());
 
-  console.log('getPatientsMeasurements res', res);
   // const res = await fetch(
   //   `/api/v1/web/measurements/patients/${id}${type === 'ALL' ? '' : `?type=${type}`}`.convertURI()
   // );

@@ -12,11 +12,7 @@ type PatientNotificationProps = {
 
 const PatientNotification = async ({ patient }: PatientNotificationProps): Promise<JSX.Element> => {
 
-  console.log('PatientNotification component >>>', patient);
-
-
   const res = await getPatientNotifications(patient);
-  console.log(' patient res', res);
 
   if (!res.success) return <></>;
 

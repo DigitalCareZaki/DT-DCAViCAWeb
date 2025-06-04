@@ -9,7 +9,6 @@ export async function readMessage(messageId: string) {
         cache: 'no-cache',
     });
     const data = await res.json();
-    console.log('Update MEssage >>>', data);
     return {
         success: res.ok,
         data,

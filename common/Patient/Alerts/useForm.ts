@@ -74,8 +74,6 @@ const useFormHook = (
         )
       );
 
-      console.log('Response from createPatientReadingRange: Sameer>>>', res);
-
 
       if (!res.success) {
         setError('Something went wrong');
