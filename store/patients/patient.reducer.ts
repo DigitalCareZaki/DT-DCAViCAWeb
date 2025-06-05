@@ -73,12 +73,14 @@ export const setPatientAppointmentsListing = (
   state.pagination = payload.payload.pagination;
 };
 
-
-
 export const pushIntoPatientMeasurementListing: PushIntoPatientMeasurementListingProps =
   (state, payload) => {
-    const measurements = state.patientMeasurementListing;
-    measurements.push(payload.payload.measurement);
+    // Ensure we push into the correct array for table updates
+    if (state.patientMeasurementListing && Array.isArray(state.patientMeasurementListing.data)) {
+      state.patientMeasurementListing.data.unshift(payload.payload.measurement);
+    } else if (Array.isArray(state.patientMeasurementListing)) {
+      state.patientMeasurementListing.unshift(payload.payload.measurement);
+    }
   };
 
 export const setPatientMedicationListing: SetPatientMedicationListingProps = (
