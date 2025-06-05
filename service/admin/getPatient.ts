@@ -12,6 +12,7 @@ async function getPatient(): Promise<{
 
   const data = await res.json();
 
+  console.log('ress <<<<<<<<', data);
 
   return {
     success: res.ok,
