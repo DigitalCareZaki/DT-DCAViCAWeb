@@ -53,6 +53,8 @@ const Table: ServerComponent = async () => {
             'Patient Name',
             'Patient Email',
             'EMR',
+            'Assign Doctor',
+            'Department',
             // 'Glucose',
             // 'Blood Pressure',
             // 'Temperature',

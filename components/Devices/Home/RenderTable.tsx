@@ -10,6 +10,9 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const RenderTable: ServerComponentProps<Props> = async ({ userRole, data }) => {
+
+  console.log('RenderTable data:', data);
+
   return (
     <>
       {data.map((el) => (
@@ -37,6 +40,7 @@ const RenderTable: ServerComponentProps<Props> = async ({ userRole, data }) => {
               ...el.created_by,
             })}
           </td>
+          <td className="px-6 py-4">{el.assigned ? 'Assigned' : 'Not Assigned'}</td>
           <td className="px-6 py-4">
             {new Date(el.created_at).toLocaleString()}
           </td>

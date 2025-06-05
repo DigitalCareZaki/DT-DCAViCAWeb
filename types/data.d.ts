@@ -722,8 +722,24 @@ export interface SuperAdminPatientListProps {
     emr: string;
     height: number | null;
     weight: number | null;
-  };
-  created_at: string;
+    doctors?: [];
+    first_assigned_doctor?: {
+      specialities: [
+        {
+          title: string;
+        }
+      ],
+      user: {
+        first_name?: string;
+        last_name?: string;
+        middle_name?: string | null;
+      },
+    };
+    department?: {
+      title: string;
+    };
+    created_at: string;
+  }
 }
 
 export interface DepartmentProps {
@@ -910,6 +926,7 @@ export interface DeviceProps {
     };
     issued_at: Date;
   }[];
+  assigned: boolean;
   created_at: Date;
   updated_at: Date | null;
 }

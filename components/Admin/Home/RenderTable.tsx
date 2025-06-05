@@ -33,6 +33,15 @@ const RenderTable: ServerComponentProps<Props> = async ({ data, userType }) => {
           </th>
           <td className="px-6 py-4">{el?.email}</td>
           <td className="px-6 py-4">{el?.patient.emr}</td>
+          <td className="px-6 py-4">
+            {getName({
+              first_name: el?.patient?.first_assigned_doctor?.user.first_name as string,
+              last_name: el?.patient?.first_assigned_doctor?.user.last_name as string,
+              middle_name: el?.patient?.first_assigned_doctor?.user?.middle_name as string,
+            })}
+          </td>
+          <td className="px-6 py-4">{el?.patient?.department?.title}</td>
+
           {/* <td className="px-6 py-4">
             <div className="flex h-5 w-5 items-center justify-center rounded-full text-white admin:bg-theme-admin-primary nurse:bg-theme-nurse-primary">
               <MdCheck size={14} color="purple" />
