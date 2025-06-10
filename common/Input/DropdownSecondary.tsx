@@ -140,7 +140,7 @@ const DropdownSecondary: ClientComponentProps<any> = ({
               opacity: 1,
             }}
             animate={{
-              height: 200,
+              height: 750, // Increased height for more visible cities
               top: 80,
               opacity: 1,
             }}
@@ -149,7 +149,7 @@ const DropdownSecondary: ClientComponentProps<any> = ({
               opacity: 0,
               height: 180,
             }}
-            className="hidescrollbar absolute z-[99999] flex h-[200px] w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-background p-4"
+            className="hidescrollbar absolute z-[99999] flex h-[350px] w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-background p-4"
           >
             {children}
           </motion.div>
