@@ -61,8 +61,8 @@ const Table: ServerComponent = async () => {
             // 'Pulse Oximeter',
             // 'ECG',
             // 'Medication',
-            'Height',
-            'Weight',
+            'Height (in meters)',
+            'Weight (in kg)',
           ]}
         >
           <RenderTable
