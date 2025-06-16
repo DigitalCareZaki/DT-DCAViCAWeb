@@ -29,6 +29,7 @@ const DropdownSecondary: ClientComponentProps<any> = ({
   labelClassName,
   titleClassName,
   errorClassName,
+  dropdownContentClassName, // add new prop
 }) => {
   const [show, setShow] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -149,7 +150,10 @@ const DropdownSecondary: ClientComponentProps<any> = ({
               opacity: 0,
               height: 180,
             }}
-            className="hidescrollbar absolute z-[99999] flex h-[200px] w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-background p-4"
+            className={twMerge(
+              "hidescrollbar absolute z-[99999] flex h-[200px] w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-background p-4",
+              dropdownContentClassName // merge custom class
+            )}
           >
             {children}
           </motion.div>

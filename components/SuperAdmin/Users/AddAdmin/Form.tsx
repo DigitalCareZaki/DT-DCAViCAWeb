@@ -278,6 +278,7 @@ const Form: ClientComponent = () => {
             error={!!errors.city?.message}
             errorMessage={errors.city?.message || '&'}
             selected={selectors.city.title}
+            dropdownContentClassName="!h-[800px]"
           >
             <ClientGenerator data={cities.data} handleSelect={handleSelect}>
               <City />
