@@ -214,13 +214,24 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
             classes="lg:hidden"
           />
         </Link>
-        <Link href={getPath('/tablets')}>
-          <ProfileDropDownOption
-            title="Tablets"
-            onClick={handleHeaderOption}
-            classes="lg:hidden"
-          />
-        </Link>
+
+        {user.type === 'ADMIN' ? (
+          <Link href={getPath('/tablets')}>
+            <ProfileDropDownOption
+              title="Gadgets"
+              onClick={handleHeaderOption}
+              classes="lg:hidden"
+            />
+          </Link>
+        ) : (
+          <Link href={getPath('/tablets')}>
+            <ProfileDropDownOption
+              title="Tablets"
+              onClick={handleHeaderOption}
+              classes="lg:hidden"
+            />
+          </Link>
+        )}
         <Link href={getPath('/users')}>
           <ProfileDropDownOption
             title="Users"

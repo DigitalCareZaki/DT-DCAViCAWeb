@@ -22,8 +22,8 @@ import type { MeasurementType } from '@types';
 const useFormHook = (
   prevData:
     | (TabletProps & {
-        id: string;
-      })
+      id: string;
+    })
     | undefined,
   categories: { name: string; value: string }[]
 ): UseFormProps => {
@@ -79,7 +79,7 @@ const useFormHook = (
             JSON.stringify({
               title: data.title,
               serial_number: data.serial_number,
-              category: data.category,
+              // category: data.category,
             })
           )
         );
@@ -141,7 +141,7 @@ const useFormHook = (
       });
     }
 
-    return () => {};
+    return () => { };
   }, [prevData]);
 
   return [register, onSubmit, errors, loading, selectedValues, handleSelect];
