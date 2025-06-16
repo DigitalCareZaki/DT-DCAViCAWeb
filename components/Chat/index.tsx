@@ -15,11 +15,11 @@ const Chat: ServerComponent = async () => {
     <>
       <PrimaryHeader user={user as any} />
       <div className="flex h-full w-full">
-
         <People />
         <Conversation />
         <Information />
-      </div></>
+      </div>
+    </>
   );
 };
 

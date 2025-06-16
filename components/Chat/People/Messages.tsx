@@ -24,8 +24,8 @@ const Messages: ClientComponentProps<MessagesProps> = ({ data }) => {
       <div className="flex flex-col gap-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-white">Messages</span>
-            <div className="theme-bg-color flex h-6 w-6 items-center justify-center rounded-full text-white">
+            <span className="font-semibold text-black">Messages</span>
+            <div className="theme-bg-color flex h-6 w-6 items-center justify-center rounded-full text-black">
               <span className="mt-[1px] text-ssx font-semibold">
                 +{data.length}
               </span>
