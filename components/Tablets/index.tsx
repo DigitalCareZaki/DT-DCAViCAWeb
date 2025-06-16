@@ -16,6 +16,8 @@ const Tablets: ServerComponentProps<Props> = async ({ patient }) => {
     ? await getAllTabletsForPatient(patient)
     : await getTablets();
 
+  console.log('tables >>>>>', res);
+
   if (!res.success) return <></>;
 
   return (

@@ -218,7 +218,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         {user.type === 'ADMIN' ? (
           <Link href={getPath('/tablets')}>
             <ProfileDropDownOption
-              title="Gadgets"
+              title="Accessories"
               onClick={handleHeaderOption}
               classes="lg:hidden"
             />

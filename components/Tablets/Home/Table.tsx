@@ -14,6 +14,7 @@ const Table: ServerComponentProps<Props> = async ({ userRole, data }) => {
           'Serial',
           'Category',
           'Created By',
+          'Status',
           'Created At',
           'Action',
         ]}

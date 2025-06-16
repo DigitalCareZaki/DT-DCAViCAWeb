@@ -1001,6 +1001,7 @@ export interface TabletProps {
     issued_at: Date;
   }[];
   created_at: Date;
+  assigned: boolean;
   updated_at: Date | null;
 }
 

@@ -10,7 +10,7 @@ import type { Props } from './types';
 const Header: ServerComponentProps<Props> = async ({ data, userRole }) => {
   return (
     <div className="flex w-full justify-between">
-      <span className="screen-title">Gadgets</span>
+      <span className="screen-title">Accessories</span>
       <div className="flex w-fit flex-row gap-4">
         <ExportButton
           data={data.map((el) => ({
@@ -45,9 +45,9 @@ const Header: ServerComponentProps<Props> = async ({ data, userRole }) => {
         />
         <Link passHref href={`/${userRole}/tablets/add`}>
           <ButtonPrimary
-            title="Add Gadgets"
-            name="Add Gadgets"
-            className="font-lg h-16 w-40 p-4"
+            title="Add Accessories"
+            name="Add Accessories"
+            className="font-bold text-md h-16 w-40 p-4"
           />
         </Link>
       </div>
