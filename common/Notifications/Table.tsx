@@ -32,7 +32,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           'Role',
           'Email',
           'Notification title',
-          'Description',
+          // 'Description',
           'Created On',
         ]}
       >

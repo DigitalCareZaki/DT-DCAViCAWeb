@@ -18,6 +18,8 @@ const createVideo = async (data: any): Promise<AddVideosProps> => {
       body: JSON.stringify(decodedData),
     });
 
+    console.log('createVideo res', res);
+
     const body = await res.json();
 
     if (res.status !== 201) {

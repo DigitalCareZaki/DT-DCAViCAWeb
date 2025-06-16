@@ -61,6 +61,8 @@ const useFormHook = (): UseFormProps => {
         )
       );
 
+      console.log('res', res);
+
       if (!res.success) {
         handleShowModal({
           type: 'ERROR',

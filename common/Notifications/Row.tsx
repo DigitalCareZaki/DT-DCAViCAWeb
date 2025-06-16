@@ -44,7 +44,7 @@ const Row: ClientComponentProps<any> = ({ ...el }) => {
       </td>
       <td className="px-6 py-4">{el?.sender?.email ?? 'N/A'}</td>
       <td className="px-6 py-4">{el?.title ?? 'N/A'}</td>
-      <td className="px-6 py-4">{el?.description ?? 'N/A'}</td>
+      {/* <td className="px-6 py-4">{el?.description ?? 'N/A'}</td> */}
       <td className="px-6 py-4">{new Date(el?.created_at).toDateString()}</td>
     </tr>
   );

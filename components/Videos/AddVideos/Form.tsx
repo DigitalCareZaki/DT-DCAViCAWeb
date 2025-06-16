@@ -109,16 +109,34 @@ const Form: ClientComponent = () => {
           >
             <>
               <div
-                onClick={() => handleSelect('category')('INFORMATIONAL')}
+                onClick={() => handleSelect('category')('ECG')}
                 className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
               >
-                <span className="font-medium">INFORMATIONAL</span>
+                <span className="font-medium">ECG</span>
               </div>
               <div
-                onClick={() => handleSelect('category')('MARKETING')}
+                onClick={() => handleSelect('category')('SPO2')}
                 className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
               >
-                <span className="font-medium">MARKETING</span>
+                <span className="font-medium">SPO2</span>
+              </div>
+              <div
+                onClick={() => handleSelect('category')('BLOODPRESSURE')}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">BLOODPRESSURE</span>
+              </div>
+              <div
+                onClick={() => handleSelect('category')('BLOODGLUCOSE')}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">BLOODGLUCOSE</span>
+              </div>
+              <div
+                onClick={() => handleSelect('category')('TEMPERATURE')}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">TEMPERATURE</span>
               </div>
             </>
           </DropdownSecondary>

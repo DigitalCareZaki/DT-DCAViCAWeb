@@ -1,11 +1,19 @@
 import { create, test, enforce } from 'vest';
 
 import type { CreateVideoProps } from './types';
-import type { VideoPriority, VideoCategory } from '@types';
+import type { VideoPriority } from '@types';
 
 const ValidVideoPriorityType: VideoPriority[] = ['HIGH', 'LOW', 'UNDEFINED'];
 
-const validVideoCategoryType: VideoCategory[] = ['INFORMATIONAL', 'MARKETING'];
+type VideoCategory = 'ECG' | 'SPO2' | 'BLOODPRESSURE' | 'BLOODGLUCOSE' | 'TEMPERATURE';
+
+const validVideoCategoryType: VideoCategory[] = [
+  'ECG',
+  'SPO2',
+  'BLOODPRESSURE',
+  'BLOODGLUCOSE',
+  'TEMPERATURE',
+];
 
 export const validator = create((data: CreateVideoProps) => {
   test('title', 'Title is required', () => {
