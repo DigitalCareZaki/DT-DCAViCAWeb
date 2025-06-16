@@ -141,7 +141,7 @@ const DropdownSecondary: ClientComponentProps<any> = ({
               opacity: 1,
             }}
             animate={{
-              height: 200,
+              height: 750, // Increased height for more visible cities
               top: 80,
               opacity: 1,
             }}
