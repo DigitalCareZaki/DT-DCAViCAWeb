@@ -49,6 +49,8 @@ const useFormHook = (): UseFormProps => {
     try {
       setLoading(true);
 
+      console.log('Video Payload >>>', data);
+
       const res = await createVideo(
         btoa(
           JSON.stringify({

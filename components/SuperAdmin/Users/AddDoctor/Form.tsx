@@ -277,6 +277,7 @@ const Form: React.FC = () => {
             error={!!errors.city?.message}
             errorMessage={errors.city?.message || '&'}
             selected={selectors.city.title}
+            dropdownContentClassName="!h-[800px] max-h-[800px] !overflow-y-scroll"
           >
             <ClientGenerator data={cities.data} handleSelect={handleSelect}>
               <City />

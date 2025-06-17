@@ -86,7 +86,7 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
       </div>
 
       {/* Second row: Tablet category */}
-      {/* <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
         <div className="w-full">
           <DropdownSecondary
             title="Select tablet category"
@@ -103,7 +103,7 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
-      </div> */}
+      </div>
 
       {/* Submit Button */}
       <ButtonPrimary

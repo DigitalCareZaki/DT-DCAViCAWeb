@@ -141,7 +141,7 @@ const DropdownSecondary: ClientComponentProps<any> = ({
               opacity: 1,
             }}
             animate={{
-              height: 750, // Increased height for more visible cities
+              height: dropdownContentClassName ? 1500 : 200, // Only set default if not custom
               top: 80,
               opacity: 1,
             }}
@@ -151,7 +151,7 @@ const DropdownSecondary: ClientComponentProps<any> = ({
               height: 180,
             }}
             className={twMerge(
-              "hidescrollbar absolute z-[99999] flex h-[200px] w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-background p-4",
+              "hidescrollbar absolute z-[99999] flex w-full flex-col gap-4 overflow-y-scroll rounded-xl bg-background p-4",
               dropdownContentClassName // merge custom class
             )}
           >

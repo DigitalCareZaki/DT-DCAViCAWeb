@@ -63,6 +63,7 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
         middle_name: data.middleName,
         last_name: data.lastName,
         address: data.address,
+        phone_number: data.phoneNumber,
       };
 
       if (file !== undefined) {

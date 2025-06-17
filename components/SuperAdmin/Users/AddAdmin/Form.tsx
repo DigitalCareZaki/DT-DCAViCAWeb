@@ -268,6 +268,7 @@ const Form: ClientComponent = () => {
       </div>
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
+
           <DropdownSecondary
             title="Select admin city"
             label="Select City"
@@ -278,7 +279,7 @@ const Form: ClientComponent = () => {
             error={!!errors.city?.message}
             errorMessage={errors.city?.message || '&'}
             selected={selectors.city.title}
-            dropdownContentClassName="!h-[800px]"
+            dropdownContentClassName="!h-[800px] max-h-[800px] !overflow-y-scroll"
           >
             <ClientGenerator data={cities.data} handleSelect={handleSelect}>
               <City />
