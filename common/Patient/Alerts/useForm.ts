@@ -20,10 +20,7 @@ import type {
 } from './types';
 import type { ModalState } from '@store-types';
 
-const useFormHook = (
-  patient: string,
-  handleHideForm: () => void
-): useFormProps => {
+const useFormHook = (patient: string, handleHideForm: () => void): useFormProps => {
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -68,8 +65,8 @@ const useFormHook = (
                   parseInt(data.range_high_2),
                 ]
                 : [parseInt(data.range_low_1), parseInt(data.range_high_1)],
-            send_sms: false,
-            send_email: false,
+            send_sms: data.send_sms,
+            send_email: data.send_email,
           })
         )
       );
