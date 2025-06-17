@@ -65,8 +65,8 @@ const useFormHook = (patient: string, handleHideForm: () => void): useFormProps 
                   parseInt(data.range_high_2),
                 ]
                 : [parseInt(data.range_low_1), parseInt(data.range_high_1)],
-            send_sms: data.send_sms,
-            send_email: data.send_email,
+            send_sms: true,
+            send_email: true,
           })
         )
       );
