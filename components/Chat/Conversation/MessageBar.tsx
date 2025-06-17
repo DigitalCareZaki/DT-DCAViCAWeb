@@ -96,6 +96,7 @@ const MessageBar: ClientComponent = () => {
   };
 
   const handleMessage = async (e: FormEvent<HTMLFormElement>) => {
+    console.log('submitting form');
     e?.preventDefault();
 
     if (!value) return;
@@ -115,6 +116,7 @@ const MessageBar: ClientComponent = () => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
         // Handle the selected file here
+        console.log('Selected file:', file.name);
         setFile(file);
         sentMessage(file, user, '')
           .then((res) => { })

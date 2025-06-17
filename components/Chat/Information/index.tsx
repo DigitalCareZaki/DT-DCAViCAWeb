@@ -10,7 +10,7 @@ import type { ServerComponent } from '@types';
 
 const Conversation: ServerComponent = async () => {
   return (
-    <div className="hidescrollbar flex h-full w-[20%] flex-col gap-8 overflow-y-scroll bg-background-secondary p-4">
+    <div className="hidescrollbar flex h-full w-[20%] flex-col gap-8 overflow-y-scroll bg-dark-secondary p-4">
       <Topbar />
       <Recipient />
       {/* <Search /> */}

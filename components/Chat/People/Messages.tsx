@@ -17,7 +17,6 @@ const Messages: ClientComponentProps<MessagesProps> = ({ data }) => {
 
   useEffect(() => {
     dispatch(setRoomsReducer({ rooms: data ?? [] }));
-    console.log('data>>>>>>>>>>>> ', data);
   }, [data]);
 
   return (
@@ -25,14 +24,14 @@ const Messages: ClientComponentProps<MessagesProps> = ({ data }) => {
       <div className="flex flex-col gap-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-black">Contacts</span>
-            <div className="theme-bg-color flex h-6 w-6 items-center justify-center rounded-full text-black">
+            <span className="font-semibold text-white">Messages</span>
+            <div className="theme-bg-color flex h-6 w-6 items-center justify-center rounded-full text-white">
               <span className="mt-[1px] text-ssx font-semibold">
                 +{data.length}
               </span>
             </div>
           </div>
-          {/* <FiEdit className="theme-text-color cursor-pointer transition duration-300 hover:scale-[105%]" /> */}
+          <FiEdit className="theme-text-color cursor-pointer transition duration-300 hover:scale-[105%]" />
         </div>
         <Search />
       </div>
