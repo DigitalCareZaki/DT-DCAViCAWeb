@@ -115,7 +115,7 @@ const useFormHook = (): UseFormProps => {
       }
 
       handleShowSnackbar({
-        message: 'Message sended',
+        message: 'Message sent',
         type: 'SUCCESS',
         show: true,
       });

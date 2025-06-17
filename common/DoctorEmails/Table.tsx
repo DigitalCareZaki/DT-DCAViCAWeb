@@ -24,7 +24,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           'Name',
           'Email',
           'Subject',
-          'Sended',
+          'Sent',
           'Error',
           'Created On',
         ]}

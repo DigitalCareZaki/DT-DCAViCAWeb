@@ -145,7 +145,7 @@ export default function Form(): JSX.Element {
         {step === 'step-1' ? 'Forgot your password?' : 'Reset your password'}
       </h2>
       <span className="-my-4 text-xs font-semibold text-gray-500">
-        {"We've"} sended you an OTP please check your inbox or junk
+        {"We've"} sent you an OTP please check your inbox or junk
       </span>
       {Render[step]}
       <div className="-my-4 flex w-full justify-start">
