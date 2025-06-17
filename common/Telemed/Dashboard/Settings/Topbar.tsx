@@ -7,7 +7,7 @@ const Topbar: ServerComponentProps<TopbarProps> = async () => {
   return (
     <div className="flex w-full items-center justify-between">
       <span className="text-md font-semibold text-gray-600">
-        Availability Settings
+        Doctor's Availability Calendar Settings
       </span>
     </div>
   );

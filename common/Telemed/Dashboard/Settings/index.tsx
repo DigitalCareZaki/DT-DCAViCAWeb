@@ -13,7 +13,7 @@ const Settings: ServerComponent = async () => {
         <div className="flex h-fit w-[70%] flex-col rounded-lg bg-white py-10 pb-20">
           <div className="px-10">
             <span className="text-xl font-semibold text-gray-600">
-              Availability Settings
+              Doctor's Availability Calendar Settings
             </span>
           </div>
           <Form />

@@ -88,12 +88,12 @@ const Toolbar: ClientComponent = () => {
           className="flex cursor-pointer items-center gap-2 rounded-lg p-2 font-medium text-gray-500 transition duration-300 hover:bg-gray-200"
         >
           <BiReply size={20} className="rotate-180" />
-          <span>Forward</span>
+          <span>Forward Last Message</span>
         </div>
-        <div className="flex cursor-pointer items-center gap-2 rounded-lg p-2 font-medium text-gray-500 transition duration-300 hover:bg-gray-200">
+        {/* <div className="flex cursor-pointer items-center gap-2 rounded-lg p-2 font-medium text-gray-500 transition duration-300 hover:bg-gray-200">
           <FaPrint size={20} />
           <span>Print</span>
-        </div>
+        </div> */}
       </div>
       <div className="flex items-center justify-between gap-4 py-2">
         <Action
@@ -105,7 +105,7 @@ const Toolbar: ClientComponent = () => {
           activeIcon={<FaStar size={20} />}
           onSuccess={onSuccessStarred}
         />
-        <Action
+        {/* <Action
           label="Delete"
           actionType="delete"
           icon={<RiDeleteBin6Line size={20} />}
@@ -114,7 +114,7 @@ const Toolbar: ClientComponent = () => {
           activeIcon={<MdDelete size={20} />}
           onSuccess={onSuccessDeleted}
           disableOnActive
-        />
+        /> */}
       </div>
     </div>
   );
