@@ -20,8 +20,8 @@ const Topbar: ClientComponent = () => {
   if (!selectedRooms?.id || !selectedRooms?.users?.length) return <></>;
 
   return (
-    <div className="flex h-fit w-full items-center justify-between border-b border-gray-main/40 pb-4 text-white">
-      <span className="text-sx text-white/80">
+    <div className="flex h-fit w-full items-center justify-between border-b border-gray-main/40 pb-4 text-gray-800">
+      <span className="text-sx text-gray-800">
         {getName({
           first_name: selectedRooms.users[0].first_name,
           middle_name: selectedRooms.users[0].middle_name,
@@ -29,7 +29,7 @@ const Topbar: ClientComponent = () => {
         })}
       </span>
       <div className="flex items-center gap-8 text-gray-main ">
-        <TooltipBasic
+        {/* <TooltipBasic
           title="Browse Pictures"
           className="tooltip-theme-background flex w-32 items-center justify-center text-center"
         >
@@ -46,7 +46,7 @@ const Topbar: ClientComponent = () => {
             size={16}
             className="hover:theme-text-color cursor-pointer"
           />
-        </TooltipBasic>
+        </TooltipBasic> */}
       </div>
       <div className="relative h-10 w-10 rounded-full">
         <Image
