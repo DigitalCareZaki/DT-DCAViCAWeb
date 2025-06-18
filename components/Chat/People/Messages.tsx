@@ -74,10 +74,12 @@ const Messages: ClientComponentProps<MessagesProps> = ({ data }) => {
               </span>
             </div>
           </div>
+          {/*
           <FiEdit
             className="theme-text-color cursor-pointer transition duration-300 hover:scale-[105%]"
             onClick={() => setShowNewMessage(true)}
           />
+          */}
         </div>
         <Search />
       </div>
