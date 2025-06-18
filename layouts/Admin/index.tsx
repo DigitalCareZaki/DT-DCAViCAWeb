@@ -28,10 +28,15 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
 
   if (route?.includes('/admin/chat')) {
     return (
-      <main className="relative flex h-screen w-screen gap-4 bg-dark-main overflow-hidden">
-        {children}
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="relative gap-4 bg-background p-6"
+        >
+          {children}
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
