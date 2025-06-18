@@ -32,6 +32,11 @@ const MessageBar: ClientComponent = () => {
     (state) => state.chats
   );
 
+  // Hide the message bar if no chat is selected
+  if (!selectedRooms?.id) {
+    return <></>;
+  }
+
   const [value, setValue] = useState<string>('');
 
   const sentMessage = async (
