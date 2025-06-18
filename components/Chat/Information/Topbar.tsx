@@ -10,8 +10,8 @@ import type { ServerComponent } from '@types';
 const Topbar: ServerComponent = async () => {
   return (
     <div className="flex w-full items-center justify-between border-b border-gray-main/40 pb-6 pt-2">
-      <div className="flex items-center gap-4 text-sx text-white/80">
-        <BsChatFill size={20} className="text-white" />
+      <div className="flex items-center gap-4 text-sx text-gray-main/80">
+        <BsChatFill size={20} className="text-gray-main" />
         <span>Chat Details</span>
       </div>
       <Link passHref href="/">
