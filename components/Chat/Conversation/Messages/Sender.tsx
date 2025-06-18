@@ -15,7 +15,7 @@ const Sender: ClientComponentProps<SenderProps> = ({
 }) => {
   return (
     <div className="flex w-full shrink-0 items-end gap-4">
-      <div className="relative h-8 w-8 rounded-full">
+      <div className="relative h-7 w-7 rounded-full">
         <Image
           src={getProfilePicture(author?.uri)}
           className="rounded-full object-cover"
@@ -23,7 +23,7 @@ const Sender: ClientComponentProps<SenderProps> = ({
           alt="profile-picture"
         />
       </div>
-      <div className="relative flex w-fit max-w-[80%] flex-col rounded-bl-sm rounded-br-xl rounded-tl-xl rounded-tr-xl bg-gray-700 p-4 py-2 text-ssx text-white">
+      <div className="relative flex w-fit max-w-[80%] flex-col rounded-bl-sm rounded-br-xl rounded-tl-xl rounded-tr-xl bg-gray-700 p-2 py-1 text-sm text-white">
         {media && (
           <div className="relative my-2 h-48 w-48 rounded-lg">
             <Image

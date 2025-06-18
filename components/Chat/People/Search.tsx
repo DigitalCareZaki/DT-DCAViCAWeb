@@ -10,9 +10,10 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setFetchingRoomsReducer, setRoomsReducer } from '@slice';
+import { setFetchingRoomsReducer, setRoomsReducer, setSelectedRoomReducer } from '@slice';
 import { InputBasic } from '@common';
 import { searchChatRooms } from '@service';
+import { openOrCreateRoom } from './openOrCreateRoom';
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -46,11 +47,11 @@ const Search = () => {
     [fetchOptions]
   );
 
-  const onOptionClick = (option: any) => {
-    // Instead of filtering, fetch and show all rooms again
+  // When a user is clicked, open/create the chat room and select it
+  const onOptionClick = async (option: any) => {
+    await openOrCreateRoom(dispatch, option);
     setValue('');
     setShowOptions(false);
-    // Refetch all rooms (empty search)
     fetchOptions('');
   };
 

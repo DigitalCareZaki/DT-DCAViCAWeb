@@ -14,12 +14,14 @@ const Chat: ServerComponent = async () => {
   return (
     <>
       <PrimaryHeader user={user as any} />
-      <div className="flex h-full w-full">
-
+      <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden bg-white">
         <People />
+        <div className="w-[1px] bg-gray-200" />
         <Conversation />
+        <div className="w-[1px] bg-gray-200" />
         <Information />
-      </div></>
+      </div>
+    </>
   );
 };
 

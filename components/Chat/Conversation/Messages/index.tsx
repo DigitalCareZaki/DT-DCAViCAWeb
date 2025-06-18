@@ -74,7 +74,7 @@ const Messages: ClientComponent = () => {
     <div
       ref={scrollRef}
       className={twMerge(
-        'hidescrollbar flex h-full w-full flex-col gap-12 overflow-y-scroll pb-40 pt-6',
+        'hidescrollbar flex h-full w-full flex-col gap-4 overflow-y-scroll pb-16 pt-2',
         userType?.toLowerCase() === 'doctor' && 'doctor-scrollbar',
         userType?.toLowerCase() === 'nurse' && 'nurse-scrollbar'
       )}

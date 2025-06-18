@@ -105,9 +105,10 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
                 middle_name: users[0]?.middle_name,
               })}
             </span>
-            {false && (
-              <div className="group-hover:theme-text-color theme-bg-color absolute right-0 flex h-4 w-4 items-center justify-center rounded-full text-ssx font-semibold text-white group-hover:bg-white">
-                <span>1</span>
+            {/* Show new message badge if there are unread messages */}
+            {users[0]?.hasNewMessage && (
+              <div className="group-hover:theme-text-color theme-bg-color absolute right-0 flex h-4 w-auto items-center justify-center rounded-full px-2 text-ssx font-semibold text-white group-hover:bg-white">
+                <span>new message</span>
               </div>
             )}
           </div>

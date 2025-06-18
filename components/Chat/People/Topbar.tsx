@@ -22,15 +22,15 @@ const Topbar: ServerComponent = async () => {
           className="rounded-full object-cover"
         />
       </div>
-      <div className="theme-text-color flex flex-col py-2 text-xs font-semibold">
-        <span>
+      <div className="theme-text-color flex flex-col py-2">
+        <span className="text-base font-semibold">
           {getName({
             first_name: user.first_name ?? '',
             last_name: user.last_name ?? '',
             middle_name: user.middle_name,
           })}
         </span>
-        <span className="text-ssx text-gray-main">{user.role}</span>
+        <span className="text-sm text-gray-main">{user.role}</span>
       </div>
     </div>
   );

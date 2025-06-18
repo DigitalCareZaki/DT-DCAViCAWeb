@@ -8,9 +8,11 @@ import type { ClientComponent } from '@types';
 
 const Conversation: ClientComponent = () => {
   return (
-    <div className="relative flex h-full w-[60%] flex-col p-4">
+    <div className="relative flex h-full w-[60%] flex-col p-4 overflow-hidden">
       <Topbar />
-      <Messages />
+      <div className="flex-1 overflow-y-auto">
+        <Messages />
+      </div>
       <MessageBar />
     </div>
   );

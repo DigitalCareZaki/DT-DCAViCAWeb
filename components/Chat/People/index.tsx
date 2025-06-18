@@ -13,7 +13,7 @@ const People: ServerComponent = async () => {
   if (!res.success) return <></>;
 
   return (
-    <div className="flex h-full w-[20%] flex-col gap-10 bg-dark-secondary p-4">
+    <div className="hidescrollbar flex h-full w-[20%] flex-col gap-10 bg-white p-4 overflow-y-auto">
       <Topbar />
       <Messages data={res.data} />
     </div>
