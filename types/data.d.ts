@@ -575,6 +575,7 @@ export interface ChatRoomProps {
     email: string;
     role: string;
   }[];
+  hasNewMessage?: boolean;
 }
 
 export interface SearchChatRoomsProps {

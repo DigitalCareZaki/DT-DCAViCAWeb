@@ -84,14 +84,15 @@ const Search = () => {
           onChange={onChange}
           value={value}
           autoComplete="off"
+          inputClassName="bg-gray-200 text-gray-main/40"
         />
       </form>
       {showOptions && options.length > 0 && (
-        <ul className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md max-h-60 overflow-y-auto">
+        <ul className="absolute z-10 mt-1 w-full text-gray-main/40 shadow-lg rounded-md max-h-60 overflow-y-auto">
           {options.map((option, idx) => (
             <li
               key={option.users?.[0]?.id || idx}
-              className="cursor-pointer px-4 py-2 hover:bg-gray-100 text-black"
+              className="cursor-pointer px-4 py-2 hover:bg-gray-100 text-gray-main/40"
               onClick={() => onOptionClick(option)}
             >
               {option.users?.[0]?.first_name} {option.users?.[0]?.last_name}

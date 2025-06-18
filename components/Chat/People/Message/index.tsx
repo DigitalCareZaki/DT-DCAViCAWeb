@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
+import { MdMail } from '@react-icons/all-files/md/MdMail';
 
 import { getName, getProfilePicture } from '@init-globals';
 import { setSelectedRoomReducer, pushToSelectedRoomReducer } from '@slice';
@@ -85,7 +86,7 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
         onClick={handleSelect}
         className={twMerge(
           'hover:theme-bg-color group flex h-14 w-full shrink-0 cursor-pointer items-center gap-4 rounded-md p-2 transition duration-300',
-          selected ? 'theme-bg-color' : 'bg-dark-main'
+          selected ? 'theme-bg-color' : 'bg-gray-main'
         )}
       >
         <div className="relative h-10 w-10 shrink-0 rounded-full">
@@ -107,8 +108,9 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
             </span>
             {/* Show new message badge if there are unread messages */}
             {users[0]?.hasNewMessage && (
-              <div className="group-hover:theme-text-color theme-bg-color absolute right-0 flex h-4 w-auto items-center justify-center rounded-full px-2 text-ssx font-semibold text-white group-hover:bg-white">
-                <span>new message</span>
+              <div className="absolute right-0 top-1 flex items-center group">
+                <MdMail className="text-red-500 w-4 h-4 animate-bounce" />
+                <span className="ml-1 hidden rounded bg-red-500 px-2 py-0.5 text-xs text-black group-hover:inline-block">New message</span>
               </div>
             )}
           </div>

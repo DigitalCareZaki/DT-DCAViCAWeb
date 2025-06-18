@@ -137,7 +137,7 @@ const MessageBar: ClientComponent = () => {
   return (
     <form
       onSubmit={handleMessage}
-      className="w-90 focus-within:theme-border-color absolute bottom-2 left-5 right-5 flex h-12 items-center gap-4 rounded-lg  border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border"
+      className="w-90 focus-within:theme-border-color flex h-12 items-center gap-4 rounded-lg border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border mt-2"
     >
       <div className="relative h-8 w-8 rounded-full">
         <Image

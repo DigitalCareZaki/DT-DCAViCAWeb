@@ -12,6 +12,9 @@ export const setRooms: SetRoomsReducer = (state, payload) => {
 
 export const setSelectedRoom: SelectRoomReducer = (state, payload) => {
   state.selectedRooms = payload.payload.room;
+  state.rooms = state.rooms.map((room) =>
+    room.id === payload.payload.room.id ? { ...room, hasNewMessage: false } : room
+  );
 };
 
 export const setFetchingRooms: SetFetchingRoomsReducer = (state, payload) => {
@@ -39,8 +42,10 @@ export const pushToSelectedRoom: SelectRoomReducer = (state, payload) => {
 
 export const pushToRoomChats: PushToRoomChats = (state, payload) => {
   const chats = state.chats[payload.payload.key];
-
   state.chats[payload.payload.key] = [...chats, payload.payload.data];
+  state.rooms = state.rooms.map((room) =>
+    room.id === payload.payload.key ? { ...room, hasNewMessage: true } : room
+  );
 };
 
 export const setToRoomChats: SetToRoomChats = (state, payload) => {
