@@ -47,9 +47,11 @@ const Search = () => {
   );
 
   const onOptionClick = (option: any) => {
-    dispatch(setRoomsReducer({ rooms: [option] }));
+    // Instead of filtering, fetch and show all rooms again
     setValue('');
     setShowOptions(false);
+    // Refetch all rooms (empty search)
+    fetchOptions('');
   };
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
