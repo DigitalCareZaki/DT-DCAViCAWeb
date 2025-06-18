@@ -13,8 +13,7 @@ const Chat: ServerComponent = async () => {
   const user = await getUser();
   return (
     <>
-      <PrimaryHeader user={user as any} />
-      <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden bg-white">
+      <div className="flex flex-grow h-full w-full overflow-hidden bg-white">
         <People />
         <div className="w-[1px] bg-gray-200" />
         <Conversation />
@@ -22,7 +21,7 @@ const Chat: ServerComponent = async () => {
         <Information />
       </div>
     </>
-  );
+  )
 };
 
 export default Chat;

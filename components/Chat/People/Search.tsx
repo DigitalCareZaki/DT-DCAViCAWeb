@@ -69,7 +69,19 @@ const Search = () => {
     } else {
       // Create a new room
       const userObj = option.users ? option : { users: [option] };
-      await openOrCreateRoom(dispatch, userObj);
+      const newRoom = await openOrCreateRoom(dispatch, userObj);
+      // Refetch chat rooms and select the new room
+      const res = await searchChatRooms(''); // fetch all rooms
+      if (res.success) {
+        dispatch(setRoomsReducer({ rooms: res.data }));
+        // Find the new room by user id and select it
+        const createdRoom = res.data.find((room: any) =>
+          room.users.some((user: any) => user.id === userObj.users[0].id)
+        );
+        if (createdRoom) {
+          dispatch(setSelectedRoomReducer({ room: createdRoom }));
+        }
+      }
     }
     setValue('');
     setShowOptions(false);

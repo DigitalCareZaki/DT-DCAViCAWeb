@@ -31,9 +31,12 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
       <div className="relative h-screen w-screen overflow-hidden">
         <main
           style={mainStyle}
-          className="relative gap-4 bg-background p-6"
+          className="flex flex-col h-screen w-full bg-background"
         >
-          {children}
+          <PrimaryHeader user={user!} />
+          <div className="flex flex-grow h-0 w-full">
+            {children}
+          </div>
           <ModalBottom />
         </main>
       </div>

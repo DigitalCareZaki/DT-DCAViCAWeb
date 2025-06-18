@@ -1,4 +1,4 @@
-import { setSelectedRoomReducer } from '@slice';
+import { setSelectedRoomReducer, setRoomsReducer } from '@slice';
 
 export const openOrCreateRoom = async (dispatch: any, option: any) => {
     let userId = option.users?.[0]?.id || option.id;
@@ -12,14 +12,20 @@ export const openOrCreateRoom = async (dispatch: any, option: any) => {
             });
             const result = await res.json();
             if (result?.data?.id) {
-                dispatch(
-                    setSelectedRoomReducer({
-                        room: { id: result.data.id, users: result.data.users ?? [] },
-                    })
-                );
+                const newRoom = { id: result.data.id, users: result.data.users ?? [] };
+                dispatch((dispatch: any, getState: any) => {
+                    const rooms = getState().chats.rooms;
+                    const exists = rooms.some((room: any) => room.id === newRoom.id);
+                    if (!exists) {
+                        dispatch(setRoomsReducer({ rooms: [...rooms, newRoom] }));
+                    }
+                    dispatch(setSelectedRoomReducer({ room: newRoom }));
+                });
+                return newRoom;
             }
         }
     } else {
         dispatch(setSelectedRoomReducer({ room: option }));
+        return option;
     }
 };
