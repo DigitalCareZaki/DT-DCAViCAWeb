@@ -27,17 +27,21 @@ const MessageBar: ClientComponent = () => {
   const [user] = useUser();
 
   const [file, setFile] = useState<File | undefined>(undefined);
+  const [value, setValue] = useState<string>('');
 
   const { selectedRooms } = useSelector<ReduxProps, StoreChatState>(
     (state) => state.chats
   );
+
+  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  }, []);
 
   // Hide the message bar if no chat is selected
   if (!selectedRooms?.id) {
     return <></>;
   }
 
-  const [value, setValue] = useState<string>('');
 
   const sentMessage = async (
     file: File | undefined,
@@ -109,9 +113,7 @@ const MessageBar: ClientComponent = () => {
     await sentMessage(file, user, value);
   };
 
-  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  }, []);
+
 
   const onFileSelected = async () => {
     const input = document.createElement('input');
