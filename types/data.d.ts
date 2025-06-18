@@ -951,7 +951,7 @@ export interface PatientMedicationAlert {
 
 export type VideoPriority = 'HIGH' | 'LOW' | 'UNDEFINED';
 
-export type VideoCategory = 'INFORMATIONAL' | 'MARKETING';
+export type VideoCategory = 'BLOODPRESSURE' | 'SPO2' | 'ECG' | 'BLOODGLUCOSE' | 'TEMPERATURE';
 
 export interface VideoProps {
   id: string;

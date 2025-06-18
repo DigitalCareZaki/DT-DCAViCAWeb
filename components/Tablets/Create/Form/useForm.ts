@@ -79,7 +79,7 @@ const useFormHook = (
             JSON.stringify({
               title: data.title,
               serial_number: data.serial_number,
-              // category: data.category,
+              category: data.category,
             })
           )
         );
