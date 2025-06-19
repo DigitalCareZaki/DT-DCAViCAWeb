@@ -29,11 +29,11 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
       },
       {
         name: 'Blood Pressure',
-        value: 'BLOOD_PRESSURE',
+        value: 'BLOODPRESSURE',
       },
       {
         name: 'Blood Glucose',
-        value: 'BLOOD_GLUCOSE',
+        value: 'BLOODGLUCOSE',
       },
       {
         name: 'Temperature',
@@ -96,7 +96,7 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
             icon="MdPin"
             error={!!errors.category?.message?.length}
             errorMessage={errors.category?.message || '&'}
-            selected={selectedValues?.category?.name}
+            selected={selectedValues?.category?.value}
           >
             <ClientGenerator data={categories} handleSelect={handleSelect}>
               <Category />
