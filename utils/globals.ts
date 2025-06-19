@@ -11,6 +11,7 @@ String.prototype.convertURI = function (internal: boolean = false) {
   // live backend url
   return `https://avica.up.railway.app${this.toString()}`;
 
+  
   // // local backend url
   // return `http://localhost:8080${this.toString()}`;
 };
