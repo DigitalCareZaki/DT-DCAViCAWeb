@@ -65,9 +65,9 @@ const useFormHook = (tabletId: string): UseFormProps => {
 
   const handleSelectPatient = useCallback(
     (patient: PatientData) => {
+      if (selectedPatients.length >= 1) return;
       if (selectedPatients.find((p) => p.id === patient.id)) return;
-
-      setSelectedPatients((prev) => [...prev, patient]);
+      setSelectedPatients([patient]);
     },
     [selectedPatients]
   );
@@ -136,7 +136,7 @@ const useFormHook = (tabletId: string): UseFormProps => {
         setLoading(false);
       }
     })();
-    return () => {};
+    return () => { };
   }, [tabletId, setValue]);
 
   return [

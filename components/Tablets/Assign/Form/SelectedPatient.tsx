@@ -51,28 +51,24 @@ const SelectedPatient: ClientComponentProps<SelectedUserProps & any> = ({
           last_name,
           middle_name,
         })}
-        <AnimatePresence>
-          {isHovering && (
-            <motion.div
-              onClick={() =>
-                handleRemovePatient({
-                  first_name,
-                  last_name,
-                  middle_name,
-                  email,
-                  id,
-                })
-              }
-              initial={{ opacity: 0, width: 0, height: 0 }}
-              animate={{ opacity: 1, width: 20, height: 20 }}
-              exit={{ opacity: 0, width: 0 }}
-              onAnimationComplete={() => setAnimationCompleted(true)}
-              className="flex h-fit w-fit cursor-pointer items-center justify-center rounded-full bg-gray-400 transition duration-200 hover:scale-[110%]"
-            >
-              {animationComplete && <IoClose />}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          onClick={() =>
+            handleRemovePatient({
+              first_name,
+              last_name,
+              middle_name,
+              email,
+              id,
+            })
+          }
+          initial={{ opacity: 0, width: 0, height: 0 }}
+          animate={{ opacity: 1, width: 20, height: 20 }}
+          exit={{ opacity: 0, width: 0 }}
+          className="flex h-fit w-fit cursor-pointer items-center justify-center rounded-full bg-gray-400 transition duration-200 hover:scale-[110%] ml-2"
+          title="Unassign"
+        >
+          <IoClose />
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   );
