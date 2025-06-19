@@ -12,7 +12,7 @@ import {
 const Chat: ServerComponent = async () => {
   const user = await getUser();
   return (
-    <>
+    <div className="px-6 w-full h-full">
       <div className="flex flex-grow h-full w-full overflow-hidden bg-white">
         <People />
         <div className="w-[1px] bg-gray-200" />
@@ -20,7 +20,7 @@ const Chat: ServerComponent = async () => {
         <div className="w-[1px] bg-gray-200" />
         <Information />
       </div>
-    </>
+    </div>
   )
 };
 

@@ -33,7 +33,9 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
           style={mainStyle}
           className="flex flex-col h-screen w-full bg-background"
         >
-          <PrimaryHeader user={user!} />
+          <div className="px-6 pt-4">
+            <PrimaryHeader user={user!} />
+          </div>
           <div className="flex flex-grow h-0 w-full">
             {children}
           </div>
