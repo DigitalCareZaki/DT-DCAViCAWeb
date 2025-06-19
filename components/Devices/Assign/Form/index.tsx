@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import {
   InputBasic,
@@ -14,10 +15,23 @@ import { useRouter } from 'next/navigation';
 import SelectPatient from './SelectPatient';
 import SelectedPatient from './SelectedPatient';
 
+import { getSingleDevice } from '@service';
+
 import type { ClientComponent } from '@types';
 
 const Form: ClientComponent = () => {
   const params = useSearchParams();
+  const [assigned, setAssigned] = useState(false);
+  const deviceId = params?.get('id') ?? '';
+
+  useEffect(() => {
+    async function fetchDevice() {
+      if (!deviceId) return;
+      const res = await getSingleDevice(deviceId);
+      if (res?.success) setAssigned(!!res.data.assigned);
+    }
+    fetchDevice();
+  }, [deviceId]);
 
   const [
     register,
@@ -30,7 +44,7 @@ const Form: ClientComponent = () => {
     selectedPatients,
     handleSelectPatient,
     handleRemovePatient,
-  ] = useForm(params?.get('id') ?? '');
+  ] = useForm(deviceId);
 
   const router = useRouter();
 
@@ -55,7 +69,7 @@ const Form: ClientComponent = () => {
             disabled={true}
           />
         </div>
-        <div className="w-full">
+        <div className="w-full relative">
           <InputDropdown
             loading={searching}
             label="Assign patients"
@@ -77,6 +91,11 @@ const Form: ClientComponent = () => {
               <SelectPatient />
             </ClientGenerator>
           </InputDropdown>
+          {assigned && (
+            <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center z-10 rounded-lg cursor-not-allowed">
+              <span className="text-red-500 font-semibold">This device is already assigned. Unassign to re-assign.</span>
+            </div>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           <ClientGenerator
@@ -87,10 +106,8 @@ const Form: ClientComponent = () => {
           </ClientGenerator>
         </div>
       </div>
-
-      <ButtonPrimary title="Update" name="Update" loading={loading} />
+      <ButtonPrimary title="Update" name="Update" loading={loading} disabled={assigned} />
       <ButtonPrimary type='button' title="Close" name="Close" loading={loading} onClick={() => router.back()} />
-
     </form>
   );
 };
