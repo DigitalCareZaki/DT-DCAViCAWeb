@@ -33,17 +33,42 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
     // Prevents overflow artifacts due to scaling
   };
 
+
   if (
     route?.includes('/doctor/telemed/appointment') ||
     route?.includes('/doctor/chat')
   ) {
     return (
-      <main style={mainStyle} className="relative h-full w-screen gap-4 bg-dark-main overflow-scroll">
-        {children}
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="flex flex-col h-screen w-full bg-background"
+        >
+          <div className="px-6 pt-4">
+            <PrimaryHeader user={user!} />
+          </div>
+          <div className="flex flex-grow h-0 w-full">
+            {children}
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
+
+
+  // old code 
+  // if (
+  //   route?.includes('/doctor/telemed/appointment') ||
+  //   route?.includes('/doctor/chat')
+  // ) {
+  //   return (
+  //     <main style={mainStyle} className="relative h-full w-screen gap-4 bg-dark-main overflow-scroll">
+  //       {children}
+  //       <ModalBottom />
+  //     </main>
+  //   );
+  // }
 
   if (route?.includes('/doctor/telemed')) {
     return (

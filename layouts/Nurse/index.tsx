@@ -35,20 +35,45 @@ const NurseLayout: ClientComponentProps<Props> = ({ user, children }) => {
     overflow: 'hidden', // Prevents overflow from scaling artifacts
   };
 
+
   if (
     route?.includes('/nurse/telemed/appointment') ||
     route?.includes('/nurse/chat')
   ) {
     return (
-      <main
-        style={mainStyle}
-        className="relative h-full w-screen gap-4 bg-dark-main"
-      >
-        {children}
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="flex flex-col h-screen w-full bg-background"
+        >
+          <div className="px-6 pt-4">
+            <PrimaryHeader user={user!} />
+          </div>
+          <div className="flex flex-grow h-0 w-full">
+            {children}
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
+
+
+  // old code 
+  // if (
+  //   route?.includes('/nurse/telemed/appointment') ||
+  //   route?.includes('/nurse/chat')
+  // ) {
+  //   return (
+  //     <main
+  //       style={mainStyle}
+  //       className="relative h-full w-screen gap-4 bg-dark-main"
+  //     >
+  //       {children}
+  //       <ModalBottom />
+  //     </main>
+  //   );
+  // }
 
   if (route?.includes('/nurse/telemed')) {
     return (
