@@ -11,6 +11,6 @@ export default function Page(): JSX.Element {
 }
 
 export const metadata: Metadata = {
-  title: 'Avica | Tablet',
-  description: 'Avica | Tablet',
+  title: 'Avica | Accessories',
+  description: 'Avica | Accessories',
 };
