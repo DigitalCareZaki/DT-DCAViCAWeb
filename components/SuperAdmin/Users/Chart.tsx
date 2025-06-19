@@ -63,10 +63,10 @@ export default function Donut({
           }}
           series={values}
           type="donut"
-          width={300}
-          height={250}
+          width={180}
+          height={120}
         />
-        <p className="text-xl font-bold">{total}</p>
+        <p className="text-base font-bold">{total}</p>
       </div>
     </Suspense>
   );
