@@ -15,7 +15,7 @@ const Recipient: ClientComponent = () => {
   if (!selectedRooms?.id) return <></>;
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4 rounded-xl bg-dark-main py-4 text-sm text-white/80">
+    <div className="flex w-full flex-col items-center justify-center gap-4 rounded-xl bg-gray-main py-4 text-sm text-white/80">
       <div className="relative h-20 w-20 rounded-full bg-white">
         <Image
           src={getProfilePicture(selectedRooms?.users[0]?.uri)}

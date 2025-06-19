@@ -109,16 +109,17 @@ const Search = () => {
 
   return (
     <div className="relative w-full">
-      <form onSubmit={onSubmit} className="meeting-input-field w-full">
+      <form onSubmit={onSubmit} className="w-full">
         <InputBasic
           icon="IoSearch"
           placeholder="Search participants"
           borderTheme
+          inputWrapperClassName="bg-background"
+          inputClassName="bg-background"
           onChange={onChange}
           value={value}
           autoComplete="off"
-          inputWrapperClassName="bg-background"
-          inputClassName="bg-background"
+
         />
       </form>
       {showOptions && options.length > 0 && (
