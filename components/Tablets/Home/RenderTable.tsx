@@ -26,10 +26,10 @@ const RenderTable: ServerComponentProps<Props> = async ({ userRole, data }) => {
               href={`/${userRole}/tablets/edit?id=${el.id}`}
               className="hover:underline hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
             >
-              {el.serial_number}
+              {el.title}
             </Link>
           </th>
-          <td className="px-6 py-4">{el.title}</td>
+          <td className="px-6 py-4">{el.serial_number}</td>
           <td className="px-6 py-4">{el.category}</td>
           <td className="px-6 py-4">
             {getName({
