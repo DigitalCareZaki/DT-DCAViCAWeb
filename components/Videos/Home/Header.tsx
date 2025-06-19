@@ -18,12 +18,13 @@ const Header: ServerComponent = async () => {
       <span className="stext-xl screen-title font-semibold text-gray-800 sm:text-2xl lg:text-3xl">
         Videos
       </span>
+
       <div className="w-40 sm:w-48">
         <Link passHref href={`/${user.role.toLocaleLowerCase()}/videos/add`}>
           <ButtonPrimary
             title="Add Video"
             name="Add video"
-            className="p-4 text-lg sm:text-xl lg:text-2xl"
+            className="h-16 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
           />
         </Link>
       </div>

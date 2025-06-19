@@ -57,7 +57,8 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     if (!socket.current.connected) {
       socket.current.connect();
 
-      socket.current.on(`${user.id}:recieve_notification`, (payload) => {
+      // Define the handler separately so it can be removed
+      const handler = (payload: any) => {
         dispatch(setNewNotificationsReducer({ data: payload }));
         dispatch(
           showModalReducer({
@@ -66,12 +67,18 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
             show: true,
           })
         );
-      });
+      };
+
+      socket.current.on(`${user.id}:recieve_notification`, handler);
+
+      // CLEANUP: Remove the event listener on unmount or user change
+      return () => {
+        socket.current?.off(`${user.id}:recieve_notification`, handler);
+      };
     }
 
-    return () => {
-      // unmounting
-    };
+    // If not connecting, still return a cleanup function
+    return () => { };
   }, [user]);
 
   useEffect(() => {

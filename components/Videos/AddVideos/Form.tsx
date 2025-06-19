@@ -143,8 +143,25 @@ const Form: ClientComponent = () => {
         </div>
       </div>
 
-      <ButtonPrimary title={'Save'} name={'Save'} loading={loading} />
-      <ButtonPrimary title="Close" name="Close" loading={loading} onClick={() => router.back()} />
+
+      {/* Submit Button */}
+      <div className="flex flex-col gap-3 sm:flex-col sm:gap-4">
+        <ButtonPrimary
+          title={'Save'}
+          name={'Save'}
+          loading={loading}
+          className="w-full"
+        />
+        <ButtonPrimary
+          title={'Close'}
+          name={'Close'}
+          onClick={() => router.back()}
+          className="w-full"
+        />
+      </div>
+
+      {/* <ButtonPrimary title={'Save'} name={'Save'} loading={loading} />
+      <ButtonPrimary title="Close" name="Close" loading={loading} onClick={() => router.back()} /> */}
 
     </form>
   );
