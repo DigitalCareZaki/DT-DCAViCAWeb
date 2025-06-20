@@ -6,7 +6,13 @@ import type {
 
 export const setNewNotifications: SetNewNotification = (state, payload) => {
   const notifications = state.notifications.find(
-    (el) => el.id === payload.payload.data.id
+    (el) =>
+      el.id === payload.payload.data.id ||
+      (
+        el.title === payload.payload.data.title &&
+        el.description === payload.payload.data.description &&
+        el.created_at === payload.payload.data.created_at
+      )
   );
 
   if (!notifications) {

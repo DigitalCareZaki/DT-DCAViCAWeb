@@ -59,6 +59,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
 
       // Define the handler separately so it can be removed
       const handler = (payload: any) => {
+        console.log('Received notification', payload); // DEBUG LOG
         dispatch(setNewNotificationsReducer({ data: payload }));
         dispatch(
           showModalReducer({
