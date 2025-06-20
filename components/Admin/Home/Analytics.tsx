@@ -21,7 +21,7 @@ const Analytics: ServerComponent = async () => {
             <PrimaryCounter value={data.success ? data.data.patients : 0} prefix="" />
           </Link>
         </span>
-        <span className="text-indigo-100 text-xs font-medium tracking-wide uppercase">
+        <span className="text-white text-xs font-medium tracking-wide uppercase">
           Total Patients
         </span>
       </div>
@@ -33,7 +33,7 @@ const Analytics: ServerComponent = async () => {
             <PrimaryCounter value={data.success ? data.data.doctors : 0} prefix="" />
           </Link>
         </span>
-        <span className="text-blue-100 text-xs font-medium tracking-wide uppercase">
+        <span className="text-white text-xs font-medium tracking-wide uppercase">
           Total Doctors
         </span>
       </div>
@@ -45,7 +45,7 @@ const Analytics: ServerComponent = async () => {
             <PrimaryCounter value={data.success ? data.data.nurses : 0} prefix="" />
           </Link>
         </span>
-        <span className="text-green-100 text-xs font-medium tracking-wide uppercase">
+        <span className="text-white text-xs font-medium tracking-wide uppercase">
           Total Nurses
         </span>
       </div>
@@ -55,7 +55,7 @@ const Analytics: ServerComponent = async () => {
           <Icon name="MdPin" size={24} className="text-white" />
           <PrimaryCounter value={data.success ? data.data.branches : 0} prefix="" />
         </span>
-        <span className="text-purple-100 text-xs font-medium tracking-wide uppercase">
+        <span className="text-white text-xs font-medium tracking-wide uppercase">
           Total Branches
         </span>
       </div>
@@ -65,7 +65,7 @@ const Analytics: ServerComponent = async () => {
           <Icon name="MdMergeType" size={24} className="text-white" />
           <PrimaryCounter value={data.success ? data.data.medications : 0} prefix="" />
         </span>
-        <span className="text-yellow-100 text-xs font-medium tracking-wide uppercase">
+        <span className="text-white text-xs font-medium tracking-wide uppercase">
           Total Specialties
         </span>
       </div>
@@ -75,7 +75,7 @@ const Analytics: ServerComponent = async () => {
           <Icon name="FaCalendarAlt" size={24} className="text-white" />
           <PrimaryCounter value={data.success ? data.data.appointments : 0} prefix="" />
         </span>
-        <span className="text-pink-100 text-xs font-medium tracking-wide uppercase">
+        <span className="text-white text-xs font-medium tracking-wide uppercase">
           Total Appointments
         </span>
       </div>
