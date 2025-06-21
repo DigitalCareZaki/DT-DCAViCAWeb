@@ -299,10 +299,8 @@ const Appointment: ClientComponentProps<Appointment> = ({
         <button
           onClick={handleToggleOptions}
           className={twMerge(
-            'flex h-11 w-[20%] cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300',
-            secondary,
-            statusState === 'PENDING' ? secondary : `${secondary} opacity-50`,
-            statusState === 'PENDING' && 'hover:shadow-xl'
+            'flex h-11 w-[20%] cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300 hover:shadow-xl',
+            secondary
           )}
         >
           <HiDotsVertical />
