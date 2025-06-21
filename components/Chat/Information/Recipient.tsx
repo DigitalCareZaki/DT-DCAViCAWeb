@@ -32,7 +32,7 @@ const Recipient: ClientComponent = () => {
             middle_name: selectedRooms?.users[0]?.middle_name as string,
           })}
         </span>
-        <span className="text-ssx text-gray-main">
+        <span className="text-ssx text-white">
           {selectedRooms?.users[0]?.role}
         </span>
       </div>
