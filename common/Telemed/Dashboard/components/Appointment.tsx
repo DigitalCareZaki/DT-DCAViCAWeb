@@ -277,9 +277,11 @@ const Appointment: ClientComponentProps<Appointment> = ({
           className={twMerge(
             'flex h-11 w-[90%] cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300',
             statusState === 'PENDING' ? secondary : `${secondary} opacity-50`,
-            statusState === 'PENDING' && 'hover:shadow-xl'
+            statusState === 'PENDING' && 'hover:shadow-xl',
+            user.role === 'PATIENT' && 'opacity-50 cursor-not-allowed'
           )}
           onClick={() => handleAccept('ACTIVE')}
+          disabled={user.role === 'PATIENT'}
         >
           {loading ? (
             showOptions ? (
