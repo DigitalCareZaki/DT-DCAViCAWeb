@@ -57,6 +57,11 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     if (!socket.current.connected) {
       socket.current.connect();
 
+      // Log all events received
+      socket.current.onAny((event, ...args) => {
+        console.log('[WebSocketProvider] Socket event received:', event, ...args);
+      });
+
       // Define the handler separately so it can be removed
       const handler = (payload: any) => {
         console.log('Received notification', payload); // DEBUG LOG
@@ -87,6 +92,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     if (!emitters?.event?.length) return;
 
     if (['appointment', 'message'].includes(emitters.event)) {
+      console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
     }
 
@@ -94,22 +100,20 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
       ['meeting-controlls', 'meeting-chat'].includes(emitters.event) &&
       emitters.payload
     ) {
+      console.log('[WebSocketProvider] Emitting event:', `${emitters.payload.appointment_id}:${emitters.event}`, emitters.payload); // DEBUG LOG
       socket.current.emit(
         `${emitters.payload.appointment_id}:${emitters.event}`,
         emitters.payload
       );
-
-      // console.log(
-      //   'emitting: ',
-      //   `${emitters.payload.appointment_id}:${emitters.event}`
-      // );
     }
 
     if (emitters.event === 'room-init') {
+      console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
     }
 
     if (emitters.event === 'send_notification') {
+      console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
     }
 

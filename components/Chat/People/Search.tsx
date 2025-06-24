@@ -24,12 +24,15 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const rooms = useSelector((state: any) => state.chats.rooms);
 
+  // Fetch users matching the search string
   const fetchOptions = useCallback(
     async (search: string) => {
       setLoading(true);
       dispatch(setFetchingRoomsReducer({ value: true }));
       const res = await searchChatRooms(search);
       if (res.success) {
+
+        console.log('fetch options function payload', res.data);
         setOptions(res.data);
       }
       setLoading(false);
@@ -38,6 +41,7 @@ const Search = () => {
     [dispatch]
   );
 
+  // Debounced search handler
   const onChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
@@ -50,44 +54,34 @@ const Search = () => {
       }
       debounceRef.current = setTimeout(() => {
         fetchOptions(val);
-      }, 400);
+      }, 400); // 400ms debounce
     },
     [fetchOptions]
   );
 
-  // When a user is clicked, open/create the chat room and select it
+  // Handle user click: open or create chat room
   const onOptionClick = async (option: any) => {
-    // Find if a room with this user already exists
-    const userId = option.users?.[0]?.id || option.id;
+    const userId = option.users?.[0]?.id;
     const existingRoom = rooms.find((room: any) =>
       room.users.some((user: any) => user.id === userId)
     );
 
     if (existingRoom) {
-      // Select the existing room
+      // Open existing room
       dispatch(setSelectedRoomReducer({ room: existingRoom }));
     } else {
-      // Create a new room
+      // Create new room and open it
       const userObj = option.users ? option : { users: [option] };
-      const newRoom = await openOrCreateRoom(dispatch, userObj);
-      // Refetch chat rooms and select the new room
-      const res = await searchChatRooms(''); // fetch all rooms
-      if (res.success) {
-        dispatch(setRoomsReducer({ rooms: res.data }));
-        // Find the new room by user id and select it
-        const createdRoom = res.data.find((room: any) =>
-          room.users.some((user: any) => user.id === userObj.users[0].id)
-        );
-        if (createdRoom) {
-          dispatch(setSelectedRoomReducer({ room: createdRoom }));
-        }
-      }
+      console.log('userObj >>>', userObj);
+      await openOrCreateRoom(dispatch, userObj);
+      // Optionally, you can refetch rooms and select the new one if needed
     }
     setValue('');
     setShowOptions(false);
     setOptions([]);
   };
 
+  // Optional: handle form submit (e.g., on Enter key)
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     if (value) {
@@ -102,6 +96,7 @@ const Search = () => {
     }
   };
 
+  // Initial fetch (optional)
   useEffect(() => {
     // @ts-ignore
     onSubmit();
@@ -119,7 +114,6 @@ const Search = () => {
           onChange={onChange}
           value={value}
           autoComplete="off"
-
         />
       </form>
       {showOptions && options.length > 0 && (

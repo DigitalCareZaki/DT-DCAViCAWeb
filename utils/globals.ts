@@ -2,18 +2,18 @@ String.prototype.convertURI = function (internal: boolean = false) {
   if (internal) {
 
     // live frontend url
-    return `https://avica-frontend.vercel.app${this.toString()}`;
+    // return `https://avica-frontend.vercel.app${this.toString()}`;
 
     // // local frontend url
-    // return `http://localhost:3000${this.toString()}`;
+    return `http://localhost:3000${this.toString()}`;
   }
 
   // live backend url
-  return `https://avica.up.railway.app${this.toString()}`;
+  // return `https://avica.up.railway.app${this.toString()}`;
 
-  
+
   // // local backend url
-  // return `http://localhost:8080${this.toString()}`;
+  return `http://localhost:8080${this.toString()}`;
 };
 
 Number.prototype.getWeight = function () {
