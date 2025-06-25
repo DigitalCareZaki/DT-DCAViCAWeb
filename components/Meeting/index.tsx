@@ -29,7 +29,7 @@ const Meeting: ServerComponentProps<MeetingProps> = async ({ id }) => {
   await joinMeeting(id);
 
   return (
-    <div className="grid h-screen grid-cols-4 gap-4">
+    <div className="grid h-screen grid-cols-4 gap-4 !bg-[#161b20]">
       <div className="col-span-3 flex h-[98%] w-full flex-col gap-2">
         <div className="h-[10%]">
           <Topbar id={id} />

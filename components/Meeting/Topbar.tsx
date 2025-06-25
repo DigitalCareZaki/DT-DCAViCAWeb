@@ -12,8 +12,8 @@ const Topbar: ServerComponentProps<TopbarProps> = async ({ id }) => {
 
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="flex flex-col text-ssx text-gray-400/80">
-        <span>{new Date().toDateString()}</span>
+      <div className="flex flex-col text-ssx mx-3 mt-2 text-gray-400/80">
+        <span className="text-xs font-semibold text-white">{new Date().toDateString()}</span>
         <span className="text-lg font-semibold text-white">
           {res.data?.title}
         </span>
