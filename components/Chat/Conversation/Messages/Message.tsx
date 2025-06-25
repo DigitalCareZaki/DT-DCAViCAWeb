@@ -24,7 +24,7 @@ const Message: ClientComponentProps<any> = ({
     return (
       <Reciever
         message={message}
-        sendedAt={timeAgo(created_at)}
+        sendedAt={timeAgo(typeof created_at === 'string' ? new Date(created_at).getTime() : created_at)}
         author={author}
         media={media}
       />
@@ -34,7 +34,7 @@ const Message: ClientComponentProps<any> = ({
   return (
     <Sender
       message={message}
-      sendedAt={timeAgo(created_at)}
+      sendedAt={timeAgo(typeof created_at === 'string' ? new Date(created_at).getTime() : created_at)}
       author={author}
       media={media}
     />

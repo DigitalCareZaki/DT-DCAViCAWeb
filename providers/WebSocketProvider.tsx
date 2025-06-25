@@ -12,6 +12,7 @@ import {
   showModalReducer,
   setNewNotificationsReducer,
 } from '@slice';
+import { fetchRoomChats } from '@service';
 
 import type { ClientComponentProps, ChildrenComponentProps } from '@types';
 import type {
@@ -148,14 +149,24 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     if (!socket.current) return;
     if (!selectedRooms?.id) return;
 
-    socket.current.on(selectedRooms.id, (data) => {
-      // console.log('room-chats: ', data);
-      dispatch(
-        setToRoomChatsReducer({
-          key: selectedRooms?.id,
-          data: data[selectedRooms?.id],
-        })
-      );
+
+    socket.current.on(selectedRooms.id, async (data) => {
+      console.log('room-chats: socket data ', data);
+
+      await fetchRoomChats(selectedRooms.id).then((res: any) => {
+        const transformedData = {
+          [selectedRooms.id]: res?.data?.chats || []
+        };
+
+        console.log('room-chats: api ', transformedData);
+
+        dispatch(
+          setToRoomChatsReducer({
+            key: selectedRooms?.id,
+            data: transformedData[selectedRooms.id],
+          })
+        );
+      });
     });
   }, [selectedRooms]);
 
