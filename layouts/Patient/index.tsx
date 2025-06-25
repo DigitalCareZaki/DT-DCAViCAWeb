@@ -34,28 +34,59 @@ const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
     route?.includes('/patient/chat')
   ) {
     return (
-      <main
-        style={mainStyle}
-        className="relative h-full w-screen gap-4 bg-dark-main"
-      >
-        {children}
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="flex flex-col h-screen w-full bg-background"
+        >
+          <div className="px-6 pt-4">
+            <PrimaryHeader user={user!} />
+          </div>
+          <div className="flex flex-grow h-0 w-full">
+            {children}
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
+
+  // old code 
+  // if (
+  //   route?.includes('/patient/telemed/appointment') ||
+  //   route?.includes('/patient/chat')
+  // ) {
+  //   return (
+  //     <main
+  //       style={mainStyle}
+  //       className="relative h-full w-screen gap-4 bg-dark-main"
+  //     >
+  //       {children}
+  //       <ModalBottom />
+  //     </main>
+  //   );
+  // }
+
   if (route?.includes('/patient/telemed')) {
     return (
-      <main
-        style={mainStyle}
-        className="relative h-full w-screen gap-4 bg-background p-6"
-      >
+      <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6 overflow-y-scroll">
         <div className="flex h-full w-full">
           <TelemedSidebar userType={user?.type} />
-          <div className="h-full flex-grow">{children}</div>
+          <div className="h-full w-[95%]">{children}</div>
         </div>
         <ModalBottom />
       </main>
+
+
+
+      // <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6 overflow-y-scroll">
+      //   <div className="flex h-full w-full">
+      //     <TelemedSidebar userType={user?.type} />
+      //     <div className="h-full flex-grow">{children}</div>
+      //   </div>
+      //   <ModalBottom />
+      // </main>
     );
   }
 
