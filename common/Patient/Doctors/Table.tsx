@@ -29,7 +29,9 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
       <ClientTable
         // heads={['Name', 'Speciality', 'Department', 'Email', 'Phone']}
-        heads={['Name', 'Specialty', 'Email', 'Phone', 'Action']}
+        heads={['Name', 'Specialty', 'Email', 'Phone',
+          // 'Action'
+        ]}
       >
         <RenderTable />
       </ClientTable>

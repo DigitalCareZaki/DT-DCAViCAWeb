@@ -27,11 +27,11 @@ const RenderTable: ClientComponent = () => {
           {/* <td className="px-6 py-4">{el.departments[0]?.title}</td> */}
           <td className="px-6 py-4">{el.user.email}</td>
           <td className="px-6 py-4">{el.user.phone_number}</td>
-          <td className="px-6 py-4">
+          {/* <td className="px-6 py-4">
             <button className="rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white shadow-md transition duration-300 ease-in-out hover:bg-blue-600">
               Delete
             </button>
-          </td>
+          </td> */}
         </tr>
       ))}
     </>
