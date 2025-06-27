@@ -13,12 +13,12 @@ const Header: ServerComponentProps<Props> = async ({ userRole, data }) => {
         Devices
       </span>
       <div className="flex w-fit flex-row gap-4">
-        <div className="w-40 sm:w-48">
+        <div className="w-36 sm:w-48">
           <Link passHref href={`/${userRole}/devices/add`}>
             <ButtonPrimary
               title="Add Device"
               name="Add device"
-              className="h-16 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
+              className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
             />
           </Link>
         </div>
