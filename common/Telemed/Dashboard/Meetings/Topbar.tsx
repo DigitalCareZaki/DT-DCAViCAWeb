@@ -12,15 +12,15 @@ const Topbar: ServerComponentProps<TopbarProps> = async ({ userType }) => {
       <span className="text-md font-semibold text-gray-600">Appointments</span>
       <div className="flex items-center gap-4">
         <div className="w-60">
-          <InputBasic
+          {/* <InputBasic
             borderTheme
             icon="IoSearch"
             placeholder="Search appointments"
             name="search"
-          />
+          /> */}
         </div>
         <div className="w-12">
-          <Link
+          {/* <Link
             passHref
             href={`/${userType?.toLowerCase()}/telemed/meetings/add`}
           >
@@ -30,7 +30,7 @@ const Topbar: ServerComponentProps<TopbarProps> = async ({ userType }) => {
               variant="icon-only"
               className="doctor:bg-fuchsia-600 patient:bg-fuchsia-600 nurse:bg-fuchsia-600"
             />
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>
