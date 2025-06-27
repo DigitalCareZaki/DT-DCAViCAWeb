@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IoMedical } from '@react-icons/all-files/io5/IoMedical';
+import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 import { FaUserNurse } from '@react-icons/all-files/fa/FaUserNurse';
 import { FaShieldAlt } from '@react-icons/all-files/fa/FaShieldAlt';
 
@@ -96,7 +96,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
             )}
             {el.role === 'PATIENT' && (
               <>
-                <IoMedical
+                <FaEdit
                   title="Assign patient to a doctor"
                   className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary"
                 />

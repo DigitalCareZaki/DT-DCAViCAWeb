@@ -1,6 +1,6 @@
 'use server';
 
-import { IoMedical } from '@react-icons/all-files/io5/IoMedical';
+import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 
 import Link from 'next/link';
 
@@ -42,7 +42,7 @@ const RenderTable: ServerComponentProps<Props> = async ({ userRole, data }) => {
           </td>
           <td className="px-6 py-4">
             <Link passHref href={`/${userRole}/devices/assign/?id=${el.id}`}>
-              <IoMedical
+              <FaEdit
                 title="Manage Patients"
                 className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
               />

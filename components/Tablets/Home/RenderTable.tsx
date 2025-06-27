@@ -1,6 +1,5 @@
 'use server';
 
-import { IoMedical } from '@react-icons/all-files/io5/IoMedical';
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 
 import Link from 'next/link';
