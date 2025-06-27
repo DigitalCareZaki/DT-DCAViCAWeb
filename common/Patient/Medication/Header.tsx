@@ -100,9 +100,9 @@ const MedicationHeader: ClientComponentProps<{
         {!hideCreateMedicationBtn && (
           <div className="w-36">
             <ButtonPrimary
-              title="Add medication"
+              title="Add Medication"
               name="Add Medication"
-              className="h-16 w-fit rounded-lg p-4"
+              className="h-12 w-fit rounded-lg p-4"
               variant="icon"
               icon="IoMdAdd"
               onClick={handleAddContactsClick}

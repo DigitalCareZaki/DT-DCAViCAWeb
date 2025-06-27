@@ -50,14 +50,14 @@ const RenderTable: ClientComponent = () => {
           <td className="px-6 py-4">
             {new Date(el.created_at).toLocaleString()}
           </td>
-          <td className="px-6 py-4">
+          {/* <td className="px-6 py-4">
             <div className="flex items-center gap-4 bg-transparent font-medium">
               <>
                 <RiEditCircleFill size={18} title="Edit medication" />
                 <RiDeleteBin4Fill size={18} title="Delete medication" />
               </>
             </div>
-          </td>
+          </td> */}
         </tr>
       ))}
     </>

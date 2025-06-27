@@ -34,7 +34,7 @@ const MedicationTable: ClientComponentProps<TableProps> = ({ data }) => {
           'Unit',
           'Prescribed By',
           'Created',
-          'Action',
+          // 'Action',
         ]}
       >
         <RenderTable />
