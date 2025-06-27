@@ -86,7 +86,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         {user.type == 'DOCTOR' ? (
           <Link href={getPath('/emr')}>
             <span className="text-link-primary text-lg 2xl:text-2xl">
-              Lab Reports
+              PHR
             </span>
           </Link>
         ) : (
@@ -131,7 +131,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
               <span className="text-link-primary">Devices</span>
             </Link>
             <Link href={getPath('/tablets')}>
-              <span className="text-link-primary">Tablets</span>
+              <span className="text-link-primary">Accessories</span>
             </Link>
           </>
         )}
