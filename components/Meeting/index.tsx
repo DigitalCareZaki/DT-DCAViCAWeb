@@ -30,21 +30,22 @@ const Meeting: ServerComponentProps<MeetingProps> = async ({ id }) => {
 
   return (
     <div className="grid h-screen grid-cols-4 gap-4 !bg-[#161b20]">
-      <div className="col-span-3 flex h-[98%] w-full flex-col gap-2">
+      <div className="col-span-3 flex h-full w-full flex-col gap-2">
         <div className="h-[10%]">
           <Topbar id={id} />
         </div>
-        <AgoraCall id={id} />
+        <div className="flex flex-col flex-grow relative">
+          <AgoraCall id={id} />
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+            <Counter />
+            <Control id={id} />
+          </div>
+        </div>
       </div>
-      <div className="col-span-1 flex h-[98%] w-full flex-col gap-2 ">
+      <div className="col-span-1 flex h-full w-full flex-col gap-2 ">
         <Participants id={id} />
         <Discussion id={id} />
       </div>
-      <div className="absolute bottom-2 left-[35%] z-20 flex flex-col items-center gap-2">
-        <Counter />
-        <Control id={id} />
-      </div>
-
       <VitalsServerWrapper id={id} />
     </div>
   );

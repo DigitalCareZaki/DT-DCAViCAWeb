@@ -169,19 +169,18 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
 
   return (
-    <>
-      <div className="relative h-[60%] w-full rounded-lg bg-dark-secondary">
-        <div className="h-full w-full rounded-lg">
-          {remoteUsers.slice(0, 1).map((user, idx) => (
-            <div className="h-full w-full" key={idx}>
-              <RemoteUser user={user} />
-            </div>
-          ))}
-        </div>
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow relative rounded-lg bg-dark-secondary flex items-center justify-center">
+        {/* Remote user video */}
+        {remoteUsers.slice(0, 1).map((user, idx) => (
+          <div className="h-full w-full" key={idx}>
+            <RemoteUser user={user} />
+          </div>
+        ))}
       </div>
-      <div className="flex h-[30%] w-full gap-4 rounded-lg">
-        <div className="w-64">
-          {/* Conditionally render screen share or camera track */}
+      <div className="flex h-40 w-full gap-4 rounded-lg mt-2">
+        <div className="w-64 h-full">
+          {/* Local video */}
           {screenSharing && localScreenTrack ? (
             <LocalVideoTrack
               track={localScreenTrack}
@@ -196,13 +195,13 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
             />
           )}
         </div>
-        {remoteUsers.slice(1, remoteUsers.length).map((user, idx) => (
-          <div className="w-64" key={idx}>
+        {remoteUsers.slice(1).map((user, idx) => (
+          <div className="w-64 h-full" key={idx}>
             <RemoteUser user={user} />
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
