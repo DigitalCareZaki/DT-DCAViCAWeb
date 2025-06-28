@@ -5,10 +5,11 @@ import { vestResolver } from '@hookform/resolvers/vest';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
-import { addPatientMeasurement } from '@service';
+import { addPatientMeasurement, getPatientMeasurements } from '@service';
 import {
   showModalReducer,
   pushIntoPatientMeasurementListingReducer,
+  setPatientMeasurementListingReducer,
 } from '@slice';
 
 import { validator } from './validator';
@@ -86,8 +87,11 @@ const useFormHook = (
         return;
       }
 
-      delete res?.success;
-      setMeasurement(res as any);
+      // Fetch latest measurements after add
+      const updatedMeasurements = await getPatientMeasurements(patient, '', 1, 100);
+      if (updatedMeasurements.success) {
+        dispatch(setPatientMeasurementListingReducer({ measurements: updatedMeasurements.data, pagination: updatedMeasurements.data.pagination }));
+      }
 
       handleHideForm.call(this);
 
