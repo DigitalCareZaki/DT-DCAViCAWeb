@@ -53,7 +53,8 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
         >
           <th
             scope="row"
-            className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 "
+            className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 truncate max-w-[160px]"
+            title={el.title}
           >
             {el.title}
           </th>
@@ -63,8 +64,8 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
           <td className="px-6 py-4">
             {new Date(el.created_at).toLocaleTimeString()}
           </td>
-          <td className="px-6 py-4">{el.type}</td>
-          <td className="px-6 py-4 ">
+          <td className="px-6 py-4 truncate max-w-[160px]">{el.type}</td>
+          <td className="px-6 py-4 truncate max-w-[160px] ">
             <div className='flex items-center'>
               {el.status ? RenderStatus[el.status as keyof typeof RenderStatus] : 'Pending'}
               {
@@ -72,7 +73,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
               }
             </div>
           </td>
-          {user.role?.toLowerCase() != "doctor" && <td className="px-6 py-4">
+          {user.role?.toLowerCase() != "doctor" && <td className="px-6 py-4 truncate max-w-[160px]">
             {el.updated_status != null ? (
               <div className="text-md text-gray-500">
                 {el.updated_status == 0 ? 'Called Patient' : el.updated_status == 1 ? 'Contacted Doctor' : el.updated_status == 2 ? 'Contacted Other' : el.updated_status == 3 ? 'No, action Required' : el.updated_status == 4 ? 'False alarm' : 'Close alert'}
@@ -81,7 +82,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
               <div className="text-md text-gray-500">No Update</div>
             )}
           </td>}
-          {user.role?.toLowerCase() == "doctor" && <td className="px-6 py-4">
+          {user.role?.toLowerCase() == "doctor" && <td className="px-6 py-4 truncate max-w-[160px]">
             {/* dropdown */}
             <div className="mt-2 grid grid-cols-1">
 
@@ -134,7 +135,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
             </div>
 
           </td>}
-          <td className="px-6 py-4">
+          <td className="px-6 py-4 truncate max-w-[160px]">
             {/* button */}
             <button
               onClick={() => {
@@ -145,13 +146,13 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
               View
             </button>
           </td>
-          <td className="px-6 py-4">{el.mode}</td>
-          <td className="px-6 py-4">{el.values.toString()}</td>
-          <td className="px-6 py-4">{el.unit.toString()}</td>
-          <td className="px-6 py-4">{el.reading_source.toString()}</td>
+          <td className="px-6 py-4 truncate max-w-[160px]">{el.mode}</td>
+          <td className="px-6 py-4 truncate max-w-[160px]">{el.values.toString()}</td>
+          <td className="px-6 py-4 truncate max-w-[160px]">{el.unit.toString()}</td>
+          <td className="px-6 py-4 truncate max-w-[160px]">{el.reading_source.toString()}</td>
           {
             user.role?.toLowerCase() != "patient" &&
-            <td className="px-6 py-4">
+            <td className="px-6 py-4 truncate max-w-[160px]">
               {/*  if the login patient this column will be hidden */}
 
               {
@@ -165,7 +166,23 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
             </td>
           }
 
-          <td className="px-6 py-4">
+          <td className="px-6 py-4 truncate max-w-[160px]" title={(() => {
+            if (el?.doctor) {
+              return 'Dr. ' + getName({
+                first_name: el.doctor.user.first_name,
+                middle_name: el.doctor.user.middle_name,
+                last_name: el.doctor.user.last_name,
+              });
+            } else if (el?.nurse) {
+              return 'RN ' + getName({
+                first_name: el.nurse.user.first_name,
+                middle_name: el.nurse.user.middle_name,
+                last_name: el.nurse.user.last_name,
+              });
+            } else {
+              return 'Self';
+            }
+          })()}>
             {el?.doctor
               ? 'Dr.' +
               ' ' +

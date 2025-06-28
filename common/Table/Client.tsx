@@ -13,7 +13,7 @@ const Client: ClientComponentProps<TableProps> = ({
 }) => {
   return (
     <table
-      className={twMerge('w-full text-left text-xs text-gray-500', className)}
+      className={twMerge('min-w-full w-full text-left text-xs text-gray-500', className)}
     >
       <thead className={twMerge('theme-bg-color text-xs uppercase text-white')}>
         <tr>

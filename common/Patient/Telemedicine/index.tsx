@@ -16,6 +16,7 @@ const TelemedicineNurses: ServerComponentProps<any> = async ({
 
   const type = await getUserTypeHeaders();
   const res = await getPatientAppointments(patient, 1, 10);
+  console.log('telemedicine >>>>', res.data.data);
 
   if (!res.success) return <></>;
 

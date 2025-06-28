@@ -19,19 +19,21 @@ const Topbar: ServerComponentProps<TopbarProps> = async ({ userType }) => {
             name="search"
           /> */}
         </div>
-        <div className="w-12">
-          {/* <Link
-            passHref
-            href={`/${userType?.toLowerCase()}/telemed/meetings/add`}
-          >
-            <ButtonPrimary
-              name="haris"
-              icon="IoMdAdd"
-              variant="icon-only"
-              className="doctor:bg-fuchsia-600 patient:bg-fuchsia-600 nurse:bg-fuchsia-600"
-            />
-          </Link> */}
-        </div>
+        {userType?.toLowerCase() === 'patient' && (
+          <div className="w-12">
+            <Link
+              passHref
+              href={`/${userType?.toLowerCase()}/telemed/meetings/add`}
+            >
+              <ButtonPrimary
+                name="haris"
+                icon="IoMdAdd"
+                variant="icon-only"
+                className="doctor:bg-fuchsia-600 patient:bg-fuchsia-600 nurse:bg-fuchsia-600"
+              />
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
