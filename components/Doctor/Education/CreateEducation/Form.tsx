@@ -10,10 +10,14 @@ import {
 
 import useForm from './useForm';
 import Reference from './Reference';
+import { useRouter } from 'next/navigation';
 
 import type { ClientComponent } from '@types';
+import { useState } from 'react';
 
 const Form: ClientComponent = () => {
+  const router = useRouter();
+  const [saveType, setSaveType] = useState<'save' | 'saveAndClose' | 'close'>("save");
   const [
     register,
     onSubmit,
@@ -26,7 +30,16 @@ const Form: ClientComponent = () => {
     handlePopReference,
     handleFileChange,
     selectedFile,
-  ] = useForm();
+  ] = useForm(saveType);
+
+  const handleSave = () => {
+    setSaveType('save');
+  };
+
+  const handleClose = () => {
+    // setSaveType('close');
+    router.back();
+  };
 
   return (
     <form
@@ -103,7 +116,10 @@ const Form: ClientComponent = () => {
           <Reference />
         </ClientGenerator>
       </div>
-      <ButtonPrimary name="Save" loading={loading} />
+      <div className="flex flex-col items-center mt-4 gap-2">
+        <ButtonPrimary name="Save" loading={loading} className='w-[50%]' type="submit" onClick={handleSave} />
+        <ButtonPrimary name="Close" loading={false} className='w-[50%]' type="button" onClick={handleClose} />
+      </div>
     </form>
   );
 };
