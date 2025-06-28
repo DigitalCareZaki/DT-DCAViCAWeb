@@ -20,7 +20,7 @@ const DoctorDevices: ServerComponentProps<Props> = async ({ patient }: any) => {
   if (!res.success) return <></>;
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
+    <div className="flex h-full w-full flex-col px-10 pr-0 pt-6">
       <Header userRole={user.role?.toLowerCase()} data={res.data} patientId={patient} />
       <Table userRole={user.role?.toLowerCase()} data={res.data} />
     </div>

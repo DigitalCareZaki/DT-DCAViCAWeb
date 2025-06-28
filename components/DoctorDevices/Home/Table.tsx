@@ -7,7 +7,7 @@ import type { Props } from './types';
 
 const Table: ServerComponentProps<Props> = async ({ userRole, data }) => {
   return (
-    <div className="relative mt-10 overflow-x-auto pb-28 shadow-md sm:rounded-lg">
+    <div className="relative mt-6 overflow-x-auto pb-28 shadow-md sm:rounded-lg">
       <ServerTable
         heads={[
           'Title',

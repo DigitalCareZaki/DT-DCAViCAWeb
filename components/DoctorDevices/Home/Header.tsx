@@ -19,7 +19,7 @@ const Header: ServerComponentProps<any> = async ({ userRole, data, patientId }) 
             <ButtonPrimary
               title="Add Device"
               name="Add device"
-              className="h-16 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
+              className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
             />
           </Link>
         </div>
