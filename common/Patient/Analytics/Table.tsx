@@ -49,7 +49,7 @@ const Table: ClientComponentProps<any> = ({ data }) => {
             <div className="loader border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
           </div>
         )}
-        <ClientTable heads={['Title', 'Description', 'Type', 'Appointment Start Date', 'Appointment End Date', 'Status', 'Patient', "Action"]}>
+        <ClientTable heads={['Title', 'Description', 'Type', 'Appointment Date', 'Appointment Time', 'Status', 'Patient', "Action"]}>
           {!loading ? <RenderTable /> : <></>}
         </ClientTable>
       </div>
