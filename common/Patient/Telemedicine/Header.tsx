@@ -54,9 +54,9 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
             title="Add Nurse"
             name="Add Nurse"
             className="h-12 rounded-lg"
-            variant="icon"
+            // variant="icon"
             // className="h-16 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
-            icon="IoMdAdd"
+            // icon="IoMdAdd"
             onClick={handleAddNurseClick}
           />
         </div>

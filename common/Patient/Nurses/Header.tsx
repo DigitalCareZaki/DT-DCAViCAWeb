@@ -34,7 +34,7 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
       );
 
       setNurse(res.data);
-    } catch (err) {}
+    } catch (err) { }
   }, 1000);
 
   return (
@@ -54,8 +54,8 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
             title="Add Nurse"
             name="Add Nurse"
             className="h-10 rounded-lg"
-            variant="icon"
-            icon="IoMdAdd"
+            // variant="icon"
+            // icon="IoMdAdd"
             onClick={handleAddNurseClick}
           />
         </div>
