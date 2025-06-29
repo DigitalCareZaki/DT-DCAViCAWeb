@@ -103,8 +103,8 @@ const MedicationHeader: ClientComponentProps<{
               title="Add Medication"
               name="Add Medication"
               className="h-12 w-fit rounded-lg p-4"
-              variant="icon"
-              icon="IoMdAdd"
+              // variant="icon"
+              // icon="IoMdAdd"
               onClick={handleAddContactsClick}
             />
           </div>
