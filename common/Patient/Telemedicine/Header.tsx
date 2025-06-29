@@ -39,7 +39,7 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
 
   return (
     <div className="flex w-full justify-between">
-      <span className="screen-title"></span>
+      <span className="screen-title">Telemedicine</span>
       <div className="flex w-fit items-center gap-4">
         <div className="flex w-60">
           <InputBasic
