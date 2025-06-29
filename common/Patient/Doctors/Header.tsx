@@ -29,6 +29,7 @@ const DoctorPatientDoctorsHeader: ClientComponent = () => {
     try {
       const value = e[0].target.value;
       const res = await getPatientDoctors(params?.get('patient') || '', value);
+      console.log('res changes>>>', res);
 
       setData(res.data);
     } catch (err) { }
@@ -51,8 +52,8 @@ const DoctorPatientDoctorsHeader: ClientComponent = () => {
             title="Assign Doctor"
             name="Assign Doctor"
             className="h-10 rounded-lg"
-            variant="icon"
-            icon="IoMdAdd"
+            // variant="icon"
+            // icon="IoMdAdd"
             onClick={handleAddDoctorClick}
           />
         </div>

@@ -77,6 +77,7 @@ const Form: ClientComponent = () => {
   useEffect(() => {
     const fetchSpecialities = async () => {
       const res = await selectSpecitlity();
+
       if (res.success) {
         const mapped = res.data.map((item: any) => ({
           name: item.title,
@@ -95,6 +96,7 @@ const Form: ClientComponent = () => {
     setSelectedDoctor(null); // reset doctor
 
     const res = await selectDoctor(value);
+
 
     if (res.success) {
       const mapped = res?.data?.map((item: any) => ({
