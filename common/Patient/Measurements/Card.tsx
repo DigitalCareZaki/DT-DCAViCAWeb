@@ -1,10 +1,10 @@
-'use server';
+'use client';
 
 import Link from 'next/link';
 
 import { twMerge } from 'tailwind-merge';
 
-import type { ServerComponentProps } from '@types';
+import type { FC } from 'react';
 import type { CardProps, MeasurementCardType } from './types';
 
 const getLink = (
@@ -19,7 +19,7 @@ const getLink = (
   return `?patient=${patient}&type=${cardId}`;
 };
 
-const Card: ServerComponentProps<CardProps> = async ({
+const Card: FC<CardProps> = ({
   id,
   title,
   Icon,

@@ -1,26 +1,26 @@
-import { getPatientMeasurements } from '@actions';
+'use client';
 
-import { DoctorPatientMeasurements } from '@components';
+import { useUser } from '@selectors';
+import { PatientMeasurements } from '@common';
 
 import type { PageProps } from '@types';
 
-export default async function Page({ searchParams }: PageProps) {
+export default function Page({ searchParams }: PageProps) {
+  const [user] = useUser();
+
   const patient = searchParams?.patient?.toString();
   const type = searchParams?.type?.toString() || 'ALL';
 
-  if (!patient) throw new Error('Patient not defined');
-
-  const res = await getPatientMeasurements(patient, type, 1, 10);
-
-  if (!res.success) return <></>;
+  if (!patient) return <div>Patient not defined</div>;
 
   return (
     <main className="h-full w-full">
-      <DoctorPatientMeasurements
-        data={res.data}
+      <PatientMeasurements
+        data={null}
         patient={patient}
         type={type}
         leftPadding={true}
+        user={user}
       />
     </main>
   );

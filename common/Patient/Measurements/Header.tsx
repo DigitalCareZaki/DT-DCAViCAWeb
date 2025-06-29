@@ -65,9 +65,9 @@ const Header: ClientComponentProps<{
                 <ButtonPrimary
                   title="Add Measurement"
                   name="Add Measurement"
-                  className="h-16 w-fit rounded-lg p-4"
-                  variant="icon"
-                  icon="IoMdAdd"
+                  className="h-12 w-fit rounded-lg p-4"
+                  // variant="icon"
+                  // icon="IoMdAdd"
                   onClick={handleAddMeasurementClick}
                 />
               </div>
