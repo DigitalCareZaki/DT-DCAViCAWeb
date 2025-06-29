@@ -22,6 +22,9 @@ const RenderStatus = {
   NORMAL: (
     <div title="Normal" className="h-[10px] w-[10px] rounded-sm bg-rag-green" />
   ),
+  ALERT_NOT_SET: (
+    <div title="Alert Not Set" className="h-[10px] w-[10px] rounded-sm bg-blue-500" />
+  ),
 };
 
 const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
@@ -67,7 +70,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
           <td className="px-6 py-4 truncate max-w-[160px]">{el.type}</td>
           <td className="px-6 py-4 truncate max-w-[160px] ">
             <div className='flex items-center'>
-              {el.status ? RenderStatus[el.status as keyof typeof RenderStatus] : 'Pending'}
+              {el.status ? RenderStatus[el.status as keyof typeof RenderStatus] : RenderStatus.ALERT_NOT_SET}
               {
                 el.updated_status != null ? <FaStar className="text-green-400 ml-2 w-4" /> : null
               }
