@@ -23,7 +23,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
   }, [data, dispatch]);
 
   return (
-    <div className="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
       {/* ClientTable is the wrapper for rendering the table */}
       <ClientTable
         heads={[

@@ -20,8 +20,8 @@ const Header: ClientComponent = () => {
           title="Add Alert"
           name="Add Alert"
           className="h-10 rounded-lg"
-          variant="icon"
-          icon="IoMdAdd"
+          // variant="icon"
+          // icon="IoMdAdd"
           onClick={toggleModal}
         />
       </div>
