@@ -57,8 +57,8 @@ const ContactHeader: ClientComponent = () => {
             title="Add contacts"
             name="Add Contacts"
             className="h-10 rounded-lg"
-            variant="icon"
-            icon="IoMdAdd"
+            // variant="icon"
+            // icon="IoMdAdd"
             onClick={handleAddContactsClick}
           />
         </div>
