@@ -17,7 +17,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="relative mt-10 overflow-x-hidden overflow-y-hidden shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
       <ClientTable
         heads={[
           'Profile',

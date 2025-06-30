@@ -1,3 +1,4 @@
+"use client"
 import { DoctorEmails } from '@common';
 import type { PageProps } from '@types';
 
