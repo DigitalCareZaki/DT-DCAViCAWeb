@@ -36,7 +36,7 @@ const Dashboard: ServerComponent = async () => {
       <Widgets data={res?.data} />
 
       <Suspense fallback={<RequestedAppointmentsSkeleton />}>
-        <RequestedAppointments />
+        <RequestedAppointments pending={true} />
       </Suspense>
 
       {/* <Suspense fallback={<MyAppointmentsSkeleton />}>

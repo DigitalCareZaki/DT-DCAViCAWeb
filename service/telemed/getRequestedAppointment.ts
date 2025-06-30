@@ -6,11 +6,13 @@ import type { GetRequestedAppointments } from '../types';
 
 import '@init-globals';
 
-async function getRequestedAppointments(): Promise<GetRequestedAppointments> {
-  const res = await fetch('/api/v1/web/telemed/requested'.convertURI());
-
+async function getRequestedAppointments({ pending }: { pending?: boolean } = {}): Promise<GetRequestedAppointments> {
+  let url = '/api/v1/web/telemed/requested'.convertURI();
+  if (pending !== undefined) {
+    url += `?pending=${pending}`;
+  }
+  const res = await fetch(url);
   const data = await res.json();
-
   return {
     data,
     success: res.ok,

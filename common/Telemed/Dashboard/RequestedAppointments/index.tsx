@@ -2,14 +2,16 @@
 
 import Appointment from '../components/Appointment'; // Import Appointment component
 import { ServerGenerator } from '@common'; // Import ServerGenerator for server-side data rendering
-import { getRequestedAppointments } from '@service'; // Import API function to fetch requested appointments
+import getRequestedAppointments from '../../../../service/telemed/getRequestedAppointment'; // Import API function to fetch requested appointments
 
 import type { ServerComponent } from '@types'; // Import the ServerComponent type for type-checking
 
+type RequestedAppointmentsProps = { pending?: boolean };
+
 // RequestedAppointments component definition
-const RequestedAppointments: ServerComponent = async () => {
+const RequestedAppointments = async ({ pending }: RequestedAppointmentsProps) => {
   // Fetch requested appointments from the API
-  const res = await getRequestedAppointments();
+  const res = await getRequestedAppointments({ pending });
 
   // If the API request fails, return an empty fragment
   if (!res.success) return <></>;
