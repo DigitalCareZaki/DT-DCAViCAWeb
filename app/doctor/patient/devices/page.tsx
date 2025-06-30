@@ -7,7 +7,7 @@ import type { PageProps } from '@types';
 export default function Page({ searchParams }: PageProps): JSX.Element {
   return (
     <main className="h-full w-full">
-      <DoctorDevices patient={searchParams?.patient?.toString() || null} />
+      <DoctorDevices patient={searchParams?.patient?.toString() ?? ''} />
     </main>
   );
 }
