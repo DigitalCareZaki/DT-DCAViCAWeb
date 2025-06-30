@@ -1,12 +1,13 @@
-'use server';
+'use client';
 
 import Discussions from './Discussion';
 import Form from './Form';
 
-import type { ServerComponentProps } from '@types';
 import type { DiscussionProps } from './types';
 
-const Discussion: ServerComponentProps<DiscussionProps> = async ({ id }) => {
+export default function Discussion({ id }: DiscussionProps) {
+  // TODO: If you need to fetch data, use useEffect or SWR here.
+  // For now, just render a placeholder with the id.
   return (
     <div className="flex h-[28rem] w-full flex-grow-0 flex-col justify-between gap-4 rounded-xl bg-dark-secondary p-5">
       <div className="flex w-full shrink-0 flex-col">
@@ -23,6 +24,4 @@ const Discussion: ServerComponentProps<DiscussionProps> = async ({ id }) => {
       <Form id={id} />
     </div>
   );
-};
-
-export default Discussion;
+}

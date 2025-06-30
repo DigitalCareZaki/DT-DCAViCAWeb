@@ -1,18 +1,10 @@
-'use server';
+'use client';
 
 import Vitals from './index';
-
-import { getLatestPatientMeasurement } from '@service';
-
-import type { ServerComponentProps } from '@types';
 import type { ServerWrapperProps } from './types';
 
-const VitalsServerWrapper: ServerComponentProps<ServerWrapperProps> = async ({
-  id,
-}) => {
-  const res = await getLatestPatientMeasurement(id);
-
-  return <Vitals data={res.data} />;
-};
-
-export default VitalsServerWrapper;
+export default function VitalsServerWrapper({ id }: ServerWrapperProps) {
+  // TODO: Fetch data on the client with useEffect or SWR if needed
+  // For now, just render Vitals with an empty array
+  return <Vitals data={[]} />;
+}
