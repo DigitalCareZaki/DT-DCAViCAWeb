@@ -6,11 +6,13 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const RenderTable: ServerComponentProps<Props> = async ({ data }) => {
+  if (!data) return <></>;
   return (
     <>
-      {data.map((el) => (
+
+      {data.length > 0 && data?.map((el) => (
         <tr
-          key={el.id}
+          key={el?.id}
           className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
         >
           <th

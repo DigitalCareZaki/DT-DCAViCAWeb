@@ -19,7 +19,7 @@ const Table: ServerComponentProps<Props> = async ({ data }) => {
           'Created At',
         ]}
       >
-        <RenderTable data={data} />
+        <RenderTable data={data || []} />
       </ServerTable>
     </div>
   );

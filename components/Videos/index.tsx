@@ -10,12 +10,14 @@ import type { ServerComponent } from '@types';
 const Videos: ServerComponent = async () => {
   const res = await getVideos();
 
+
   if (!res.success) return <></>;
+  if (!res.data) return <></>;
 
   return (
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
       <Header />
-      <Table data={res.data} />
+      <Table data={res?.data || []} />
     </div>
   );
 };
