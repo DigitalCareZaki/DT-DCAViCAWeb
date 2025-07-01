@@ -116,40 +116,52 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     );
 
   return (
-    <>
-      <div className="relative h-[60%] w-full rounded-lg bg-dark-secondary">
-        <div className="h-full w-full rounded-lg">
-          {remoteUsers.slice(0, 1).map((user, idx) => (
-            <div className="h-full w-full" key={idx}>
+    <div className="relative w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+      {/* Main video area: responsive grid for participants */}
+      <div className={
+        remoteUsers.length > 1
+          ? "relative w-full h-full grid grid-cols-2 md:grid-cols-3 gap-4 p-4"
+          : "relative w-full h-full flex items-center justify-center"
+      }>
+        {remoteUsers.length > 0 ? (
+          remoteUsers.map((user, idx) => (
+            <div
+              className="w-full h-full flex items-center justify-center transition-all duration-500 bg-black rounded-2xl shadow-2xl border-2 border-gray-700 overflow-hidden"
+              key={idx}
+            >
               <RemoteUser user={user} />
             </div>
-          ))}
-        </div>
-      </div>
-      <div className="flex h-[30%] w-full gap-4 rounded-lg">
-        <div className="w-64">
-          {/* Conditionally render screen share or camera track */}
-          {screenSharing && localScreenTrack ? (
-            <LocalVideoTrack
-              track={localScreenTrack}
-              play={true}
-              className="h-full w-full rounded-lg"
-            />
-          ) : (
-            <LocalVideoTrack
-              track={localCameraTrack}
-              play={true}
-              className="h-full w-full rounded-lg"
-            />
-          )}
-        </div>
-        {remoteUsers.slice(1, remoteUsers.length).map((user, idx) => (
-          <div className="w-64" key={idx}>
-            <RemoteUser user={user} />
+          ))
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl font-medium bg-black/70 rounded-2xl">
+            Waiting for other participants to join...
           </div>
-        ))}
+        )}
+        {/* Local video as floating tile with glow (only if not in grid mode) */}
+        {remoteUsers.length <= 1 && (
+          <div className="absolute bottom-8 right-8 w-48 h-32 rounded-xl shadow-xl overflow-hidden border-2 border-white/80 bg-black/80 animate-fade-in ring-4 ring-blue-500/30">
+            {screenSharing && localScreenTrack ? (
+              <LocalVideoTrack
+                track={localScreenTrack}
+                play={true}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            ) : (
+              <LocalVideoTrack
+                track={localCameraTrack}
+                play={true}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            )}
+          </div>
+        )}
       </div>
-    </>
+      {/* Floating control bar placeholder */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-4 z-20 flex items-center gap-4 bg-black/70 rounded-full px-6 py-3 shadow-lg animate-fade-in">
+        {/* TODO: Replace with <Control /> component for actual controls */}
+        <span className="text-white text-lg font-semibold opacity-60">Controls go here</span>
+      </div>
+    </div>
   );
 }
 

@@ -1,3 +1,4 @@
+"use server";
 import fetch from '@fetch';
 
 import type { FetchMeetingMetaData } from '../types';

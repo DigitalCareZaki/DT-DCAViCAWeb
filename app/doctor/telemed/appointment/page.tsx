@@ -3,9 +3,8 @@ import { Metadata } from 'next';
 
 export default function Page(): JSX.Element {
   return (
-    <main className="h-full w-full">
-      {/* <DoctorTelemed /> */}
-      <span>Appointment</span>
+    <main className="fixed inset-0 w-full h-full bg-[#f6fcfc] overflow-auto">
+      <DoctorTelemed />
     </main>
   );
 }

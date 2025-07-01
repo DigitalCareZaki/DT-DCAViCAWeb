@@ -13,13 +13,13 @@ const AgoraCall = dynamic(() => import('./AgoraCall'), { ssr: false });
 export default function MeetingClient({ id }: { id: string }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     return (
-        <div className={`grid h-screen grid-cols-4 gap-4 p-4 duration-200`}>
+        <div className="grid h-screen grid-cols-4 gap-4 bg-[#f6fcfc]">
             <div className="col-span-3 flex h-full w-full flex-col gap-4 rounded-2xl bg-dark-secondary shadow-xl overflow-hidden">
                 <div className="h-[8%] flex items-center px-6 border-b border-dark-main/30">
                     <Topbar id={id} />
                 </div>
                 <div className="flex flex-col flex-grow relative">
-                    <div className="flex-grow flex items-center justify-center bg-dark-main rounded-2xl m-4 shadow-lg overflow-hidden">
+                    <div className="flex-grow flex items-stretch justify-center bg-dark-main shadow-lg overflow-hidden m-0 p-0">
                         <AgoraCall id={id} />
                     </div>
                     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
