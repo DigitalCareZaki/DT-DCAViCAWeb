@@ -150,7 +150,9 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
             </button>
           </td>
           <td className="px-6 py-4 truncate max-w-[160px]">{el.mode}</td>
-          <td className="px-6 py-4 truncate max-w-[160px]">{el.values.toString()}</td>
+          <td className="px-6 py-4 truncate max-w-[160px]">
+            {(Array.isArray(el.values) && el.values.length > 0) ? el.values.join("/") : el.values.toString()}
+          </td>
           <td className="px-6 py-4 truncate max-w-[160px]">{el.unit.toString()}</td>
           <td className="px-6 py-4 truncate max-w-[160px]">{el.reading_source.toString()}</td>
           {
