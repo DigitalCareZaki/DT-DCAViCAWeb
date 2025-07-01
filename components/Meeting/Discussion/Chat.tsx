@@ -39,10 +39,10 @@ const Chat: ClientComponentProps<any> = ({
           {isCurrentUser
             ? 'You'
             : getName({
-                first_name,
-                last_name,
-                middle_name,
-              })}
+              first_name,
+              last_name,
+              middle_name,
+            })}
         </span>
         <div className="theme-bg-color w-fit rounded-lg px-4 py-2 text-end text-white">
           {media && (

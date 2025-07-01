@@ -77,7 +77,7 @@ const Form: ClientComponentProps<DiscussionProps> = ({ id }) => {
     <form onSubmit={onSubmit} className="meeting-input-field w-full">
       <InputBasic
         icon="FaImage"
-        placeholder="Search participants"
+        placeholder="Write Message"
         borderTheme
         secondaryIcon="IoSend"
         onChange={onChange}

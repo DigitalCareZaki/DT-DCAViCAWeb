@@ -37,20 +37,20 @@ export default function Topbar({ id }: TopbarProps) {
 
 
   return (
-    <div className="w-full px-6 py-3 flex items-center gap-6 bg-white/10 backdrop-blur-md shadow-md rounded-t-2xl border-b border-white/10">
-      <div className="flex items-center gap-3">
-        <FaInfoCircle className="text-blue-400 text-2xl" />
+    <div className="w-full px-8 py-4 flex items-center justify-between bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 shadow-lg rounded-t-2xl border-b border-white/10">
+      <div className="flex items-center gap-5 mt-2">
+        {/* <FaInfoCircle className="text-blue-400 text-3xl" /> */}
         <div>
-          <div className="text-lg font-bold text-white tracking-wide">{data?.title}</div>
-          <div className="text-sm text-gray-300"> {data.description}</div>
+          <div className="text-xl font-extrabold text-white tracking-wide leading-tight">{data?.title}</div>
+          <div className="text-base text-gray-300 mt-1">{data.description}</div>
         </div>
       </div>
-      <div className="ml-auto flex items-center gap-6">
-        <div className="text-sm text-gray-200 flex items-center gap-2">
-          <span className="font-medium">Date:</span>
+      <div className="flex items-center gap-8">
+        <div className="text-base text-gray-200 flex items-center gap-2">
+          <span className="font-semibold">Date:</span>
           <span>{new Date().toDateString()}</span>
         </div>
-        <div className="text-xs text-gray-400 bg-gray-800/60 px-3 py-1 rounded-md select-all border border-gray-700">
+        <div className="text-sm text-white bg-blue-600/80 px-4 py-1 rounded-md font-semibold shadow border border-blue-400">
           <span className="font-semibold">Invited:</span> +{data.participants?.length}
         </div>
       </div>

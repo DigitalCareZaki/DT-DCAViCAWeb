@@ -13,11 +13,11 @@ export default function Discussion({ id }: DiscussionProps) {
       <div className="flex w-full shrink-0 flex-col">
         <span className=" font-semibold text-white">Discussion</span>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500">Recording</span>
-          <div className="relative flex h-3 w-3 items-center justify-center rounded-full">
+          {/* <span className="text-xs text-gray-500">Recording</span> */}
+          {/* <div className="relative flex h-3 w-3 items-center justify-center rounded-full">
             <div className="theme-bg-color h-2 w-2 rounded-full" />
             <div className="theme-bg-color absolute h-2 w-2 animate-ping rounded-full" />
-          </div>
+          </div> */}
         </div>
       </div>
       <Discussions />

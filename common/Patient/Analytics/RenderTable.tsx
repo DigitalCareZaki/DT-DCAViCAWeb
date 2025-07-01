@@ -65,9 +65,10 @@ const RenderTable: ClientComponent = () => {
   return (
     <>
       {setPatientAppointmentsListing?.map((el: any) => {
-        const appointment = el;
-        const organizer = appointment?.organizer;
-        const observation = appointment?.appointmentObservation;
+        const appointment = el?.appointment;
+        const organizer = el?.appointment?.organizer;
+        const observation = el?.appointment?.appointmentObservation;
+        console.log('appointment observation >>>', observation);
 
         return (
           <tr
@@ -81,7 +82,7 @@ const RenderTable: ClientComponent = () => {
               {new Date(appointment?.start_date).toLocaleDateString()}
             </td>
             <td className="px-6 py-4">
-              {new Date(appointment?.end_date).toLocaleDateString()}
+              {new Date(appointment?.start_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </td>
             <td className="px-6 py-4">{el?.status}</td>
             <td className="px-6 py-4">
@@ -90,10 +91,14 @@ const RenderTable: ClientComponent = () => {
 
             <td className="px-6 py-4">
               <div
-                onClick={() => handleDownload(observation, organizer)}
-                className="theme-bg-color flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%]"
+                onClick={() => {
+                  if (observation) handleDownload(observation, organizer);
+                }}
+                className={`theme-bg-color flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!observation ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                title={observation ? 'Download' : 'Report not generated'}
               >
-                <IoDownload size={16} />
+                <IoDownload size={16} color={observation ? 'white' : '#A0AEC0'} />
               </div>
             </td>
           </tr>

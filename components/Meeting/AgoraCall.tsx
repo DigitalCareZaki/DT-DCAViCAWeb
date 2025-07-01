@@ -159,7 +159,7 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
       {/* Floating control bar placeholder */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-4 z-20 flex items-center gap-4 bg-black/70 rounded-full px-6 py-3 shadow-lg animate-fade-in">
         {/* TODO: Replace with <Control /> component for actual controls */}
-        <span className="text-white text-lg font-semibold opacity-60">Controls go here</span>
+        {/* <span className="text-white text-lg font-semibold opacity-60">Controls go here</span> */}
       </div>
     </div>
   );

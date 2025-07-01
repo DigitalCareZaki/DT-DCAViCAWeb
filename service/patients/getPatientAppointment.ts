@@ -15,6 +15,8 @@ async function getPatientAppointments(
 
     const data = await res.json();
 
+
+
     return {
         data: data,
         success: res.ok,

@@ -15,6 +15,8 @@ const AnalyticsTab: ServerComponentProps<any> = async ({ }) => {
   const type = await getUserTypeHeaders();
   const res = await getAnalytics(1, 10);
 
+  console.log('res testing analytics >>>', res);
+
   if (!res.success) return <></>;
 
 

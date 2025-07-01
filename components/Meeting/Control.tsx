@@ -367,7 +367,7 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
       {/* New Button for Modal */}
       <button
         onClick={() => setIsModalOpen(true)}
-        title="More Info"
+        title="Consultation Form"
         className="meeting-bar-btn"
       >
         <FaInfoCircle size={16} />
