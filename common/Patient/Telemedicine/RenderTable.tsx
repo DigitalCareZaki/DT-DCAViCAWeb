@@ -16,6 +16,7 @@ const RenderTable: ClientComponent = () => {
     (state) => state.patients
   );
   const handleDownload = (observation: any, organizer: any) => {
+
     const doc = new jsPDF();
 
     // Header Title
@@ -42,14 +43,14 @@ const RenderTable: ClientComponent = () => {
       head: [['Field', 'Details']],
       body: [
         ['Patient Name', `${organizer?.first_name || ''} ${organizer?.last_name || ''}`.trim() || 'N/A'],
-        ['Observations', observation?.Observations || 'N/A'],
-        ['Diagnosis', observation?.Diagnosis || 'N/A'],
-        ['Medications', observation?.Medications || 'N/A'],
-        ['Procedure', observation?.Procedure || 'N/A'],
+        ['Observations', observation?.observations || 'N/A'],
+        ['Diagnosis', observation?.diagnosis || 'N/A'],
+        ['Medications', observation?.medications || 'N/A'],
+        ['Procedure', observation?.procedure || 'N/A'],
         [
           'Follow-up Date',
-          observation?.Follow_up_date
-            ? new Date(observation.Follow_up_date).toLocaleDateString()
+          observation?.follow_up_date
+            ? new Date(observation.follow_up_date).toLocaleDateString()
             : 'N/A',
         ],
       ],
@@ -70,6 +71,7 @@ const RenderTable: ClientComponent = () => {
         const organizer = appointment?.organizer;
         const observation = appointment?.appointmentObservation;
 
+
         return (
           <tr
             key={el?.id}
@@ -89,14 +91,18 @@ const RenderTable: ClientComponent = () => {
               {organizer?.first_name} {organizer?.last_name}
             </td>
 
-            {/* <td className="px-6 py-4">
+            <td className="px-6 py-4">
               <div
-                onClick={() => handleDownload(observation, organizer)}
-                className="theme-bg-color flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%]"
+                onClick={() => {
+                  if (observation) handleDownload(observation, organizer);
+                }}
+                className={`theme-bg-color flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!observation ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                title={observation ? 'Download' : 'Report not generated'}
               >
-                <IoDownload size={16} />
+                <IoDownload size={16} color={observation ? 'white' : '#A0AEC0'} />
               </div>
-            </td> */}
+            </td>
           </tr>
         );
       })}
