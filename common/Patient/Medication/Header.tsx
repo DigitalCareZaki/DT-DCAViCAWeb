@@ -44,7 +44,7 @@ const MedicationHeader: ClientComponentProps<{
   return (
     <div className="flex w-full justify-between">
       <span className="screen-title">Medication</span>
-      <div className="flex w-fit items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="flex w-60">
           <InputBasic
             placeholder="Search"
@@ -102,7 +102,7 @@ const MedicationHeader: ClientComponentProps<{
             <ButtonPrimary
               title="Add Medication"
               name="Add Medication"
-              className="h-12 w-fit rounded-lg p-4"
+              className="text-md h-12 w-36 rounded-lg p-4"
               // variant="icon"
               // icon="IoMdAdd"
               onClick={handleAddContactsClick}
