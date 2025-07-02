@@ -7,7 +7,7 @@ import type { GetNotifications } from '../types';
 import '@init-globals';
 
 async function getNotificationsProps(): Promise<GetNotifications> {
-  const res = await fetch('/api/v1/web/notifications'.convertURI(), {
+  const res = await fetch('/api/v1/web/notifications', {
     next: {
       revalidate: 60,
     },

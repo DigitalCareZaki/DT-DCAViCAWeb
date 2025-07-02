@@ -7,7 +7,7 @@ import type { GetCitiesProps } from '../types';
 import '@init-globals';
 
 async function getCities(): Promise<GetCitiesProps> {
-  const res = await fetch('/api/v1/web/master/cities'.convertURI());
+  const res = await fetch('/api/v1/web/master/cities');
 
   const data = await res.json();
 

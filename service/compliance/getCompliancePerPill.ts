@@ -8,7 +8,7 @@ async function getCompliancePerPill(
   patientId: string
 ): Promise<GetDoctorCompliancePerPillProps> {
   const res = await fetch(
-    `/api/v1/web/compliance/patients/${patientId}`.convertURI()
+    `/api/v1/web/compliance/patients/${patientId}`
   );
 
   const data = await res.json();

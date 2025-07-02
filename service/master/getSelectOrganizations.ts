@@ -7,7 +7,7 @@ import type { GetSelectOrganizations } from '../types';
 import '@init-globals';
 
 async function getSelectOrganizations(): Promise<GetSelectOrganizations> {
-  const res = await fetch('/api/v1/web/master/get-organizations'.convertURI());
+  const res = await fetch('/api/v1/web/master/get-organizations');
 
   const data = await res.json();
 

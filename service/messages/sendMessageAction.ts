@@ -10,7 +10,7 @@ async function sendMessageAction(
 ): Promise<SendMessageAction> {
   try {
     const res = await fetch(
-      `/api/v1/web/message/action/${id}?type=${type}`.convertURI(),
+      `/api/v1/web/message/action/${id}?type=${type}`,
       {
         method: 'PATCH',
       }

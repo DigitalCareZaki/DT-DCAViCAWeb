@@ -7,7 +7,7 @@ import type { GetOrganizationProps } from '../types';
 import '@init-globals';
 
 async function getOrganization(): Promise<GetOrganizationProps> {
-  const res = await fetch('/api/v1/web/master/organizations'.convertURI());
+  const res = await fetch('/api/v1/web/master/organizations');
 
   const data = await res.json();
 

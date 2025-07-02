@@ -10,7 +10,7 @@ async function changePassword(data: any) {
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch('/api/v1/web/auth/change-password'.convertURI(), {
+    const res = await fetch('/api/v1/web/auth/change-password', {
       method: 'PATCH',
       body: JSON.stringify({
         ...decodedData,

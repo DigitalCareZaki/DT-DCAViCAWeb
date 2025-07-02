@@ -29,11 +29,11 @@ const Actions: ClientComponentProps<ActionsProps> = ({ ...data }) => {
       headers.set('Authorization', `Bearer ${user.token}`);
 
       try {
-        await fetch(`/api/v1/web/education/like/${data.id}`.convertURI(), {
+        await fetch(`/api/v1/web/education/like/${data.id}`, {
           method: 'GET',
           headers,
         });
-      } catch (err) {}
+      } catch (err) { }
     })();
   }, [data.id, states.like, user]);
 

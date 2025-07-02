@@ -21,10 +21,10 @@ async function getPatientsMeasurements(
   // Construct the final URL
   const url = `/api/v1/web/measurements/patients/${id}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
-  const res = await fetch(url.convertURI());
+  const res = await fetch(url);
 
   // const res = await fetch(
-  //   `/api/v1/web/measurements/patients/${id}${type === 'ALL' ? '' : `?type=${type}`}`.convertURI()
+  //   `/api/v1/web/measurements/patients/${id}${type === 'ALL' ? '' : `?type=${type}`}`
   // );
 
   const data = await res.json();

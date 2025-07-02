@@ -5,7 +5,7 @@ import '@init-globals';
 
 async function getAllPatientsReports(page: any, limit: any) {
   const url = `/api/v1/web/doctor/all-reports?page=${page}&limit=${limit}`;
-  const res = await fetch(url.convertURI());
+  const res = await fetch(url);
   const data = await res.json();
 
   return { success: res.ok, data };
@@ -15,6 +15,6 @@ export default getAllPatientsReports;
 
 
 // // old code
-//   const res = await fetch(`/api/v1/web/doctor/all-reports`.convertURI());
+//   const res = await fetch(`/api/v1/web/doctor/all-reports`);
 //   const data = await res.json();
 //   return { success: res.ok, data};

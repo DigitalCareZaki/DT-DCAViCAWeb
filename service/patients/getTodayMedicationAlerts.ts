@@ -8,7 +8,7 @@ import '@init-globals';
 
 async function getTodayMedicationAlerts(page: any, limit: any): Promise<any> {
   const res = await fetch(
-    `/api/v1/web/patient/medications/alerts?page=${page}&limit=${limit}`.convertURI()
+    `/api/v1/web/patient/medications/alerts?page=${page}&limit=${limit}`
   );
 
   const data = await res.json();

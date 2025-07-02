@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
 
       if (!authRoutes.some((el) => el.pathname === request.nextUrl.pathname)) {
         console.log("sheesh " + request.nextUrl.pathname);
-        
+
         return NextResponse.redirect(new URL('/login', request.url));
       }
     }
@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
       request.headers.get('Authorization') ||
       `Bearer ${request.cookies.get('jwt')?.value}`;
 
-    const res = await fetch('/api/jwt-verify'.convertURI(true), {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/jwt-verify`, {
       headers: {
         Authorization: token || '',
       },
@@ -120,9 +120,6 @@ export async function middleware(request: NextRequest) {
         });
       }
     }
-
-    console.log("damm wtf");
-    
 
     return NextResponse.redirect(
       new URL(`/${user?.role?.toLowerCase()}`, request.url)

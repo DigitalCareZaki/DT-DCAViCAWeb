@@ -9,7 +9,7 @@ async function getSingleVlPatient(
   duration: string
 ) {
   const res = await fetch(
-    `/api/v1/vl/patients/${patchSn}?duration=${duration}`.convertURI(),
+    `/api/v1/vl/patients/${patchSn}?duration=${duration}`,
     {
       cache: 'no-store',
     }

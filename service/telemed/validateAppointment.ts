@@ -9,7 +9,7 @@ import '@init-globals';
 async function validateAppointment(id: string): Promise<ValidateAppointment> {
   try {
     const res = await fetch(
-      `/api/v1/web/telemed/validate-meeting/${id}`.convertURI(),
+      `/api/v1/web/telemed/validate-meeting/${id}`,
       {
         cache: 'no-cache',
       }

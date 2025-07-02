@@ -18,7 +18,7 @@ async function getPatientsMeasurements(
 
   const url = `/api/v1/web/measurements${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
-  const res = await fetch(url.convertURI());
+  const res = await fetch(url);
   const data = await res.json();
 
   return {
@@ -43,7 +43,7 @@ export default getPatientsMeasurements;
 //   console.log(type, type);
 
 //   const res = await fetch(
-//     `/api/v1/web/measurements${type === 'ALL' ? '' : `?type=${type}`}`.convertURI()
+//     `/api/v1/web/measurements${type === 'ALL' ? '' : `?type=${type}`}`
 //   );
 
 //   const data = await res.json();

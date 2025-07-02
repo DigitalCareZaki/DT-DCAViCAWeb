@@ -9,7 +9,7 @@ async function addPatientMeasurement(data: any, patientId: string) {
     );
 
     const res = await fetch(
-      `/api/v1/web/measurements/patients/${patientId}`.convertURI(),
+      `/api/v1/web/measurements/patients/${patientId}`,
       {
         method: 'POST',
         cache: 'no-cache',

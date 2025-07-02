@@ -7,7 +7,7 @@ import type { GetDepartmentBranchesProps } from '../types';
 import '@init-globals';
 
 const fetchDepartments = async (): Promise<GetDepartmentBranchesProps> => {
-  const res = await fetch('/api/v1/web/departments/branches'.convertURI());
+  const res = await fetch('/api/v1/web/departments/branches');
 
   const data = await res.json();
 

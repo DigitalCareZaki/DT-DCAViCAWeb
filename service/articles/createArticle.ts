@@ -10,7 +10,7 @@ async function createArticle(
     //   Buffer.from(data, 'base64').toString('utf-8')
     // );
 
-    const res = await fetch('/api/v1/web/education'.convertURI(), {
+    const res = await fetch('/api/v1/web/education', {
       method: 'POST',
       // body: JSON.stringify(decodedData),
       body: JSON.stringify(data),

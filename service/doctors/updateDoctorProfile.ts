@@ -13,7 +13,7 @@ async function updateDoctorProfile(
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch(`/api/v1/web/${type}/profile`.convertURI(), {
+    const res = await fetch(`/api/v1/web/${type}/profile`, {
       method: 'PATCH',
       cache: 'no-cache',
       body: JSON.stringify({

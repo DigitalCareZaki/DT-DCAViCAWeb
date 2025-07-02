@@ -10,7 +10,7 @@ async function getLatestMeasurement(
   id: string
 ): Promise<GetLatestPatientMeasurement> {
   const res = await fetch(
-    `/api/v1/web/telemed/patient/recent-measurement/${id}`.convertURI()
+    `/api/v1/web/telemed/patient/recent-measurement/${id}`
   );
 
   const data = await res.json();

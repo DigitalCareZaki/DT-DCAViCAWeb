@@ -71,7 +71,7 @@ const useFormHook = (
       });
 
       try {
-        const res = await fetch(`/api/v1/web/devices/devices/${value}`.convertURI(), {
+        const res = await fetch(`/api/v1/web/devices/devices/${value}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

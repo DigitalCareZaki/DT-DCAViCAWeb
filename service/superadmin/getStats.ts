@@ -6,7 +6,7 @@ import type { GetSuperAdminStats } from '../types';
 
 async function getStats(role: string): Promise<GetSuperAdminStats> {
   const res = await fetch(
-    `/api/v1/web/${role?.toLowerCase()}/stats`.convertURI()
+    `/api/v1/web/${role?.toLowerCase()}/stats`
   );
 
   const data = await res.json();

@@ -6,7 +6,7 @@ import type { GetCountriesProps } from '../types';
 
 const getCountries = async (): Promise<GetCountriesProps> => {
   const res = await fetch(
-    '/api/v1/web/organization/location/countries'.convertURI()
+    '/api/v1/web/organization/location/countries'
   );
 
   const data = await res.json();

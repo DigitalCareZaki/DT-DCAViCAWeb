@@ -7,7 +7,7 @@ import type { GetRequestedAppointments } from '../types';
 import '@init-globals';
 
 async function getRequestedAppointments({ pending }: { pending?: boolean } = {}): Promise<GetRequestedAppointments> {
-  let url = '/api/v1/web/telemed/requested'.convertURI();
+  let url = '/api/v1/web/telemed/requested';
   if (pending !== undefined) {
     url += `?pending=${pending}`;
   }

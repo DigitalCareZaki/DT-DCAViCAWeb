@@ -12,7 +12,7 @@ async function addNurse(data: any): Promise<AddDataProps> {
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch(`/api/v1/web/organization/nurse`.convertURI(), {
+    const res = await fetch(`/api/v1/web/organization/nurse`, {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify(decodedData),

@@ -7,7 +7,7 @@ import type { GetBranchesProps } from '../types';
 import '@init-globals';
 
 const getBranches = async (search: string = ''): Promise<GetBranchesProps> => {
-  const res = await fetch(`/api/v1/web/superadmin/branches?search=${search}`.convertURI());
+  const res = await fetch(`/api/v1/web/superadmin/branches?search=${search}`);
 
   const data = await res.json();
 

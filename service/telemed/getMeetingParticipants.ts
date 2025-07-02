@@ -10,7 +10,7 @@ async function getMeetingParticipants(
   id: string
 ): Promise<FetchMeetingParticipants> {
   const res = await fetch(
-    `/api/v1/web/telemed/meeting-participants/${id}`.convertURI(),
+    `/api/v1/web/telemed/meeting-participants/${id}`,
     {
       cache: 'no-cache',
     }

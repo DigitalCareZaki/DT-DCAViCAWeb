@@ -6,7 +6,7 @@ import type { SearchUsersMessagesProps } from '../types';
 
 async function searchUsers(value: string): Promise<SearchUsersMessagesProps> {
   const res = await fetch(
-    `/api/v1/web/message/search/users?value=${value}`.convertURI()
+    `/api/v1/web/message/search/users?value=${value}`
   );
 
   const data = await res.json();

@@ -10,7 +10,7 @@ async function searchUsers(query: string): Promise<TelemedSearchUsersProps> {
   params.append('q', query);
 
   const res = await fetch(
-    `/api/v1/web/telemed/search?${params.toString()}`.convertURI()
+    `/api/v1/web/telemed/search?${params.toString()}`
   );
 
   const data = await res.json();

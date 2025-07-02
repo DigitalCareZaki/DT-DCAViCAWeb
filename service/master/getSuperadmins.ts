@@ -7,7 +7,7 @@ import type { GetSuperAdminsProps } from '../types';
 import '@init-globals';
 
 async function getSuperAdmins(): Promise<GetSuperAdminsProps> {
-  const res = await fetch('/api/v1/web/master/superadmins'.convertURI());
+  const res = await fetch('/api/v1/web/master/superadmins');
 
   const data = await res.json();
 

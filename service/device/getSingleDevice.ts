@@ -9,7 +9,7 @@ import '@init-globals';
 const getSingleDevice = async (
   deviceId: string
 ): Promise<GetSingleDeviceProps> => {
-  const res = await fetch(`/api/v1/web/devices/${deviceId}`.convertURI());
+  const res = await fetch(`/api/v1/web/devices/${deviceId}`);
 
   const data = await res.json();
 

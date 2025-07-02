@@ -5,7 +5,7 @@ import type { GetInbox } from '../types';
 
 async function getThreadMessages(messageId: string): Promise<GetInbox> {
   const res = await fetch(
-    `/api/v1/web/message/thread?messageId=${messageId}`.convertURI()
+    `/api/v1/web/message/thread?messageId=${messageId}`
   );
 
   const data = await res.json();

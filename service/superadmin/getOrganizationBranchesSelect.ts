@@ -7,7 +7,7 @@ import type { GetOrganizationBranchesSelect } from '../types';
 const getOrganizationBranchesSelect =
   async (): Promise<GetOrganizationBranchesSelect> => {
     const res = await fetch(
-      '/api/v1/web/organization/branches/select'.convertURI()
+      '/api/v1/web/organization/branches/select'
     );
 
     const data = await res.json();

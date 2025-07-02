@@ -11,7 +11,7 @@ async function resetPassword(payload: any): Promise<ResetPassword> {
     Buffer.from(payload, 'base64').toString('utf-8')
   );
 
-  const res = await fetch('/api/v1/web/auth/reset-password'.convertURI(), {
+  const res = await fetch('/api/v1/web/auth/reset-password', {
     method: 'PATCH',
     body: JSON.stringify(decodedData),
     cache: 'no-cache',

@@ -9,7 +9,7 @@ import '@init-globals';
 async function getTelemedDetailsProps(
   id: string
 ): Promise<FetchTelemedDetails> {
-  const res = await fetch(`/api/v1/web/telemed/view/${id}`.convertURI());
+  const res = await fetch(`/api/v1/web/telemed/view/${id}`);
 
   const data = await res.json();
 

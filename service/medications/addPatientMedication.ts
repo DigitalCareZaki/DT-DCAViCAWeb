@@ -9,7 +9,7 @@ async function addPatientMedication(data: any, patientId: string) {
     );
 
     const res = await fetch(
-      `/api/v1/web/medications/patients/${patientId}`.convertURI(),
+      `/api/v1/web/medications/patients/${patientId}`,
       {
         method: 'POST',
         cache: 'no-cache',

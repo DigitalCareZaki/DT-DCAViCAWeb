@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import {} from '@init-globals';
+import { } from '@init-globals';
 
 export async function login(data: any) {
   try {
@@ -11,7 +11,9 @@ export async function login(data: any) {
 
     const cookieStore = cookies();
 
-    const res = await fetch('/api/v1/web/auth/login'.convertURI(), {
+
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/auth/login`, {
       method: 'POST',
       body: JSON.stringify({
         ...decodedData,

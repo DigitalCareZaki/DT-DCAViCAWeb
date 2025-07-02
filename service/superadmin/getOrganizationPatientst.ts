@@ -4,7 +4,7 @@ import fetch from '@fetch';
 import type { GetOrganizationPatients } from '../types';
 
 const getOrganizationPatients = async (): Promise<GetOrganizationPatients> => {
-  const res = await fetch(`/api/v1/web/organization/patients`.convertURI());
+  const res = await fetch(`/api/v1/web/organization/patients`);
 
   const data = await res.json();
 

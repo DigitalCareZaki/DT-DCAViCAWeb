@@ -7,7 +7,7 @@ import '@init-globals';
 async function disableUser(id: string): Promise<any> {
   try {
     const res = await fetch(
-      `/api/v1/web/organization/disable-user?id=${id}`.convertURI(),
+      `/api/v1/web/organization/disable-user?id=${id}`,
       {
         cache: 'no-cache',
       }

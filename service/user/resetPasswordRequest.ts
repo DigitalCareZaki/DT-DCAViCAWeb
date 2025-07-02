@@ -13,7 +13,7 @@ async function resetPasswordRequest(
     Buffer.from(payload, 'base64').toString('utf-8')
   );
 
-  const res = await fetch('/api/v1/web/auth/forgot-password'.convertURI(), {
+  const res = await fetch('/api/v1/web/auth/forgot-password', {
     method: 'POST',
     body: JSON.stringify(decodedData),
     cache: 'no-cache',

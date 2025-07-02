@@ -7,7 +7,7 @@ import '@init-globals';
 import type { GetCurrentOrganization } from '../types';
 
 async function getCurrentOrganization(): Promise<GetCurrentOrganization> {
-  const res = await fetch('/api/v1/web/organization'.convertURI());
+  const res = await fetch('/api/v1/web/organization');
 
   const data = await res.json();
 

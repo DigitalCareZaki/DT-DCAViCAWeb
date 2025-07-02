@@ -7,7 +7,7 @@ import type { GetSelfAppointments } from '../types';
 import '@init-globals';
 
 async function getSelfAppointmentsProps(): Promise<GetSelfAppointments> {
-  const res = await fetch('/api/v1/web/telemed'.convertURI());
+  const res = await fetch('/api/v1/web/telemed');
 
   const data = await res.json();
 

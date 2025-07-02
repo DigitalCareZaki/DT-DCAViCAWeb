@@ -18,7 +18,7 @@ function useFetch<T>(): useFetchReturnProps {
       headers.set('Accept', 'application/json');
       headers.set('Authorization', getCookie('jwt')?.toString() ?? '');
 
-      const data = await fetch(uri.convertURI(), {
+      const data = await fetch(uri, {
         headers,
         method,
       });

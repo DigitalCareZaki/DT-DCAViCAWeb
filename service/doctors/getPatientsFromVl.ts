@@ -5,7 +5,7 @@ import fetch from '@fetch';
 import type { GetVLAllPatients } from '@types-services';
 
 async function getVlPatients(): Promise<GetVLAllPatients> {
-  const res = await fetch('/api/v1/vl/patients'.convertURI(), {
+  const res = await fetch('/api/v1/vl/patients', {
     cache: 'no-store',
   });
 

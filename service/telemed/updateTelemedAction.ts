@@ -14,7 +14,7 @@ async function updateTelemedAction(
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch('/api/v1/web/telemed/action'.convertURI(), {
+    const res = await fetch('/api/v1/web/telemed/action', {
       method: 'PATCH',
       cache: 'no-cache',
       body: JSON.stringify(decodedData),

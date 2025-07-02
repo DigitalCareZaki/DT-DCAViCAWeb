@@ -9,7 +9,7 @@ async function getPatientNurses(
   type: string = 'doctor'
 ): Promise<GetPatientNurses> {
   const res = await fetch(
-    `/api/v1/web/${type}/patients/nurses/${id}?search=${search || ''}`.convertURI()
+    `/api/v1/web/${type}/patients/nurses/${id}?search=${search || ''}`
   );
 
   const data = await res.json();

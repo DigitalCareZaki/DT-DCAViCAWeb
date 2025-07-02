@@ -10,7 +10,7 @@ const getPatientReadingAlerts = async (
   search?: string
 ): Promise<GetDepartmentsProps> => {
   const res = await fetch(
-    `/api/v1/web/departments?search=${search ?? ''}`.convertURI()
+    `/api/v1/web/departments?search=${search ?? ''}`
   );
 
   const data = await res.json();

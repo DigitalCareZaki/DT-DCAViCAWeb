@@ -33,7 +33,7 @@ const Dashboard: ServerComponent = async () => {
       retryApi(() => getAppointmentStats('doctor'))
     ]);
 
-    console.log('API Success Status:');
+    console.log('API Success Status >>>>>>> ', res?.success, compliance?.success, stats?.success);
 
     if (!res?.success || !compliance?.success || !stats?.success) {
       console.error('API call failed:');

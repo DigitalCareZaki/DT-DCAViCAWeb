@@ -5,7 +5,7 @@ import type { GetSearchNurse } from './types';
 
 async function searchNurse(search?: string): Promise<GetSearchNurse> {
   const res = await fetch(
-    `/api/v1/web/doctor/nurses?search=${search || ''}`.convertURI()
+    `/api/v1/web/doctor/nurses?search=${search || ''}`
   );
 
   const data = await res.json();

@@ -12,7 +12,7 @@ const createDevice = async (data: any): Promise<any> => {
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch('/api/v1/web/devices'.convertURI(), {
+    const res = await fetch('/api/v1/web/devices', {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify(decodedData),

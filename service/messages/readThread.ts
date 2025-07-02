@@ -4,7 +4,7 @@
 import fetch from '@fetch';
 
 export async function readThread(messageId: string) {
-    const res = await fetch(`/api/v1/web/message/update/${messageId}`.convertURI(), {
+    const res = await fetch(`/api/v1/web/message/update/${messageId}`, {
         method: 'PATCH',
         cache: 'no-cache',
     });

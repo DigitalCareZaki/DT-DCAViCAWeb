@@ -5,7 +5,7 @@ import fetch from '@fetch';
 import type { ExistsPincodeProps } from '../types';
 
 async function existsPincode(): Promise<ExistsPincodeProps> {
-  const res = await fetch('/api/user/exists-pincode'.convertURI());
+  const res = await fetch('/api/user/exists-pincode');
   await res.json();
 
   return {

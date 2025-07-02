@@ -7,7 +7,7 @@ import type { GetNotifications } from '../types';
 import '@init-globals';
 
 async function getPatientsSms(patient: string): Promise<any> {
-  const res = await fetch(`/api/v1/web/sms/${patient}`.convertURI(), {
+  const res = await fetch(`/api/v1/web/sms/${patient}`, {
     next: {
       revalidate: 60,
     },

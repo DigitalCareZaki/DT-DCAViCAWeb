@@ -7,7 +7,7 @@ import type { GetRoomChats } from '../types';
 import '@init-globals';
 
 async function fetchRoomChats(roomId: string): Promise<GetRoomChats> {
-  const res = await fetch(`/api/v1/web/chat/room/${roomId}`.convertURI());
+  const res = await fetch(`/api/v1/web/chat/room/${roomId}`);
 
   const data = await res.json();
 

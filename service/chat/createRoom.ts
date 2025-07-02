@@ -12,7 +12,7 @@ async function createRoom(data: any): Promise<CreateRoomProps> {
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch('/api/v1/web/chat/room'.convertURI(), {
+    const res = await fetch('/api/v1/web/chat/room', {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify({

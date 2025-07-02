@@ -7,7 +7,7 @@ import type { GetMasterStatistics } from '../types';
 import '@init-globals';
 
 async function getStats(): Promise<GetMasterStatistics> {
-  const res = await fetch('/api/v1/web/master/statistics'.convertURI());
+  const res = await fetch('/api/v1/web/master/statistics');
 
   const data = await res.json();
 

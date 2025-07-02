@@ -14,7 +14,7 @@ async function toggleEmailTemplate(
   );
 
   const res = await fetch(
-    '/api/v1/web/master/toggle-email-template'.convertURI(),
+    '/api/v1/web/master/toggle-email-template',
     {
       method: 'PATCH',
       body: JSON.stringify(decodedData),

@@ -6,7 +6,7 @@ import type { FetchMeetingChatsProps } from '../types';
 
 async function fetchMeetingChats(id: string): Promise<FetchMeetingChatsProps> {
   const res = await fetch(
-    `/api/v1/web/telemed/meeting-discussion/${id}`.convertURI()
+    `/api/v1/web/telemed/meeting-discussion/${id}`
   );
 
   const data = await res.json();

@@ -8,7 +8,7 @@ const getOrganizationUsers = async (
   role: string = ''
 ): Promise<GetOrganizationUsers> => {
   const res = await fetch(
-    `/api/v1/web/organization/users?search=${search}&role=${role}`.convertURI()
+    `/api/v1/web/organization/users?search=${search}&role=${role}`
   );
 
   const data = await res.json();

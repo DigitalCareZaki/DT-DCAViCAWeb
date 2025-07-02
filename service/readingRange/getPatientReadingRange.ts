@@ -10,7 +10,7 @@ const getPatientReadingRange = async (
   patientId: string
 ): Promise<GetPatientReadingRangeProps> => {
   const res = await fetch(
-    `/api/v1/web/measurements/ranges/patients/${patientId}`.convertURI()
+    `/api/v1/web/measurements/ranges/patients/${patientId}`
   );
 
   const data = await res.json();

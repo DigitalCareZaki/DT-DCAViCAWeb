@@ -13,7 +13,7 @@ async function addSuperadmin(data: any): Promise<AddSuperadminProps> {
       Buffer.from(data, 'base64').toString('utf-8')
     );
     const res = await fetch(
-      '/api/v1/web/organization/superadmin'.convertURI(),
+      '/api/v1/web/organization/superadmin',
       {
         method: 'POST',
         cache: 'no-cache',

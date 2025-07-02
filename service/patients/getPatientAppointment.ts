@@ -10,7 +10,7 @@ async function getPatientAppointments(
 ): Promise<any> {
 
     const res = await fetch(
-        `/api/v1/web/telemed/patientappointments?patientId=${patientId}&page=${page}&limit=${limit}`.convertURI()
+        `/api/v1/web/telemed/patientappointments?patientId=${patientId}&page=${page}&limit=${limit}`
     );
 
     const data = await res.json();

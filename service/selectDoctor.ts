@@ -5,7 +5,7 @@ import type { GetSearchDoctor } from './types';
 
 async function selectDoctor(specialityId: string): Promise<any> {
   const res = await fetch(
-    `/api/v1/web/doctor/doctors/speciality?specialityId=${specialityId}`.convertURI()
+    `/api/v1/web/doctor/doctors/speciality?specialityId=${specialityId}`
   );
 
   const data = await res.json();

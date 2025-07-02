@@ -8,7 +8,7 @@ import '@init-globals';
 
 async function joinMeeting(id: string): Promise<JoinMeetingProps> {
   const res = await fetch(
-    `/api/v1/web/telemed/join-meeting/${id}`.convertURI(),
+    `/api/v1/web/telemed/join-meeting/${id}`,
     {
       cache: 'no-cache',
     }

@@ -4,7 +4,7 @@
 import fetch from '@fetch';
 
 export async function readMessage(messageId: string) {
-    const res = await fetch(`/api/v1/web/message/update-message/${messageId}`.convertURI(), {
+    const res = await fetch(`/api/v1/web/message/update-message/${messageId}`, {
         method: 'PATCH',
         cache: 'no-cache',
     });

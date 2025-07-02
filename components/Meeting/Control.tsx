@@ -83,7 +83,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
 
 
 
-      const res = await fetch('/api/v1/web/telemed/report'.convertURI(), {
+      const res = await fetch('/api/v1/web/telemed/report', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

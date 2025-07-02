@@ -10,7 +10,7 @@ async function addNurseRolePatient(
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch('/api/v1/web/nurse/nurses'.convertURI(), {
+    const res = await fetch('/api/v1/web/nurse/nurses', {
       method: 'PATCH',
       cache: 'no-cache',
       body: JSON.stringify({

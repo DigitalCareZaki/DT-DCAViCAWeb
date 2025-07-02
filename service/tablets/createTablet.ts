@@ -12,7 +12,7 @@ const createTablet = async (data: any): Promise<AddTabletProps> => {
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch('/api/v1/web/tablets'.convertURI(), {
+    const res = await fetch('/api/v1/web/tablets', {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify(decodedData),

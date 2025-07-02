@@ -26,7 +26,7 @@ async function getUserPatientRecords(
 
   console.log(query.toString());
 
-  const res = await fetch(`/api/v1/web/emr?${query.toString()}`.convertURI());
+  const res = await fetch(`/api/v1/web/emr?${query.toString()}`);
 
   const data = await res.json();
 

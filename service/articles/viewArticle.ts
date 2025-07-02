@@ -4,7 +4,7 @@ import fetch from '@fetch';
 import type { ViewArticleProps } from '../types';
 
 async function viewArticle(id: string): Promise<ViewArticleProps> {
-  const res = await fetch(`/api/v1/web/education/${id}`.convertURI(), {
+  const res = await fetch(`/api/v1/web/education/${id}`, {
     cache: 'no-cache',
   });
 

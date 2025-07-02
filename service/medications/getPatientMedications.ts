@@ -9,7 +9,7 @@ async function getPatientMedication(
   search?: string
 ): Promise<GetPatientMedicationProps> {
   const res = await fetch(
-    `/api/v1/web/medications/patients/${id}?search=${search || ''}`.convertURI()
+    `/api/v1/web/medications/patients/${id}?search=${search || ''}`
   );
 
   const data = await res.json();

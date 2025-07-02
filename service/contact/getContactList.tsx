@@ -7,7 +7,7 @@ import type { GetPatientContacts } from '../types';
 async function getPatientContactsForDoctor(
 ): Promise<GetPatientContacts> {
     const res = await fetch(
-        `/api/v1/web/patient/contacts`.convertURI()
+        `/api/v1/web/patient/contacts`
     );
 
     const data = await res.json();

@@ -10,7 +10,7 @@ async function updateMeetingStatus(
   appointmentId: string
 ): Promise<UpdateMeetingStatusProps> {
   const res = await fetch(
-    `/api/v1/web/telemed/meeting-update-status/${appointmentId}`.convertURI(),
+    `/api/v1/web/telemed/meeting-update-status/${appointmentId}`,
     {
       method: 'PATCH',
       body: JSON.stringify({ status }),

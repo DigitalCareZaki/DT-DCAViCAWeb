@@ -6,7 +6,7 @@ import { FetchRoomsProps } from '../types';
 import '@init-globals';
 
 async function fetchRooms(): Promise<FetchRoomsProps> {
-  const res = await fetch('/api/v1/web/chat/room'.convertURI());
+  const res = await fetch('/api/v1/web/chat/room');
 
   const data = await res.json();
 

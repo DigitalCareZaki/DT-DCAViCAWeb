@@ -8,7 +8,7 @@ async function getPatient(): Promise<{
   data: SuperAdminPatientListProps[];
   success: boolean;
 }> {
-  const res = await fetch('/api/v1/web/admin/patient'.convertURI());
+  const res = await fetch('/api/v1/web/admin/patient');
 
   const data = await res.json();
 

@@ -9,7 +9,7 @@ import '@init-globals';
 const getSingleTablet = async (
   tabletId: string
 ): Promise<GetSingleTabletProps> => {
-  const res = await fetch(`/api/v1/web/tablets/${tabletId}`.convertURI());
+  const res = await fetch(`/api/v1/web/tablets/${tabletId}`);
 
   const data = await res.json();
 

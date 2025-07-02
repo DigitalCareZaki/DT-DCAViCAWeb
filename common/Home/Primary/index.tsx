@@ -3,7 +3,6 @@
 import Header from './Header';
 import Table from './Table';
 import Charts from './Charts';
-
 import { getUserTypeHeaders, getPatientList } from '@actions';
 
 import type { Props } from './types';
@@ -16,10 +15,12 @@ const HomePrimary: ServerComponentProps<Props> = async ({
 }) => {
   const userType = await getUserTypeHeaders();
   const initialData = await getPatientList(userType?.toLowerCase(), 1, 10);
-  if (typeof userType !== 'string') return <></>;
 
+  console.log('userType >>>>>>>>>> ', userType);
 
-  if (!initialData.success) return <></>;
+  // if (typeof userType !== 'string') return <>HELLLLLLLLLLLLLLLLLO</>;
+
+  if (!initialData.success) return <>TESTING</>;
 
   return (
     <div className="mt-10 flex h-full w-full flex-col gap-8 overflow-y-scroll p-6 sm:p-8 lg:p-10">
@@ -29,7 +30,9 @@ const HomePrimary: ServerComponentProps<Props> = async ({
       {/* Header and Table Section */}
       <div className="flex h-auto w-full flex-col gap-8 text-white">
         <Header data={initialData?.data} />
-        <Table userType={userType.toLowerCase()} initialData={initialData?.data} initialPagination={initialData?.data?.pagination} />
+        <Table
+          userType={"doctor"}
+          initialData={initialData?.data} initialPagination={initialData?.data?.pagination} />
       </div>
     </div>
   );

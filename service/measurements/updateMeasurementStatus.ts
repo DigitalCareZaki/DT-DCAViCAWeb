@@ -8,9 +8,9 @@ async function updateMeasurementStatus(
   username: String,
 ): Promise<boolean> {
   console.log("yoo ", new_status);
-  
+
   const res = await fetch(
-    `/api/v1/web/measurements/${id}?status=${new_status}&updated_by='${username}'`.convertURI(),
+    `/api/v1/web/measurements/${id}?status=${new_status}&updated_by='${username}'`,
     {
       method: 'POST',
     }

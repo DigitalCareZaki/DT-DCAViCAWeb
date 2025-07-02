@@ -11,7 +11,7 @@ async function composeMessage(data: any): Promise<ComposeMessageProps> {
     );
     console.log('[composeMessage] Payload:', decodedData);
 
-    const res = await fetch('/api/v1/web/message/compose'.convertURI(), {
+    const res = await fetch('/api/v1/web/message/compose', {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify(decodedData),

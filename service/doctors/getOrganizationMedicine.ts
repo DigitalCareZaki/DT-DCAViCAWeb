@@ -12,7 +12,7 @@ async function getOrganizationMedicine(
   params.append('search', query);
 
   const res = await fetch(
-    `/api/v1/web/doctor/organization/medications?${params.toString()}`.convertURI()
+    `/api/v1/web/doctor/organization/medications?${params.toString()}`
   );
 
   const data = await res.json();

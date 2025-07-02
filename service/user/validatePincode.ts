@@ -11,7 +11,7 @@ async function verifyPincode(payload: string): Promise<VerifyPincodeProps> {
     Buffer.from(payload, 'base64').toString('utf-8')
   );
 
-  const res = await fetch('/api/v1/web/auth/verify-pincode'.convertURI(), {
+  const res = await fetch('/api/v1/web/auth/verify-pincode', {
     method: 'PATCH',
     body: JSON.stringify(decodedPayload),
     cache: 'no-cache',

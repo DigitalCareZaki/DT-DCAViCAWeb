@@ -15,7 +15,7 @@ const updateTablet = async (
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
-    const res = await fetch(`/api/v1/web/tablets/${tabletId}`.convertURI(), {
+    const res = await fetch(`/api/v1/web/tablets/${tabletId}`, {
       method: 'PATCH',
       cache: 'no-cache',
       body: JSON.stringify(decodedData),

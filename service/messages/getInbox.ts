@@ -8,7 +8,7 @@ async function getInbox(
   search?: string
 ): Promise<GetInbox> {
   const res = await fetch(
-    `/api/v1/web/message/${type}?search=${search ?? ''}`.convertURI()
+    `/api/v1/web/message/${type}?search=${search ?? ''}`
   );
 
   const data = await res.json();

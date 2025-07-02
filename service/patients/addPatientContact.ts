@@ -11,7 +11,7 @@ async function addPatientContact(data: any, patientId: string) {
     );
 
     const res = await fetch(
-      `/api/v1/web/doctor/patients/contacts/${patientId}`.convertURI(),
+      `/api/v1/web/doctor/patients/contacts/${patientId}`,
       {
         method: 'POST',
         cache: 'no-cache',

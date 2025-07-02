@@ -8,6 +8,8 @@ export default async function fetchWrapper(
   init?: RequestInit | undefined,
   dynamicHeader?: boolean
 ): Promise<Response> {
+
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
   const requestHeaders = new Headers();
   const clientHeaders = headers();
 
@@ -28,7 +30,7 @@ export default async function fetchWrapper(
 
   requestHeaders.set('Authorization', token || '');
 
-  return fetch(input, {
+  return fetch(`${BASE_URL}${input}`, {
     headers: requestHeaders,
     ...init,
   });

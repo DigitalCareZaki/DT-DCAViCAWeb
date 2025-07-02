@@ -10,7 +10,7 @@ async function getOrganizationDepartments(
   branchId: string
 ): Promise<GetOrganizationDepartments> {
   const res = await fetch(
-    `/api/v1/web/organization/departments/${branchId}`.convertURI()
+    `/api/v1/web/organization/departments/${branchId}`
   );
 
   const data = await res.json();

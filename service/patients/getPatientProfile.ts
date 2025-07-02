@@ -10,7 +10,7 @@ async function getPatientProfile(
 ): Promise<GetPatientProfile> {
 
   const res = await fetch(
-    `/api/v1/web/${userType}/patients/profile/${id}`.convertURI()
+    `/api/v1/web/${userType}/patients/profile/${id}`
   );
 
   const data = await res.json();

@@ -10,7 +10,7 @@ const getAllDevicesForPatient = async (
   patientId: string
 ): Promise<GetDeviceProps> => {
   const res = await fetch(
-    `/api/v1/web/devices/patients/${patientId}`.convertURI()
+    `/api/v1/web/devices/patients/${patientId}`
   );
 
   const data = await res.json();
