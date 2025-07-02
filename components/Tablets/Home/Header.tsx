@@ -47,7 +47,7 @@ const Header: ServerComponentProps<Props> = async ({ data, userRole }) => {
           <ButtonPrimary
             title="Add Accessories"
             name="Add Accessories"
-            className="font-bold text-md h-16 w-40 p-4"
+            className="font-bold text-xl h-12 w-56 p-4"
           />
         </Link>
       </div>

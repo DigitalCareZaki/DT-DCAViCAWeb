@@ -9,10 +9,10 @@ import type { ServerComponent } from '@types';
 
 const Admin: ServerComponent = async () => {
   return (
-    <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pb-96 font-poppins">
+    <div className="mt-10 flex h-screen w-full flex-col gap-6 pb-96 font-poppins">
       <PageInfo />
       <Analytics />
-      <div className="flex h-full w-full flex-col text-white">
+      <div className="flex h-screen w-full flex-col text-white">
         <Table />
       </div>
     </div>
