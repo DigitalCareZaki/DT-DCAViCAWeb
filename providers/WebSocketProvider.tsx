@@ -170,6 +170,29 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     });
   }, [selectedRooms]);
 
+  useEffect(() => {
+    if (!socket.current || !emitters?.payload?.appointment_id) return;
+
+    const chatEvent = `${emitters.payload.appointment_id}:meeting-chat-client`;
+    const participantsEvent = `${emitters.payload.appointment_id}:totalParticiapnts`;
+
+    const chatHandler = (data: any) => {
+      dispatch(addToChatsReducer({ chat: data }));
+    };
+    const participantsHandler = (data: any) => {
+      dispatch(addToParticipantsReducer({ data }));
+    };
+
+    socket.current.on(chatEvent, chatHandler);
+    socket.current.on(participantsEvent, participantsHandler);
+
+    // Cleanup to prevent multiple listeners
+    return () => {
+      socket.current?.off(chatEvent, chatHandler);
+      socket.current?.off(participantsEvent, participantsHandler);
+    };
+  }, [emitters?.payload?.appointment_id]);
+
   return <>{children}</>;
 };
 
