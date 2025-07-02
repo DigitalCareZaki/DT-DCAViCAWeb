@@ -26,6 +26,7 @@ const Dashboard: ServerComponentProps<Props> = async ({ patient, type }) => {
       : [],
   };
 
+
   return (
     <div className="mt-10 flex flex-col gap-6 overflow-y-scroll">
       {/* Analytics Section */}
@@ -36,7 +37,7 @@ const Dashboard: ServerComponentProps<Props> = async ({ patient, type }) => {
       <div className="flex w-full flex-col gap-6">
         <Medication patient={patient} />
         <PatientMeasurement
-          data={measurements.data}
+          data={measurements?.data}
           patient={patient}
           type={type}
         />

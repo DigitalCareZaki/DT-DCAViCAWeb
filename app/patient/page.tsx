@@ -12,7 +12,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <main className="h-full w-full">
-      <PatientHome patient={user.id} type={type} />
+      <PatientHome patient={user?.id} type={type} />
     </main>
   );
 }

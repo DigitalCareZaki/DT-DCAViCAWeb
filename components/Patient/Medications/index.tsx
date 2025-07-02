@@ -11,7 +11,7 @@ import type { ServerComponentProps } from '@types';
 const PatientTodayMedications: ServerComponentProps<Props> = async ({
   patient,
 }) => {
-  if (!patient) throw new Error('Patient not defined');
+  if (!patient) return <></>;
 
   const res = await getTodayMedicationAlerts(1, 5);
 
