@@ -92,7 +92,7 @@ const MessageBar: ClientComponent = () => {
                 first_name: user.first_name ?? '',
                 last_name: user.last_name ?? '',
                 middle_name: user.middle_name,
-              })} sended you a chat`,
+              })} sent you a chat`,
               title: 'New Chat',
             },
           })

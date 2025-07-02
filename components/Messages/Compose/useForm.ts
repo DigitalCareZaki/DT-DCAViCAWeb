@@ -130,7 +130,7 @@ const useFormHook = (): UseFormProps => {
               first_name: user.first_name ?? '',
               last_name: user.last_name ?? '',
               middle_name: user.middle_name,
-            })} sended you a email '${data.content?.trimHTML()}'`,
+            })} sent you a email '${data.content?.trimHTML()}'`,
             title: 'New email',
           },
         })
