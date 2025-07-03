@@ -13,11 +13,11 @@ async function retryApi<T>(apiCall: () => Promise<T>, maxRetries: number = 6, de
       if (result && (result as any).success === true) {
         return result;
       }
-      console.log(`Attempt ${i + 1} failed, retrying...`);
+      // console.log(`Attempt ${i + 1} failed, retrying...`);
       await delay(delayMs);
     } catch (error) {
       if (i === maxRetries - 1) throw error;
-      console.log(`Attempt ${i + 1} failed with error, retrying...`);
+      // console.log(`Attempt ${i + 1} failed with error, retrying...`);
       await delay(delayMs);
     }
   }
@@ -33,10 +33,8 @@ const Dashboard: ServerComponent = async () => {
       retryApi(() => getAppointmentStats('doctor'))
     ]);
 
-    console.log('API Success Status >>>>>>> ', res?.success, compliance?.success, stats?.success);
 
     if (!res?.success || !compliance?.success || !stats?.success) {
-      console.error('API call failed:');
       return <></>;
     }
 

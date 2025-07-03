@@ -16,8 +16,6 @@ async function getPatientList(
 
   const res = await fetch(url);
 
-  console.log('res from getPatientList >>>>>>>>>> ', res);
-
   // const res = await fetch(`/api/v1/web/${userType}/patients`); 
 
   const data = await res.json();

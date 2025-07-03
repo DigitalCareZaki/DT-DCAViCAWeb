@@ -36,7 +36,7 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
 
       const room = rooms.find((el) => el.users[0]?.id === users[0]?.id);
 
-      console.log('room: ', room);
+
 
       if (room?.id) {
         dispatch(setSelectedRoomReducer({ room }));
@@ -44,7 +44,7 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
         return;
       }
 
-      console.log('creating room');
+
 
       const res = await createRoom(btoa(JSON.stringify(data)));
 

@@ -16,7 +16,7 @@ const Devices: ServerComponentProps<Props> = async ({ patient }) => {
     ? await getAllDevicesForPatient(patient)
     : await getDevices();
 
-  console.log('Devices data:', res);
+
 
   if (!res.success) return <></>;
 

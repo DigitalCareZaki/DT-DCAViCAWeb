@@ -71,9 +71,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
 
     var endMinutes = endTime!.getMinutes() + endTime!.getHours() * 60;
 
-    console.log(startMinutes);
 
-    console.log(endMinutes);
     var ret = [];
 
     for (var i = startMinutes; i <= endMinutes; i += 10) {
@@ -90,7 +88,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
       // need end time in this format 13:00
       var endTm = `${(endHours).toString().padStart(2, '0')}:${(endMinutes2).toString().padStart(2, '0')}`;
 
-      console.log(endTm);
+
 
       const startHours12 = hours % 12 || 12;
       const endHours12 = endHours % 12 || 12;
@@ -103,13 +101,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
       });
 
     }
-    console.log("yholo");
 
-    console.log(startMinutes);
-
-    console.log(endMinutes);
-
-    console.log(ret);
 
     return ret;
   }

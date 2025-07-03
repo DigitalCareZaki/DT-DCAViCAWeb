@@ -3,12 +3,11 @@ import { createRoom } from '@service';
 
 export const openOrCreateRoom = async (dispatch: any, option: any) => {
     let userId = option.users?.[0]?.id;
-    console.log('option >>>', option);
-    console.log('user id  Check>>>>', userId);
+
 
     if (userId) {
         const data = { user_id: userId };
-        console.log('data user Id kia a rahe han>>>', data);
+
         const result = await createRoom(btoa(JSON.stringify(data)));
 
         if (result?.data?.id) {

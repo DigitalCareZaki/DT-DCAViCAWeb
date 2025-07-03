@@ -16,7 +16,7 @@ const HomePrimary: ServerComponentProps<Props> = async ({
   const userType = await getUserTypeHeaders();
   const initialData = await getPatientList(userType?.toLowerCase(), 1, 10);
 
-  console.log('userType >>>>>>>>>> ', userType);
+
 
   // if (typeof userType !== 'string') return <>HELLLLLLLLLLLLLLLLLO</>;
 

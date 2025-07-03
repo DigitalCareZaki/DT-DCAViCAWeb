@@ -91,7 +91,7 @@ const Form: ClientComponent = () => {
     setSelectedNurse({ name, id: value });
 
     // 👇 Use this doctor ID for further actions
-    console.log('Selected Doctor:', { name, id: value });
+
   };
 
   const onChange = debounce(async (event: ChangeEvent<HTMLInputElement>[]) => {

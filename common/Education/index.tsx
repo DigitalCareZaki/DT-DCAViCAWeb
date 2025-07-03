@@ -12,8 +12,6 @@ import type { ServerComponent } from '@types';
 const Education: ServerComponent = async () => {
   const res = await getArticles();
 
-  console.log('res articles>>>>', res);
-
   if (!res.success) return <></>;
 
   return (

@@ -33,7 +33,7 @@ const TelemedicineNurses: FC<Props> = ({ patient }) => {
       try {
         setLoading(true);
         const res = await getPatientAppointments(patient, 1, 10);
-        console.log('telemedicine >>>>', res.data.data);
+
 
         if (res.success) {
           setData(res.data);

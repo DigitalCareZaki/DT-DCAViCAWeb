@@ -68,7 +68,7 @@ const RenderTable: ClientComponent = () => {
         const appointment = el?.appointment;
         const organizer = el?.appointment?.organizer;
         const observation = el?.appointment?.appointmentObservation;
-        console.log('appointment observation >>>', observation);
+
 
         return (
           <tr

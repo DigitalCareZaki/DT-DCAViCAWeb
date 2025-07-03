@@ -32,7 +32,7 @@ const Search = () => {
       const res = await searchChatRooms(search);
       if (res.success) {
 
-        console.log('fetch options function payload', res.data);
+
         setOptions(res.data);
       }
       setLoading(false);
@@ -72,7 +72,7 @@ const Search = () => {
     } else {
       // Create new room and open it
       const userObj = option.users ? option : { users: [option] };
-      console.log('userObj >>>', userObj);
+
       await openOrCreateRoom(dispatch, userObj);
       // Optionally, you can refetch rooms and select the new one if needed
     }

@@ -34,8 +34,6 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
   const [user] = useUser();
 
-  console.log(' get call funcation user >>>>>>', user);
-
   const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
   const { isLoading: isLoadingCam, localCameraTrack } = useLocalCameraTrack();
 

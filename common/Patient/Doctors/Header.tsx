@@ -29,7 +29,7 @@ const DoctorPatientDoctorsHeader: ClientComponent = () => {
     try {
       const value = e[0].target.value;
       const res = await getPatientDoctors(params?.get('patient') || '', value);
-      console.log('res changes>>>', res);
+
 
       setData(res.data);
     } catch (err) { }

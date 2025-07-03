@@ -86,7 +86,6 @@ const useFormHook = (
         setSerials(serials);
         setDeviceList(data);
       } catch (error) {
-        console.error('API call error:', error);
         setSerials([]);
       }
     },

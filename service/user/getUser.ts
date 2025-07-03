@@ -6,7 +6,6 @@ async function getUser(): Promise<UserProps | undefined> {
   const { cookies } = await import('next/headers');
   const token = cookies().get('jwt')?.value || '';
 
-  console.log('token >>>>>>>>>>>>>>>>> ', token);
   const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/jwt-verify`, {
     headers: {
       'Authorization': `Bearer ${token}`
