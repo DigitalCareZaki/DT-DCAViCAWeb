@@ -46,7 +46,7 @@ const Discussion: ClientComponentProps<ParticipantsProps> = ({ id }) => {
         </div>
       </div>
 
-      <div className="hidescrollbar flex w-full flex-col overflow-y-scroll">
+      <div className="flex w-full flex-col h-[10rem] overflow-scroll-y">
         <ClientGenerator data={data}>
           <Participant />
         </ClientGenerator>

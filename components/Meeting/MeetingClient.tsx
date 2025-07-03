@@ -29,10 +29,10 @@ export default function MeetingClient({ id }: { id: string }) {
                 </div>
             </div>
             <div className="col-span-1 flex h-full w-full flex-col gap-4">
-                <div className="flex-1 rounded-2xl bg-dark-secondary shadow-xl overflow-hidden flex flex-col">
+                <div className="flex-1 rounded-2xl bg-dark-secondary shadow-xl flex flex-col">
                     <Participants id={id} />
                 </div>
-                <div className="flex-1 rounded-2xl bg-dark-secondary shadow-xl overflow-hidden flex flex-col mt-2">
+                <div className="flex-1 rounded-2xl bg-dark-secondary shadow-xl overflow-scroll-y flex flex-col mt-2">
                     <Discussion id={id} />
                 </div>
             </div>
