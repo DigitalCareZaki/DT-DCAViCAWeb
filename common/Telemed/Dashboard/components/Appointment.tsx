@@ -305,7 +305,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
         >
           <HiDotsVertical />
         </button>
-        <AnimatePresence>
+        {/* <AnimatePresence>
           {showOptions && (
             <motion.div
               initial={{
@@ -361,7 +361,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
               </div>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
       <div className="flex w-full items-center">
         <Link
