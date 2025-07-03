@@ -82,7 +82,7 @@ const Form: ClientComponent = () => {
                   title="Search medication"
                   overrideShow={0}
                   hideInfo
-                  labelClassName="text-white"
+                  labelClassName="text-black"
                   inputWrapperClassName="doctor:focus-within:border-theme-doctor-primary"
                   inputClassName="bg-transparent placeholder:font-normal placeholder:text-gray-300"
                   icon="IoSearch"
