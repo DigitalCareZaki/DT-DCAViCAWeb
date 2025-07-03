@@ -60,9 +60,9 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
       socket.current.connect();
 
       // Log all events received
-      socket.current.onAny((event, ...args) => {
-        console.log('[WebSocketProvider] Socket event received:', event, ...args);
-      });
+      // socket.current.onAny((event, ...args) => {
+      //   console.log('[WebSocketProvider] Socket event received:', event, ...args);
+      // });
 
       // Define the handler separately so it can be removed
       const handler = (payload: any) => {
@@ -94,7 +94,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     if (!emitters?.event?.length) return;
 
     if (['appointment', 'message'].includes(emitters.event)) {
-      console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
+      // console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
     }
 
@@ -102,7 +102,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
       ['meeting-controlls', 'meeting-chat'].includes(emitters.event) &&
       emitters.payload
     ) {
-      console.log('[WebSocketProvider] Emitting event:', `${emitters.payload.appointment_id}:${emitters.event}`, emitters.payload); // DEBUG LOG
+      // console.log('[WebSocketProvider] Emitting event:', `${emitters.payload.appointment_id}:${emitters.event}`, emitters.payload); // DEBUG LOG
       socket.current.emit(
         `${emitters.payload.appointment_id}:${emitters.event}`,
         emitters.payload
@@ -110,12 +110,12 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     }
 
     if (emitters.event === 'room-init') {
-      console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
+      // console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
     }
 
     if (emitters.event === 'send_notification') {
-      console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
+      // console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
     }
 
@@ -131,7 +131,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
       socket.current.on(
         `${emitters.payload?.appointment_id}:meeting-chat-client`,
         (data: any) => {
-          // console.log('client-chat: ', data);
+          console.log('client-chat: format check kia a raha', data);
           dispatch(addToChatsReducer({ chat: data }));
         }
       );
@@ -141,7 +141,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     isDynamicMessage.current = true;
 
     // return () => {
-    //   isDynamicMessage.current = false;
+    //   isDynamicMessage.current = false; // output reason:  why 
     // };
 
   }, [emitters]);
@@ -152,14 +152,14 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
 
 
     socket.current.on(selectedRooms.id, async (data) => {
-      console.log('room-chats: socket data ', data);
+      // console.log('room-chats: socket data ', data);
 
       await fetchRoomChats(selectedRooms.id).then((res: any) => {
         const transformedData = {
           [selectedRooms.id]: res?.data?.chats || []
         };
 
-        console.log('room-chats: api ', transformedData);
+        // console.log('room-chats: api ', transformedData);
 
         dispatch(
           setToRoomChatsReducer({
@@ -171,28 +171,28 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     });
   }, [selectedRooms]);
 
-  useEffect(() => {
-    if (!socket.current || !emitters?.payload?.appointment_id) return;
+  // useEffect(() => {
+  //   if (!socket.current || !emitters?.payload?.appointment_id) return;
 
-    const chatEvent = `${emitters.payload.appointment_id}:meeting-chat-client`;
-    const participantsEvent = `${emitters.payload.appointment_id}:totalParticiapnts`;
+  //   const chatEvent = `${emitters.payload.appointment_id}:meeting-chat-client`;
+  //   const participantsEvent = `${emitters.payload.appointment_id}:totalParticiapnts`;
 
-    const chatHandler = (data: any) => {
-      dispatch(addToChatsReducer({ chat: data }));
-    };
-    const participantsHandler = (data: any) => {
-      dispatch(addToParticipantsReducer({ data }));
-    };
+  //   const chatHandler = (data: any) => {
+  //     dispatch(addToChatsReducer({ chat: data }));
+  //   };
+  //   const participantsHandler = (data: any) => {
+  //     dispatch(addToParticipantsReducer({ data }));
+  //   };
 
-    socket.current.on(chatEvent, chatHandler);
-    socket.current.on(participantsEvent, participantsHandler);
+  //   socket.current.on(chatEvent, chatHandler);
+  //   socket.current.on(participantsEvent, participantsHandler);
 
-    // Cleanup to prevent multiple listeners
-    return () => {
-      socket.current?.off(chatEvent, chatHandler);
-      socket.current?.off(participantsEvent, participantsHandler);
-    };
-  }, [emitters?.payload?.appointment_id]);
+  //   // Cleanup to prevent multiple listeners
+  //   return () => {
+  //     socket.current?.off(chatEvent, chatHandler);
+  //     socket.current?.off(participantsEvent, participantsHandler);
+  //   };
+  // }, [emitters?.payload?.appointment_id]);
 
   return <>{children}</>;
 };
