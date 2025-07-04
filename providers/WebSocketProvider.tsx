@@ -46,11 +46,14 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     // Softsols
     // wss://avica.up.railway.app
 
-    socket.current = io('wss://api.avica.health', {
-      transports: ['websocket'],
-      autoConnect: false,
-      query: { ...user },
-    }
+    socket.current = io(
+      process.env.NEXT_PUBLIC_SOCKET_URL || 'wss://api.avica.health',
+      // 'wss://avica.up.railway.app',
+      {
+        transports: ['websocket'],
+        autoConnect: false,
+        query: { ...user },
+      }
     );
 
     if (!socket.current.connected) {
