@@ -212,7 +212,7 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
 
   return (
     <AgoraRTCProvider client={client}>
-      <Call Client={client} channelName={id} AppID="cfd13282cfcd4a70a542490cb0437c87" token={token} />
+      <Call Client={client} channelName={id} AppID={process.env.NEXT_PUBLIC_AGORA_APP_ID || 'b03a1cbf5d3e43ff973a26d84a726f85'} token={token} />
     </AgoraRTCProvider>
   );
 };
