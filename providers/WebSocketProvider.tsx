@@ -47,7 +47,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     // wss://avica.up.railway.app
 
     socket.current = io(
-      process.env.NEXT_PUBLIC_SOCKET_URL || 'wss://avica.up.railway.app',
+      process.env.NEXT_PUBLIC_SOCKET_URL || 'wss://api.avica.health',
       // 'wss://avica.up.railway.app',
       {
         transports: ['websocket'],
