@@ -13,8 +13,16 @@ const RequestedAppointments = async ({ pending }: RequestedAppointmentsProps) =>
   // Fetch requested appointments from the API
   const res = await getRequestedAppointments({ pending });
 
+
+
   // If the API request fails, return an empty fragment
   if (!res.success) return <></>;
+
+  // Transform the data to ensure appointment ID is properly passed
+  const transformedData = res.data.map((item: any) => ({
+    ...item,
+    id: item.appointment?.id || item.id, // Use appointment ID as the main id
+  }));
 
   return (
     <div className="relative flex w-full flex-col gap-4 rounded-lg bg-white px-4 py-8 sm:py-10 sm:px-6 lg:px-8">
@@ -28,7 +36,7 @@ const RequestedAppointments = async ({ pending }: RequestedAppointmentsProps) =>
       <div className="flex w-full items-center gap-4 overflow-x-auto py-4 sm:py-6">
 
         {/* ServerGenerator component will iterate over fetched data and render Appointment components */}
-        <ServerGenerator data={res.data}>
+        <ServerGenerator data={transformedData}>
           <Appointment />
         </ServerGenerator>
       </div>

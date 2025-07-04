@@ -82,6 +82,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
 
   const { primary, secondary, text, border } = useMemo(() => theme, [theme]);
 
+
   const handleShowModal = useCallback(
     (props: ModalState) => {
       dispatch(showModalReducer({ ...props }));
