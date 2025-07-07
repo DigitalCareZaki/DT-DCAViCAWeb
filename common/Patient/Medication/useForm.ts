@@ -33,6 +33,7 @@ const useFormHook = (
 
   const [selectors, setSelectors] = useState<SelectorProps>({
     unit: undefined,
+    frequency: undefined,
   });
 
   const [searchingResults, setSearchingResults] = useState<
@@ -60,7 +61,7 @@ const useFormHook = (
   });
 
   const handleSelectors = useCallback(
-    (type: string, value: string) => {
+    (type: string, value: string | number) => {
       setValue(type as any, value);
       setSelectors((prev) => ({ ...prev, [type]: value }));
     },
@@ -93,26 +94,37 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
-
-
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
 
-      const [_hours, _minutes] = data.time.split(':');
-
       const start = new Date(data.start);
       const end = new Date(data.end);
 
-      const time = new Date(
-        start.getFullYear(),
-        start.getMonth(),
-        start.getDate(),
-        Number(_hours),
-        Number(_minutes),
-        0,
-        0
-      );
+      // Collect time fields based on frequency
+      const times: string[] = [];
+      if (data.frequency >= 1 && data.time1) times.push(data.time1);
+      if (data.frequency >= 2 && data.time2) times.push(data.time2);
+      if (data.frequency >= 3 && data.time3) times.push(data.time3);
+
+      // Convert times to Date objects (if needed by backend)
+      const timeObjects = times.map((t) => {
+        const [_hours, _minutes] = t.split(":");
+        return new Date(
+          start.getFullYear(),
+          start.getMonth(),
+          start.getDate(),
+          Number(_hours),
+          Number(_minutes),
+          0,
+          0
+        );
+      });
+
+      console.log('data', data);
+      console.log('start', start);
+      console.log('end', end);
+      console.log('timeObjects', timeObjects);
 
       const res = await addPatientMedication(
         btoa(
@@ -120,7 +132,7 @@ const useFormHook = (
             name: data.name,
             start_date: start,
             end_date: end,
-            time: time,
+            times: timeObjects, // send as array
             dosage: data.dosage,
             frequency: data.frequency,
             unit: data.unit,

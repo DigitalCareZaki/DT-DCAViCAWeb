@@ -16,7 +16,9 @@ export type CreateMedicationProps = {
   name: string;
   start: string;
   end: string;
-  time: string;
+  time1?: string;
+  time2?: string;
+  time3?: string;
   dosage: string;
   frequency: number;
   unit: MedicationUnit;
@@ -24,6 +26,7 @@ export type CreateMedicationProps = {
 
 export interface SelectorProps {
   unit: MedicationUnit | undefined;
+  frequency?: number;
 }
 
 export type useFormProps = [

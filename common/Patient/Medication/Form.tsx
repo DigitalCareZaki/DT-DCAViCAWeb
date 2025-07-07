@@ -126,21 +126,61 @@ const Form: ClientComponent = () => {
                     />
                   </div>
                 </div>
+
+                {/* <div className="flex w-1/2"> */}
+                <InputBasic
+                  label="Time"
+                  placeholder="Enter time"
+                  borderTheme
+                  labelVariant="tiny"
+                  title="Time"
+                  defaultBorder
+                  hookProps={register('time')}
+                  error={!!errors.time?.message?.length}
+                  errorMessage={errors.time?.message}
+                />
+                {/* </div> */}
+
+                <DropdownSecondary
+                  title="Frequency"
+                  label="Frequency"
+                  borderTheme
+                  inputWrapperClassName="bg-background"
+                  icon="IoSearch"
+                  error={!!errors.frequency?.message?.length}
+                  errorMessage={errors.frequency?.message}
+                  selected={selectors.frequency?.toString()}
+                >
+                  <>
+                    {[1, 2, 3].map((freq) => (
+                      <div
+                        key={freq}
+                        onClick={() => handleSelector('frequency', freq)}
+                        className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                      >
+                        <span className="font-medium">{freq}</span>
+                      </div>
+                    ))}
+                  </>
+                </DropdownSecondary>
+                {/* Render time inputs based on frequency */}
+                {selectors.frequency && Array.from({ length: selectors.frequency }, (_, i) => (
+                  <InputBasic
+                    key={`time${i + 1}`}
+                    label={`Time ${i + 1}`}
+                    placeholder="Enter time"
+                    borderTheme
+                    labelVariant="tiny"
+                    title={`Time ${i + 1}`}
+                    defaultBorder
+                    type="time"
+                    hookProps={register(`time${i + 1}`)}
+                    error={!!errors[`time${i + 1}`]?.message?.length}
+                    errorMessage={errors[`time${i + 1}`]?.message}
+                  />
+                ))}
                 <div className="flex w-full items-start gap-4">
-                  <div className="flex w-1/2">
-                    <InputBasic
-                      label="Time"
-                      placeholder="Enter time"
-                      borderTheme
-                      labelVariant="tiny"
-                      title="Time"
-                      defaultBorder
-                      hookProps={register('time')}
-                      error={!!errors.time?.message?.length}
-                      errorMessage={errors.time?.message}
-                    />
-                  </div>
-                  <div className="flex w-1/2">
+                  <div className="flex w-full">
                     <InputBasic
                       label="Dosage"
                       placeholder="Enter dosage"
@@ -154,17 +194,6 @@ const Form: ClientComponent = () => {
                     />
                   </div>
                 </div>
-                <InputBasic
-                  label="Frequency"
-                  placeholder="Enter frequency"
-                  borderTheme
-                  labelVariant="tiny"
-                  title="Frequency"
-                  defaultBorder
-                  hookProps={register('frequency')}
-                  error={!!errors.frequency?.message?.length}
-                  errorMessage={errors.frequency?.message}
-                />
                 <DropdownSecondary
                   title="Medication Unit"
                   label="Unit"
