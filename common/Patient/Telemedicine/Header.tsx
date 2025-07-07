@@ -49,7 +49,7 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
             onChange={onChange}
           />
         </div>
-        <div className="w-36">
+        {/* <div className="w-36">
           <ButtonPrimary
             title="Add Nurse"
             name="Add Nurse"
@@ -59,7 +59,7 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
             // icon="IoMdAdd"
             onClick={handleAddNurseClick}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
