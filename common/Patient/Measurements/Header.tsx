@@ -57,7 +57,7 @@ const Header: ClientComponentProps<{
             <LegendItem title="High" twRagColor="bg-rag-red" />
             <LegendItem title="Normal" twRagColor="bg-rag-green" />
             <LegendItem title="Low" twRagColor="bg-rag-amber" />
-            <LegendItem title="No reading" twRagColor="bg-rag-no-reading" />
+            <LegendItem title="Alert Not Set" twRagColor="bg-rag-no-reading" />
           </RenderLegend>
           <div className="flex items-center justify-end gap-4">
             {!hideActions && (
