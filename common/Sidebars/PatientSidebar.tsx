@@ -284,7 +284,7 @@ const Sidebar: ClientComponent = () => {
             className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
           >
             <IoIosSettings size={18} />
-            {sidebar && <span className="text-xs">Settings</span>}
+            {sidebar && <span className="text-xs">Profile</span>}
           </Link>
 
         </div>

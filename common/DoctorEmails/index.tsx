@@ -50,7 +50,7 @@ const DoctorEmails: FC<{ patient: string }> = ({ patient }) => {
   return (
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
       <div className="flex w-full justify-between">
-        <span className="screen-title">Doctor Emails</span>
+        <span className="screen-title">Emails History</span>
       </div>
       <Table data={data} />
     </div>
