@@ -54,6 +54,7 @@ const useFormHook = (deviceId: string): UseFormProps => {
     try {
       setSearching(true);
       const res = await getAllPatients();
+
       if (!res.success) return;
       setPatients(res.data);
     } catch (err: any) {
@@ -123,7 +124,7 @@ const useFormHook = (deviceId: string): UseFormProps => {
 
         setValue('device_id', deviceId);
         setSelectedPatients(
-          res.data.patient_devices.map((el) => ({
+          res?.data?.patient_devices?.map((el) => ({
             id: el.issued_to.user.id,
             first_name: el.issued_to.user.first_name,
             middle_name: el.issued_to.user.middle_name,
@@ -136,7 +137,7 @@ const useFormHook = (deviceId: string): UseFormProps => {
         setLoading(false);
       }
     })();
-    return () => {};
+    return () => { };
   }, [deviceId, setValue]);
 
   return [

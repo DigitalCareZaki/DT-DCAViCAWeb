@@ -28,6 +28,7 @@ const Form: ClientComponent = () => {
     async function fetchDevice() {
       if (!deviceId) return;
       const res = await getSingleDevice(deviceId);
+
       if (res?.success) setAssigned(!!res.data.assigned);
     }
     fetchDevice();

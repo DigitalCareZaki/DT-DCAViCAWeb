@@ -28,7 +28,7 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
   } else if (userType === 'ADMIN') {
     res = await getAdminPatient();
   } else if (userType === 'DOCTOR') {
-    res = await getPatientList();
+    res = await getPatientList(userType.toLowerCase());
   } else if (userType === 'NURSE') {
     res = await getPatientList(userType.toLowerCase());
   }
@@ -44,16 +44,16 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
     userType === 'DOCTOR' ||
     userType === 'NURSE'
   ) {
-    const patients: PatientListingData[] = res.data;
+    const patients: PatientListingData[] = res.data.data; // yaha doctor sa assign karty waqt backend sa payload change howa han 
 
     return {
       success: true,
-      data: patients.map((el) => ({
-        id: el.user.id,
-        first_name: el.user.first_name,
-        middle_name: el.user.middle_name,
-        last_name: el.user.first_name,
-        email: el.user.email,
+      data: patients?.map((el) => ({
+        id: el.patient.id,
+        first_name: el.patient.first_name,
+        middle_name: el.patient.middle_name,
+        last_name: el.patient.first_name,
+        email: el.patient.email,
       })),
     };
   } else if (userType === 'ADMIN') {
@@ -61,7 +61,7 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
 
     return {
       success: true,
-      data: patients.map((el) => ({
+      data: patients?.map((el) => ({
         id: el.id,
         first_name: el.first_name,
         middle_name: el.middle_name,
