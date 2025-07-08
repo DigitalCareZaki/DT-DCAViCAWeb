@@ -272,7 +272,7 @@ const Sidebar: ClientComponent = () => {
           </Link>
         </div>
         <div
-          title="Settings"
+          title="Profile"
           className={twMerge(
             'patient-profile-bar-icon',
             sidebar && 'flex bg-background px-2'
