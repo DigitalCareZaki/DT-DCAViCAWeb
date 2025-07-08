@@ -71,7 +71,7 @@ const useFormHook = (
       });
 
       try {
-        const res = await fetch(`/api/v1/web/devices/devices/${value}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/devices/devices/${value}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
