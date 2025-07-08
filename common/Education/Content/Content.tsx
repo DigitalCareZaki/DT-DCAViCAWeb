@@ -20,7 +20,7 @@ const Content: ClientComponentProps<ContentProps> = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="hidescrollbar flex h-screen w-[60%] flex-col gap-4 overflow-y-scroll pb-96">
+    <div className="flex h-screen w-[60%] flex-col gap-4 overflow-y-scroll pb-96">
       <ArticleRender />
     </div>
   );

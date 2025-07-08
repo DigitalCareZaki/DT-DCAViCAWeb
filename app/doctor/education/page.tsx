@@ -19,7 +19,9 @@ export default function Page(): JSX.Element {
             <EducationLeftBar />
           </Suspense>
           <Suspense fallback={<EducationContentSkeleton />}>
+
             <EducationContent />
+
           </Suspense>
           <Suspense fallback={<EducationRightBarSkeleton />}>
             <EducationRightBar />
