@@ -288,7 +288,7 @@ const Sidebar: ClientComponent = () => {
           </Link>
 
         </div>
-        <div
+        {/* <div
           title="Notifications"
           className={twMerge(
             'patient-profile-bar-icon',
@@ -304,9 +304,9 @@ const Sidebar: ClientComponent = () => {
             {sidebar && <span className="text-xs">Notifications</span>}
           </Link>
 
-        </div>
+        </div> */}
 
-        <div
+        {/* <div
           title="Sms"
           className={twMerge(
             'patient-profile-bar-icon',
@@ -322,9 +322,9 @@ const Sidebar: ClientComponent = () => {
             {sidebar && <span className="text-xs">Sms</span>}
           </Link>
 
-        </div>
+        </div> */}
 
-        <div
+        {/* <div
           title="Email History"
           className={twMerge(
             'patient-profile-bar-icon',
@@ -340,7 +340,7 @@ const Sidebar: ClientComponent = () => {
             {sidebar && <span className="text-xs">Email History</span>}
           </Link>
 
-        </div>
+        </div> */}
 
       </div>
     </motion.div>
