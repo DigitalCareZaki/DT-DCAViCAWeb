@@ -20,47 +20,31 @@ import type { ModalState } from '@store-types';
 import type { Appointment } from './types';
 
 const colors = {
-  '1': {
-    primary: 'bg-fuchsia-200',
-    secondary: 'bg-fuchsia-400',
-    text: 'text-fuchsia-500',
-    border: '#86198f',
-  },
-  '2': {
-    primary: 'bg-amber-200',
-    secondary: 'bg-amber-400',
-    text: 'text-amber-500',
-    border: '#86198f',
-  },
-  '3': {
-    primary: 'bg-rose-200',
-    secondary: 'bg-rose-400',
-    text: 'text-rose-500',
-    border: 'border-amber-800',
-  },
-  '4': {
-    primary: 'bg-green-200',
-    secondary: 'bg-green-400',
-    text: 'text-green-500',
-    border: 'border-rose-800',
-  },
-  '5': {
-    primary: 'bg-blue-200',
-    secondary: 'bg-blue-400',
-    text: 'text-blue-500',
-    border: 'border-green-800',
-  },
-  '6': {
-    primary: 'bg-orange-200',
-    secondary: 'bg-orange-400',
-    text: 'text-orange-500',
+  DOCTOR: {
+    primary: 'bg-blue-100',
+    secondary: 'bg-blue-600',
+    text: 'text-blue-700',
     border: 'border-blue-800',
   },
+  NURSE: {
+    primary: 'bg-green-100',
+    secondary: 'bg-green-600',
+    text: 'text-green-700',
+    border: 'border-green-800',
+  },
+  PATIENT: {
+    primary: 'bg-teal-100',
+    secondary: 'bg-teal-600',
+    text: 'text-teal-700',
+    border: 'border-teal-800',
+  },
+  DEFAULT: {
+    primary: 'bg-gray-100',
+    secondary: 'bg-gray-400',
+    text: 'text-gray-700',
+    border: 'border-gray-800',
+  },
 };
-
-function generateRandomNumber(): number {
-  return Math.floor(Math.random() * 6) + 1;
-}
 
 const Appointment: ClientComponentProps<Appointment> = ({
   className,
@@ -75,10 +59,9 @@ const Appointment: ClientComponentProps<Appointment> = ({
   const [statusState, setStatusState] = useState<string>(status ?? '');
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  const [theme] = useState(
-    // @ts-ignore
-    colors[generateRandomNumber().toString()]
-  );
+  // Assign color based on organizer role
+  const role = typeof appointment?.organizer?.role === 'string' ? appointment.organizer.role.toUpperCase() : 'DEFAULT';
+  const theme = colors[role as keyof typeof colors] || colors.DEFAULT;
 
   const { primary, secondary, text, border } = useMemo(() => theme, [theme]);
 

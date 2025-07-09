@@ -33,6 +33,10 @@ const Dashboard: ServerComponent = async () => {
       retryApi(() => getAppointmentStats('doctor'))
     ]);
 
+    console.log('get patient rag >>>.', res);
+    console.log('get patient compliance >>>.', compliance);
+    console.log('get appointment stats >>>.', stats);
+
 
     if (!res?.success || !compliance?.success || !stats?.success) {
       return <></>;
