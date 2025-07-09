@@ -75,23 +75,9 @@ export const validator = create((data: CreateMedicationProps) => {
     return validateDatePattern(data.end);
   });
 
-  test('end', 'End should be a valid date', () => {
-    return validateDate(data.end);
-  });
-
-  test('time', 'Time is required', () => {
-    enforce(data.time).isNotEmpty();
-  });
-
-  // same for time, issue in vest/validator library
-
-  test('time', 'Time should be HH:MM', () => {
-    return validateTimePattern(data.time);
-  });
-
-  test('time', 'Time should be a valid time', () => {
-    return validateTime(data.time);
-  });
+  // test('end', 'End should be a valid date', () => {
+  //   return validateDate(data.end);
+  // });
 
   test('dosage', 'Dosage is required', () => {
     enforce(data.dosage).isNotEmpty();
@@ -104,6 +90,43 @@ export const validator = create((data: CreateMedicationProps) => {
   test('frequency', 'Frequency should be a number', () => {
     enforce(data.frequency).isNumeric();
   });
+
+  // Validate time fields according to frequency
+  const freq = Number(data.frequency);
+
+  if (freq >= 1) {
+    test('time1', 'Time 1 is required', () => {
+      enforce(data.time1).isNotEmpty();
+    });
+    test('time1', 'Time 1 should be HH:MM', () => {
+      return typeof data.time1 === 'string' ? validateTimePattern(data.time1) : false;
+    });
+    test('time1', 'Time 1 should be a valid time', () => {
+      return typeof data.time1 === 'string' ? validateTime(data.time1) : false;
+    });
+  }
+  if (freq >= 2) {
+    test('time2', 'Time 2 is required', () => {
+      enforce(data.time2).isNotEmpty();
+    });
+    test('time2', 'Time 2 should be HH:MM', () => {
+      return typeof data.time2 === 'string' ? validateTimePattern(data.time2) : false;
+    });
+    test('time2', 'Time 2 should be a valid time', () => {
+      return typeof data.time2 === 'string' ? validateTime(data.time2) : false;
+    });
+  }
+  if (freq >= 3) {
+    test('time3', 'Time 3 is required', () => {
+      enforce(data.time3).isNotEmpty();
+    });
+    test('time3', 'Time 3 should be HH:MM', () => {
+      return typeof data.time3 === 'string' ? validateTimePattern(data.time3) : false;
+    });
+    test('time3', 'Time 3 should be a valid time', () => {
+      return typeof data.time3 === 'string' ? validateTime(data.time3) : false;
+    });
+  }
 
   test('unit', 'Unit is required', () => {
     enforce(data.unit).isNotEmpty();

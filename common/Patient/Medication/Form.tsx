@@ -127,20 +127,6 @@ const Form: ClientComponent = () => {
                   </div>
                 </div>
 
-                {/* <div className="flex w-1/2"> */}
-                <InputBasic
-                  label="Time"
-                  placeholder="Enter time"
-                  borderTheme
-                  labelVariant="tiny"
-                  title="Time"
-                  defaultBorder
-                  hookProps={register('time')}
-                  error={!!errors.time?.message?.length}
-                  errorMessage={errors.time?.message}
-                />
-                {/* </div> */}
-
                 <DropdownSecondary
                   title="Frequency"
                   label="Frequency"

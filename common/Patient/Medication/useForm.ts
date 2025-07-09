@@ -98,43 +98,29 @@ const useFormHook = (
     try {
       setLoading(true);
 
-      const start = new Date(data.start);
-      const end = new Date(data.end);
+      // Use string dates as required by backend
+      const start_date = data.start; // should be YYYY-MM-DD
+      const end_date = data.end;     // should be YYYY-MM-DD
 
-      // Collect time fields based on frequency
-      const times: string[] = [];
-      if (data.frequency >= 1 && data.time1) times.push(data.time1);
-      if (data.frequency >= 2 && data.time2) times.push(data.time2);
-      if (data.frequency >= 3 && data.time3) times.push(data.time3);
-
-      // Convert times to Date objects (if needed by backend)
-      const timeObjects = times.map((t) => {
-        const [_hours, _minutes] = t.split(":");
-        return new Date(
-          start.getFullYear(),
-          start.getMonth(),
-          start.getDate(),
-          Number(_hours),
-          Number(_minutes),
-          0,
-          0
-        );
-      });
+      const time = [];
+      if (data.frequency >= 1 && data.time1) time.push(data.time1);
+      if (data.frequency >= 2 && data.time2) time.push(data.time2);
+      if (data.frequency >= 3 && data.time3) time.push(data.time3);
 
       console.log('data', data);
-      console.log('start', start);
-      console.log('end', end);
-      console.log('timeObjects', timeObjects);
+      console.log('start_date', start_date);
+      console.log('end_date', end_date);
+      console.log('time', time);
 
       const res = await addPatientMedication(
         btoa(
           JSON.stringify({
             name: data.name,
-            start_date: start,
-            end_date: end,
-            times: timeObjects, // send as array
+            start_date, // string
+            end_date,   // string
+            time,       // array of strings
             dosage: data.dosage,
-            frequency: data.frequency,
+            frequency: String(data.frequency), // as string if backend expects string
             unit: data.unit,
           })
         ),
