@@ -49,11 +49,11 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
     return {
       success: true,
       data: patients.map((el) => ({
-        id: el.user.id,
-        first_name: el.user.first_name,
-        middle_name: el.user.middle_name,
-        last_name: el.user.first_name,
-        email: el.user.email,
+        id: el.patient.id,
+        first_name: el.patient.first_name,
+        middle_name: el.patient.middle_name,
+        last_name: el.patient.first_name,
+        email: el.patient.email,
       })),
     };
   } else if (userType === 'ADMIN') {
