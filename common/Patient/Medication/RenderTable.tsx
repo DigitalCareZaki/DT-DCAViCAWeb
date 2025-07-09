@@ -16,6 +16,8 @@ const RenderTable: ClientComponent = () => {
     StorePatientState
   >((state) => state.patients);
 
+  console.log('patientMedicationListing >>>.', patientMedicationListing);
+
   return (
     <>
       {patientMedicationListing?.map((el) => (
@@ -34,10 +36,12 @@ const RenderTable: ClientComponent = () => {
           </td>
           <td className="px-6 py-4">{new Date(el.end_date).toDateString()}</td>
           <td className="px-6 py-4">
-            {new Date(el.time).toLocaleTimeString()}
+            {Array.isArray(el.time)
+              ? el.time.join(', ')
+              : el.time}
           </td>
-          <td className="px-6 py-4">{el.dosage}</td>
           <td className="px-6 py-4">{el.frequency} per day</td>
+          <td className="px-6 py-4">{el.dosage}</td>
           <td className="px-6 py-4">{el.unit}</td>
           <td className="px-6 py-4">
             {'Dr. ' +
