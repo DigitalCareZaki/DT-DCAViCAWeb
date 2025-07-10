@@ -19,11 +19,9 @@ const RenderTable: ClientComponentProps<any> = ({ data }: any) => {
               {el.name}
             </th>
             <td className="px-6 py-4">
-              {new Date(el.start_date).toLocaleDateString()}
+              {new Date(el.start_date).toDateString()}
             </td>
-            <td className="px-6 py-4">
-              {new Date(el.end_date).toLocaleTimeString()}
-            </td>
+            <td className="px-6 py-4">{new Date(el.end_date).toDateString()}</td>
             <td className="px-6 py-4">
               {Array.isArray(el.time)
                 ? el.time.join(', ')
