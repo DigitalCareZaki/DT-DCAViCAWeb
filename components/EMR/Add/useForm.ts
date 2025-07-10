@@ -38,34 +38,32 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (!selectedFile) throw new Error('Please select image');
-
       setLoading(true);
 
-      const formdata = new FormData();
-
-      formdata.append('file', selectedFile);
-
-      const res = await uploadFile(formdata);
-
-      if (!res.success) {
-        throw new Error(res?.message ?? 'File upload failed');
+      let uri = null;
+      if (selectedFile) {
+        const formdata = new FormData();
+        formdata.append('file', selectedFile);
+        const res = await uploadFile(formdata);
+        if (!res.success) {
+          throw new Error(res?.message ?? 'File upload failed');
+        }
+        uri = res.url;
       }
 
       const payload = {
         patient_id: patient_id,
-        uri: res.url,
+        uri: uri,
         title: data.title,
         description: data.description,
         type,
       };
 
-
       const result = await addPatientEMRRecord(btoa(JSON.stringify(payload)));
-
+      console.log('result >>>', result);
 
       if (!result.success) {
-        throw new Error(res?.message ?? 'Failed to add EMR record');
+        throw new Error(result?.message ?? 'Failed to add EMR record');
       }
 
       // dispatch(setEmrRecordsSlice(result.));
