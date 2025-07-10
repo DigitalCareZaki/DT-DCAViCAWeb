@@ -13,19 +13,22 @@ import type { ClientComponent } from '@types';
 import { PatientCompliance, PatientCompliancePerPill } from '@types';
 import type { ReduxProps, StoreComplianceState } from '@store-types';
 
-type MedicationTableProps = Pick<PatientCompliancePerPill, 'medications'>;
+type MedicationWithCreatedAt = {
+  id: string;
+  name: string;
+  compliance: PatientCompliance;
+  created_at?: string;
+};
 
 const RenderTable = ({
   medications,
   selected,
   setMed,
-}: MedicationTableProps & {
+}: {
+  medications: MedicationWithCreatedAt[];
   selected: string;
   setMed: (id: string, data: PatientCompliance) => void;
 }) =>
-
-
-
   medications.map((el) => (
     <tr
       key={el.id}
@@ -41,6 +44,9 @@ const RenderTable = ({
       >
         {el.name}
       </th>
+      <td className="whitespace-nowrap px-6 py-4 text-gray-900">
+        {el.created_at ? new Date(el.created_at).toLocaleDateString() : '-'}
+      </td>
     </tr>
   ));
 
@@ -48,13 +54,7 @@ const MedicationTable: ClientComponent = () => {
   const { data, selected } = useSelector<ReduxProps, StoreComplianceState>(
     (state) => state.compliance
   );
-  const [medications, setMedications] = useState<
-    Array<{
-      id: string;
-      name: string;
-      compliance: PatientCompliance;
-    }>
-  >([]);
+  const [medications, setMedications] = useState<MedicationWithCreatedAt[]>([]);
   const [selectedId, setSelectedId] = useState<string>('');
 
   const dispatch = useDispatch();
@@ -71,7 +71,15 @@ const MedicationTable: ClientComponent = () => {
   }, []);
 
   useEffect(() => {
-    setMedications(data.medications);
+    // Map medications to include created_at if available from PatientMedicationProps
+
+    console.log('check >>>', data);
+    setMedications(
+      data.medications.map((med: any) => ({
+        ...med,
+        created_at: med.created_at,
+      }))
+    );
   }, [data.user.id]);
 
   useEffect(() => {
@@ -81,8 +89,7 @@ const MedicationTable: ClientComponent = () => {
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
-      <ClientTable heads={['Medication Name']}>
-
+      <ClientTable heads={['Medication Name', 'Created At']}>
         <RenderTable
           medications={medications}
           setMed={setMed}
