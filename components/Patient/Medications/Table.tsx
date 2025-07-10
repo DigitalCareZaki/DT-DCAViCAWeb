@@ -88,8 +88,8 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           'Start Date',
           'End Date',
           'Time',
-          'Dosage',
           'Frequency',
+          'Dosage',
           'Status',
           'Created At',
         ]}
