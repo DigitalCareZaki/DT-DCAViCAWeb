@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge';
 
 import type { ComplianceRenderProps } from './types';
 import type { ClientComponentProps } from '@types';
+import Link from 'next/link';
 
 type RenderTableProps = {
   selectedPatient: string;
@@ -42,7 +43,19 @@ const RenderTable: ClientComponentProps<any> = ({
             {`${el?.patient?.first_name || ''} ${el?.patient?.middle_name || ''} ${el?.patient?.last_name || ''}`}
           </th>
           <td className="px-6 py-4">{el?.patient?.email || 'N/A'}</td>
-          <td className="px-6 py-4">{el?.patient?.emr || 'No EMR'}</td>
+          <td className="px-6 py-4">
+            {el?.patient?.emr ? (
+              <Link
+                href={`/doctor/patient/medication?patient=${el?.patient?.id}`}
+                className="text-blue-600 underline cursor-pointer hover:text-blue-800"
+                onClick={e => e.stopPropagation()}
+              >
+                {el?.patient?.emr}
+              </Link>
+            ) : (
+              'No EMR'
+            )}
+          </td>
         </tr>
       ))}
       {/* old code  */}
