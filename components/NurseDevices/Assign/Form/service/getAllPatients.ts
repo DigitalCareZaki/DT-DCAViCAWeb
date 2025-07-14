@@ -44,6 +44,7 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
     userType === 'DOCTOR' ||
     userType === 'NURSE'
   ) {
+
     const patients: PatientListingData[] = res.data;
 
     return {
