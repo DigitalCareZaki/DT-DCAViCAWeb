@@ -35,6 +35,8 @@ const PatientNotification: FC<PatientNotificationProps> = ({ patient }) => {
         setLoading(true);
         const res = await getPatientNotifications(patient);
 
+
+
         if (res.success) {
           setData(res.data ?? []);
           dispatch(setNotificationsReducer({ data: res.data ?? [] }));
