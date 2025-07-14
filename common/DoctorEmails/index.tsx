@@ -25,6 +25,7 @@ const DoctorEmails: FC<{ patient: string }> = ({ patient }) => {
       try {
         setLoading(true);
         const res = await getDoctorEmailsHistory(patient);
+        console.log('res Get Doctor Email History >>>', res.data);
         if (res.success) {
           setData(res.data ?? []);
         }
