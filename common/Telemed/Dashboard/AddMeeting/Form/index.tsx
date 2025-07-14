@@ -43,9 +43,9 @@ const Form: ClientComponent = () => {
       onSubmit={onSubmit}
       className="h-full w-full rounded-b-2xl bg-white pb-10 text-lg"
     >
-      <div className="flex h-fit w-full flex-col gap-10 rounded-2xl bg-fuchsia-500 p-8">
+      <div className="flex h-fit w-full flex-col gap-10 rounded-2xl bg-teal-100 p-8">
         <div>
-          <span className="text-xl font-semibold text-white">
+          <span className="text-xl font-semibold text-teal-900">
             Book Appointment
           </span>
         </div>
@@ -60,13 +60,13 @@ const Form: ClientComponent = () => {
                   title="Invite participants"
                   overrideShow={0}
                   hideInfo
-                  labelClassName="text-white text-lg"
-                  inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent hover:bg-fuchsia-400"
-                  inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+                  labelClassName="text-teal-900 text-lg"
+                  inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400 hover:bg-teal-50"
+                  inputClassName="bg-transparent placeholder:text-teal-900 text-teal-900 text-lg"
                   icon="IoSearch"
-                  iconColor="#fff"
+                  iconColor="#14b8a6"
                   onChange={handleSearchUser}
-                  dropdownClassName="bg-fuchsia-200"
+                  dropdownClassName="bg-teal-50"
                 >
                   <ClientGenerator
                     data={users}
@@ -78,7 +78,7 @@ const Form: ClientComponent = () => {
               </div>
               <div className="h-10 w-32 shrink-0">
                 <ButtonPrimary
-                  className="w-full text-lg rounded-full text-white doctor:bg-fuchsia-600 patient:bg-fuchsia-600 nurse:bg-fuchsia-600"
+                  className="w-full text-lg rounded-full text-white !bg-[#0d9488] hover:bg-emerald-600"
                   name="Invite"
                 />
               </div>
@@ -93,29 +93,29 @@ const Form: ClientComponent = () => {
             name="title"
             placeholder="Enter appointment title"
             defaultBorder
-            inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
+            inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400"
             label="Appointment title"
-            inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+            inputClassName="bg-transparent placeholder:text-teal-900 text-teal-900 text-lg"
             hideInfo
-            labelClassName="text-white text-lg"
+            labelClassName="text-teal-900 text-lg"
             hookProps={register('title')}
             error={!!errors?.title?.message?.length}
             errorMessage={errors?.title?.message}
-            errorClassName="text-rose-200"
+            errorClassName="text-rose-400"
           />
           <InputBasic
             name="description"
             placeholder="Enter appointment description"
             defaultBorder
-            inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 patient:focus-within:border-fuchsia-100 nurse:focus-within:border-fuchsia-100 border-transparent"
+            inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400"
             label="Appointment description"
-            inputClassName="bg-transparent placeholder:text-fuchsia-200 text-fuchsia-100 text-lg"
+            inputClassName="bg-transparent placeholder:text-teal-900 text-teal-900 text-lg"
             hideInfo
-            labelClassName="text-white text-lg"
+            labelClassName="text-teal-900 text-lg"
             hookProps={register('description')}
             error={!!errors?.description?.message?.length}
             errorMessage={errors?.description?.message}
-            errorClassName="text-rose-200"
+            errorClassName="text-rose-400"
           />
           <div className="flex w-full items-center gap-4">
             <div className="w-1/2">
@@ -125,13 +125,13 @@ const Form: ClientComponent = () => {
                 borderTheme
                 icon="FaGenderless"
                 hideInfo
-                inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 border-transparent hover:bg-fuchsia-300"
-                labelClassName="text-white text-lg"
-                titleClassName="text-white text-lg"
-                iconColor="#fff"
+                inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400 hover:bg-teal-50"
+                labelClassName="text-teal-900 text-lg"
+                titleClassName="text-teal-900 text-lg"
+                iconColor="#14b8a6"
                 error={!!errors?.type?.message?.length}
                 errorMessage={errors?.type?.message}
-                errorClassName="text-rose-200"
+                errorClassName="text-rose-400"
                 selected={selectors.type}
               >
                 <TypeSelector handleSelect={handleSelect} />
@@ -144,13 +144,13 @@ const Form: ClientComponent = () => {
                 borderTheme
                 icon="FaGenderless"
                 hideInfo
-                inputWrapperClassName="bg-fuchsia-400 doctor:focus-within:border-fuchsia-100 border-transparent hover:bg-fuchsia-300"
-                labelClassName="text-white text-lg"
-                titleClassName="text-white text-lg"
-                iconColor="#fff"
+                inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400 hover:bg-teal-50"
+                labelClassName="text-teal-900 text-lg"
+                titleClassName="text-teal-900 text-lg"
+                iconColor="#14b8a6"
                 error={!!errors?.about?.message?.length}
                 errorMessage={errors?.about?.message}
-                errorClassName="text-rose-200"
+                errorClassName="text-rose-400"
                 selected={selectors.about}
               >
                 <AboutSelector handleSelect={handleSelect} />
@@ -165,7 +165,7 @@ const Form: ClientComponent = () => {
 
       <div className="w-full p-2 px-10 pb-0 pt-10">
         <ButtonPrimary
-          className="h-14 text-lg w-full doctor:bg-fuchsia-500 patient:bg-fuchsia-500 nurse:bg-fuchsia-500"
+          className="h-14 text-lg w-full !bg-[#0d9488] hover:bg-emerald-600 text-white"
           name="Create Appointment"
           loading={loading}
         />
