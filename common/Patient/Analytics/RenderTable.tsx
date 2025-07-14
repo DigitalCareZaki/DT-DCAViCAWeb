@@ -10,11 +10,14 @@ import { CircleSpinner } from 'react-spinners-kit';
 import { IoDownload } from '@react-icons/all-files/io5/IoDownload';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { FaPhone } from '@react-icons/all-files/fa/FaPhone';
+import { useRouter } from 'next/navigation';
 const RenderTable: ClientComponent = () => {
 
   const { setPatientAppointmentsListing } = useSelector<any, any>(
     (state) => state.patients
   );
+  const router = useRouter();
 
   const handleDownload = (observation: any, organizer: any) => {
     const doc = new jsPDF();
@@ -90,15 +93,28 @@ const RenderTable: ClientComponent = () => {
             </td>
 
             <td className="px-6 py-4">
-              <div
-                onClick={() => {
-                  if (observation) handleDownload(observation, organizer);
-                }}
-                className={`theme-bg-color flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!observation ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                  }`}
-                title={observation ? 'Download' : 'Report not generated'}
-              >
-                <IoDownload size={16} color={observation ? 'white' : '#A0AEC0'} />
+              <div className="flex gap-2">
+                <div
+                  onClick={() => {
+                    if (observation) handleDownload(observation, organizer);
+                  }}
+                  className={`theme-bg-color flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!observation ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                    }`}
+                  title={observation ? 'Download' : 'Report not generated'}
+                >
+                  <IoDownload size={16} color={observation ? 'white' : '#A0AEC0'} />
+                </div>
+                <div
+                  onClick={() => {
+                    if (appointment?.id) {
+                      router.push(`/patient/telemed/meetings/view/${appointment.id}`);
+                    }
+                  }}
+                  className={`bg-green-500 flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!appointment?.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                  title={appointment?.id ? 'Join Meeting' : 'Meeting not available'}
+                >
+                  <FaPhone size={16} />
+                </div>
               </div>
             </td>
           </tr>
