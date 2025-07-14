@@ -12,12 +12,14 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { FaPhone } from '@react-icons/all-files/fa/FaPhone';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@selectors';
 const RenderTable: ClientComponent = () => {
 
   const { setPatientAppointmentsListing } = useSelector<any, any>(
     (state) => state.patients
   );
   const router = useRouter();
+  const [user] = useUser();
 
   const handleDownload = (observation: any, organizer: any) => {
 
@@ -107,8 +109,8 @@ const RenderTable: ClientComponent = () => {
                 </div>
                 <div
                   onClick={() => {
-                    if (appointment?.id) {
-                      router.push(`/patient/telemed/meetings/view/${appointment.id}`);
+                    if (appointment?.id && user?.type) {
+                      router.push(`/${user.type.toLowerCase()}/telemed/meetings/view/${appointment.id}`);
                     }
                   }}
                   className={`bg-green-500 flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!appointment?.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
