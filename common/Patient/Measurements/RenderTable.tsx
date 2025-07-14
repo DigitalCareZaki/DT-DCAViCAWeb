@@ -109,7 +109,12 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
 
                   var newData = data.map((item: any) => {
                     if (item.id == el.id) {
-                      return { ...item, updated_status: val, updated_status_by: user.name ?? (user.first_name ?? "") };
+                      return {
+                        ...item,
+                        updated_status: val,
+                        updated_status_by: user.name ?? (user.first_name ?? ""),
+                        updated_status_at: new Date().toISOString() // Add this line
+                      };
                     }
                     return item;
                   }
