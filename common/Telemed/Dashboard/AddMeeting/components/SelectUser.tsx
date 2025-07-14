@@ -17,8 +17,7 @@ const SelectUser: ClientComponentProps<SearchTelemedResProps | any> = ({
       onClick={() =>
         handleSelectUser({ id, first_name, middle_name, last_name, email })
       }
-      className="flex h-12 w-full shrink-0 cursor-pointer flex-col justify-center rounded-lg bg-fuchsia-500 px-4 text-xs text-white transition duration-200 hover:bg-fuchsia-600
-    "
+      className="flex h-12 w-full shrink-0 cursor-pointer flex-col justify-center rounded-lg bg-emerald-100 px-4 text-xs text-emerald-900 transition duration-200 hover:bg-emerald-200"
     >
       <span className="font-semibold">
         {getName({
@@ -27,7 +26,7 @@ const SelectUser: ClientComponentProps<SearchTelemedResProps | any> = ({
           middle_name,
         })}
       </span>
-      <span className=" text-[10px] text-fuchsia-200">{email}</span>
+      <span className="text-[10px] text-emerald-700">{email}</span>
     </div>
   );
 };

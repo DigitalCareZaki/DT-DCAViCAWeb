@@ -92,10 +92,10 @@ const Day: ClientComponentProps<DayProps> = ({ value, onSelect, selected }) => {
     <div
       onClick={handleSelect}
       className={twMerge(
-        'flex h-20 w-20 shrink-0 cursor-pointer flex-col items-center justify-center rounded-full transition duration-300 hover:scale-105 hover:bg-fuchsia-500 hover:text-fuchsia-200',
+        'flex h-20 w-20 shrink-0 cursor-pointer flex-col items-center justify-center rounded-full transition duration-300 hover:scale-105 hover:bg-emerald-400 hover:text-emerald-400',
         isActive
-          ? 'bg-fuchsia-500 text-fuchsia-200'
-          : 'bg-fuchsia-200 text-gray-500'
+          ? 'bg-emerald-500 text-fuchsia-200'
+          : 'bg-emerald-200 text-gray-500'
       )}
     >
       <span className="text-base font-medium">

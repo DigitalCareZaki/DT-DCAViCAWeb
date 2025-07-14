@@ -16,9 +16,9 @@ const TimeSlot: ClientComponentProps<TimeSlotProps> = ({
   const isActive = useMemo(
     () =>
       new Date(startTime as any).getTime() ===
-        new Date(selectedTimeSlot?.startTime as any).getTime() &&
+      new Date(selectedTimeSlot?.startTime as any).getTime() &&
       new Date(endTime as any).getTime() ===
-        new Date(selectedTimeSlot?.endTime as any).getTime(),
+      new Date(selectedTimeSlot?.endTime as any).getTime(),
     [startTime, endTime, selectedTimeSlot]
   );
 
@@ -30,8 +30,8 @@ const TimeSlot: ClientComponentProps<TimeSlotProps> = ({
     <div
       onClick={handleSelect}
       className={twMerge(
-        'flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-xs font-semibold  transition duration-200 hover:bg-fuchsia-500 hover:text-white',
-        isActive ? 'bg-fuchsia-500 text-white' : 'bg-fuchsia-100 text-gray-600'
+        'flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-xs font-semibold transition duration-200 hover:bg-emerald-500 hover:text-white',
+        isActive ? '!bg-emerald-500 text-white' : '!bg-emerald-100 text-emerald-900'
       )}
     >
       {title}

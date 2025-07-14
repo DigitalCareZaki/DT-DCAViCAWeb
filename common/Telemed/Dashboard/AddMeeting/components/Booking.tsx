@@ -164,7 +164,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
           {slotP && slotP.endTime && slotP.startTime &&
             <>
 
-              <div className="flex gap-1 rounded-full bg-fuchsia-500 p-2 px-4 text-xs text-fuchsia-50">
+              <div className="flex gap-1 rounded-full bg-emerald-500 p-2 px-4 text-xs text-fuchsia-50">
                 <span className='text-lg'>
                   {new Date().toLocaleDateString('en-US', {
                     month: 'long',

@@ -127,7 +127,7 @@ export const SelectedUser: ClientComponentProps<SelectedUserProps & any> = ({
         }}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        className="flex h-9 w-fit items-center gap-4 rounded-full bg-fuchsia-400 p-2 px-4 text-xs font-semibold text-white transition-all"
+        className="flex h-9 w-fit items-center gap-4 rounded-full bg-emerald-100 p-2 px-4 text-xs font-semibold text-emerald-900 transition-all"
       >
         {getName({
           first_name,
@@ -151,7 +151,7 @@ export const SelectedUser: ClientComponentProps<SelectedUserProps & any> = ({
               animate={{ opacity: 1, width: 20, height: 20 }}
               exit={{ opacity: 0, width: 0 }}
               onAnimationComplete={() => setAnimationCompleted(true)}
-              className="flex h-fit w-fit cursor-pointer items-center justify-center rounded-full bg-fuchsia-500 transition duration-200 hover:scale-[110%]"
+              className="flex h-fit w-fit cursor-pointer items-center justify-center rounded-full bg-emerald-500 transition duration-200 hover:scale-[110%] hover:bg-emerald-600"
             >
               {animationComplete && <IoClose />}
             </motion.div>
