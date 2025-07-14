@@ -80,7 +80,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         diagnosis: data?.diagnosis,
         medications: data?.prescribedMedications,
         procedure: data?.procedureRecommended,
-        follow_up_date: new Date(data?.follow_up_date)
+        follow_up_date: new Date(data?.followupDate)
       };
 
 

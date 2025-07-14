@@ -23,6 +23,8 @@ const Record: ClientComponentProps<any> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
+
+
   const handleDownload = useCallback(() => {
     setLoading(true);
     if (uri) {
@@ -44,6 +46,9 @@ const Record: ClientComponentProps<any> = ({
   }, [onDelete]);
 
   return (
+
+
+
     <tr className="border-b odd:bg-white even:bg-gray-50">
       {/* Profile Picture */}
       <th
@@ -63,18 +68,18 @@ const Record: ClientComponentProps<any> = ({
           />
         </div> */}
       </th>
-      {/* <td className="px-6 py-4">
+      <td className="px-6 py-4">
         {getName({
           first_name: patient.user.first_name,
           last_name: patient.user.last_name,
           middle_name: patient.user.middle_name,
         })}
       </td>
-      <td className="px-6 py-4">{title}</td>
+      {/* <td className="px-6 py-4">{title}</td>
       <td className="px-6 py-4">{family_history ?? 'N/A'}</td> */}
 
       {/* Patient Name */}
-      {showPatientNameColumn && (
+      {/* {showPatientNameColumn && (
         <td className="px-6 py-4">
           {getName({
             first_name: patient.user.first_name,
@@ -82,7 +87,7 @@ const Record: ClientComponentProps<any> = ({
             middle_name: patient.user.middle_name,
           })}
         </td>
-      )}
+      )} */}
 
 
       {/* Title */}

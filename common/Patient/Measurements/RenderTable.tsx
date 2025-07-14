@@ -215,7 +215,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
             <h2 className="text-2xl mb-4">Log Details</h2>
             <p className='pb-2'>Updated at:
               {
-                (selectedMeasurement.updated_status_at == null) ? "No Update" : new Date(selectedMeasurement.updated_status_at).toLocaleString()
+                selectedMeasurement.updated_status_at == null ? "No Update" : new Date(selectedMeasurement.updated_status_at).toLocaleString()
               }
             </p>
             <p className='pb-2'>Updated by:

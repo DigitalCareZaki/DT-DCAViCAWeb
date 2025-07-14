@@ -20,6 +20,7 @@ const RenderTable: ClientComponent = () => {
   const router = useRouter();
 
   const handleDownload = (observation: any, organizer: any) => {
+
     const doc = new jsPDF();
 
     // Header Title

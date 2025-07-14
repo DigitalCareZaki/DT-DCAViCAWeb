@@ -19,6 +19,7 @@ const Table: ClientComponent = () => {
       <ClientTable
         heads={[
           '',
+          'Patient Name',
           'Title',
           'Description',
           // 'Started',

@@ -17,9 +17,15 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false); // ✅ loader state
+
+
   const fetchReports = async (pageNumber: number) => {
     setLoading(true); // ✅ start loader
     const response = await getAllPatientsReports(pageNumber, 10);
+
+    const filterData = Array.isArray(response.data.data)
+      ? response.data.data.filter((e: any) => e.type && e.type.toUpperCase() === "RECORD")
+      : []
 
     if (!response.success) {
       setLoading(false); // ✅ stop loader
@@ -29,7 +35,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
     if (response.success) {
       setLoading(false); // ✅ stop loader
 
-      dispatch(setEmrRecordsSlice({ records: response?.data.data }));
+      dispatch(setEmrRecordsSlice({ records: filterData }));
       setHasNextPage(response.data.pagination?.hasNextPage);
     }
   };
