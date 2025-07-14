@@ -363,26 +363,33 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
 
   return (
     <div className="flex h-12 w-fit items-center justify-center gap-3 rounded-full bg-dark-secondary px-6 shadow-2xl">
-      <button title="Options" className="meeting-bar-btn ">
-        <HiDotsVertical size={16} />
-      </button>
 
-      {/* New Button for Modal */}
-      <button
-        onClick={() => setIsModalOpen(true)}
-        title="Consultation Form"
-        className="meeting-bar-btn"
-      >
-        <FaInfoCircle size={16} />
-      </button>
+      {/* {user?.role !== 'PATIENT' && user?.type !== 'PATIENT' && (
+        <button title="Options" className="meeting-bar-btn ">
+          <HiDotsVertical size={16} />
+        </button>
+      )} */}
 
-      <button
-        onClick={handleShowVitals}
-        title="Patient Vitals"
-        className="meeting-bar-btn"
-      >
-        <MdShowChart size={16} />
-      </button>
+      {/* Show Consultation Form button only for non-patient users */}
+      {user?.role !== 'PATIENT' && user?.type !== 'PATIENT' && (
+        <button
+          onClick={() => setIsModalOpen(true)}
+          title="Consultation Form"
+          className="meeting-bar-btn"
+        >
+          <FaInfoCircle size={16} />
+        </button>
+      )}
+
+      {user?.role !== 'PATIENT' && user?.type !== 'PATIENT' && (
+        <button
+          onClick={handleShowVitals}
+          title="Patient Vitals"
+          className="meeting-bar-btn"
+        >
+          <MdShowChart size={16} />
+        </button>
+      )}
 
       <button
         onClick={handleToggleMic}
