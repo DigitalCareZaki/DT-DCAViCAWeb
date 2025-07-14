@@ -20,7 +20,7 @@ const Table: ServerComponent = async () => {
       <ExportButton
         data={data.data.map((el) => ({
           emr: el.emr,
-          ...el.patient,
+          ...el.user,
         }))}
         headers={[
           {

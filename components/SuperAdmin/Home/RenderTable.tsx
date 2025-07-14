@@ -6,6 +6,9 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const RenderTable: ServerComponentProps<Props> = async ({ data, userType }) => {
+
+  console.log('data SuperAdmin >>>>>', data);
+
   return (
     <>
       {data.map((el, i) => (
@@ -19,13 +22,13 @@ const RenderTable: ServerComponentProps<Props> = async ({ data, userType }) => {
           >
             <Link
               passHref
-              href={`/${userType}/patient/profile?patient=${el?.patient?.id}`}
+              href={`/${userType}/patient/profile?patient=${el?.user?.id}`}
               className="hover:underline hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
             >
-              {`${el?.patient?.first_name} ${el?.patient?.middle_name || ''} ${el?.patient?.last_name}`}
+              {`${el?.user?.first_name} ${el?.user?.middle_name || ''} ${el?.user?.last_name}`}
             </Link>
           </th>
-          <td className="px-6 py-4">{el?.patient?.email}</td>
+          <td className="px-6 py-4">{el?.user?.email}</td>
           <td className="px-6 py-4">{el?.emr}</td>
           <td className="px-6 py-4">
             <div className="flex h-5 w-5 items-center justify-center rounded-full text-white doctor:bg-theme-doctor-primary nurse:bg-theme-nurse-primary">

@@ -127,7 +127,7 @@ export type PatientListingData = {
   emr: string;
   weight: null | number;
   height: null | number;
-  patient: {
+  user: {
     id: string;
     first_name: string;
     middle_name: string | null;
