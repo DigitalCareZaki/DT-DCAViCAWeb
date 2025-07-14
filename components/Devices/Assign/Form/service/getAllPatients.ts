@@ -54,6 +54,8 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
         middle_name: el.patient.middle_name,
         last_name: el.patient.first_name,
         email: el.patient.email,
+
+
       })),
     };
   } else if (userType === 'ADMIN') {
