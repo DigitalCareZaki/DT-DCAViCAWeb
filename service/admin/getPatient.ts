@@ -22,8 +22,6 @@ async function getPatient(page = 1, limit = 10): Promise<{
 
   const data = await res.json();
 
-  console.log('ress <<<<<<<<', data);
-
   return {
     success: res.ok,
     data: data.data,
