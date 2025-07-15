@@ -30,7 +30,7 @@ const TimeSlot: ClientComponentProps<TimeSlotProps> = ({
     <div
       onClick={handleSelect}
       className={twMerge(
-        'flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-xs font-semibold transition duration-200 hover:bg-emerald-500 hover:text-white',
+        'flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-xs font-semibold transition duration-200 hover:bg-emerald-500 hover:text-emerald-900',
         isActive ? '!bg-emerald-500 text-white' : '!bg-emerald-100 text-emerald-900'
       )}
     >
