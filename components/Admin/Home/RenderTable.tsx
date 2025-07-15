@@ -1,13 +1,12 @@
+'use client';
 import Link from 'next/link';
 
 import { MdCheck } from '@react-icons/all-files/md/MdCheck';
-
-import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 import { getName } from '@init-globals';
 
-const RenderTable: ServerComponentProps<Props> = async ({ data, userType }) => {
+const RenderTable = ({ data, userType }: Props) => {
   return (
     <>
       {data.map((el, i) => (
