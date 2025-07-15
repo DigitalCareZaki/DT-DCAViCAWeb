@@ -4,6 +4,11 @@ import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 
 const RenderTable: ClientComponentProps<any> = ({ data }: any) => {
+
+
+  console.log('data Check>>>>', data);
+
+
   return (
     <>
       {data.map((el: any) =>
@@ -26,13 +31,14 @@ const RenderTable: ClientComponentProps<any> = ({ data }: any) => {
               <span
                 className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-base font-semibold text-blue-700 border border-blue-300"
               >
-                {(() => {
-                  const labels = ['1st', '2nd', '3rd'];
-                  const alertIndex = el.patient_medication_alerts.findIndex((a: any) => a.id === item.id);
-                  const label = labels[alertIndex] || `${alertIndex + 1}th`;
-                  return `${label}: ${item.alert_time ? new Date(item.alert_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}`;
-                })()}
+                {Array.isArray(el.time)
+                  ? el.time.join(', ')
+                  : el.time}
               </span>
+
+              {/* {Array.isArray(el.time)
+                ? el.time.join(', ')
+                : el.time} */}
             </td>
             <td className="px-6 py-4">{el.frequency}</td>
             <td className="px-6 py-4">{el.dosage}</td>
