@@ -47,6 +47,9 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
   }, [patientMeasurementListing]);
   const [forceRender, setForceRender] = useState(false);
 
+  console.log('data kia update howa han>>>>>>', data);
+
+
   return (
     <>
       {data?.map((el: any) => (
@@ -230,7 +233,7 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
               }
             </p>
             <p className='pb-2'>Action: {
-              selectedMeasurement.updated_status == 0 ? 'Called Patient' : selectedMeasurement.updated_status == 1 ? 'Contacted Doctor' : selectedMeasurement.updated_status == 2 ? 'Contacted Other' : selectedMeasurement.updated_status == null ? 'No Update' : 'No, action Required'
+              selectedMeasurement.updated_status == 0 ? 'Called Patient' : selectedMeasurement.updated_status == 1 ? 'Contacted Doctor' : selectedMeasurement.updated_status == 2 ? 'Contacted Other' : selectedMeasurement.updated_status == 3 ? 'No, action Required' : selectedMeasurement.updated_status == 4 ? 'False alarm' : 'Close alert'
             }</p>
             <button
               // move it to right
