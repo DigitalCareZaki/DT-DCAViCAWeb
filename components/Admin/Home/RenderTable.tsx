@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-
 import { MdCheck } from '@react-icons/all-files/md/MdCheck';
 import type { Props } from './types';
 

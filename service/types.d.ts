@@ -206,6 +206,16 @@ export type GetCurrentOrganization = {
 export type GetOrganizationPatients = {
   success: boolean;
   data: PatientListingData[];
+  pagination: {
+    totalItems: number;
+    perPage: number;
+    currentPage: number,
+    totalPages: number,
+    hasNextPage: boolean,
+    hasPrevPage: boolean,
+    nextPage: number | null,
+    prevPage: number | null,
+  };
 };
 
 export type GetOrganizationBranches = {

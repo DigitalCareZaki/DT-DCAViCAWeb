@@ -12,6 +12,8 @@ import { getAdminPatient } from '@service';
 const Table = () => {
   const [data, setData] = useState<SuperAdminPatientListProps[]>([]);
   const [pagination, setPagination] = useState({
+    totalItems: 1,
+    perPage: 10,
     currentPage: 1,
     totalPages: 1,
     hasNextPage: false,
@@ -43,7 +45,6 @@ const Table = () => {
     fetchData(page);
   };
 
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
