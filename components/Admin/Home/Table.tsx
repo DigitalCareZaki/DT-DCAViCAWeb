@@ -26,9 +26,6 @@ const Table = () => {
     setLoading(true);
     const userTypeHeader = await getUserTypeHeaders();
     const res = await getAdminPatient(page, 10);
-
-    console.log('data with pagination client >>>>', res);
-
     if (res.success) {
       setUserType(userTypeHeader?.toLowerCase() ?? 'doctor');
       setData(res?.data);
