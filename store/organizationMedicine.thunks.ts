@@ -1,6 +1,7 @@
 import { setOrganizationMedicines, addOrganizationMedicine } from '../store/organizationMedicine.slice';
 import apiGetOrganizationMedicines from '../service/superadmin/getOrganizationMedicines';
 import addAdminOrganizationMedicine from '../service/superadmin/addAdminMedicines';
+import { updateAdminOrganizationMedicine } from '../service/superadmin/addAdminMedicines';
 import type { OrganizationMedicineProps } from '../types/data';
 
 // Thunk to fetch all medicines
@@ -16,6 +17,19 @@ export const addOrganizationMedicineAndUpdate = (medicine: string) => async (dis
     const res = await addAdminOrganizationMedicine(btoa(JSON.stringify({ name: medicine })));
     if (res.success) {
         // After adding, fetch the updated list
+        const fetchRes = await apiGetOrganizationMedicines();
+        if (fetchRes.success) {
+            dispatch(setOrganizationMedicines(fetchRes.data));
+        }
+    }
+    return res;
+};
+
+// Thunk to update a medicine and update store
+export const updateOrganizationMedicineAndUpdate = (medicineId: string, name: string) => async (dispatch: any) => {
+    const res = await updateAdminOrganizationMedicine(medicineId, name);
+    if (res.success) {
+        // After updating, fetch the updated list
         const fetchRes = await apiGetOrganizationMedicines();
         if (fetchRes.success) {
             dispatch(setOrganizationMedicines(fetchRes.data));

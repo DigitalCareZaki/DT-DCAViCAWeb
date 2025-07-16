@@ -4,12 +4,21 @@ import { InputBasic, ButtonPrimary } from '@common';
 interface MedicineModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (medicine: string) => void;
+    onAdd?: (medicine: string) => void;
+    isEdit?: boolean;
+    initialValue?: string;
+    onUpdate?: (medicine: string) => void;
 }
 
-const MedicineModal: React.FC<MedicineModalProps> = ({ isOpen, onClose, onAdd }) => {
-    const [medicine, setMedicine] = useState('');
+const MedicineModal: React.FC<MedicineModalProps> = ({ isOpen, onClose, onAdd, isEdit = false, initialValue = '', onUpdate }) => {
+    const [medicine, setMedicine] = useState(initialValue);
     const [error, setError] = useState('');
+
+    // Reset input when modal opens/closes or initialValue changes
+    React.useEffect(() => {
+        setMedicine(initialValue);
+        setError('');
+    }, [isOpen, initialValue]);
 
     if (!isOpen) return null;
 
@@ -19,7 +28,11 @@ const MedicineModal: React.FC<MedicineModalProps> = ({ isOpen, onClose, onAdd })
             setError('Medicine name is required');
             return;
         }
-        onAdd(medicine.trim());
+        if (isEdit && onUpdate) {
+            onUpdate(medicine.trim());
+        } else if (onAdd) {
+            onAdd(medicine.trim());
+        }
         setMedicine('');
         setError('');
     };
@@ -60,7 +73,10 @@ const MedicineModal: React.FC<MedicineModalProps> = ({ isOpen, onClose, onAdd })
                         error={!!error}
                         errorMessage={error || '&'}
                     />
-                    <ButtonPrimary name="Add" />
+                    <div className="flex flex-col gap-4 justify-end">
+                        <ButtonPrimary name={isEdit ? 'Update' : 'Add'} />
+                        <ButtonPrimary name="Close" type="button" onClick={onClose} />
+                    </div>
                 </form>
             </div>
         </div>

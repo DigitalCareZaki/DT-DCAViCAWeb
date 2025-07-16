@@ -37,4 +37,27 @@ async function addAdminOrganizationMedicine(data: any): Promise<any> {
   }
 }
 
+export async function updateAdminOrganizationMedicine(medicineId: string, name: string): Promise<any> {
+  try {
+    const res = await fetch(`/api/v1/web/organization/update-medicine/${medicineId}`, {
+      method: 'PUT',
+      cache: 'no-cache',
+      body: JSON.stringify({ name }),
+    });
+    const body = await res.json();
+    if (res.status !== 201) {
+      throw new Error(body?.message?.toString());
+    }
+    return {
+      success: true,
+      data: body,
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      message: err?.message ?? 'Something went wrong',
+    };
+  }
+}
+
 export default addAdminOrganizationMedicine;
