@@ -33,6 +33,7 @@ const Dropdown: ClientComponentProps<DropdownProps> = ({
   dropdownClassName,
   error,
   errorMessage,
+  disabled,
 }) => {
   const [user] = useUser();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -103,6 +104,7 @@ const Dropdown: ClientComponentProps<DropdownProps> = ({
           iconColor={iconColor}
           error={error}
           errorMessage={errorMessage}
+          disabled={disabled}
         />
       </div>
       <AnimatePresence>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 
 import {
   InputBasic,
@@ -21,18 +21,18 @@ import type { ClientComponent } from '@types';
 
 const Form: ClientComponent = () => {
   const params = useSearchParams();
-  const [assigned, setAssigned] = useState(false);
+  // const [assigned, setAssigned] = useState(false);
   const deviceId = params?.get('id') ?? '';
 
-  useEffect(() => {
-    async function fetchDevice() {
-      if (!deviceId) return;
-      const res = await getSingleDevice(deviceId);
+  // useEffect(() => {
+  //   async function fetchDevice() {
+  //     if (!deviceId) return;
+  //     const res = await getSingleDevice(deviceId);
 
-      if (res?.success) setAssigned(!!res.data.assigned);
-    }
-    fetchDevice();
-  }, [deviceId]);
+  //     if (res?.success) return;
+  //   }
+  //   fetchDevice();
+  // }, [deviceId]);
 
   const [
     register,
@@ -81,6 +81,7 @@ const Form: ClientComponent = () => {
             labelClassName="text-gray-600"
             inputClassName="bg-transparent placeholder:text-gray-600"
             icon="IoSearch"
+            disabled={selectedPatients.length > 0}
             // onClear={onClear}
             onChange={handleSearchPatients}
             dropdownClassName="bg-gray-200"
@@ -92,11 +93,11 @@ const Form: ClientComponent = () => {
               <SelectPatient />
             </ClientGenerator>
           </InputDropdown>
-          {assigned && (
+          {/* {assigned && (
             <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center z-10 rounded-lg cursor-not-allowed">
               <span className="text-red-500 font-semibold">This device is already assigned. Unassign to re-assign.</span>
             </div>
-          )}
+          )} */}
         </div>
         <div className="flex flex-wrap gap-2">
           <ClientGenerator
@@ -107,7 +108,7 @@ const Form: ClientComponent = () => {
           </ClientGenerator>
         </div>
       </div>
-      <ButtonPrimary title="Update" name="Update" loading={loading} disabled={assigned} />
+      <ButtonPrimary title="Update" name="Update" loading={loading} />
       <ButtonPrimary type='button' title="Close" name="Close" loading={loading} onClick={() => router.back()} />
     </form>
   );
