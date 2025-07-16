@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useMemo, ChangeEvent } from 'react';
+import { useCallback, useState, useMemo, ChangeEvent, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,7 @@ import { vestResolver } from '@hookform/resolvers/vest';
 import { showModalReducer } from '@slice';
 import { searchTelemedUsers, addTelemed } from '@service';
 import { debounce } from '@init-globals';
+import { getRequestedAppointments } from '@service';
 
 import { validator } from './validator';
 
@@ -16,9 +17,14 @@ import type { ModalState } from '@store-types';
 import type { AddAppointmentProps, UseFormProps } from './types';
 import type { SearchTelemedResProps } from '@types';
 
-const useFormHook: UseFormProps = () => {
+// Accept options object with setAppointments
+interface UseFormOptions {
+  setAppointments?: (appointments: any[]) => void;
+}
+const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
   const dispatch = useDispatch();
   const router = useRouter();
+
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selectors, setSelectors] = useState<{
@@ -40,6 +46,7 @@ const useFormHook: UseFormProps = () => {
   );
 
   const [users, setUsers] = useState<SearchTelemedResProps[]>([]);
+
 
   const [searching, setSearching] = useState<boolean>(false);
 
@@ -134,7 +141,6 @@ const useFormHook: UseFormProps = () => {
         end_date: selectedTime.endTime,
         users: selectedUsers.map((u) => u.id),
       };
-
       const res = await addTelemed(btoa(JSON.stringify(payload)));
 
       if (!res.success) {
@@ -153,7 +159,13 @@ const useFormHook: UseFormProps = () => {
         show: true,
       });
 
-      router.back();
+      // Fetch latest appointments after successful add
+      const appointmentsRes = await getRequestedAppointments();
+      if (setAppointments) {
+        setAppointments(appointmentsRes.data || []);
+        router.back();
+      }
+      // Do not navigate away
     } catch (err: any) {
       handleShowModal({
         show: true,

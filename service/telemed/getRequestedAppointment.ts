@@ -11,7 +11,9 @@ async function getRequestedAppointments({ pending }: { pending?: boolean } = {})
   if (pending !== undefined) {
     url += `?pending=${pending}`;
   }
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    cache: 'no-store',
+  });
   const data = await res.json();
   return {
     data,

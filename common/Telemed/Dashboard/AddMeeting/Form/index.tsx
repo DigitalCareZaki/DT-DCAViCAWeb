@@ -18,9 +18,9 @@ import {
 } from '../components/Selectors';
 import SelectUser from '../components/SelectUser';
 
-import type { ClientComponent } from '@types';
+import type { UseFormProps } from './types';
 
-const Form: ClientComponent = () => {
+const Form = ({ user, appointments, setAppointments }: any) => {
   const [
     register,
     onSubmit,
@@ -36,7 +36,7 @@ const Form: ClientComponent = () => {
     handleSelectUser,
     selectedUsers,
     handleRemove,
-  ] = useForm();
+  ] = useForm({ setAppointments }) as ReturnType<any>;
 
   return (
     <form
