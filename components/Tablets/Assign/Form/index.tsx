@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-
+import { useEffect, useState } from 'react';
 import {
   InputBasic,
   InputDropdown,
@@ -13,13 +13,25 @@ import useForm from './useForm';
 import { useRouter } from 'next/navigation'
 import SelectPatient from './SelectPatient';
 import SelectedPatient from './SelectedPatient';
-
+import { getSingleTablet } from '@service';
 import type { ClientComponent } from '@types';
 
 const Form: ClientComponent = () => {
   const params = useSearchParams();
-
+  const [assigned, setAssigned] = useState(false);
+  const tabletId = params?.get('id') ?? '';
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchDevice() {
+      if (!tabletId) return;
+      const res = await getSingleTablet(tabletId);
+
+      if (res?.success) setAssigned(true);
+    }
+    fetchDevice();
+  }, [tabletId]);
+
 
   const [
     register,
@@ -32,7 +44,7 @@ const Form: ClientComponent = () => {
     selectedPatients,
     handleSelectPatient,
     handleRemovePatient,
-  ] = useForm(params?.get('id') ?? '');
+  ] = useForm(tabletId);
 
   return (
     <form
@@ -66,6 +78,7 @@ const Form: ClientComponent = () => {
             labelClassName="text-gray-600"
             inputClassName="bg-transparent placeholder:text-gray-600"
             icon="IoSearch"
+            disabled={selectedPatients.length > 0}
             // onClear={onClear}
             onChange={handleSearchPatients}
             dropdownClassName="bg-gray-200"
