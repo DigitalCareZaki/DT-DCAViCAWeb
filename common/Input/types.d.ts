@@ -76,6 +76,7 @@ export interface DropdownProps {
   dropdownClassName?: string;
   error?: boolean;
   errorMessage?: string;
+  disabled?: boolean
 }
 
 export interface DropdownWithoutStateProps extends DropdownProps {
