@@ -24,10 +24,8 @@ const Form: ClientComponent = () => {
 
   useEffect(() => {
     async function fetchDevice() {
-      if (!tabletId) return;
       const res = await getSingleTablet(tabletId);
-
-      if (res?.success) setAssigned(true);
+      if (res?.success) setAssigned(!!res.data.assigned);
     }
     fetchDevice();
   }, [tabletId]);
