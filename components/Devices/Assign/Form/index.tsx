@@ -29,7 +29,7 @@ const Form: ClientComponent = () => {
       if (!deviceId) return;
       const res = await getSingleDevice(deviceId);
 
-      if (res?.success) setAssigned(!!res.data.assigned);
+      if (res?.success) setAssigned(true);
     }
     fetchDevice();
   }, [deviceId]);
