@@ -345,7 +345,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
                 />
               </Link>
 
-              <Link
+              {/* <Link
                 className="h-full w-full"
                 href={getPath('/contacts')}
                 passHref
@@ -354,7 +354,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
                   title="Contact Details"
                   onClick={handleDropDownOption}
                 />
-              </Link>
+              </Link> */}
 
               {/* <Link
                 className="h-full w-full"
