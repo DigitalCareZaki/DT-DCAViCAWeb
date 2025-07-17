@@ -5,10 +5,6 @@ import type { TableProps } from './types';
 
 const RenderTable: ClientComponentProps<any> = ({ data }: any) => {
 
-
-  console.log('data Check>>>>', data);
-
-
   return (
     <>
       {data.map((el: any) =>
