@@ -7,6 +7,7 @@ import Patient from "../components/Appointment";
 import { getRequestedAppointments, getUser } from '@service';
 import type { UserRole } from "@types";
 import { BiLoaderAlt } from "react-icons/bi";
+import PatientLoader from "../../../Loader/PatientLoader";
 
 async function fetchAppointments() {
   const appointmentsRes = await getRequestedAppointments();
@@ -22,33 +23,30 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
 
   const [appointments, setAppointments] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      // setLoading(true);
+      setLoading(true);
       const [appointmentsRes, userRes] = await Promise.all([
         fetchAppointments(),
         fetchUser(),
       ]);
       setAppointments(appointmentsRes.data || []);
       setUser(userRes || null);
-      // setLoading(false);
+      setLoading(false);
     }
     loadData();
   }, []);
 
+  if (loading) {
+    return <PatientLoader />;
+  }
 
   return (
     <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4 relative">
-      {user ? <PrimaryHeader user={user as any} /> : <BiLoaderAlt />}
+      <PrimaryHeader user={user as any} />
       <Topbar userType={userType as UserRole} />
-      {/* Show a small loader in the top-right corner if loading, but keep the list visible */}
-      {/* {loading && (
-        <div className="absolute top-2 right-2 z-10">
-          <BiLoaderAlt />
-        </div>
-      )} */}
       <div className="grid w-full grid-cols-4 flex-wrap gap-4 1000:grid-cols-3 1300:grid-cols-4 1600:grid-cols-5">
         <ClientGenerator data={appointments} dynamicWidth>
           <Patient />
