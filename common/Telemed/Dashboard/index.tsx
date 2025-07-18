@@ -27,11 +27,11 @@ const Dashboard: ServerComponent = async () => {
   return (
     <div className="hidescrollbar flex !h-full w-full flex-col gap-6 !overflow-y-scroll px-4">
       {/* Conditionally render PrimaryHeader only if user is defined */}
-      {user ? (
+      {/* {user ? (
         <PrimaryHeader user={user as any} />
       ) : (
         <BiLoaderAlt />
-      )}
+      )} */}
 
       <Widgets data={res?.data} />
 

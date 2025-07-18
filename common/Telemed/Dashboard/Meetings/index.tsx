@@ -45,7 +45,7 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
 
   return (
     <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4 relative">
-      <PrimaryHeader user={user as any} />
+      {/* <PrimaryHeader user={user as any} /> */}
       <Topbar userType={userType as UserRole} />
       <div className="grid w-full grid-cols-4 flex-wrap gap-4 1000:grid-cols-3 1300:grid-cols-4 1600:grid-cols-5">
         <ClientGenerator data={appointments} dynamicWidth>
