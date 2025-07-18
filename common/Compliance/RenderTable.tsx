@@ -18,9 +18,6 @@ const RenderTable: ClientComponentProps<any> = ({
 
 }) => {
 
-  console.log('data emr kia a raha han>>>.', data);
-
-
   return (
     <>
       {data?.data?.map((el: any, i: number) => (

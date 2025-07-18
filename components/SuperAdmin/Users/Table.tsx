@@ -27,6 +27,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
         <ExportButton
           data={data.map((el) => ({
             full_name: `${el.first_name} ${el.last_name}`,
+            branch: el.associated_branches[0].name,
             ...el,
           }))}
           headers={[
@@ -49,6 +50,14 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
             {
               label: 'Role',
               key: 'role',
+            },
+            {
+              label: 'Gender',
+              key: 'gender',
+            },
+            {
+              label: 'Branch',
+              key: 'branch',
             },
           ]}
           filename="User Data"

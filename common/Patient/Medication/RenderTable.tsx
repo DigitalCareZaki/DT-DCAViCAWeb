@@ -16,7 +16,6 @@ const RenderTable: ClientComponent = () => {
     StorePatientState
   >((state) => state.patients);
 
-  console.log('patientMedicationListing >>>.', patientMedicationListing);
 
   return (
     <>

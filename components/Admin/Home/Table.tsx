@@ -46,9 +46,6 @@ const Table = () => {
   };
 
 
-  console.log('data >>>>>>', data);
-
-
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
       <ExportButton

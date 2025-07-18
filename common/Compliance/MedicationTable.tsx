@@ -72,8 +72,6 @@ const MedicationTable: ClientComponent = () => {
 
   useEffect(() => {
     // Map medications to include created_at if available from PatientMedicationProps
-
-    console.log('check >>>', data);
     setMedications(
       data.medications.map((med: any) => ({
         ...med,

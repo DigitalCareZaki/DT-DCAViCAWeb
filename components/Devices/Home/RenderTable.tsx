@@ -11,7 +11,6 @@ import type { Props } from './types';
 
 const RenderTable: ServerComponentProps<Props> = async ({ userRole, data }) => {
 
-  console.log('RenderTable data:', data);
 
   return (
     <>

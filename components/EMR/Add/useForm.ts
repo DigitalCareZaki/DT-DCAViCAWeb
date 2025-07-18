@@ -60,7 +60,6 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
       };
 
       const result = await addPatientEMRRecord(btoa(JSON.stringify(payload)));
-      console.log('result >>>', result);
 
       if (!result.success) {
         throw new Error(result?.message ?? 'Failed to add EMR record');
