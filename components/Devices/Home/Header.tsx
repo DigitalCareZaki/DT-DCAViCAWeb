@@ -7,6 +7,9 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const Header: ServerComponentProps<Props> = async ({ userRole, data }) => {
+
+  console.log('devices  >>>>>>', data);
+
   return (
     <div className="flex w-full justify-between px-4 py-4 sm:px-6 lg:px-8">
       <span className="screen-title text-xl font-semibold text-gray-800 sm:text-2xl lg:text-3xl">
@@ -25,6 +28,8 @@ const Header: ServerComponentProps<Props> = async ({ userRole, data }) => {
         <ExportButton
           data={data.map((el) => ({
             ...el,
+            status: el.assigned === true ? "Assigned" : "Un Assigned",
+            created_at: new Date(el.created_at).toLocaleDateString(),
             created_by: `${el.created_by.first_name} ${el.created_by.last_name}`,
           }))}
           headers={[
@@ -47,6 +52,14 @@ const Header: ServerComponentProps<Props> = async ({ userRole, data }) => {
             {
               label: 'Created By',
               key: 'created_by',
+            },
+            {
+              label: 'Status',
+              key: 'status',
+            },
+            {
+              label: 'Added On',
+              key: 'created_at',
             },
           ]}
           filename="Devices List"

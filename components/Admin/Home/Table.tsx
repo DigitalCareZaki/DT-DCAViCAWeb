@@ -46,11 +46,17 @@ const Table = () => {
   };
 
 
+  console.log('data >>>>>>', data);
+
+
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
       <ExportButton
         data={data.map((el) => ({
           emr: el.patient.emr,
+          assigned_doctor: `${el.patient.first_assigned_doctor?.user.first_name ? el.patient.first_assigned_doctor?.user.first_name : ""} ${el.patient.first_assigned_doctor?.user.middle_name ? el.patient.first_assigned_doctor?.user.middle_name : ""} ${el.patient.first_assigned_doctor?.user.last_name ? el.patient.first_assigned_doctor?.user.last_name : ""}`,
+          height: el.patient.height,
+          weight: el.patient.weight,
           ...el,
         }))}
         headers={[
@@ -59,6 +65,9 @@ const Table = () => {
           { label: 'Last name', key: 'last_name' },
           { label: 'EMR', key: 'emr' },
           { label: 'Email', key: 'email' },
+          { label: 'Assigned Doctor', key: 'assigned_doctor' },
+          { label: 'Height', key: 'height' },
+          { label: 'Weight', key: 'weight' },
         ]}
         filename="Patient List Data"
       />
