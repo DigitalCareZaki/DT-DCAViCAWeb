@@ -47,8 +47,6 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
   }, [patientMeasurementListing]);
   const [forceRender, setForceRender] = useState(false);
 
-  console.log('data kia update howa han>>>>>>', data);
-
 
   return (
     <>
