@@ -30,7 +30,8 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
     transformOrigin: 'top left',
     width: '150%', // Compensates for the width scaling
     height: '150%', // Compensates for the height scaling
-    // Prevents overflow artifacts due to scaling
+    position: 'relative' as const,
+    zIndex: 0, // Base z-index for the scaled container
   };
 
 

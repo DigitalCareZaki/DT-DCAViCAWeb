@@ -14,8 +14,8 @@ const ViewMeeting: ServerComponentProps<Props> = async ({ id }) => {
   const res = await getTelemedDetails(id);
 
   return (
-    <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4">
-      <Header />
+    <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4 py-4">
+      {/* <Header /> */}
       <Topbar {...res.data} appointment_id={id} />
       <div className="flex h-[60vh] w-full items-center gap-4">
         <Participant participants={res.data.participants} />
