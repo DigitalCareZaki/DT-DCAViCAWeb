@@ -11,13 +11,13 @@ export default async function Page() {
 
     return (
         <main className="h-full w-full">
-            <div className="flex !h-full w-full flex-col gap-6 px-4">
+            {/* <div className="flex !h-full w-full flex-col gap-6 px-4">
                 {user ? (
                     <PrimaryHeader user={user as any} />
                 ) : (
                     <BiLoaderAlt />
                 )}
-            </div>
+            </div> */}
             <AnalyticsWrapper />
         </main>
 
