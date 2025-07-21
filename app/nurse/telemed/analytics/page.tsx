@@ -11,11 +11,11 @@ export default async function Page() {
 
     return (
         <div className=" flex h-full w-full flex-col gap-6 px-4">
-            {user ? (
+            {/* {user ? (
                 <PrimaryHeader user={user as any} />
             ) : (
                 <BiLoaderAlt />
-            )}
+            )} */}
             <AnalyticsWrapper />
         </div>
     );

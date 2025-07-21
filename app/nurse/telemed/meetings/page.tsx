@@ -20,11 +20,11 @@ export default async function Page() {
     // <main className="h-full w-full">
     <div className=" flex h-full w-full flex-col gap-6 px-4">
 
-      {user ? (
+      {/* {user ? (
         <PrimaryHeader user={user as any} />
       ) : (
         <BiLoaderAlt />
-      )}
+      )} */}
       <Topbar userType={userType as UserRole} />
       <div className="grid w-full grid-cols-4 flex-wrap gap-4 1000:grid-cols-3 1300:grid-cols-4 1600:grid-cols-5">
         <ServerGenerator data={res.data} dynamicWidth>

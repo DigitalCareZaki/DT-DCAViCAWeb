@@ -27,7 +27,7 @@ const AddMeeting = () => {
 
   return (
     <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4">
-      {user ? <PrimaryHeader user={user as any} /> : <BiLoaderAlt />}
+      {/* {user ? <PrimaryHeader user={user as any} /> : <BiLoaderAlt />} */}
       <div className="flex w-full justify-center">
         <div className="w-[70%] transform scale-90">
           <Form user={user} appointments={appointments} setAppointments={setAppointments} />
