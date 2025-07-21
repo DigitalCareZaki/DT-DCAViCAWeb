@@ -23,8 +23,8 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
   useEffect(() => {
     if (viewed && data.id) {
       viewArticlePost(data.id)
-        .then(() => {})
-        .catch(() => {});
+        .then(() => { })
+        .catch(() => { });
     }
   }, [data.id, viewed]);
 
@@ -43,7 +43,7 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
           <Image
             src={data.uri}
             alt="article-image"
-            className="rounded-lg object-cover"
+            className="rounded-lg object-contain"
             fill
           />
         ) : (
