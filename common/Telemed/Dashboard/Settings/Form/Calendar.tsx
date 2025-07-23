@@ -15,15 +15,13 @@ import TimeSlot from './TimeSection';
 import { times as timeConstant } from '../../AddMeeting/components/constants';
 
 import Datepicker from "tailwind-datepicker-react"
-import type { ClientComponent, ClientComponentProps } from '@types';
+import type { ClientComponentProps } from '@types';
 import { IOptions } from 'tailwind-datepicker-react/types/Options';
 import { SlotParent, SlotParentProps, SlotWrapper } from './types';
 import SlotManager from './SlotManager';
 import { updateCalendar } from '@service';
 
-const Form: ClientComponentProps<SlotParentProps> = ({
-    data,
-}) => {
+const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
     const [times, setTimes] = useState(timeConstant);
     const [show, setShow] = useState<boolean>(false);
     const [show1, setShow1] = useState<boolean>(false);
@@ -57,9 +55,9 @@ const Form: ClientComponentProps<SlotParentProps> = ({
         autoHide: true,
         todayBtn: true,
         clearBtn: true,
-        minDate: new Date(),
+        minDate: new Date(new Date().setHours(0, 0, 0, 0)), // Set to start of today
         datepickerClassNames: "top-12",
-        defaultDate: new Date(),
+        defaultDate: new Date(new Date().setHours(0, 0, 0, 0)), // Set to start of today
         language: "en",
         disabledDates: [],
         weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
@@ -142,7 +140,10 @@ const Form: ClientComponentProps<SlotParentProps> = ({
                     </label>
                     <div className="mt-2">
                         <Datepicker options={{
-                            ...options, inputNameProp: 'start', inputIdProp: 'start', defaultDate: opp.startTime ? new Date(opp.startTime) : undefined,
+                            ...options,
+                            inputNameProp: 'start',
+                            inputIdProp: 'start',
+                            // defaultDate: opp.startTime ? new Date(opp.startTime) : undefined,
                         }} onChange={(v) => {
                             setOpp({
                                 ...opp,
