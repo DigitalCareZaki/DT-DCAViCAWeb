@@ -23,7 +23,8 @@ export const setNewNotifications: SetNewNotification = (state, payload) => {
 };
 
 export const setNotifications: SetNotifications = (state, payload) => {
-  state.notifications = [...payload.payload.data];
+  state.notifications = [...payload.payload.data.data];
+  state.pagination = payload.payload.data.pagination;
 };
 
 export const setNotificationsRead: SetReadNotifications = (state) => {

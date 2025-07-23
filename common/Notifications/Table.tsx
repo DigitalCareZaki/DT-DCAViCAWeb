@@ -11,19 +11,19 @@ import RenderTable from './RenderTable';
 import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 
-const Table: ClientComponentProps<TableProps> = ({ data }) => {
+const Table: ClientComponentProps<TableProps> = ({ data, pagination }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!data) return;
 
     // Dispatch actions to set the notifications and mark them as read
-    dispatch(setNotificationsReducer({ data }));
+    dispatch(setNotificationsReducer({ data: { data, pagination } }));
     dispatch(setNotificationsReadReducer());
   }, [data, dispatch]);
 
   return (
-    <div className="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative mt-10 shadow-md sm:rounded-lg">
       {/* ClientTable is the wrapper for rendering the table */}
       <ClientTable
         heads={[

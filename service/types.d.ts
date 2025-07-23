@@ -470,7 +470,19 @@ export type GetLogs = {
 
 export type GetNotifications = {
   success: boolean;
-  data: NotificationProps[];
+  data: {
+    data: NotificationProps[];
+    pagination: {
+      totalItems: number;
+      perPage: number;
+      currentPage: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+      nextPage: number | null;
+      prevPage: number | null;
+    };
+  }
 };
 
 export type GetEmailsHistory = {

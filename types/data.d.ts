@@ -829,6 +829,17 @@ export interface NotificationProps {
   created_at: string;
 }
 
+export interface PaginationProps {
+  totalItems: number;
+  perPage: number;
+  currentPage: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  nextPage: number | null;
+  prevPage: number | null;
+}
+
 export interface EmailsHistoryProps {
   id: string;
   error: string | null;

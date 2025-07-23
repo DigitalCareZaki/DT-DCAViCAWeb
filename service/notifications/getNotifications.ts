@@ -6,8 +6,9 @@ import type { GetNotifications } from '../types';
 
 import '@init-globals';
 
-async function getNotificationsProps(): Promise<GetNotifications> {
-  const res = await fetch('/api/v1/web/notifications', {
+async function getNotificationsProps(page: number = 1, limit: number = 10): Promise<GetNotifications> {
+  const res = await fetch(`/api/v1/web/notifications?page=${page}&limit=${limit}`, {
+    cache: 'no-store',
     next: {
       revalidate: 60,
     },
