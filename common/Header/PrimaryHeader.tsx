@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { deleteCookie } from 'cookies-next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaHome } from '@react-icons/all-files/fa/FaHome';
@@ -21,6 +21,7 @@ import type { HeaderProps, ClientComponentProps } from '@types';
 
 const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [organization] = useCurrentOrganization();
 
   const [show, setShow] = useState<boolean>(false);
@@ -36,6 +37,8 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         return 'default';
       }
     }, [user?.type]);
+
+  console.log('renderLinkType >>>', renderLinkType);
 
   const handleDropDownOption = useCallback(() => {
     setShow(false);
@@ -57,24 +60,62 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
     [user?.type]
   );
 
+  // Helper to get theme color for user type
+  const getThemeColor = (type: string) => {
+    switch (type) {
+      case 'DOCTOR':
+        return '#0070FA';
+      case 'NURSE':
+        return '#FFA000';
+      case 'ADMIN':
+        return '#8697fa';
+      case 'SUPERADMIN':
+        return '#00B278';
+      case 'PATIENT':
+        return '#ef233c';
+      case 'MASTER':
+        return '#252422';
+      default:
+        return '#259CFA'; // fallback
+    }
+  };
+  const themeColor = getThemeColor(user?.type || '');
+  const safePathname = pathname || '';
+  // Helper to check if a link is active
+  const isActive = (href: string, exact = false) => {
+    if (exact) {
+      return safePathname === href;
+    }
+    return safePathname === href || (href !== '/' && safePathname.startsWith(href));
+  };
+
   const renderLinks = {
     default: (
       <>
         <Link href={getPath('')}>
-          <div className="flex flex-row-reverse items-center gap-2">
-            <span className="text-link-primary text-lg 2xl:text-2xl">
+          <div className={`flex flex-row-reverse items-center gap-2 ${isActive(getPath(''), true) ? '' : ''}`}>
+            <span
+              className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath(''), true) ? '' : 'border-transparent'}`}
+              style={isActive(getPath(''), true) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+            >
               Dashboard
             </span>
             <FaHome size={18} className="text-gray-600" />
           </div>
         </Link>
         <Link passHref href={getPath('/telemed')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/telemed')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/telemed')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
             Telemedicine
           </span>
         </Link>
         <Link href={getPath('/education')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/education')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/education')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
             Patient Education
           </span>
         </Link>
@@ -85,37 +126,57 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         </Link> */}
         {user.type == 'DOCTOR' ? (
           <Link href={getPath('/emr')}>
-            <span className="text-link-primary text-lg 2xl:text-2xl">
+            <span
+              className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/emr')) ? '' : 'border-transparent'}`}
+              style={isActive(getPath('/emr')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+            >
               Lab Reports
             </span>
           </Link>
         ) : (
           <Link href={getPath('/emr')}>
-            <span className="text-link-primary text-lg 2xl:text-2xl">
+            <span
+              className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/emr')) ? '' : 'border-transparent'}`}
+              style={isActive(getPath('/emr')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+            >
               PHR
             </span>
           </Link>
         )}
         {user.type !== 'PATIENT' && (
           <Link passHref href={getPath('/rag')}>
-            <span className="text-link-primary text-lg 2xl:text-2xl">RAG</span>
+            <span
+              className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/rag')) ? '' : 'border-transparent'}`}
+              style={isActive(getPath('/rag')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+            >
+              RAG
+            </span>
           </Link>
         )}
         <Communication />
         <Link href={getPath('/notifications')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/notifications')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/notifications')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
             Notifications
           </span>
         </Link>
         {user.type === 'DOCTOR' && (
           <>
             <Link href={getPath('/logs')}>
-              <span className="text-link-primary text-lg 2xl:text-2xl">
+              <span
+                className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/logs')) ? '' : 'border-transparent'}`}
+                style={isActive(getPath('/logs')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+              >
                 Logs
               </span>
             </Link>
             <Link href={getPath('/vl')}>
-              <span className="text-link-primary text-lg 2xl:text-2xl">
+              <span
+                className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/vl')) ? '' : 'border-transparent'}`}
+                style={isActive(getPath('/vl')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+              >
                 AviCardia
               </span>
             </Link>
@@ -125,13 +186,28 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         {user.type !== 'PATIENT' && (
           <>
             <Link href={getPath('/compliance')}>
-              <span className="text-link-primary">Compliance</span>
+              <span
+                className={`text-link-primary border-b-4 border-solid ${isActive(getPath('/compliance')) ? '' : 'border-transparent'}`}
+                style={isActive(getPath('/compliance')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+              >
+                Compliance
+              </span>
             </Link>
             <Link href={getPath('/devices')}>
-              <span className="text-link-primary">Devices</span>
+              <span
+                className={`text-link-primary border-b-4 border-solid ${isActive(getPath('/devices')) ? '' : 'border-transparent'}`}
+                style={isActive(getPath('/devices')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+              >
+                Devices
+              </span>
             </Link>
             <Link href={getPath('/tablets')}>
-              <span className="text-link-primary">Accessories</span>
+              <span
+                className={`text-link-primary border-b-4 border-solid ${isActive(getPath('/tablets')) ? '' : 'border-transparent'}`}
+                style={isActive(getPath('/tablets')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+              >
+                Accessories
+              </span>
             </Link>
           </>
         )}
@@ -148,33 +224,55 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
     master: (
       <>
         <Link href={getPath('')}>
-          <div className="flex flex-row-reverse items-center gap-2">
-            <span className="text-link-primary text-lg 2xl:text-2xl">
+          <div className={`flex flex-row-reverse items-center gap-2 ${isActive(getPath(''), true) ? '' : ''}`}>
+            <span
+              className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath(''), true) ? '' : 'border-transparent'}`}
+              style={isActive(getPath(''), true) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+            >
               Dashboard
             </span>
             <FaHome size={18} className="text-gray-600" />
           </div>
         </Link>
         <Link href={getPath('/organizations')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/organizations')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/organizations')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
             Organizations
           </span>
         </Link>
         <Link href={getPath('/emails')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">Emails</span>
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/emails')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/emails')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
+            Emails
+          </span>
         </Link>
         <Link href={getPath('/email-templates')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/email-templates')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/email-templates')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
             Email Templates
           </span>
         </Link>
         <Link href={getPath('/superadmin')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/superadmin')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/superadmin')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
             Superadmin
           </span>
         </Link>
         <Link href={getPath('/logs')}>
-          <span className="text-link-primary text-lg 2xl:text-2xl">Logs</span>
+          <span
+            className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/logs')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/logs')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          >
+            Logs
+          </span>
         </Link>
       </>
     ),
@@ -182,13 +280,14 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
     administration: (
       <>
         <Link href={getPath('')} className="flex gap-1">
-          <div className="hidden items-center gap-2 lg:flex lg:flex-row-reverse">
-            <FaHome size={16} className="hidden text-gray-600 lg:block" />
+          <div className={`hidden items-center gap-2 lg:flex lg:flex-row-reverse ${isActive(getPath(''), true) ? '' : ''}`}>
+            {/* <FaHome size={16} className="hidden text-gray-600 lg:block" /> */}
           </div>
           <ProfileDropDownOption
             title="Dashboard"
             onClick={handleHeaderOption}
-            classes="lg:hidden"
+            classes={`border-b-4 border-solid ${isActive(getPath(''), true) ? '' : 'border-transparent'}`}
+            style={isActive(getPath(''), true) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
           />
         </Link>
         {user.type === 'SUPERADMIN' && (
@@ -196,7 +295,8 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
             <ProfileDropDownOption
               title="Branches"
               onClick={handleHeaderOption}
-              classes="lg:hidden"
+              classes={`border-b-4 border-solid ${isActive(getPath('/branches')) ? '' : 'border-transparent'}`}
+              style={isActive(getPath('/branches')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
             />
           </Link>
         )}
@@ -204,39 +304,32 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
           <ProfileDropDownOption
             title="Departments"
             onClick={handleHeaderOption}
-            classes="lg:hidden"
+            classes={`border-b-4 border-solid ${isActive(getPath('/departments')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/departments')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
           />
         </Link>
         <Link href={getPath('/devices')}>
           <ProfileDropDownOption
             title="Devices"
             onClick={handleHeaderOption}
-            classes="lg:hidden"
+            classes={`border-b-4 border-solid ${isActive(getPath('/devices')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/devices')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
           />
         </Link>
-
-        {user.type === 'ADMIN' ? (
-          <Link href={getPath('/tablets')}>
-            <ProfileDropDownOption
-              title="Accessories"
-              onClick={handleHeaderOption}
-              classes="lg:hidden"
-            />
-          </Link>
-        ) : (
-          <Link href={getPath('/tablets')}>
-            <ProfileDropDownOption
-              title="Accessories"
-              onClick={handleHeaderOption}
-              classes="lg:hidden"
-            />
-          </Link>
-        )}
+        <Link href={getPath('/tablets')}>
+          <ProfileDropDownOption
+            title="Accessories"
+            onClick={handleHeaderOption}
+            classes={`border-b-4 border-solid ${isActive(getPath('/tablets')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/tablets')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
+          />
+        </Link>
         <Link href={getPath('/users')}>
           <ProfileDropDownOption
             title="Users"
             onClick={handleHeaderOption}
-            classes="lg:hidden"
+            classes={`border-b-4 border-solid ${isActive(getPath('/users')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/users')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
           />
         </Link>
         <Communication />
@@ -244,14 +337,16 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
           <ProfileDropDownOption
             title="Videos"
             onClick={handleHeaderOption}
-            classes="lg:hidden"
+            classes={`border-b-4 border-solid ${isActive(getPath('/videos')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/videos')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
           />
         </Link>
         <Link href={getPath('/settings')}>
           <ProfileDropDownOption
             title="Settings"
             onClick={handleHeaderOption}
-            classes="lg:hidden"
+            classes={`border-b-4 border-solid ${isActive(getPath('/settings')) ? '' : 'border-transparent'}`}
+            style={isActive(getPath('/settings')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
           />
         </Link>
       </>

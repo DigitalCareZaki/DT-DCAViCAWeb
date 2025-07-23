@@ -18,6 +18,9 @@ const OrganizationMedicine = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editMedicine, setEditMedicine] = useState<any>(null);
 
+
+    console.log('medicines >>>', medicines);
+
     useEffect(() => {
         dispatch<any>(fetchOrganizationMedicines());
     }, [dispatch]);

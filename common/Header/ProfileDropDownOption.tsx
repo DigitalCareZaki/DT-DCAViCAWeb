@@ -5,11 +5,12 @@ import { ClientComponentProps } from '@types';
 
 const ProfileDropDownOption: ClientComponentProps<
   ProfileDropdownOptionType
-> = ({ title, onClick, classes }) => {
+> = ({ title, onClick, classes, style }) => {
   return (
     <div
-      className="h-full w-full cursor-pointer rounded-lg p-2 hover:bg-gray-100"
+      className={`h-full w-full cursor-pointer rounded-lg p-2 hover:bg-gray-100 ${classes || ''}`}
       onClick={onClick}
+      style={style}
     >
       <span>{title}</span>
     </div>
