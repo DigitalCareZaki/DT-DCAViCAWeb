@@ -5,6 +5,7 @@ import { getEmailsHistory } from '@service';
 import Table from './Table';
 
 import type { FC } from 'react';
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
 const mainStyle = {
   transform: 'scale(0.67)',
@@ -17,23 +18,30 @@ const mainStyle = {
 const Emails: FC = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any[]>([]);
+  const [page, setPage] = useState(1); // Current page
+  const [limit] = useState(10); // Items per page
+  const [pagination, setPagination] = useState<any>(null); // For totalPages, etc.
+
+
+  const loadEmails = async () => {
+    try {
+      setLoading(true);
+      const res = await getEmailsHistory(page, limit);
+      if (res.success) {
+        setData(res.data.data ?? []);
+        setPagination(res.data.pagination);
+      }
+    } catch (error) {
+      console.error('Error loading emails:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
-    const loadEmails = async () => {
-      try {
-        setLoading(true);
-        const res = await getEmailsHistory();
-        if (res.success) {
-          setData(res.data ?? []);
-        }
-      } catch (error) {
-        console.error('Error loading emails:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     loadEmails();
-  }, []);
+  }, [page]);
 
   if (loading) return <div
     style={mainStyle}
@@ -51,6 +59,29 @@ const Emails: FC = () => {
         <span className="screen-title">Email History</span>
       </div>
       <Table data={data} />
+      {pagination && (
+        <div className="flex items-center justify-center gap-4 pb-6">
+          <button
+            onClick={() => setPage(p => Math.max(p - 1, 1))}
+            disabled={!pagination.hasPrevPage}
+            className="rounded bg-gray-200 px-3 py-1 disabled:opacity-50"
+          >
+            <FaArrowLeft className="w-5 h-5 text-gray-700" />
+          </button>
+
+          <span className="text-sm">
+            Page {pagination.currentPage} of {pagination.totalPages}
+          </span>
+
+          <button
+            onClick={() => setPage(p => Math.min(p + 1, pagination.totalPages))}
+            disabled={!pagination.hasNextPage}
+            className="rounded bg-gray-200 px-3 py-1 disabled:opacity-50"
+          >
+            <FaArrowRight className="w-5 h-5 text-gray-700" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
