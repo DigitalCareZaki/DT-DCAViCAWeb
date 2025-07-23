@@ -21,7 +21,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
   }, [data, dispatch]);
 
   return (
-    <div className="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative mt-10 shadow-md sm:rounded-lg">
       <ClientTable
         heads={[
           'Profile',

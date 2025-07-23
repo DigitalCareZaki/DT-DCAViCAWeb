@@ -37,7 +37,7 @@ const HeaderFilter = () => {
         onMouseLeave={onBlur}
         title="Filter"
         name="Filter"
-        className="h-12 sm:h-14 lg:h-16 rounded-lg text-base sm:text-lg lg:text-xl"
+        className="h-12 sm:h-14 lg:h-11 rounded-lg text-base sm:text-lg lg:text-2xl"
         variant="icon"
         icon="IoMdAdd"
       />

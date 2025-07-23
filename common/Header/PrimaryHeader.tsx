@@ -38,7 +38,6 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
       }
     }, [user?.type]);
 
-  console.log('renderLinkType >>>', renderLinkType);
 
   const handleDropDownOption = useCallback(() => {
     setShow(false);

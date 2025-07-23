@@ -26,6 +26,14 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     overflow: 'hidden', // Prevents overflow due to scaling
   };
 
+  const mainStyleSettings = {
+    transform: 'scale(0.67)', // Scales the layout to 67%
+    transformOrigin: 'top left', // Ensures scaling starts at the top-left corner
+    width: '150%', // Compensates for scaling width
+    height: '150%', // Compensates for scaling height
+    overflow: 'auto', // <-- changed from 'hidden' to 'auto' to enable scrolling
+  };
+
   if (route?.includes('/admin/chat')) {
     return (
       <div className="relative h-screen w-screen overflow-hidden">
@@ -50,7 +58,7 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     return (
       <div className="relative h-screen w-screen overflow-hidden">
         <main
-          style={mainStyle}
+          style={mainStyleSettings}
           className="relative gap-4 bg-background p-6"
         >
           <PrimaryHeader user={user!} />

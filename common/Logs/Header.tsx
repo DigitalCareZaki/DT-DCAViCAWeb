@@ -8,7 +8,7 @@ import type { LogsDataProps } from '@types';
 
 const Header: ClientComponentProps<{ data: LogsDataProps[] }> = ({ data }) => {
   return (
-    <div className="mt-8 flex w-full items-center justify-end gap-4 px-4 py-4 sm:px-6 lg:px-8">
+    <div className="mt-8 flex w-full items-center justify-end gap-4 px-4 py-4 sm:px-6 lg:px-8 ">
       <ExportButton
         data={data.map((el) => ({
           name: `${el.user.first_name} ${el.user.last_name}`,
