@@ -351,6 +351,9 @@ export type OrganizationUsersProps = {
   associated_branches: {
     name: string;
   }[];
+  patient: any;
+  doctor: any;
+  nurse: any;
   active?: boolean;
 };
 

@@ -73,14 +73,19 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
           <th
             scope="row"
             className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
-          >
-            {getName({
-              first_name: el.first_name,
-              last_name: el.last_name,
-              middle_name: el.middle_name,
-            })}
+          >           {getName({
+            first_name: el.first_name,
+            last_name: el.last_name,
+            middle_name: el.middle_name,
+          })}
           </th>
           <td className="px-6 py-4">{el.email}</td>
+          <td className="px-6 py-4">
+            {
+              el.role === 'DOCTOR' ? el.doctor?.departments?.[0]?.title :
+                el.role === 'NURSE' ? el.nurse?.department?.title :
+                  el.role === 'PATIENT' ? el.patient?.doctors?.[0]?.departments?.[0]?.title : 'N/A'
+            }</td>
           <td className="px-6 py-4">{el.phone_number}</td>
           {/* <td className="px-6 py-4">{el.username}</td> */}
           <td className="px-6 py-4">{el.role}</td>

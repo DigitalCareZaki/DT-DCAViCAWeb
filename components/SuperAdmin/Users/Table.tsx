@@ -31,34 +31,13 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
             ...el,
           }))}
           headers={[
-            {
-              label: 'Name',
-              key: 'full_name',
-            },
-            {
-              label: 'Username',
-              key: 'username',
-            },
-            {
-              label: 'Email',
-              key: 'email',
-            },
-            {
-              label: 'Phone',
-              key: 'phone_number',
-            },
-            {
-              label: 'Role',
-              key: 'role',
-            },
-            {
-              label: 'Gender',
-              key: 'gender',
-            },
-            {
-              label: 'Branch',
-              key: 'branch',
-            },
+            { label: 'Name', key: 'full_name' },
+            { label: 'Username', key: 'username' },
+            { label: 'Email', key: 'email' },
+            { label: 'Phone', key: 'phone_number' },
+            { label: 'Role', key: 'role' },
+            { label: 'Gender', key: 'gender' },
+            { label: 'Branch', key: 'branch' },
           ]}
           filename="User Data"
         />
@@ -68,6 +47,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           heads={[
             'Name',
             'Email',
+            'Department',
             'Phone',
             // 'Username',
             'Role',
