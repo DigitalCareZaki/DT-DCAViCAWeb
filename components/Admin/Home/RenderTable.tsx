@@ -38,7 +38,7 @@ const RenderTable = ({ data, userType }: Props) => {
               middle_name: el?.patient?.first_assigned_doctor?.user?.middle_name as string,
             })}
           </td>
-          <td className="px-6 py-4">{el?.patient?.department?.title}</td>
+          <td className="px-6 py-4">{el.patient?.doctors?.[0]?.departments?.[0]?.title}</td>
 
           {/* <td className="px-6 py-4">
             <div className="flex h-5 w-5 items-center justify-center rounded-full text-white admin:bg-theme-admin-primary nurse:bg-theme-nurse-primary">

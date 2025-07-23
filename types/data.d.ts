@@ -723,7 +723,7 @@ export interface SuperAdminPatientListProps {
     emr: string;
     height: number | null;
     weight: number | null;
-    doctors?: [];
+    doctors?: any[];
     first_assigned_doctor?: {
       specialities: [
         {
