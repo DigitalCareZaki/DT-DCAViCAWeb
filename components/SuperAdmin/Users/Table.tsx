@@ -69,11 +69,11 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
             'Name',
             'Email',
             'Phone',
-            'Username',
+            // 'Username',
             'Role',
             'Gender',
             'Branch',
-            'Action',
+            'Status',
           ]}
         >
           <RenderTable />

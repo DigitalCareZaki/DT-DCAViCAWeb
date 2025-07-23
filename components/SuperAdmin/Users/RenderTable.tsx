@@ -25,6 +25,8 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
     (state) => state.superadmin
   );
 
+  console.log('users >>>>>>>>>>> ', users);
+
   const handleDisable = async (id: string) => {
     try {
       if (loading) return;
@@ -80,7 +82,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
           </th>
           <td className="px-6 py-4">{el.email}</td>
           <td className="px-6 py-4">{el.phone_number}</td>
-          <td className="px-6 py-4">{el.username}</td>
+          {/* <td className="px-6 py-4">{el.username}</td> */}
           <td className="px-6 py-4">{el.role}</td>
           <td className="px-6 py-4">{el.gender}</td>
           <td className="px-6 py-4">{el.associated_branches[0]?.name}</td>
@@ -90,8 +92,8 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
             ) : (
               <FaShieldAlt
                 onClick={() => handleDisable(el.id)}
-                title="Disable user account"
-                className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary"
+                title={el.active ? "Disable user account" : "Enable user account"}
+                className={`${!el.active ? 'text-red-500' : 'text-green-500'} hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary`}
               />
             )}
             {el.role === 'PATIENT' && (

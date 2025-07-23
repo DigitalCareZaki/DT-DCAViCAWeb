@@ -55,9 +55,9 @@ const Form = ({ user, appointments, setAppointments }: any) => {
               <div className="w-full">
                 <InputDropdown
                   loading={searching}
-                  label="Invite participants"
-                  placeholder="Invite participants by searching their email"
-                  title="Invite participants"
+                  label="Select Doctor"
+                  placeholder="Select Doctor by searching their email"
+                  title="Select Doctor"
                   overrideShow={0}
                   hideInfo
                   labelClassName="text-teal-900 text-lg"

@@ -153,8 +153,8 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     <>
       <div className="flex w-full flex-col gap-6 py-10">
         <div className="flex w-full flex-col items-center justify-center gap-10 ">
-          {!selectedUserId && <>
-            Select Doctor
+          {selectedUserId && <>
+            Select Date & Time Slot
           </>}
           {
             (!slotP || !slotP.endTime || !slotP.startTime) && selectedUserId && <>

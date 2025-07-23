@@ -46,7 +46,7 @@ const Table = () => {
   };
 
 
-  console.log('data >>>', data);
+  console.log('data >>>>>>>>>>', data[0]?.patient?.doctors?.[0]?.departments?.[0]?.title);
 
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
@@ -56,7 +56,7 @@ const Table = () => {
           assigned_doctor: `${el.patient.first_assigned_doctor?.user.first_name ? el.patient.first_assigned_doctor?.user.first_name : ""} ${el.patient.first_assigned_doctor?.user.middle_name ? el.patient.first_assigned_doctor?.user.middle_name : ""} ${el.patient.first_assigned_doctor?.user.last_name ? el.patient.first_assigned_doctor?.user.last_name : ""}`,
           height: el.patient.height,
           weight: el.patient.weight,
-          department: el.patient.department?.title ?? '',
+          department: el.patient?.doctors?.[0]?.departments?.[0]?.title ?? '',
           ...el,
         }))}
         headers={[

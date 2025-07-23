@@ -26,9 +26,9 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
         heads={[
           'Title',
           'Description',
-          'Address',
-          'Country',
-          'City',
+          // 'Address',
+          // 'Country',
+          // 'City',
           'Branch',
           'Doctors',
           'Nurses',

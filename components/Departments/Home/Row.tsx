@@ -14,10 +14,10 @@ const Row: ClientComponentProps<any> = ({ ...el }) => {
       >
         {el.title}
       </th>
-      <td className="px-6 py-4">{el.description?.slice(0, 20)}</td>
-      <td className="px-6 py-4">{el?.location?.address ?? 'N/A'}</td>
-      <td className="px-6 py-4">{el.location.city.country.name ?? 'N/A'}</td>
-      <td className="px-6 py-4">{el.location.city.name ?? 'N/A'}</td>
+      <td className="px-20 py-4">{el.description}</td>
+      {/* <td className="px-6 py-4">{el?.location?.address ?? 'N/A'}</td>
+      <td className="px-6 py-4">{el.location.city.country.name ?? 'N/A'}</td> */}
+      {/* <td className="px-6 py-4">{el.location.city.name ?? 'N/A'}</td> */}
       <td className="px-6 py-4">{el.branch.name ?? 'N/A'}</td>
       <td className="px-6 py-4">{el.doctor.length}</td>
       <td className="px-6 py-4">{el.nurse.length}</td>
