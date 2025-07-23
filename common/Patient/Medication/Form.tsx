@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 
+import { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -47,6 +48,14 @@ const Form: ClientComponent = () => {
     handleSetCurrentMedicineName,
   ] = useForm(params?.get('patient')?.toString() ?? '', handleHideForm);
 
+  // Get today's date in YYYY-MM-DD format for min attribute
+  const today = useMemo(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }, []);
 
 
   return (
@@ -63,7 +72,7 @@ const Form: ClientComponent = () => {
             right: -1000,
           }}
           onSubmit={onSubmit}
-          className="absolute right-0 top-24 flex h-[35rem] w-[26rem] flex-col justify-between rounded-lg rounded-r-none border bg-white p-6 shadow-2xl transition"
+          className="absolute right-0 top-24 flex h-[35rem] w-[28rem] flex-col justify-between rounded-lg rounded-r-none border bg-white p-6 shadow-2xl transition"
         >
           <>
             <div className="w-fit">
@@ -107,6 +116,8 @@ const Form: ClientComponent = () => {
                       labelVariant="tiny"
                       title="Start date"
                       defaultBorder
+                      type="date"
+                      min={today}
                       hookProps={register('start')}
                       error={!!errors.start?.message?.length}
                       errorMessage={errors.start?.message}
@@ -120,6 +131,8 @@ const Form: ClientComponent = () => {
                       labelVariant="tiny"
                       title="End date"
                       defaultBorder
+                      type="date"
+                      min={today}
                       hookProps={register('end')}
                       error={!!errors.end?.message?.length}
                       errorMessage={errors.end?.message}

@@ -98,9 +98,22 @@ const useFormHook = (
     try {
       setLoading(true);
 
-      // Use string dates as required by backend
-      const start_date = data.start; // should be YYYY-MM-DD
-      const end_date = data.end;     // should be YYYY-MM-DD
+      // Ensure dates are in YYYY-MM-DD format
+      const formatDate = (date: string) => {
+        if (!date) return '';
+        // If already in YYYY-MM-DD, return as is
+        if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+        // Try to parse and format
+        const d = new Date(date);
+        if (isNaN(d.getTime())) return date;
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+
+      const start_date = formatDate(data.start); // should be YYYY-MM-DD
+      const end_date = formatDate(data.end);     // should be YYYY-MM-DD
 
       const time = [];
       if (data.frequency >= 1 && data.time1) time.push(data.time1);
