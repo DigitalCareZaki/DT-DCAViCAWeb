@@ -11,6 +11,8 @@ const Analytics: ServerComponent = async () => {
   const user = await getUser();
   const data = await getSuperAdminStats(user?.role ?? 'superadmin');
 
+  console.log('data.data', data.data);
+
   return (
     <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
       {/* Patients */}
@@ -53,10 +55,10 @@ const Analytics: ServerComponent = async () => {
       <div className="flex min-h-28 flex-col items-center justify-center rounded-xl bg-gradient-to-r bg-[#8697fa] shadow-md hover:shadow-lg transition-shadow gap-1">
         <span className="text-white text-3xl font-extrabold flex items-center gap-2">
           <Icon name="MdPin" size={24} className="text-white" />
-          <PrimaryCounter value={data.success ? data.data.branches : 0} prefix="" />
+          <PrimaryCounter value={data.success ? data.data.departments : 0} prefix="" />
         </span>
         <span className="text-white text-xs font-medium tracking-wide uppercase">
-          Total Branches
+          Total Departments / Specialties
         </span>
       </div>
       {/* Specialties */}
@@ -66,7 +68,7 @@ const Analytics: ServerComponent = async () => {
           <PrimaryCounter value={data.success ? data.data.medications : 0} prefix="" />
         </span>
         <span className="text-white text-xs font-medium tracking-wide uppercase">
-          Total Specialties
+          Total Medications
         </span>
       </div>
       {/* Appointments */}

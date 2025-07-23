@@ -275,6 +275,7 @@ export type GetSuperAdminStats = {
     patients: number;
     nurses: number;
     branches: number;
+    departments: number;
     appointments: number;
     medications: number;
   };
