@@ -5,8 +5,8 @@ import { updateAdminOrganizationMedicine } from '../service/superadmin/addAdminM
 import type { OrganizationMedicineProps } from '../types/data';
 
 // Thunk to fetch all medicines
-export const fetchOrganizationMedicines = () => async (dispatch: any) => {
-    const res = await apiGetOrganizationMedicines();
+export const fetchOrganizationMedicines = (page: number = 1, limit: number = 10) => async (dispatch: any) => {
+    const res = await apiGetOrganizationMedicines(page, limit);
     if (res.success) {
         dispatch(setOrganizationMedicines(res.data));
     }

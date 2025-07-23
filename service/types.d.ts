@@ -391,7 +391,19 @@ export type GetRoomChats = {
 
 export type OrganizationMedicine = {
   success: boolean;
-  data: OrganizationMedicineProps[];
+  data: {
+    data: OrganizationMedicineProps[];
+    pagination: {
+      totalItems: number;
+      perPage: number;
+      currentPage: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+      nextPage: number | null;
+      prevPage: number | null;
+    };
+  }
 };
 
 export type GetDoctorRagsProps = {

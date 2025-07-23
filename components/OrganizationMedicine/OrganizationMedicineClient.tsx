@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchOrganizationMedicines } from "../../store/organizationMedicine.thunks";
 import { updateOrganizationMedicineAndUpdate } from '../../store/organizationMedicine.thunks';
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
-
 import Header from "./Table/Header";
 import Table from "./Table/RenderTable";
 import { twMerge } from 'tailwind-merge';
 import MedicineModal from './Table/MedicineModal';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const OrganizationMedicine = () => {
     const dispatch = useDispatch();
     const medicines = useSelector((state: any) => state.organizationMedicine.medicines);
+    const pagination = useSelector((state: any) => state.organizationMedicine.pagination);
+    const [page, setPage] = useState(1);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editMedicine, setEditMedicine] = useState<any>(null);
 
@@ -22,8 +24,8 @@ const OrganizationMedicine = () => {
     console.log('medicines >>>', medicines);
 
     useEffect(() => {
-        dispatch<any>(fetchOrganizationMedicines());
-    }, [dispatch]);
+        dispatch<any>(fetchOrganizationMedicines(page));
+    }, [dispatch, page]);
 
     const handleEdit = (item: any) => {
         setEditMedicine(item);
@@ -35,6 +37,7 @@ const OrganizationMedicine = () => {
             const res = await dispatch<any>(updateOrganizationMedicineAndUpdate(editMedicine.id, name));
             if (res?.success) {
                 toast.success('Medicine updated');
+                dispatch<any>(fetchOrganizationMedicines(page));
             } else {
                 toast.error('Failed to update medicine');
             }
@@ -49,7 +52,7 @@ const OrganizationMedicine = () => {
     };
 
     return (
-        <div className="h-screen overflow-y-scroll pb-96 font-poppins">
+        <div className="h-screen pb-96 font-poppins">
             <MedicineModal
                 isOpen={isEditModalOpen}
                 onClose={handleCloseEdit}
@@ -58,7 +61,7 @@ const OrganizationMedicine = () => {
                 onUpdate={handleUpdate}
             />
             <Header />
-            <div className="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="relative mt-10 shadow-md sm:rounded-lg">
                 <table className="w-full text-left text-xs sm:text-sm md:text-base text-gray-700">
                     <thead
                         className={twMerge(
@@ -95,6 +98,29 @@ const OrganizationMedicine = () => {
                     </tbody>
                 </table>
             </div>
+            {pagination && (
+                <div className="flex items-center justify-center gap-4 py-7">
+                    <button
+                        onClick={() => setPage(p => Math.max(p - 1, 1))}
+                        disabled={!pagination.hasPrevPage}
+                        className="rounded-full bg-gray-200 px-3 py-1 disabled:opacity-50"
+                    >
+                        <FaArrowLeft className="w-5 h-5 text-gray-700 " />
+                    </button>
+
+                    <span className="text-sm">
+                        Page {pagination.currentPage} of {pagination.totalPages}
+                    </span>
+
+                    <button
+                        onClick={() => setPage(p => Math.min(p + 1, pagination.totalPages))}
+                        disabled={!pagination.hasNextPage}
+                        className="rounded-full bg-gray-200 px-3 py-1 disabled:opacity-50"
+                    >
+                        <FaArrowRight className="w-5 h-5 text-gray-700" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

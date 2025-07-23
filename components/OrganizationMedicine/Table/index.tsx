@@ -9,7 +9,7 @@ import type { TableProps } from './types';
 
 const Table: ServerComponentProps<TableProps> = async ({ data }) => {
   return (
-    <div className="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative mt-10 shadow-md sm:rounded-lg">
       <ServerTable heads={['Name', 'Created On']}>
         <RenderTable data={data} />
       </ServerTable>
