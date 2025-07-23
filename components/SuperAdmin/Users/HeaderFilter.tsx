@@ -77,11 +77,7 @@ const HeaderFilter = () => {
                 <span className='text-lg lg:text-xl xl:text-2xl'>Nurse</span>
               </div>
             </Link>
-            <Link
-              className="flex admin:hidden"
-              passHref
-              href={`/${user.role?.toLowerCase()}/users?role=patient`}
-            >
+            <Link passHref href={`/${user.role?.toLowerCase()}/users?role=patient`}>
               <div className="theme-bg-color flex h-10 w-full cursor-pointer items-center justify-center rounded-md text-xs font-semibold text-white transition duration-300 hover:shadow-lg">
                 <span className='text-lg lg:text-xl xl:text-2xl'>Patient</span>
               </div>
