@@ -15,7 +15,7 @@ const Departments: ServerComponent = async () => {
 
   return (
     <div className="overflow-y-scroll pb-96 font-poppins">
-      <PageInfo />
+      {/* <PageInfo /> */}
       <Header />
       <Table data={res.data} />
     </div>

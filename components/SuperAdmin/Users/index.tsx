@@ -17,7 +17,7 @@ const Users: ServerComponentProps<Props> = async ({ role }) => {
 
   return (
     <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4 font-poppins">
-      <PageInfo />
+      {/* <PageInfo /> */}
       <Chart data={res.data} />
       <Header />
       <Table data={res.data} />

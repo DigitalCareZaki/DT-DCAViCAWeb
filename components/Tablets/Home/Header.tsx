@@ -10,7 +10,7 @@ import type { Props } from './types';
 const Header: ServerComponentProps<Props> = async ({ data, userRole }) => {
   return (
     <div className="flex w-full justify-between">
-      <span className="screen-title">Accessories</span>
+      <span className="screen-title"></span>
       <div className="flex w-fit flex-row gap-4">
         <ExportButton
           data={data.map((el) => ({

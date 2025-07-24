@@ -10,7 +10,7 @@ const Table: ServerComponentProps<Props> = async ({ userRole, data }) => {
   console.log('Table data:', data);
 
   return (
-    <div className="relative mt-10 overflow-x-auto pb-28 shadow-md sm:rounded-lg">
+    <div className="relative mt-4 overflow-x-auto pb-28 shadow-md sm:rounded-lg">
       <ServerTable
         heads={[
           'Title',
