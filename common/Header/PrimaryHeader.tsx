@@ -48,8 +48,18 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
   }, []);
 
   const handleLogout = async () => {
+    // Remove all relevant cookies
     deleteCookie('jwt');
-    router.push('/login');
+    // If you have other cookies, remove them here as well
+
+    // Clear local and session storage
+    if (typeof window !== 'undefined') {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
+
+    // Force a full reload to clear all client-side state and prevent back navigation
+    window.location.replace('/login');
   };
 
   const getPath = useCallback(
