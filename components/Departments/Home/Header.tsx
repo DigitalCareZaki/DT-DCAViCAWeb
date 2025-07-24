@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useState } from 'react'; // Import hooks for state and event handling
+import { ChangeEvent, FormEvent, useState, useEffect, useRef } from 'react'; // Import hooks for state and event handling
 import Link from 'next/link'; // Import Link for navigation
 import { useDispatch } from 'react-redux'; // Import Redux dispatch for state management
 
@@ -16,26 +16,36 @@ const Header: ClientComponent = () => {
   const dispatch = useDispatch(); // Get the dispatch function from Redux
 
   const [value, setValue] = useState<string>(''); // State for the search input value
+  const debounceRef = useRef<NodeJS.Timeout | null>(null); // Ref for debounce timer
+
+  // Debounced search effect
+  useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        // Fetch all departments if input is empty, else search
+        const res = await getDepartments(value);
+        if (!res.success) return;
+        dispatch(setDepartmentsReducer({ data: res.data ?? [] }));
+      } catch (err) {
+        // Handle errors if needed
+      }
+    }, 300); // 300ms debounce
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [value, dispatch]);
 
   // Handle changes in the search input
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  // Handle form submission to search departments
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  // Keep form submit for accessibility, but do nothing (debounce handles search)
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    try {
-      if (!value) return; // Don't submit if the search input is empty
-
-      const res = await getDepartments(value); // Fetch departments based on search input
-
-      if (!res.success) return; // Return if the request fails
-      dispatch(setDepartmentsReducer({ data: res.data ?? [] })); // Update Redux store with fetched data
-    } catch (err) {
-      // Handle any errors here
-    }
   };
 
   return (
