@@ -8,13 +8,22 @@ import { getLogs } from '@service';
 
 import type { LogsDataProps, ServerComponent } from '@types';
 
+
+const mainStyle = {
+  transform: 'scale(0.67)',
+  transformOrigin: 'top left',
+  width: '150%',
+  height: '150%',
+  overflow: 'hidden',
+};
+
 const Logs = () => {
 
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<LogsDataProps[]>([]);
   const [pagination, setPagination] = useState<any>(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [loading, setLoading] = useState(false);
 
   const loadLogs = async () => {
     try {
@@ -34,6 +43,16 @@ const Logs = () => {
   useEffect(() => {
     loadLogs();
   }, [page]);
+
+  if (loading) return <div
+    style={mainStyle}
+    className="flex h-full w-screen items-center justify-center bg-background"
+  >
+    <div
+      className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+      role="status"
+    ></div>
+  </div>;
 
   return (
     <div className="h-screen pb-96 font-poppins">
