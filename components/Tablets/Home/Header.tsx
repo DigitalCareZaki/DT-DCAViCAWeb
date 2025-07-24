@@ -4,19 +4,20 @@ import type { ChangeEvent, FormEvent } from 'react';
 import type { TabletProps } from 'types/data';
 
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { InputBasic, ButtonPrimary, ExportButton } from '@common';
 import getTablets from 'service/tablets/getTablets';
 import { setTablets } from 'store/tablets.slice';
 import { useEffect, useState, useRef } from 'react';
+import type { ReduxProps } from 'store/types';
 
 interface HeaderProps {
   userRole: string;
-  data: TabletProps[];
 }
 
-const Header = ({ userRole, data }: HeaderProps) => {
+const Header = ({ userRole }: HeaderProps) => {
   const dispatch = useDispatch();
+  const tablets = useSelector((state: ReduxProps) => state.tablets.tablets);
   const [value, setValue] = useState<string>('');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -26,7 +27,7 @@ const Header = ({ userRole, data }: HeaderProps) => {
     }
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await getTablets(value);
+        const res = await getTablets(1, 10, value);
         if (!res.success) return;
         dispatch(setTablets(res.data ?? []));
       } catch (err) {
@@ -60,7 +61,7 @@ const Header = ({ userRole, data }: HeaderProps) => {
       </form>
       <div className="flex w-fit flex-row gap-4">
         <ExportButton
-          data={data.map((el: TabletProps) => ({
+          data={tablets.map((el: TabletProps) => ({
             ...el,
             created_by: `${el.created_by.first_name} ${el.created_by.last_name}`,
             issued_to: el.patient_tablets

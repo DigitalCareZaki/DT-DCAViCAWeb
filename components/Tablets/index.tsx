@@ -1,29 +1,25 @@
-'use server';
+'use client';
 
+import { useSelector } from 'react-redux';
 import Header from './Home/Header';
 import Table from './Home/Table';
+import type { ReduxProps } from 'store/types';
 
-import { getUser, getTablets, getAllTabletsForPatient } from '@service';
+interface TabletsProps {
+  patient?: string | null;
+}
 
-import type { Props } from './types';
-import type { ServerComponentProps } from '@types';
+const Tablets = ({ patient }: TabletsProps) => {
+  const user = useSelector((state: ReduxProps) => state.user.user);
 
-const Tablets: ServerComponentProps<Props> = async ({ patient }) => {
-  const user = await getUser();
-  if (!user?.role) return <></>;
-
-  const res = patient
-    ? await getAllTabletsForPatient(patient)
-    : await getTablets();
-
-  console.log('tables >>>>>', res);
-
-  if (!res.success) return <></>;
+  if (!user?.role) return null;
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
-      <Header userRole={user.role?.toLowerCase()} data={res.data} />
-      <Table userRole={user.role?.toLowerCase()} data={res.data} />
+    <div className="flex h-screen w-full flex-col gap-6 px-10 pr-0 pt-6">
+      <Header userRole={user.role?.toLowerCase()} />
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <Table userRole={user.role?.toLowerCase()} patient={patient} />
+      </div>
     </div>
   );
 };
