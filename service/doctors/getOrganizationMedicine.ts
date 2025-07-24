@@ -6,7 +6,7 @@ import { OrganizationMedicine } from '../types';
 
 async function getOrganizationMedicine(
   query: string
-): Promise<OrganizationMedicine> {
+): Promise<OrganizationMedicine | any> {
   const params = new URLSearchParams();
 
   params.append('search', query);

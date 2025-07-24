@@ -6,7 +6,7 @@ import type { GetEmailsHistory } from '../types';
 
 import '@init-globals';
 
-async function getDoctorEmailsHistory(userId: string): Promise<GetEmailsHistory> {
+async function getDoctorEmailsHistory(userId: string): Promise<GetEmailsHistory | any> {
   const res = await fetch(`/api/v1/web/emails/email-history/${userId}`);
 
   const data = await res.json();

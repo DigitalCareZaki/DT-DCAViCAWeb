@@ -18,7 +18,7 @@ const OrganizationMedicine: ServerComponent = async () => {
     <div className="h-screen overflow-y-scroll pb-96 font-poppins">
       <PageInfo />
       <Header />
-      <Table data={res.data} />
+      <Table data={res.data.data || []} />
     </div>
   );
 };

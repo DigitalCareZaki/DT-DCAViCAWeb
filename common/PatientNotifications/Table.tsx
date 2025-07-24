@@ -11,7 +11,7 @@ import RenderTable from './RenderTable';
 import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 
-const Table: ClientComponentProps<TableProps> = ({ data }) => {
+const Table: ClientComponentProps<TableProps> = ({ data }: any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {

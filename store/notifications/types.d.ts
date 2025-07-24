@@ -4,12 +4,12 @@ import type { NotificationProps, PaginationProps } from '@types';
 export interface StoreNotificationProps {
   notifications: NotificationProps[];
   unread: boolean;
-  pagination: PaginationProps;
+  pagination?: PaginationProps;
 }
 
 export type SetNotifications = (
   state: StoreNotificationProps,
-  payload: PayloadAction<{ data: { data: NotificationProps[]; pagination: PaginationProps } }>
+  payload: PayloadAction<{ data: { data: NotificationProps[]; pagination?: PaginationProps } }>
 ) => void;
 
 export type SetNewNotification = (
