@@ -20,23 +20,23 @@ const Header = ({ userRole, data }: HeaderProps) => {
   const [value, setValue] = useState<string>('');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  // useEffect(() => {
-  //   if (debounceRef.current) {
-  //     clearTimeout(debounceRef.current);
-  //   }
-  //   debounceRef.current = setTimeout(async () => {
-  //     try {
-  //       const res = await getDevices(value);
-  //       if (!res.success) return;
-  //       dispatch(setDevices(res.data ?? []));
-  //     } catch (err) {
-  //       // Handle errors if needed
-  //     }
-  //   }, 300);
-  //   return () => {
-  //     if (debounceRef.current) clearTimeout(debounceRef.current);
-  //   };
-  // }, [value, dispatch]);
+  useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await getDevices(1, 10, value);
+        if (!res.success) return;
+        dispatch(setDevices(res.data ?? []));
+      } catch (err) {
+        // Handle errors if needed
+      }
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [value, dispatch]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);

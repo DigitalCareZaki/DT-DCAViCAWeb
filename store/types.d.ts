@@ -34,6 +34,7 @@ export type ReduxProps = {
   changePasswords: StoreChangePasswordState;
   contacts: StoreContactState;
   pincodes: StoreChangePincodeState;
+  devices: { devices: any[] };
 };
 
 export {

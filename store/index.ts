@@ -18,6 +18,7 @@ import { contactsSlice } from './contact';
 import { pincodeSlice } from './pincode';
 import organizationMedicineReducer from './organizationMedicine.slice';
 import devicesReducer from './devices.slice';
+import tabletsReducer from './tablets.slice';
 
 const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ const store = configureStore({
     pincodes: pincodeSlice,
     organizationMedicine: organizationMedicineReducer,
     devices: devicesReducer,
+    tablets: tabletsReducer,
   },
 });
 

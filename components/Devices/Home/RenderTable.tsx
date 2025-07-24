@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 
@@ -6,15 +6,13 @@ import Link from 'next/link';
 
 import { getName } from '@init-globals';
 
-import type { ServerComponentProps } from '@types';
+import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
 
-const RenderTable: ServerComponentProps<Props> = async ({ userRole, data }) => {
-
-
+const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
   return (
     <>
-      {data.map((el) => (
+      {data.map((el: any) => (
         <tr
           key={el.id}
           className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
