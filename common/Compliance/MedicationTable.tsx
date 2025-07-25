@@ -45,8 +45,12 @@ const RenderTable = ({
         {el.name}
       </th>
       <td className="whitespace-nowrap px-6 py-4 text-gray-900">
+        {el.created_at ? new Date(el.created_at).toLocaleTimeString() : '-'}
+      </td>
+      <td className="whitespace-nowrap px-6 py-4 text-gray-900">
         {el.created_at ? new Date(el.created_at).toLocaleDateString() : '-'}
       </td>
+
     </tr>
   ));
 
@@ -58,6 +62,8 @@ const MedicationTable: ClientComponent = () => {
   const [selectedId, setSelectedId] = useState<string>('');
 
   const dispatch = useDispatch();
+
+  console.log('data >>>>>>>>>>>>>>>>>>>>>', data);
 
   const setMed = useCallback((id: string, data: PatientCompliance) => {
     dispatch(
@@ -87,7 +93,7 @@ const MedicationTable: ClientComponent = () => {
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
-      <ClientTable heads={['Medication Name', 'Created At']}>
+      <ClientTable heads={['Medication Name', 'Time', 'Created At']}>
         <RenderTable
           medications={medications}
           setMed={setMed}
