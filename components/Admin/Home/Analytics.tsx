@@ -11,8 +11,6 @@ const Analytics: ServerComponent = async () => {
   const user = await getUser();
   const data = await getSuperAdminStats(user?.role ?? 'superadmin');
 
-  console.log('data.data', data.data);
-
   return (
     <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
       {/* Patients */}

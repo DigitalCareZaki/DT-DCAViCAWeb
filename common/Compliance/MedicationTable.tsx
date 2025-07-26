@@ -13,11 +13,30 @@ import type { ClientComponent } from '@types';
 import { PatientCompliance, PatientCompliancePerPill } from '@types';
 import type { ReduxProps, StoreComplianceState } from '@store-types';
 
-type MedicationWithCreatedAt = {
+type MedicationWithComplianceDates = {
   id: string;
   name: string;
   compliance: PatientCompliance;
   created_at?: string;
+  startDate: string;
+  endDate: string;
+};
+
+// Helper function to extract start and end dates from compliance data
+const getComplianceDateRange = (compliance: PatientCompliance): { startDate: string; endDate: string } => {
+  const dates = Object.keys(compliance).sort();
+
+  if (dates.length === 0) {
+    return { startDate: '-', endDate: '-' };
+  }
+
+  const startDate = dates[0];
+  const endDate = dates[dates.length - 1];
+
+  return {
+    startDate: new Date(startDate).toLocaleDateString(),
+    endDate: new Date(endDate).toLocaleDateString(),
+  };
 };
 
 const RenderTable = ({
@@ -25,7 +44,7 @@ const RenderTable = ({
   selected,
   setMed,
 }: {
-  medications: MedicationWithCreatedAt[];
+  medications: MedicationWithComplianceDates[];
   selected: string;
   setMed: (id: string, data: PatientCompliance) => void;
 }) =>
@@ -45,10 +64,14 @@ const RenderTable = ({
         {el.name}
       </th>
       <td className="whitespace-nowrap px-6 py-4 text-gray-900">
-        {el.created_at ? new Date(el.created_at).toLocaleTimeString() : '-'}
+        {el.startDate}
       </td>
       <td className="whitespace-nowrap px-6 py-4 text-gray-900">
-        {el.created_at ? new Date(el.created_at).toLocaleDateString() : '-'}
+        {el.endDate}
+      </td>
+
+      <td className="whitespace-nowrap px-6 py-4 text-gray-900">
+        {el.created_at ? new Date(el.created_at).toLocaleString() : '-'}
       </td>
 
     </tr>
@@ -58,12 +81,10 @@ const MedicationTable: ClientComponent = () => {
   const { data, selected } = useSelector<ReduxProps, StoreComplianceState>(
     (state) => state.compliance
   );
-  const [medications, setMedications] = useState<MedicationWithCreatedAt[]>([]);
+  const [medications, setMedications] = useState<MedicationWithComplianceDates[]>([]);
   const [selectedId, setSelectedId] = useState<string>('');
 
   const dispatch = useDispatch();
-
-  console.log('data >>>>>>>>>>>>>>>>>>>>>', data);
 
   const setMed = useCallback((id: string, data: PatientCompliance) => {
     dispatch(
@@ -77,12 +98,17 @@ const MedicationTable: ClientComponent = () => {
   }, []);
 
   useEffect(() => {
-    // Map medications to include created_at if available from PatientMedicationProps
+    // Map medications to include created_at and start/end dates from compliance data
     setMedications(
-      data.medications.map((med: any) => ({
-        ...med,
-        created_at: med.created_at,
-      }))
+      data.medications.map((med: any) => {
+        const { startDate, endDate } = getComplianceDateRange(med.compliance);
+        return {
+          ...med,
+          created_at: med.created_at,
+          startDate,
+          endDate,
+        };
+      })
     );
   }, [data.user.id]);
 
@@ -90,10 +116,9 @@ const MedicationTable: ClientComponent = () => {
     setSelectedId(selected.id ?? '');
   }, [selected.id]);
 
-
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
-      <ClientTable heads={['Medication Name', 'Time', 'Created At']}>
+      <ClientTable heads={['Medication Name', 'Start Date', 'End Date', 'Created At']}>
         <RenderTable
           medications={medications}
           setMed={setMed}
