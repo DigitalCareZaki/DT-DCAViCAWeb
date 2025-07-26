@@ -21,22 +21,26 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
   }, [data, dispatch]);
 
   return (
-    <div className="relative mt-10 shadow-md sm:rounded-lg">
-      <ClientTable
-        heads={[
-          'Profile',
-          'Name',
-          'Role',
-          'Email',
-          'Method',
-          'Module',
-          'Platform',
-          'Endpoint',
-          'Created On',
-        ]}
-      >
-        <RenderTable />
-      </ClientTable>
+    <div className="w-full">
+      <div className="overflow-x-auto">
+        <div className="min-w-full shadow-md sm:rounded-lg">
+          <ClientTable
+            heads={[
+              'Profile',
+              'Name',
+              'Role',
+              'Email',
+              'Method',
+              'Module',
+              'Platform',
+              'Endpoint',
+              'Created On',
+            ]}
+          >
+            <RenderTable />
+          </ClientTable>
+        </div>
+      </div>
     </div>
   );
 };

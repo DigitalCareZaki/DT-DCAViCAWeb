@@ -31,7 +31,7 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     transformOrigin: 'top left', // Ensures scaling starts at the top-left corner
     width: '150%', // Compensates for scaling width
     height: '150%', // Compensates for scaling height
-    overflow: 'auto', // <-- changed from 'hidden' to 'auto' to enable scrolling
+    overflow: 'hidden', // Changed back to hidden for the main container
   };
 
   if (route?.includes('/admin/chat')) {
@@ -53,7 +53,6 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     );
   }
 
-
   if (route?.includes('/admin/settings')) {
     return (
       <div className="relative h-screen w-screen overflow-hidden">
@@ -62,9 +61,11 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
           className="relative gap-4 bg-background p-6"
         >
           <PrimaryHeader user={user!} />
-          <div className="flex h-full w-full">
+          <div className="flex h-full w-full overflow-hidden">
             <DynamicSidebar renderKey="settings" />
-            <div className="h-full flex-grow pl-4">{children}</div>
+            <div className="flex-grow pl-4 overflow-auto min-w-0">
+              {children}
+            </div>
           </div>
           <ModalBottom />
         </main>
@@ -76,9 +77,11 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     return (
       <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6">
         <PrimaryHeader user={user!} />
-        <div className="flex h-full w-full">
-          <DynamicSidebar renderKey="users" />
-          <div className="h-full flex-grow">{children}</div>
+        <div className="flex h-full w-full overflow-hidden">
+          <div className="flex-shrink-0">
+            <DynamicSidebar renderKey="users" />
+          </div>
+          <div className="flex-grow overflow-auto min-w-0">{children}</div>
         </div>
         <ModalBottom />
       </main>

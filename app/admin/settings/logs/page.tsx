@@ -1,9 +1,10 @@
+
 import { Logs } from '@common';
 
 export default function Page(): JSX.Element {
   return (
-    <main className="h-full w-full overflow-auto">
+    <div className="h-full w-full flex flex-col overflow-hidden">
       <Logs />
-    </main>
+    </div>
   );
 }
