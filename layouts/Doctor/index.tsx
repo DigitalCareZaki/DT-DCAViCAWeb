@@ -34,7 +34,6 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
     zIndex: 0, // Base z-index for the scaled container
   };
 
-
   if (
     route?.includes('/doctor/telemed/appointment') ||
     route?.includes('/doctor/chat')
@@ -45,10 +44,12 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
           style={mainStyle}
           className="flex flex-col h-screen w-full bg-background"
         >
-          <div className="px-6 pt-4">
+          {/* Sticky Header */}
+          <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
             <PrimaryHeader user={user!} />
           </div>
-          <div className="flex flex-grow h-0 w-full">
+          {/* Scrollable Content */}
+          <div className="flex flex-grow h-0 w-full overflow-hidden">
             {children}
           </div>
           <ModalBottom />
@@ -56,7 +57,6 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
       </div>
     );
   }
-
 
   // old code 
   // if (
@@ -70,39 +70,67 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
   //     </main>
   //   );
   // }
-
   if (route?.includes('/doctor/telemed')) {
     return (
-      <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6 overflow-y-scroll">
-        <PrimaryHeader user={user!} />
-        <div className="flex h-full w-full">
-          <TelemedSidebar userType={user?.type} />
-          <div className="h-full w-[95%]">{children}</div>
-        </div>
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="flex flex-col h-screen w-full bg-background"
+        >
+          {/* Sticky Header */}
+          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+            <PrimaryHeader user={user!} />
+          </div>
+          {/* Scrollable Content */}
+          <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+            <TelemedSidebar userType={user?.type} />
+            <div className="h-full w-[95%]">{children}</div>
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
   if (!route?.includes('/doctor/patient')) {
     return (
-      <main style={mainStyle} className="h-full w-screen gap-4 bg-background p-6">
-        <PrimaryHeader user={user!} />
-        {children}
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="flex flex-col h-screen w-full bg-background"
+        >
+          {/* Sticky Header */}
+          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+            <PrimaryHeader user={user!} />
+          </div>
+          {/* Scrollable Content */}
+          <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+            {children}
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
   return (
-    <main style={mainStyle} className="h-full w-screen gap-4 bg-background p-6">
-      <PrimaryHeader user={user!} />
-      <div className="flex h-full w-full">
-        <PatientSidebar />
-        <div className="h-full w-[95%]">{children}</div>
-      </div>
-      <ModalBottom />
-    </main>
+    <div className="relative h-screen w-screen overflow-hidden">
+      <main
+        style={mainStyle}
+        className="flex flex-col h-screen w-full bg-background"
+      >
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+          <PrimaryHeader user={user!} />
+        </div>
+        {/* Scrollable Content */}
+        <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+          <PatientSidebar />
+          <div className="h-full w-[95%]">{children}</div>
+        </div>
+        <ModalBottom />
+      </main>
+    </div>
   );
 };
 
