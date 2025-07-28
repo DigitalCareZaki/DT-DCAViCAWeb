@@ -28,34 +28,47 @@ const MasterLayout: ClientComponentProps<ChildrenComponentProps> = ({
     transformOrigin: 'top left', // Keeps scaling origin at the top-left corner
     width: '150%', // Compensates for the width scaling
     height: '150%', // Compensates for the height scaling
-    overflow: 'hidden', // Prevents overflow from scaling artifacts
   };
 
   if (route?.includes('/admin/users')) {
     return (
-      <main
-        style={mainStyle}
-        className="relative h-full w-screen gap-4 bg-background p-6"
-      >
-        {/* <PrimaryHeader user={user!} /> */}
-        <div className="flex h-full w-full">
-          <DynamicSidebar renderKey="users" />
-          <div className="h-full flex-grow">{children}</div>
-        </div>
-        <ModalBottom />
-      </main>
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main
+          style={mainStyle}
+          className="flex flex-col h-screen w-full bg-background"
+        >
+          {/* Sticky Header */}
+          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+            <PrimaryHeader user={user!} />
+          </div>
+          {/* Scrollable Content */}
+          <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+            <DynamicSidebar renderKey="users" />
+            <div className="h-full flex-grow">{children}</div>
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
   return (
-    <main
-      style={mainStyle}
-      className="h-full w-screen gap-4 bg-background p-6"
-    >
-      <PrimaryHeader user={user!} />
-      {children}
-      <ModalBottom />
-    </main>
+    <div className="relative h-screen w-screen overflow-hidden">
+      <main
+        style={mainStyle}
+        className="flex flex-col h-screen w-full bg-background"
+      >
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+          <PrimaryHeader user={user!} />
+        </div>
+        {/* Scrollable Content */}
+        <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+          {children}
+        </div>
+        <ModalBottom />
+      </main>
+    </div>
   );
 };
 
