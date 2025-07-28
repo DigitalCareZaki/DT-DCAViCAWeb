@@ -9,6 +9,7 @@ import { setPatientMedicationListingReduer } from '@slice';
 import Header from './Header';
 import Table from './Table';
 import Form from './Form';
+import Pagination from './Pagination';
 
 import type { FC } from 'react';
 import type { Props } from './types';
@@ -29,6 +30,8 @@ const Medication: FC<Props> = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PatientMedicationProps[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     const loadMedications = async () => {
@@ -52,6 +55,22 @@ const Medication: FC<Props> = ({
     loadMedications();
   }, [patient, dispatch]);
 
+  // Reset to first page when data changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data]);
+
+  // Calculate pagination values
+  const totalItems = data.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = data.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   if (!patient) return <div>Patient not define</div>;
   if (loading) return <div
     style={mainStyle} // Apply the zoom-out effect here
@@ -69,7 +88,14 @@ const Medication: FC<Props> = ({
         hideCreateMedicationBtn={hideCreateMedicationBtn}
         data={data}
       />
-      <Table data={data} />
+      <Table data={currentData} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+      />
       <Form />
     </div>
   );

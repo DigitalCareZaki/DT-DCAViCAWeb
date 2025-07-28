@@ -16,6 +16,16 @@ const RenderTable: ClientComponent = () => {
     StorePatientState
   >((state) => state.patients);
 
+  // If no data is available, show empty state
+  if (!patientMedicationListing || patientMedicationListing.length === 0) {
+    return (
+      <tr>
+        <td colSpan={9} className="px-6 py-4 text-center text-gray-500">
+          No medications found
+        </td>
+      </tr>
+    );
+  }
 
   return (
     <>

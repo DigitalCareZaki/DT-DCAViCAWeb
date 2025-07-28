@@ -19,7 +19,7 @@ const MedicationTable: ClientComponentProps<TableProps> = ({ data }) => {
 
   useEffect(() => {
     setData(data);
-  }, [data]);
+  }, [data, dispatch]);
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
