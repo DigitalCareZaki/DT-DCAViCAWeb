@@ -274,7 +274,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
               <CircleSpinner size={20} color="#fff" />
             )
           ) : statusState === 'PENDING' ? (
-            'Accept'
+            user.role === 'PATIENT' ? 'PENDING' : 'Accept'
           ) : (
             statusState &&
             statusState[0].toUpperCase() + statusState.slice(1).toLowerCase()

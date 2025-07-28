@@ -24,7 +24,7 @@ const Table: ClientComponent = () => {
           'Description',
           // 'Started',
           // 'Ended',
-          'Report Type',
+          'Lab report',
           'Date & Time',
           'Actions',
         ]}
