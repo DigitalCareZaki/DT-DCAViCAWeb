@@ -23,7 +23,7 @@ const HomePrimary: ServerComponentProps<Props> = async ({
   if (!initialData.success) return <>TESTING</>;
 
   return (
-    <div className="mt-10 flex h-full w-full flex-col gap-8 overflow-y-scroll p-6 sm:p-8 lg:p-10">
+    <div className="mt-10 flex h-full w-full flex-col gap-8 p-6 sm:p-8 lg:p-10">
       {/* Client component below */}
       <Charts appointments={appointments} compliance={compliance} rag={rag} />
 
