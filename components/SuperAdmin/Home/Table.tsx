@@ -86,7 +86,7 @@ const Table = () => {
         filename="Patient List Data"
       />
 
-      <div className="relative w-full overflow-x-auto pb-12 shadow-md sm:rounded-lg">
+      <div className="relative w-full overflow-y-scroll pb-12 shadow-md sm:rounded-lg">
         <ClientTable
           heads={[
             'Patient Name',
