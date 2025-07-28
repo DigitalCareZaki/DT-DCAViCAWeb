@@ -41,7 +41,7 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
           style={mainStyle}
           className="flex flex-col h-screen w-full bg-background"
         >
-          <div className="px-6 pt-4">
+          <div className="px-6 pt-4 sticky top-0 z-50 bg-background">
             <PrimaryHeader user={user!} />
           </div>
           <div className="flex flex-grow h-0 w-full">
@@ -60,7 +60,9 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
           style={mainStyleSettings}
           className="relative gap-4 bg-background p-6"
         >
-          <PrimaryHeader user={user!} />
+          <div className="sticky top-0 z-50 bg-background pb-4">
+            <PrimaryHeader user={user!} />
+          </div>
           <div className="flex h-full w-full overflow-hidden">
             <DynamicSidebar renderKey="settings" />
             <div className="flex-grow pl-4 overflow-auto min-w-0">
@@ -76,7 +78,9 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
   if (route?.includes('/admin/users')) {
     return (
       <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6">
-        <PrimaryHeader user={user!} />
+        <div className="sticky top-0 z-50 bg-background pb-4">
+          <PrimaryHeader user={user!} />
+        </div>
         <div className="flex h-full w-full overflow-hidden">
           <div className="flex-shrink-0">
             <DynamicSidebar renderKey="users" />
@@ -94,7 +98,9 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
         style={mainStyle}
         className="relative gap-4 bg-background p-6"
       >
-        <PrimaryHeader user={user!} />
+        <div className="sticky top-0 z-50 bg-background pb-4">
+          <PrimaryHeader user={user!} />
+        </div>
         {children}
         <ModalBottom />
       </main>

@@ -363,7 +363,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
   };
 
   return (
-    <header className="relative flex h-16 w-full items-center justify-between rounded-2xl bg-white p-4">
+    <header className="relative flex h-16 w-full items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
       <Link passHref href="/">
         <LogoMainClient
           organizationName={organization.name}
