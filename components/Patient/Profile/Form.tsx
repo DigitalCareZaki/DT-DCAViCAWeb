@@ -30,6 +30,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     handleSelect,
     selectors,
     handleFilePicker,
+    setSelectors,
   ] = useForm(profileData);
 
   // Define the expected result type from onSubmit
@@ -44,6 +45,11 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     const result = await (onSubmit(e) as unknown as Promise<SubmitResult | void>);
     if (result && result.success && result.updatedData) {
       setProfileData(result.updatedData);
+      // Update selectors with new profile picture URI
+      setSelectors((prev) => ({
+        ...prev,
+        profilePicture: result.updatedData?.uri || '',
+      }));
     }
   };
 

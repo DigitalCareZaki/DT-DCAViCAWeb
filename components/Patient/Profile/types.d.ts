@@ -39,4 +39,5 @@ export type UseFormProps = [
   handleSelect: (type: string) => (title: string | undefined) => void,
   selectors: SelectorProps,
   handleFilePicker: (accept?: string) => void,
+  setSelectors: React.Dispatch<React.SetStateAction<SelectorProps>>,
 ];

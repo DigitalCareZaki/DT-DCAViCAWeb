@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 
-import { showModalReducer } from '@slice';
+import { showModalReducer, setUserReducer } from '@slice';
 import { updateDoctorProfile } from '@service';
 import { useUser } from '@selectors';
 import { useImagePicker } from '@clienthooks';
@@ -34,7 +34,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     title: {
       title: data.title,
     },
-    profilePicture: data.uri,
+    profilePicture: data.uri || '',
   });
 
   const {
@@ -72,6 +72,8 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
         height: data.height,
       };
 
+      let updatedUri = data.uri || '';
+
       if (file) {
         const formdata = new FormData();
 
@@ -80,8 +82,9 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
         const res = await uploadFile(formdata);
 
         if (res.success) {
+          updatedUri = res.url || '';
           Object.assign(payload, {
-            uri: res.url,
+            uri: res.url || '',
           });
         }
       }
@@ -96,17 +99,38 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
       );
 
       if (res.success) {
+        // Update user data in Redux store with new profile information
+        const updatedUserData = {
+          ...user,
+          first_name: data.first_name,
+          middle_name: data.middle_name,
+          last_name: data.last_name,
+          uri: updatedUri,
+        };
+
+        dispatch(setUserReducer({ user: updatedUserData }));
+
         handleShowModal({
           show: true,
           type: 'SUCCESS',
           message: 'Your profile has been updated successfully',
         });
+
+        // Return updated data for Form component
+        return {
+          success: true,
+          updatedData: {
+            ...data,
+            uri: updatedUri,
+          },
+        };
       } else {
         handleShowModal({
           show: true,
           type: 'ERROR',
           message: 'Cannot update profile right now',
         });
+        return { success: false };
       }
     } catch (err) {
       handleShowModal({
@@ -114,6 +138,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
         type: 'ERROR',
         message: 'OOPS Something went wrong',
       });
+      return { success: false };
     } finally {
       setLoading(false);
     }
@@ -152,6 +177,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     handleSelect,
     selectors,
     handleFilePicker,
+    setSelectors,
   ];
 };
 

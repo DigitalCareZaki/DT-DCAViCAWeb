@@ -11,6 +11,7 @@ import {
   TelemedSidebar,
 } from '@common';
 import { setUserReducer } from '@slice';
+import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
@@ -18,11 +19,15 @@ import type { Props } from './types';
 const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
   const route = usePathname();
   const dispatch = useDispatch();
+  const [reduxUser] = useUser();
 
   useEffect(() => {
     if (!user) return;
     dispatch(setUserReducer({ user }));
   }, [dispatch, user]);
+
+  const currentUser = reduxUser || user;
+
 
   // Shared styles for the main layout (applying the zoom-out effect)
   const mainStyle = {
@@ -46,7 +51,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
         >
           {/* Sticky Header */}
           <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
-            <PrimaryHeader user={user!} />
+            <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
           <div className="flex flex-grow h-0 w-full overflow-hidden">
@@ -79,11 +84,11 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
         >
           {/* Sticky Header */}
           <div className="sticky top-0 z-50 bg-background p-6 pb-2">
-            <PrimaryHeader user={user!} />
+            <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
           <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
-            <TelemedSidebar userType={user?.type} />
+            <TelemedSidebar userType={currentUser?.type} />
             <div className="h-full w-[95%]">{children}</div>
           </div>
           <ModalBottom />
@@ -101,7 +106,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
         >
           {/* Sticky Header */}
           <div className="sticky top-0 z-50 bg-background p-6 pb-2">
-            <PrimaryHeader user={user!} />
+            <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
           <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
@@ -121,7 +126,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
       >
         {/* Sticky Header */}
         <div className="sticky top-0 z-50 bg-background p-6 pb-2">
-          <PrimaryHeader user={user!} />
+          <PrimaryHeader user={currentUser!} />
         </div>
         {/* Scrollable Content */}
         <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">

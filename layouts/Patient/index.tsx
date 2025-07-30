@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 import { PrimaryHeader, ModalBottom, TelemedSidebar } from '@common';
 import { setUserReducer } from '@slice';
+import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
@@ -13,12 +14,15 @@ import type { Props } from './types';
 const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
   const route = usePathname();
   const dispatch = useDispatch();
+  const [reduxUser] = useUser();
 
   useEffect(() => {
     if (user) {
       dispatch(setUserReducer({ user }));
     }
   }, [dispatch, user]);
+
+  const currentUser = reduxUser || user;
 
   // Styles for replicating a zoom-out effect
   const mainStyle = {
@@ -40,7 +44,7 @@ const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
         >
           {/* Sticky Header */}
           <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
-            <PrimaryHeader user={user!} />
+            <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
           <div className="flex flex-grow h-0 w-full overflow-hidden">
@@ -61,11 +65,11 @@ const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
         >
           {/* Sticky Header */}
           <div className="sticky top-0 z-50 bg-background p-6 pb-2">
-            <PrimaryHeader user={user!} />
+            <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
           <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
-            <TelemedSidebar userType={user?.type} />
+            <TelemedSidebar userType={currentUser?.type} />
             <div className="h-full w-[95%]">{children}</div>
           </div>
           <ModalBottom />
@@ -89,7 +93,7 @@ const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
       >
         {/* Sticky Header */}
         <div className="sticky top-0 z-50 bg-background p-6 pb-2">
-          <PrimaryHeader user={user!} />
+          <PrimaryHeader user={currentUser!} />
         </div>
         {/* Scrollable Content */}
         <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">

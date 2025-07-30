@@ -39,6 +39,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     }
 
     getCalendar(selectedUserId).then((data) => {
+      console.log('check >>>>>>>>>>>', data.data);
       setSlotP(data.data);
     });
   }, [selectedUserId]);
@@ -153,7 +154,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     <>
       <div className="flex w-full flex-col gap-6 py-10">
         <div className="flex w-full flex-col items-center justify-center gap-10 ">
-          {selectedUserId && <>
+          {!selectedUserId && <>
             Select Date & Time Slot
           </>}
           {
