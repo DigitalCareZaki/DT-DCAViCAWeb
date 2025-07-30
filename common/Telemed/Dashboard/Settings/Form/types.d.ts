@@ -2,10 +2,10 @@ import { ChangeEvent } from 'react';
 
 export interface TimeSectionProps {
   title?: string;
-  onAdded?: (slot:Slot) => void;
+  onAdded?: (slot: Slot) => void;
   min?: string;
   max?: string;
-  slot: useState<Slot|undefined>;
+  slot: useState<Slot | undefined>;
   setSlot: (slot: Slot) => void;
   onChange?: (
     e: ChangeEvent<HTMLInputElement>,
@@ -27,8 +27,8 @@ export interface SlotParentProps {
 
 export interface SlotParent {
   slots: SlotWrapper[];
-  startTime?: Date;
-  endTime?: Date;
+  startTime?: Date | null;
+  endTime?: Date | null;
 }
 
 export interface SlotWrapper {

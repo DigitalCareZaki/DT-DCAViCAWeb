@@ -11,6 +11,8 @@ const Form1: ServerComponent = async () => {
   data.data.slots.sort((a, b) => {
     return a.day - b.day;
   });
+
+  console.log('data', data.data);
   return (
     <>
       <Form data={data.data}></Form>
