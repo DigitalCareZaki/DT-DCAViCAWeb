@@ -204,12 +204,12 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
                     }}
                     className="h-full w-full"
                   >
-                    <div className="grid-4 grid w-full grid-flow-col gap-6 px-10 align-top text-gray-600">
+                    <div className="flex w-full flex-col gap-6 px-10 text-gray-600">
 
                       {
                         getSlots()?.map((item, index) => {
-                          return <>
-                            <div className='grid grid-cols-8 gap-x-1 gap-y-5'>
+                          return (
+                            <div key={index} className='flex flex-wrap gap-2'>
                               <ClientGenerator
                                 data={getSlotTimes(item)}
                                 onSelect={onSelectTimeSlot}
@@ -218,7 +218,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
                                 <TimeSlot />
                               </ClientGenerator>
                             </div>
-                          </>;
+                          );
                         })
                       }
 
