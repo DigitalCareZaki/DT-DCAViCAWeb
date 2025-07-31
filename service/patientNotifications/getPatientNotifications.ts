@@ -6,8 +6,12 @@ import type { GetNotifications } from '../types';
 
 import '@init-globals';
 
-async function getPatientNotifications(patient: string): Promise<any> {
-  const res = await fetch(`/api/v1/web/notifications/${patient}`, {
+async function getPatientNotifications(
+  patient: string, 
+  page: number = 1, 
+  limit: number = 10
+): Promise<any> {
+  const res = await fetch(`/api/v1/web/notifications/${patient}?page=${page}&limit=${limit}`, {
     next: {
       revalidate: 60,
     },
