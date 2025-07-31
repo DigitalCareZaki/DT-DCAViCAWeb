@@ -76,6 +76,7 @@ const config: Config = {
         'rag-amber': '#F19F00',
         'rag-green': '#00990F',
         'rag-no-reading': '#0400C1',
+        'rag-reading-not-set': '#962622',
         'dark-main': '#161B20',
         'dark-secondary': '#242E3D',
         theme: {

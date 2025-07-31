@@ -13,6 +13,7 @@ const statusColors: any = {
   LOW: "bg-yellow-500",
   NORMAL: "bg-green-500",
   ALERT_NOT_SET: "bg-[#001cbd]",
+  READING_NOT_SET: "bg-rag-reading-not-set",
 };
 
 const measurementKeys = ["BLOODGLUCOSE", "BLOODPRESSURE", "TEMPERATURE", "MEDICATION", "SPO2", "ECG"];
@@ -45,13 +46,13 @@ const RenderTable: ServerComponentProps<any> = async ({
           </td>
           {measurementKeys?.map((key) => {
             const measurement = el?.measurements?.[key];
-            const status = measurement?.status || null;
+            const status = measurement?.status || (measurement === undefined ? 'READING_NOT_SET' : null);
             return (
               <td key={key} className="px-3 py-2 md:px-6 md:py-4">
                 <div
                   className={`flex h-5 w-5 items-center justify-center rounded-full text-white ${statusColors[status]}`}
                 >
-                  {status ? <MdCheck size={14} /> : <MdClose size={14} />}
+                  {status && status !== 'READING_NOT_SET' ? <MdCheck size={14} /> : <MdClose size={14} />}
                 </div>
               </td>
             );
