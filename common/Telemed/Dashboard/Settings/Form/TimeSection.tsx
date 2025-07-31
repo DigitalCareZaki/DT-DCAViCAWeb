@@ -24,36 +24,33 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
     setShow((prev) => !prev);
   };
 
+  function setTimeOnDate(baseLike: Date | string | number | undefined, hhmm: string): Date {
+    const [h, m] = hhmm.split(':').map(Number);
+    const base = baseLike ? new Date(baseLike) : new Date();
+    base.setHours(h, m, 0, 0); // interpret as local 24h time
+    return base;
+  }
 
   function getTimeValue(value: Date | undefined) {
     if (!value) return "--";
-
-    const currentTime = new Date(value);
-    const hours = String(currentTime.getHours()).padStart(2, '0');
-    const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+    const d = new Date(value);
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
+  }
+
+  function format12h(dateLike: Date | string | number) {
+    const d = new Date(dateLike);
+    // [] = use default locale; force hour12 for AM/PM
+    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
   }
 
 
   function getTitle() {
+    // show label only when both times are selected
     if (!slot || !slot.startTime || !slot.endTime || onAdded) return 'Select Time';
-    const cStartTime = new Date(slot.startTime);
-    const cEndTime = new Date(slot.endTime);
 
-    // i need am and pm
-    const startHours = cStartTime.getHours();
-    const endHours = cEndTime.getHours();
-
-    const startMinutes = String(cStartTime.getMinutes()).padStart(2, '0');
-    const endMinutes = String(cEndTime.getMinutes()).padStart(2, '0');
-
-    const startAmPm = startHours >= 12 ? 'PM' : 'AM';
-    const endAmPm = endHours >= 12 ? 'PM' : 'AM';
-
-    const startHours12 = startHours % 12 || 12;
-    const endHours12 = endHours % 12 || 12;
-
-    return `${startHours12}:${startMinutes} ${startAmPm} - ${endHours12}:${endMinutes} ${endAmPm}`;
+    return `${format12h(slot.startTime)} - ${format12h(slot.endTime)}`;
   }
 
   return (
@@ -93,11 +90,8 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
                 min={min}
                 max={max}
                 onChange={(e) => {
-                  var startTime = createHours(e.target.value + 'am');
-                  setSlot({
-                    ...slot,
-                    startTime,
-                  });
+                  const startTime = setTimeOnDate(slot?.startTime, e.target.value); // no "am" append
+                  setSlot({ ...slot, startTime });
                 }}
               />
             </div>
@@ -110,11 +104,8 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
                 min={min}
                 max={max}
                 onChange={(e) => {
-                  var endTime = createHours(e.target.value + 'am');
-                  setSlot({
-                    ...slot,
-                    endTime,
-                  });
+                  const endTime = setTimeOnDate(slot?.endTime, e.target.value); // no "am" append
+                  setSlot({ ...slot, endTime });
                 }}
               />
             </div>

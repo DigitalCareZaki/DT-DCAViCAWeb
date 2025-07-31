@@ -12,7 +12,6 @@ const Form1: ServerComponent = async () => {
     return a.day - b.day;
   });
 
-  console.log('data', data.data);
   return (
     <>
       <Form data={data.data}></Form>
