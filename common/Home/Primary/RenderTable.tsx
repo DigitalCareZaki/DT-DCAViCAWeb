@@ -12,7 +12,7 @@ const statusColors: any = {
   HIGH: "bg-red-500",
   LOW: "bg-yellow-500",
   NORMAL: "bg-green-500",
-  null: "bg-[#001cbd]",
+  ALERT_NOT_SET: "bg-[#001cbd]",
 };
 
 const measurementKeys = ["BLOODGLUCOSE", "BLOODPRESSURE", "TEMPERATURE", "MEDICATION", "SPO2", "ECG"];
