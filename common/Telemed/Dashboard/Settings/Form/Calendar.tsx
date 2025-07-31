@@ -179,10 +179,6 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
             newErrors.endDate = 'End Date is required';
         }
 
-        if (opp.startTime && opp.endTime && opp.startTime >= opp.endTime) {
-            newErrors.endDate = 'End Date must be after Start Date';
-        }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     }
@@ -302,6 +298,7 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                                 if (!validateDates()) {
                                     return;
                                 }
+
 
                                 setLoading(true);
                                 await updateCalendar(
