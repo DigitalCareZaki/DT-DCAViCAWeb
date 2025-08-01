@@ -18,6 +18,10 @@ const Notifications: ClientComponent = () => {
     StoreNotificationProps
   >((state) => state.notifications);
 
+  // Debug logging
+  console.log('Notifications data:', notifications);
+  console.log('Unread status:', unread);
+
   const timeoutRef = useRef<any | null>(null);
   const [show, setShow] = useState<boolean>(false);
 
@@ -52,7 +56,7 @@ const Notifications: ClientComponent = () => {
           'theme-bg-color relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[105%]'
         }
       >
-        {unread && (
+        {(unread || notifications.filter(n => !n?.read).length > 0) && (
           <div className="theme-bg-color absolute z-20 h-full w-full animate-ping rounded-full" />
         )}
         <IoNotifications />
@@ -78,16 +82,35 @@ const Notifications: ClientComponent = () => {
               type: 'keyframes',
               duration: 0.2,
             }}
-            className="absolute top-full z-50 flex h-96 w-full flex-col gap-4 overflow-y-scroll rounded-lg bg-white p-2 text-xs shadow-lg shadow-black/50"
+            className="absolute top-full right-0 z-50 flex h-96 w-80 flex-col gap-2 overflow-y-auto rounded-lg bg-white p-4 text-xs shadow-lg shadow-black/50 border border-gray-200"
           >
+            <div className="flex items-center justify-between border-b border-gray-200 pb-2 mb-2">
+              <h3 className="font-semibold text-gray-800">Notifications</h3>
+              {unread && (
+                <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                  {notifications.filter(n => !n?.read).length} new
+                </span>
+              )}
+            </div>
+
             {notifications.length > 0 ? (
-              <ClientGenerator data={notifications}>
-                <IndividalNotification />
-              </ClientGenerator>
+              <div className="space-y-3">
+                <ClientGenerator data={notifications}>
+                  <IndividalNotification />
+                </ClientGenerator>
+              </div>
             ) : (
-              <p className="my-auto w-full text-center text-md">
-                🥳 Hooray! You have no notifications...
-              </p>
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <div className="text-gray-400 mb-2">
+                  <IoNotifications size={32} />
+                </div>
+                <p className="text-gray-500 text-sm">
+                  No notifications yet
+                </p>
+                <p className="text-gray-400 text-xs mt-1">
+                  You're all caught up!
+                </p>
+              </div>
             )}
           </motion.div>
         )}
@@ -98,8 +121,8 @@ const Notifications: ClientComponent = () => {
 
 const IndividalNotification: ClientComponentProps<any> = ({ ...el }) => {
   return (
-    <div className="theme-bg-color flex w-full items-start gap-2 overflow-x-hidden rounded-2xl p-4">
-      <div className="relative h-10 w-10 shrink-0 rounded-full">
+    <div className="flex w-full items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 border border-gray-100">
+      <div className="relative h-10 w-10 shrink-0 rounded-full bg-gray-200">
         <Image
           src={getProfilePicture(el?.sender?.uri)}
           alt="profile"
@@ -107,21 +130,27 @@ const IndividalNotification: ClientComponentProps<any> = ({ ...el }) => {
           fill
         />
       </div>
-      <div className="flex flex-col text-white">
-        <span className="text-sm text-xs font-semibold">
-          {getName({
-            ...el?.sender,
-          })}
-        </span>
-        <span className="-mt-1 line-clamp-1 w-[80%] truncate text-sm text-xs font-semibold text-white/50">
-          {el?.sender?.email}
-        </span>
-        <span className="text-sm text-xs font-semibold">{el?.title}</span>
-        <span className="-mt-1 w-[80%] text-[10px] text-white/60">
-          {el?.description}
-        </span>
-        <div className="flex w-[80%] justify-end">
-          <span className="-mt-1 text-[10px] font-semibold text-white/80">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-sm font-semibold text-gray-900 truncate">
+                {getName({
+                  ...el?.sender,
+                })}
+              </span>
+              {!el?.read && (
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              )}
+            </div>
+            <p className="text-sm font-medium text-gray-800 mb-1 line-clamp-2">
+              {el?.title}
+            </p>
+            <p className="text-xs text-gray-600 line-clamp-2">
+              {el?.description}
+            </p>
+          </div>
+          <span className="text-xs text-gray-400 whitespace-nowrap">
             {timeAgo(new Date(el?.created_at).getTime())}
           </span>
         </div>

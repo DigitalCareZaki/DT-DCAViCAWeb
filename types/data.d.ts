@@ -827,6 +827,7 @@ export interface NotificationProps {
   title: string;
   description: string;
   created_at: string;
+  read?: boolean;
 }
 
 export interface PaginationProps {
