@@ -9,6 +9,7 @@ import type { ServerComponent } from '@types';
 
 const SmsHistory: ServerComponent = async () => {
   const res = await getSmsHistory(1, 10);
+
   if (!res.success) return <></>;
 
   return (

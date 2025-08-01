@@ -73,7 +73,7 @@ const Charts: ClientComponentProps<Props> = ({
           </div>
           <div className="flex items-center gap-4">
             <div className="h-7 w-7 rounded-2xl bg-rag-reading-not-set"></div>
-            <p className="text-lg leading-none">Reading Not Set</p>
+            <p className="text-lg leading-none">Reading Not Taken</p>
           </div>
         </div>
       </div>

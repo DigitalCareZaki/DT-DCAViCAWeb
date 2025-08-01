@@ -44,7 +44,7 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
           'Glucose',
           'Blood Pressure',
           'Temperature',
-          'Medication',
+          // 'Medication',
           'SPO2',
           'ECG',
         ]}

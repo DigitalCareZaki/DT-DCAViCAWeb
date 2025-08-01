@@ -6,8 +6,8 @@ import '@init-globals';
 async function getSmsHistory(page: any, limit: any): Promise<any> {
   const res = await fetch(`/api/v1/web/sms/logs?page=${page}&limit=${limit}`);
 
-  const data = await res.json();
 
+  const data = await res.json();
 
   return {
     success: res.ok,
