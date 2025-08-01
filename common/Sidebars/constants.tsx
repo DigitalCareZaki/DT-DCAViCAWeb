@@ -48,12 +48,6 @@ const data = {
       Icon: MdEmail,
     },
     {
-      title: 'Logs',
-      id: 'logs',
-      path: '/settings/logs',
-      Icon: MdTimelapse,
-    },
-    {
       title: 'Notifications',
       id: 'notifications',
       path: '/settings/notifications',
