@@ -61,7 +61,7 @@ const Vitals: ClientComponentProps<Props> = ({ data }) => {
               opacity: 0,
               y: 100,
             }}
-            className="flex h-[90%] w-[90%] flex-col gap-10 rounded-2xl bg-dark-secondary p-5 shadow-xl"
+            className="flex h-[70%] w-[70%] flex-col gap-6 rounded-2xl bg-dark-secondary p-5 shadow-xl"
           >
             <div className="flex w-full items-center justify-between">
               <div className="flex flex-col">
@@ -81,7 +81,7 @@ const Vitals: ClientComponentProps<Props> = ({ data }) => {
               </TooltipBasic>
             </div>
             <Levels data={data} />
-            <div className="h-40 w-full">
+            <div className="h-32 w-full">
               <Chart data={generateECGData(100)} />
             </div>
           </motion.div>
