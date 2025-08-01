@@ -108,9 +108,11 @@ const Record: ClientComponentProps<any> = ({
       <td className="flex space-x-4 px-6 py-4">
         {/* Download Button */}
         <div
-          onClick={handleDownload}
-
-          className="theme-bg-color flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%]"
+          onClick={uri ? handleDownload : undefined}
+          className={`flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 ${uri
+            ? 'theme-bg-color cursor-pointer hover:scale-[110%]'
+            : 'bg-gray-400 cursor-not-allowed'
+            }`}
         >
           {loading ? (
             <CircleSpinner size={16} color="#fff" />
