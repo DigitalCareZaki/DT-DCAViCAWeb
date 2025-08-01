@@ -146,14 +146,14 @@ const Vitals: ClientComponentProps<Props> = ({ data, appointmentId }) => {
               opacity: 0,
               y: 100,
             }}
-            className="flex h-[80%] w-[80%] flex-col gap-6 rounded-2xl bg-dark-secondary p-5 shadow-xl"
+            className="flex h-[60%] w-[60%] flex-col gap-6 rounded-2xl bg-dark-secondary p-5 shadow-xl"
           >
             <div className="flex w-full items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-t-color-secondary">
                   Vitals
                 </span>
-                <span className="text-xs text-gray-400">Syed Azeem Javed</span>
+                <span className="text-xs text-gray-400">{vitalsData[0]?.patient?.user?.first_name} {vitalsData[0]?.patient?.user?.middle_name} {vitalsData[0]?.patient?.user?.last_name}</span>
               </div>
 
               <TooltipBasic title="Close">
@@ -168,13 +168,13 @@ const Vitals: ClientComponentProps<Props> = ({ data, appointmentId }) => {
 
             <Levels data={data} />
 
-            <div className="flex-1 overflow-auto">
+            <div className={`flex-1 ${vitalsData.length > 10 ? 'overflow-auto' : ''}`}>
               {loading ? (
                 <div className="flex h-full items-center justify-center">
                   <div className="text-t-color-secondary">Loading vitals...</div>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className={`${vitalsData.length > 10 ? 'overflow-x-auto max-h-96' : 'overflow-x-auto'}`}>
                   <table className="w-full min-w-full border-collapse border border-gray-700">
                     <thead>
                       <tr className="bg-dark-main">
@@ -199,27 +199,27 @@ const Vitals: ClientComponentProps<Props> = ({ data, appointmentId }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {vitalsData.map((vital) => (
-                        <tr key={vital.id} className="border-b border-gray-700 hover:bg-dark-main/50">
+                      {vitalsData?.map((vital) => (
+                        <tr key={vital?.id} className="border-b border-gray-700 hover:bg-dark-main/50">
                           <td className="border border-gray-700 px-4 py-2 text-sm text-gray-300">
-                            {vital.title}
+                            {vital?.title}
                           </td>
                           <td className="border border-gray-700 px-4 py-2 text-sm text-gray-300">
-                            {vital.type}
+                            {vital?.type}
                           </td>
                           <td className="border border-gray-700 px-4 py-2 text-sm text-gray-300">
-                            {vital.values.join(', ')}
+                            {vital?.values?.join(', ')}
                           </td>
                           <td className="border border-gray-700 px-4 py-2 text-sm text-gray-300">
-                            {vital.unit}
+                            {vital?.unit}
                           </td>
                           <td className="border border-gray-700 px-4 py-2 text-sm">
-                            <span className={getStatusColor(vital.status)}>
-                              {vital.status}
+                            <span className={getStatusColor(vital?.status)}>
+                              {vital?.status}
                             </span>
                           </td>
                           <td className="border border-gray-700 px-4 py-2 text-sm text-gray-300">
-                            {formatDate(vital.created_at)}
+                            {formatDate(vital?.created_at)}
                           </td>
                         </tr>
                       ))}
