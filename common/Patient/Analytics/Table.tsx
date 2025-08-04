@@ -13,19 +13,44 @@ import type { TableProps } from './types';
 import type { ClientComponentProps, PatientNursesProps } from '@types';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
-const Table: ClientComponentProps<any> = ({ data }) => {
+const Table: ClientComponentProps<any> = ({ }) => {
 
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const [pagination, setPagination] = useState(data?.pagination);
+  const [pagination, setPagination] = useState({
+    totalItems: 0,
+    totalPages: 0,
+    currentPage: 1,
+    perPage: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+    nextPage: null,
+    prevPage: null
+  });
   const [loading, setLoading] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const setData = (appointments: any, paginationData: any) => dispatch(setPatientAppointmentsListingReducer({ appointments, pagination: paginationData }));
 
 
   useEffect(() => {
-    setData(data?.data, data?.pagination);
-  }, [data]);
+    const fetchInitialData = async () => {
+      setLoading(true);
+      const res = await getAnalytics(1, 10);
+      console.log('Initial data response:', res);
+
+      if (res?.success) {
+        setData(res.data.data, res.data.pagination);
+        setPagination(res.data.pagination);
+      }
+      setLoading(false);
+      setInitialLoad(false);
+    };
+
+    if (initialLoad) {
+      fetchInitialData();
+    }
+  }, [initialLoad]);
 
   const handlePageChange = async (page: number) => {
     setLoading(true);
@@ -35,8 +60,12 @@ const Table: ClientComponentProps<any> = ({ data }) => {
       page,
       pagination.perPage
     );
-    setData(appointments?.data, appointments?.data?.pagination);
-    setPagination(appointments?.data?.pagination);
+
+    if (appointments?.success) {
+      setData(appointments.data.data, appointments.data.pagination);
+      setPagination(appointments.data.pagination);
+    }
+
     setLoading(false);
   };
 
@@ -50,11 +79,11 @@ const Table: ClientComponentProps<any> = ({ data }) => {
           </div>
         )}
         <ClientTable heads={['Title', 'Description', 'Type', 'Appointment Date', 'Appointment Time', 'Status', 'Patient', "Action"]}>
-          {!loading ? <RenderTable /> : <></>}
+          {!loading && !initialLoad ? <RenderTable /> : <></>}
         </ClientTable>
       </div>
       {/* Pagination Controls */}
-      {!loading && (
+      {!loading && !initialLoad && (
         <div className="flex justify-center mt-4">
           <div className="flex items-center space-x-4">
             <button

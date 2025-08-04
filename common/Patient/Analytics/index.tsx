@@ -1,7 +1,6 @@
 'use server';
 
 import { getPatientNurses, getUserTypeHeaders } from '@actions';
-import { getAnalytics } from '@service';
 import Header from './Header';
 import Table from './Table';
 import Form from './Form';
@@ -11,18 +10,12 @@ import type { Props } from './types';
 
 const AnalyticsTab: ServerComponentProps<any> = async ({ }) => {
 
-
-  const type = await getUserTypeHeaders();
-  const res = await getAnalytics(1, 10);
-
-
-  if (!res.success) return <></>;
-
+  // const type = await getUserTypeHeaders();
 
   return (
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
       <Header />
-      <Table data={res?.data} />
+      <Table />
       {/* <Form /> */}
     </div>
   );
