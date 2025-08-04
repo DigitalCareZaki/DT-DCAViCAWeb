@@ -29,46 +29,63 @@ const Medication: FC<Props> = ({
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [data, setData] = useState<PatientMedicationProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState({
+    totalItems: 0,
+    perPage: 10,
+    currentPage: 1,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPrevPage: false,
+    nextPage: null as number | null,
+    prevPage: null as number | null,
+  });
 
   useEffect(() => {
     const loadMedications = async () => {
       if (!patient) return;
 
       try {
-        setLoading(true);
-        const res = await getPatientMedications(patient, undefined);
+        // Only show main loading for initial load or page changes, not for search
+        if (searchTerm === '') {
+          setLoading(true);
+        } else {
+          setSearchLoading(true);
+        }
+
+        const res = await getPatientMedications(patient, searchTerm, currentPage, itemsPerPage);
 
         if (res.success) {
           setData(res.data);
+          setPagination(res.pagination);
           dispatch(setPatientMedicationListingReduer({ medications: res.data }));
         }
       } catch (error) {
         console.error('Error loading medications:', error);
       } finally {
         setLoading(false);
+        setSearchLoading(false);
       }
     };
 
     loadMedications();
-  }, [patient, dispatch]);
+  }, [patient, searchTerm, currentPage, itemsPerPage, dispatch]);
 
-  // Reset to first page when data changes
+  // Reset to first page when patient or search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [data]);
-
-  // Calculate pagination values
-  const totalItems = data.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = data.slice(startIndex, endIndex);
+  }, [patient, searchTerm]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleSearch = (searchValue: string) => {
+    setSearchTerm(searchValue);
   };
 
   if (!patient) return <div>Patient not define</div>;
@@ -87,14 +104,20 @@ const Medication: FC<Props> = ({
       <Header
         hideCreateMedicationBtn={hideCreateMedicationBtn}
         data={data}
+        onSearch={handleSearch}
+        searchLoading={searchLoading}
       />
-      <Table data={currentData} />
+      <Table data={data} />
       <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
         onPageChange={handlePageChange}
-        totalItems={totalItems}
-        itemsPerPage={itemsPerPage}
+        totalItems={pagination.totalItems}
+        itemsPerPage={pagination.perPage}
+        hasNextPage={pagination.hasNextPage}
+        hasPrevPage={pagination.hasPrevPage}
+        nextPage={pagination.nextPage}
+        prevPage={pagination.prevPage}
       />
       <Form />
     </div>

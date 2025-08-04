@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 
@@ -9,15 +9,15 @@ import {
   setPatientMedicationListingReduer,
 } from '@slice';
 import { InputBasic, ButtonPrimary, ExportButton } from '@common';
-import { debounce } from '@init-globals';
-import { getPatientMedications } from '@service';
 
 import type { ClientComponentProps, PatientMedicationProps } from '@types';
 
 const MedicationHeader: ClientComponentProps<{
   hideCreateMedicationBtn?: boolean;
   data: PatientMedicationProps[];
-}> = ({ hideCreateMedicationBtn, data }) => {
+  onSearch?: (searchValue: string) => void;
+  searchLoading?: boolean;
+}> = ({ hideCreateMedicationBtn, data, onSearch, searchLoading }) => {
   const dispatch = useDispatch();
   const params = useSearchParams();
 
@@ -28,18 +28,22 @@ const MedicationHeader: ClientComponentProps<{
   const setData = (medications: PatientMedicationProps[]) =>
     dispatch(setPatientMedicationListingReduer({ medications }));
 
-  const onChange = debounce(async (e: ChangeEvent<HTMLInputElement>[]) => {
-    const value = e[0].target.value;
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-    const res = await getPatientMedications(
-      params?.get('patient')?.toString() ?? '',
-      value
-    );
+  const debouncedSearch = useCallback((value: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-    if (!res.success) return;
+    timeoutRef.current = setTimeout(() => {
+      onSearch?.(value);
+    }, 500);
+  }, [onSearch]);
 
-    setData(res.data);
-  }, 1000);
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    debouncedSearch(value);
+  };
 
   return (
     <div className="flex w-full justify-between">
@@ -51,6 +55,8 @@ const MedicationHeader: ClientComponentProps<{
             icon="IoSearch"
             borderTheme
             onChange={onChange}
+            disabled={searchLoading}
+            className={searchLoading ? 'opacity-50' : ''}
           />
         </div>
         <ExportButton

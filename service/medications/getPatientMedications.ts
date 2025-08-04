@@ -6,17 +6,34 @@ import type { GetPatientMedicationProps } from '../types';
 
 async function getPatientMedication(
   id: string,
-  search?: string
+  search?: string,
+  page?: number,
+  perPage?: number
 ): Promise<GetPatientMedicationProps> {
-  const res = await fetch(
-    `/api/v1/web/medications/patients/${id}?search=${search || ''}`
-  );
+  const params = new URLSearchParams();
+  if (search) params.append('search', search);
+  if (page) params.append('page', page.toString());
+  if (perPage) params.append('perPage', perPage.toString());
 
-  const data = await res.json();
+  const url = `/api/v1/web/medications/patients/${id}?${params.toString()}`;
+
+  const res = await fetch(url);
+
+  const responseData = await res.json();
 
   return {
     success: res.ok,
-    data,
+    data: responseData.data || responseData,
+    pagination: responseData.pagination || {
+      totalItems: 0,
+      perPage: 10,
+      currentPage: 1,
+      totalPages: 0,
+      hasNextPage: false,
+      hasPrevPage: false,
+      nextPage: null,
+      prevPage: null,
+    },
   };
 }
 

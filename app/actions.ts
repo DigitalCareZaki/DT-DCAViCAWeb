@@ -72,8 +72,12 @@ export const getPatientMeasurements = async (
   pageSize: number
 ) => getPatientMeasurementsService(id, type, page, pageSize);
 
-export const getPatientMedications = async (id: string, search?: string) =>
-  getPatientMedicationsService(id, search);
+export const getPatientMedications = async (
+  id: string, 
+  search?: string, 
+  page?: number, 
+  perPage?: number
+) => getPatientMedicationsService(id, search, page, perPage);
 
 export const getPatientCompilancePerPill = async (patientId: string) =>
   getCompliancePerPillService(patientId);
