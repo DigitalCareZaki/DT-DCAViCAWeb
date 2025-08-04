@@ -33,7 +33,7 @@ export default function Promotion(): JSX.Element {
       </div>
 
       <div className="flex w-full flex-col items-center font-normal tracking-wider">
-        <span>Available on</span>
+        <span className="text-sm font-normal tracking-wider text-secondary">Available on</span>
         <div className="mt-6 flex items-center gap-4">
           <ButtonPromotion
             heading="AppStore"
