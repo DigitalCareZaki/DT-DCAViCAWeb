@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useCallback, useRef } from 'react';
+import { ChangeEvent, useCallback, useRef, useMemo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 
@@ -29,6 +29,56 @@ const MedicationHeader: ClientComponentProps<{
     dispatch(setPatientMedicationListingReduer({ medications }));
 
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState('');
+
+  // Preserve focus during search operations
+  useEffect(() => {
+    if (searchLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [searchLoading]);
+
+  // Prevent focus loss by maintaining focus on any re-render
+  useEffect(() => {
+    const handleFocusLoss = () => {
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        // Small delay to ensure the input is ready
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 0);
+      }
+    };
+
+    // Listen for focus events on the document
+    document.addEventListener('focusin', handleFocusLoss);
+
+    // Also use a mutation observer to detect DOM changes that might cause focus loss
+    const observer = new MutationObserver(() => {
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 0);
+      }
+    });
+
+    // Observe the entire document for changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+
+    return () => {
+      document.removeEventListener('focusin', handleFocusLoss);
+      observer.disconnect();
+    };
+  }, []);
 
   const debouncedSearch = useCallback((value: string) => {
     if (timeoutRef.current) {
@@ -42,22 +92,48 @@ const MedicationHeader: ClientComponentProps<{
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setInputValue(value);
     debouncedSearch(value);
   };
+
+  const onFocus = () => {
+    // Ensure focus is maintained
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const onBlur = () => {
+    // Prevent blur by immediately refocusing
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
+  };
+
+  // Memoize the input component to prevent re-renders that cause focus loss
+  const searchInput = useMemo(() => (
+    <InputBasic
+      ref={inputRef}
+      placeholder="Search"
+      icon="IoSearch"
+      borderTheme
+      value={inputValue}
+      onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      disabled={false} // Never disable the input to prevent focus loss
+      className={searchLoading ? 'opacity-50' : ''}
+    />
+  ), [inputValue, onChange, onFocus, onBlur, searchLoading]);
 
   return (
     <div className="flex w-full justify-between">
       <span className="screen-title">Medication</span>
       <div className="flex items-center gap-4">
         <div className="flex w-60">
-          <InputBasic
-            placeholder="Search"
-            icon="IoSearch"
-            borderTheme
-            onChange={onChange}
-            disabled={searchLoading}
-            className={searchLoading ? 'opacity-50' : ''}
-          />
+          {searchInput}
         </div>
         <ExportButton
           data={data.map((el) => ({

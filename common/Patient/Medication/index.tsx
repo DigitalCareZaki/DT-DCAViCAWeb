@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { getPatientMedications } from '@actions';
@@ -84,9 +84,38 @@ const Medication: FC<Props> = ({
     setCurrentPage(page);
   };
 
-  const handleSearch = (searchValue: string) => {
+  const handleSearch = useCallback((searchValue: string) => {
     setSearchTerm(searchValue);
-  };
+  }, []);
+
+  // Memoize the Header component to prevent unnecessary re-renders
+  const headerComponent = useMemo(() => (
+    <Header
+      hideCreateMedicationBtn={hideCreateMedicationBtn}
+      data={data}
+      onSearch={handleSearch}
+      searchLoading={searchLoading}
+    />
+  ), [hideCreateMedicationBtn, data, handleSearch, searchLoading]);
+
+  // Memoize the table and pagination to prevent re-renders during search
+  const tableComponent = useMemo(() => (
+    <Table data={data} />
+  ), [data]);
+
+  const paginationComponent = useMemo(() => (
+    <Pagination
+      currentPage={pagination.currentPage}
+      totalPages={pagination.totalPages}
+      onPageChange={handlePageChange}
+      totalItems={pagination.totalItems}
+      itemsPerPage={pagination.perPage}
+      hasNextPage={pagination.hasNextPage}
+      hasPrevPage={pagination.hasPrevPage}
+      nextPage={pagination.nextPage}
+      prevPage={pagination.prevPage}
+    />
+  ), [pagination, handlePageChange]);
 
   if (!patient) return <div>Patient not define</div>;
   if (loading) return <div
@@ -101,24 +130,9 @@ const Medication: FC<Props> = ({
 
   return (
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
-      <Header
-        hideCreateMedicationBtn={hideCreateMedicationBtn}
-        data={data}
-        onSearch={handleSearch}
-        searchLoading={searchLoading}
-      />
-      <Table data={data} />
-      <Pagination
-        currentPage={pagination.currentPage}
-        totalPages={pagination.totalPages}
-        onPageChange={handlePageChange}
-        totalItems={pagination.totalItems}
-        itemsPerPage={pagination.perPage}
-        hasNextPage={pagination.hasNextPage}
-        hasPrevPage={pagination.hasPrevPage}
-        nextPage={pagination.nextPage}
-        prevPage={pagination.prevPage}
-      />
+      {headerComponent}
+      {tableComponent}
+      {paginationComponent}
       <Form />
     </div>
   );
