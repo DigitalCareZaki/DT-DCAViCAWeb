@@ -254,7 +254,7 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                 {/* Weekly Day Selection - Only show when both dates are selected */}
                 {(opp.startTime && opp.endTime) && (
                     <>
-                        <div className="mb-4">
+                        <div className="mb-4 px-10">
                             <h3 className="text-lg font-medium text-gray-900 mb-4">
                                 Weekly Availability
                                 {opp.startTime && opp.endTime && (
