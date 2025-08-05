@@ -91,6 +91,7 @@ const RenderTable: ClientComponent = () => {
               {new Date(appointment?.start_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </td>
             <td className="px-6 py-4">{el?.status}</td>
+            <td className="px-6 py-4">{observation?.diagnosis || 'N/A'}</td>
             <td className="px-6 py-4">
               {organizer?.first_name} {organizer?.last_name}
             </td>
