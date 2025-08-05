@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { deleteCookie } from 'cookies-next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaHome } from '@react-icons/all-files/fa/FaHome';
+import { IoNotifications } from '@react-icons/all-files/io5/IoNotifications';
 
 import { useCurrentOrganization } from '@selectors';
 import { LogoMainClient } from '@common';
@@ -96,6 +97,14 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
       return safePathname === href;
     }
     return safePathname === href || (href !== '/' && safePathname.startsWith(href));
+  };
+
+  // Handle notification bell click to redirect to notifications
+  const handleNotificationClick = () => {
+    router.push(getPath('/notifications'));
+  };
+  const handleNotificationAdmn = () => {
+    router.push(getPath('/settings/notifications'));
   };
 
   const renderLinks = {
@@ -384,7 +393,22 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
             >
               <IoReorderThreeOutline size={26} />
             </div>
-            <Notifications />
+
+            {/* Notification Bell Icon with Click Functionality */}
+            <div className="relative">
+              {(user?.type === 'DOCTOR' || user?.type === 'NURSE' || user?.type === 'PATIENT') ? (
+                // For DOCTOR, NURSE, PATIENT - add click functionality
+                <div onClick={handleNotificationClick}>
+                  <Notifications />
+                </div>
+              ) : (user?.type === 'ADMIN' || user?.type === 'SUPERADMIN') ? (
+                // For ADMIN and SUPERADMIN - original functionality
+                <div onClick={handleNotificationAdmn}>
+                  <Notifications />
+                </div>
+              ) : null}
+            </div>
+
             <div
               onClick={() => setShow((prev) => !prev)}
               className="relative h-10 w-10 rounded-full bg-black"
