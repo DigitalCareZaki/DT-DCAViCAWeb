@@ -77,7 +77,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
   // }
   if (route?.includes('/doctor/telemed')) {
     return (
-      <div className="relative h-screen w-screen overflow-hidden">
+      <div className="relative h-full w-screen">
         <main
           style={mainStyle}
           className="flex flex-col h-screen w-full bg-background"
@@ -87,7 +87,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
             <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
-          <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+          <div className="flex flex-grow h-full w-full px-6">
             <TelemedSidebar userType={currentUser?.type} />
             <div className="h-full w-[95%]">{children}</div>
           </div>
