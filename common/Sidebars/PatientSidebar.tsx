@@ -19,6 +19,7 @@ import { IoPulseOutline } from '@react-icons/all-files/io5/IoPulseOutline';
 
 import { useUser } from '@selectors';
 import { getPatientProfile } from '@actions';
+import { getPatientIdRemoveAlert } from '@service';
 import { getProfilePicture, getName } from '@init-globals';
 
 import type { ClientComponent } from '@types';
@@ -35,14 +36,17 @@ const Sidebar: ClientComponent = () => {
     last_name: string | null;
     middle_name: string | null;
     emr: string | null;
+    user_id: string | null;
   }>({
     uri: null,
     first_name: null,
     last_name: null,
     middle_name: null,
     emr: null,
+    user_id: null,
   });
   const [sidebar, setSidebar] = useState<boolean>(false);
+  const [isCurrentUserDoctor, setIsCurrentUserDoctor] = useState<boolean>(false);
 
   const getPath = useCallback(
     (url: string) => {
@@ -57,7 +61,10 @@ const Sidebar: ClientComponent = () => {
     if (!params?.get('patient')?.length) return;
 
     (async () => {
-      const patient = await getPatientProfile(params.get('patient') as string);
+      const patientId = params.get('patient') as string;
+
+      // Fetch patient profile for display purposes
+      const patient = await getPatientProfile(patientId);
 
       setPatient({
         uri: patient?.data?.user?.uri,
@@ -65,9 +72,21 @@ const Sidebar: ClientComponent = () => {
         last_name: patient?.data?.user?.last_name,
         middle_name: patient?.data?.user?.middle_name,
         emr: patient?.data?.emr,
+        user_id: patient?.data?.user?.id,
       });
+
+      // Call the new API to get user_id and check if it matches current user
+      try {
+        const patientUserData = await getPatientIdRemoveAlert(patientId);
+        if (patientUserData.success && patientUserData.data.user_id) {
+          setIsCurrentUserDoctor(user.id === patientUserData.data.user_id);
+        }
+      } catch (error) {
+        console.error('Error fetching patient user ID:', error);
+        setIsCurrentUserDoctor(false);
+      }
     })();
-  }, [params]);
+  }, [params, user.id]);
 
   // "/doctor/patient/profile"
   return (
@@ -223,22 +242,24 @@ const Sidebar: ClientComponent = () => {
             {sidebar && <span className="text-xs">Medication</span>}
           </Link>
         </div>
-        <div
-          title="Alerts"
-          className={twMerge(
-            'patient-profile-bar-icon',
-            sidebar && 'flex bg-background px-2'
-          )}
-        >
-          <Link
-            passHref
-            href={getPath(`/patient/alerts?patient=${params?.get('patient')}`)}
-            className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
+        {isCurrentUserDoctor && (
+          <div
+            title="Alerts"
+            className={twMerge(
+              'patient-profile-bar-icon',
+              sidebar && 'flex bg-background px-2'
+            )}
           >
-            <IoIosNotifications size={18} />
-            {sidebar && <span className="text-xs">Alerts</span>}
-          </Link>
-        </div>
+            <Link
+              passHref
+              href={getPath(`/patient/alerts?patient=${params?.get('patient')}`)}
+              className={twMerge('flex gap-2', sidebar ? 'w-full' : 'w-fit')}
+            >
+              <IoIosNotifications size={18} />
+              {sidebar && <span className="text-xs">Alerts</span>}
+            </Link>
+          </div>
+        )}
         <div
           title="Devices"
           className={twMerge(

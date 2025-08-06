@@ -8,6 +8,7 @@ export { default as addPatientContact } from './patients/addPatientContact';
 export { default as searchDoctor } from './searchDoctor';
 export { default as addPatientDoctor } from './patients/addPatientDoctor';
 export { default as getPatientDoctors } from './patients/getPatientDoctors';
+export { default as getPatientIdRemoveAlert } from './patients/getPatientIdRemoveAlert';
 export { default as getPatientNurses } from './patients/getPatientNurses';
 export { default as searchNurse } from './searchNurse';
 export { default as addPatientNurse } from './patients/addPatientNurse';
@@ -75,6 +76,7 @@ export { default as fetchChatRooms } from './chat/getRooms';
 export { default as searchChatRooms } from './chat/searchRooms';
 export { default as createRoom } from './chat/createRoom';
 export { default as fetchRoomChats } from './chat/getRoomChats';
+
 
 export { default as searchArticle } from './articles/searchArticle';
 export { default as searchUsersMessages } from './messages/searchUsers';
