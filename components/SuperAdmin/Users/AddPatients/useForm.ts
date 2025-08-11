@@ -30,6 +30,23 @@ import type {
 
 import { ModalState } from '@store-types';
 
+// Define loading step types
+export type LoadingStep =
+  | 'idle'
+  | 'validating'
+  | 'preparing'
+  | 'submitting'
+  | 'processing'
+  | 'success'
+  | 'error';
+
+export interface LoadingStepInfo {
+  step: LoadingStep;
+  title: string;
+  description: string;
+  progress: number;
+}
+
 const useFormHook = (): useFormProps => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -38,6 +55,7 @@ const useFormHook = (): useFormProps => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
 
   const [selectors, setSelectors] = useState<SelectorsProps>({
     gender: {
@@ -116,6 +134,7 @@ const useFormHook = (): useFormProps => {
     formState: { errors },
     setValue,
     clearErrors,
+    getValues,
   } = useForm<AddPatientProps>({
     resolver: vestResolver(validator),
     mode: 'onChange',
@@ -124,49 +143,128 @@ const useFormHook = (): useFormProps => {
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
 
+  // Function to get loading step information
+  const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
+    const steps: Record<LoadingStep, LoadingStepInfo> = {
+      idle: {
+        step: 'idle',
+        title: 'Ready to Submit',
+        description: 'Form is ready for submission',
+        progress: 0,
+      },
+      validating: {
+        step: 'validating',
+        title: 'Validating Form',
+        description: 'Checking form data and requirements...',
+        progress: 20,
+      },
+      preparing: {
+        step: 'preparing',
+        title: 'Preparing Data',
+        description: 'Organizing patient information...',
+        progress: 40,
+      },
+      submitting: {
+        step: 'submitting',
+        title: 'Submitting to Server',
+        description: 'Sending patient data to the server...',
+        progress: 60,
+      },
+      processing: {
+        step: 'processing',
+        title: 'Processing Request',
+        description: 'Server is processing the patient creation...',
+        progress: 80,
+      },
+      success: {
+        step: 'success',
+        title: 'Patient Created Successfully!',
+        description: 'Redirecting to users page...',
+        progress: 100,
+      },
+      error: {
+        step: 'error',
+        title: 'Error Occurred',
+        description: 'Something went wrong. Please try again.',
+        progress: 0,
+      },
+    };
+    return steps[step];
+  };
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
+      setError('');
+      setCurrentStep('validating');
 
-      const res = await addPatient(
-        btoa(
-          JSON.stringify({
-            email: data.email,
-            first_name: data.firstName,
-            last_name: data.lastName,
-            middle_name: data.middleName,
-            username: data.username,
-            phone_number: data.phoneNumber,
-            gender: data.gender,
-            title: data.title,
-            password: data.password,
-            branch_id: data.branch,
-            city_id: data.city,
-            country_id: data.country,
-            weight: data.weight ? parseFloat(data.weight) : null,
-            height: data.height ? parseFloat(data.height) : null,
-            dob: new Date(data.dob).toISOString(),
-            address: data.address,
-            doctor_id: data.doctor,
-            nurse_id: data.nurse,
-          })
-        )
-      );
+      // Simulate validation step
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setCurrentStep('preparing');
+
+      // Get current form values to ensure we have the latest state
+      const currentValues = getValues();
+
+      // Use selector values for proper data mapping
+      const payload = {
+        email: currentValues.email,
+        first_name: currentValues.firstName,
+        last_name: currentValues.lastName,
+        middle_name: currentValues.middleName,
+        username: currentValues.username,
+        phone_number: currentValues.phoneNumber,
+        gender: selectors.gender.title, // Use selector title instead of form value
+        title: selectors.title.title, // Use selector title instead of form value
+        password: currentValues.password,
+        branch_id: selectors.branch.id, // Use selector id for proper mapping
+        city_id: selectors.city.id, // Use selector id for proper mapping
+        country_id: selectors.country.id, // Use selector id for proper mapping
+        weight: currentValues.weight ? parseFloat(currentValues.weight) : null,
+        height: currentValues.height ? parseFloat(currentValues.height) : null,
+        dob: new Date(currentValues.dob).toISOString(),
+        address: currentValues.address,
+        doctor_id: selectors.doctor.id, // Use selector id for proper mapping
+        nurse_id: selectors.nurse.id, // Use selector id for proper mapping
+      };
+
+      // Simulate data preparation step
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setCurrentStep('submitting');
+
+      const res = await addPatient(btoa(JSON.stringify(payload)));
+
+      setCurrentStep('processing');
+      // Simulate processing step
+      await new Promise(resolve => setTimeout(resolve, 400));
 
       if (!res.success) {
+        setCurrentStep('error');
         handleShowModal({ message: res?.message, type: 'ERROR', show: true });
         return;
       }
 
+      setCurrentStep('success');
+
+      // Show success message and wait before redirecting
       handleShowModal({
-        message: 'Patient added',
+        message: 'Patient added successfully! Redirecting to users page...',
         type: 'SUCCESS',
         show: true,
       });
 
-      router.push(`/${user.role?.toLocaleLowerCase()}/users`);
+      // Wait 3 seconds before redirecting to show success step
+      setTimeout(() => {
+        router.push(`/${user.role?.toLocaleLowerCase()}/users`);
+      }, 3000);
+
     } catch (err: any) {
+      setCurrentStep('error');
       setError(err?.message ?? 'Something went wrong');
+      handleShowModal({
+        message: err?.message ?? 'Something went wrong',
+        type: 'ERROR',
+        show: true
+      });
     } finally {
       setLoading(false);
     }
@@ -185,11 +283,18 @@ const useFormHook = (): useFormProps => {
         loading: true,
         data: [],
       });
-      const res = await getOrganizationBranchesSelect();
-      setBranches({
-        loading: false,
-        data: res.data,
-      });
+      try {
+        const res = await getOrganizationBranchesSelect();
+        setBranches({
+          loading: false,
+          data: res.data,
+        });
+      } catch (error) {
+        setBranches({
+          loading: false,
+          data: [],
+        });
+      }
     })();
 
     (async () => {
@@ -197,13 +302,18 @@ const useFormHook = (): useFormProps => {
         loading: true,
         data: [],
       });
-
-      const res = await getCities();
-
-      setCities({
-        loading: false,
-        data: res.data,
-      });
+      try {
+        const res = await getCities();
+        setCities({
+          loading: false,
+          data: res.data,
+        });
+      } catch (error) {
+        setCities({
+          loading: false,
+          data: [],
+        });
+      }
     })();
 
     (async () => {
@@ -211,41 +321,56 @@ const useFormHook = (): useFormProps => {
         loading: true,
         data: [],
       });
-
-      const res = await getCountries();
-
-      setCountries({
-        loading: false,
-        data: res.data,
-      });
+      try {
+        const res = await getCountries();
+        setCountries({
+          loading: false,
+          data: res.data,
+        });
+      } catch (error) {
+        setCountries({
+          loading: false,
+          data: [],
+        });
+      }
     })();
 
     (async () => {
       setDoctors({
-        loading: false,
+        loading: true,
         data: [],
       });
-
-      const res = await getOrganizationDoctors();
-
-      setDoctors({
-        loading: true,
-        data: res.data,
-      });
+      try {
+        const res = await getOrganizationDoctors();
+        setDoctors({
+          loading: false,
+          data: res.data,
+        });
+      } catch (error) {
+        setDoctors({
+          loading: false,
+          data: [],
+        });
+      }
     })();
 
     (async () => {
       setNurses({
-        loading: false,
+        loading: true,
         data: [],
       });
-
-      const res = await getOrganizationNurses();
-
-      setNurses({
-        loading: true,
-        data: res.data,
-      });
+      try {
+        const res = await getOrganizationNurses();
+        setNurses({
+          loading: false,
+          data: res.data,
+        });
+      } catch (error) {
+        setNurses({
+          loading: false,
+          data: [],
+        });
+      }
     })();
   }, []);
 
@@ -263,6 +388,8 @@ const useFormHook = (): useFormProps => {
     doctors,
     nurses,
     validator,
+    currentStep,
+    getLoadingStepInfo,
   ];
 };
 

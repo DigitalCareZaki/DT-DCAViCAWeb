@@ -60,12 +60,29 @@ export interface SelectorsProps {
   };
 }
 
+// Loading step types
+export type LoadingStep =
+  | 'idle'
+  | 'validating'
+  | 'preparing'
+  | 'submitting'
+  | 'processing'
+  | 'success'
+  | 'error';
+
+export interface LoadingStepInfo {
+  step: LoadingStep;
+  title: string;
+  description: string;
+  progress: number;
+}
+
 export type useFormProps = [
   register: UseFormRegister<AddPatientProps>,
   onSubmit: (
     e?: BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>,
-  FieldErrors<AddPatientProps>,
+  errors: FieldErrors<AddPatientProps>,
   loading: boolean,
   error: string,
   handleSelect: (
@@ -77,5 +94,7 @@ export type useFormProps = [
   countries: { loading: boolean; data: CountriesProps[] },
   nurses: { loading: boolean; data: SelectUserProps[] },
   doctors: { loading: boolean; data: SelectUserProps[] },
-  validator: Suite,
+  validator: any, // Using any for now since the exact vest type is complex
+  currentStep: LoadingStep,
+  getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
 ];

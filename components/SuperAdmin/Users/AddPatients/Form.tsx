@@ -5,6 +5,9 @@ import { IoFemale } from '@react-icons/all-files/io5/IoFemale';
 import { FaTransgender } from '@react-icons/all-files/fa/FaTransgender';
 import { FaQuestion } from '@react-icons/all-files/fa/FaQuestion';
 import { MdTitle } from '@react-icons/all-files/md/MdTitle';
+import { FaSpinner } from '@react-icons/all-files/fa/FaSpinner';
+import { FaCheckCircle } from '@react-icons/all-files/fa/FaCheckCircle';
+import { FaExclamationTriangle } from '@react-icons/all-files/fa/FaExclamationTriangle';
 
 import Link from 'next/link';
 
@@ -17,6 +20,7 @@ import {
 
 import useForm from './useForm';
 import { Branch, City, Country, Doctor, Nurse } from './Elements';
+import type { LoadingStep, LoadingStepInfo } from './types';
 
 import type { ClientComponent } from '@types';
 
@@ -35,13 +39,89 @@ const Form: ClientComponent = () => {
     doctors,
     nurses,
     validator,
+    currentStep,
+    getLoadingStepInfo,
   ] = useForm();
+
+  // Progressive loading overlay component
+  const ProgressiveLoadingOverlay = () => {
+    const stepInfo = getLoadingStepInfo(currentStep);
+
+    return (
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-2xl">
+        <div className="flex flex-col items-center gap-6 text-center max-w-md">
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${stepInfo.progress}%` }}
+            ></div>
+          </div>
+
+          {/* Step Icon */}
+          <div className="flex items-center justify-center">
+            {currentStep === 'success' ? (
+              <FaCheckCircle className="h-12 w-12 text-green-500" />
+            ) : currentStep === 'error' ? (
+              <FaExclamationTriangle className="h-12 w-12 text-red-500" />
+            ) : (
+              <FaSpinner className="h-12 w-12 animate-spin text-blue-600" />
+            )}
+          </div>
+
+          {/* Step Title */}
+          <h3 className="text-xl font-semibold text-gray-800">
+            {stepInfo.title}
+          </h3>
+
+          {/* Step Description */}
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {stepInfo.description}
+          </p>
+
+          {/* Progress Percentage */}
+          <div className="text-sm font-medium text-blue-600">
+            {stepInfo.progress}% Complete
+          </div>
+
+          {/* Step Indicators */}
+          <div className="flex items-center gap-2 mt-4">
+            {['validating', 'preparing', 'submitting', 'processing', 'success'].map((step, index) => {
+              const isActive = currentStep === step;
+              const isCompleted = ['validating', 'preparing', 'submitting', 'processing', 'success'].indexOf(currentStep) > index;
+
+              return (
+                <div
+                  key={step}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${isCompleted
+                    ? 'bg-green-500'
+                    : isActive
+                      ? 'bg-blue-500'
+                      : 'bg-gray-300'
+                    }`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <form
       onSubmit={onSubmit}
-      className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-8"
+      className="relative flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-8"
+      // Disable keyboard navigation during loading
+      onKeyDown={(e) => {
+        if (loading && (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+        }
+      }}
     >
+      {/* Progressive Loading Overlay */}
+      {loading && <ProgressiveLoadingOverlay />}
+
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
@@ -55,6 +135,7 @@ const Form: ClientComponent = () => {
             hookProps={register('firstName')}
             error={!!errors.firstName?.message}
             errorMessage={errors.firstName?.message || '&'}
+            disabled={loading}
           />
         </div>
         <div className="w-1/2">
@@ -69,6 +150,7 @@ const Form: ClientComponent = () => {
             hookProps={register('middleName')}
             error={!!errors.middleName?.message}
             errorMessage={errors.middleName?.message || '&'}
+            disabled={loading}
           />
         </div>
       </div>
@@ -85,6 +167,7 @@ const Form: ClientComponent = () => {
             hookProps={register('lastName')}
             error={!!errors.lastName?.message}
             errorMessage={errors.lastName?.message || '&'}
+            disabled={loading}
           />
         </div>
         <div className="w-1/2">
@@ -99,6 +182,7 @@ const Form: ClientComponent = () => {
             hookProps={register('phoneNumber')}
             error={!!errors.phoneNumber?.message}
             errorMessage={errors.phoneNumber?.message || '&'}
+            disabled={loading}
           />
         </div>
       </div>
@@ -116,6 +200,7 @@ const Form: ClientComponent = () => {
             hookProps={register('email')}
             error={!!errors.email?.message}
             errorMessage={errors.email?.message || '&'}
+            disabled={loading}
           />
         </div>
         <div className="w-1/2">
@@ -131,6 +216,7 @@ const Form: ClientComponent = () => {
             error={!!errors.password?.message}
             errorMessage={errors.password?.message || '&'}
             validatorErrors={validator?.getErrors('password')}
+            disabled={loading}
           />
         </div>
       </div>
@@ -145,32 +231,37 @@ const Form: ClientComponent = () => {
             error={!!errors.gender?.message}
             errorMessage={errors.gender?.message || '&'}
             selected={selectors.gender.title}
+            disabled={loading}
           >
             <>
               <div
-                onClick={() => handleSelect('gender')('MALE', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('gender')('MALE', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MALE</span>
                 <IoMdMale size={18} />
               </div>
               <div
-                onClick={() => handleSelect('gender')('FEMALE', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('gender')('FEMALE', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">FEMALE</span>
                 <IoFemale size={18} />
               </div>
               <div
-                onClick={() => handleSelect('gender')('TRANS', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('gender')('TRANS', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">TRANS</span>
                 <FaTransgender size={18} />
               </div>
               <div
-                onClick={() => handleSelect('gender')('UNKNOWN', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('gender')('UNKNOWN', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">UNKNOWN</span>
                 <FaQuestion size={18} />
@@ -188,46 +279,53 @@ const Form: ClientComponent = () => {
             error={!!errors.title?.message}
             errorMessage={errors.title?.message || '&'}
             selected={selectors.title.title}
+            disabled={loading}
           >
             <>
               <div
-                onClick={() => handleSelect('title')('MR', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('title')('MR', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MR</span>
                 <MdTitle size={18} />
               </div>
               <div
-                onClick={() => handleSelect('title')('MS', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('title')('MS', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MS</span>
                 <MdTitle size={18} />
               </div>
               <div
-                onClick={() => handleSelect('title')('MRS', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('title')('MRS', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MRS</span>
                 <MdTitle size={18} />
               </div>
               <div
-                onClick={() => handleSelect('title')('MISS', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('title')('MISS', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MISS</span>
                 <MdTitle size={18} />
               </div>
               <div
-                onClick={() => handleSelect('title')('MASTER', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('title')('MASTER', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MASTER</span>
                 <MdTitle size={18} />
               </div>
               <div
-                onClick={() => handleSelect('title')('MADAM', undefined)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                onClick={() => !loading && handleSelect('title')('MADAM', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
               >
                 <span className="font-medium">MADAM</span>
                 <MdTitle size={18} />
@@ -249,6 +347,7 @@ const Form: ClientComponent = () => {
             hookProps={register('username')}
             error={!!errors.username?.message}
             errorMessage={errors.username?.message || '&'}
+            disabled={loading}
           />
         </div>
         <div className="w-1/2">
@@ -262,6 +361,7 @@ const Form: ClientComponent = () => {
             error={!!errors.country?.message}
             errorMessage={errors.country?.message || '&'}
             selected={selectors.country.title}
+            disabled={loading}
           >
             <ClientGenerator data={countries.data} handleSelect={handleSelect}>
               <Country />
@@ -282,6 +382,7 @@ const Form: ClientComponent = () => {
             errorMessage={errors.city?.message || '&'}
             selected={selectors.city.title}
             dropdownContentClassName="!h-[800px] max-h-[800px] !overflow-y-scroll"
+            disabled={loading}
           >
             <ClientGenerator data={cities.data} handleSelect={handleSelect}>
               <City />
@@ -299,6 +400,7 @@ const Form: ClientComponent = () => {
             error={!!errors.branch?.message}
             errorMessage={errors.branch?.message || '&'}
             selected={selectors.branch.title}
+            disabled={loading}
           >
             <ClientGenerator data={branches.data} handleSelect={handleSelect}>
               <Branch />
@@ -320,6 +422,7 @@ const Form: ClientComponent = () => {
             hookProps={register('weight')}
             error={!!errors.weight?.message}
             errorMessage={errors.weight?.message || '&'}
+            disabled={loading}
           />
         </div>
         <div className="w-1/2">
@@ -335,6 +438,7 @@ const Form: ClientComponent = () => {
             hookProps={register('height')}
             error={!!errors.height?.message}
             errorMessage={errors.height?.message || '&'}
+            disabled={loading}
           />
         </div>
       </div>
@@ -350,6 +454,7 @@ const Form: ClientComponent = () => {
             error={!!errors.doctor?.message}
             errorMessage={errors.doctor?.message || '&'}
             selected={selectors.doctor.title}
+            disabled={loading}
           >
             <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
               <Doctor />
@@ -367,6 +472,7 @@ const Form: ClientComponent = () => {
             error={!!errors.nurse?.message}
             errorMessage={errors.nurse?.message || '&'}
             selected={selectors.nurse.title}
+            disabled={loading}
           >
             <ClientGenerator data={nurses.data} handleSelect={handleSelect}>
               <Nurse />
@@ -388,6 +494,7 @@ const Form: ClientComponent = () => {
             hookProps={register('dob')}
             error={!!errors.dob?.message}
             errorMessage={errors.dob?.message || '&'}
+            disabled={loading}
           />
         </div>
         <div className="w-1/2">
@@ -403,6 +510,7 @@ const Form: ClientComponent = () => {
             hookProps={register('address')}
             error={!!errors.address?.message}
             errorMessage={errors.address?.message || '&'}
+            disabled={loading}
           />
         </div>
       </div>
@@ -416,17 +524,29 @@ const Form: ClientComponent = () => {
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            className={loading ? 'pointer-events-none opacity-50' : ''}
           ></iframe>
         </div>
       </div>
       <div className="col-span-2 flex w-full flex-col gap-4 mt-6">
-        <ButtonPrimary title="Save" name="Save" className="rounded-lg" />
+        <ButtonPrimary
+          title={loading ? "Processing..." : "Save"}
+          name={loading ? "Processing..." : "Save"}
+          className="rounded-lg relative"
+          disabled={loading}
+          type="submit"
+        >
+          {loading && (
+            <FaSpinner className="absolute left-4 h-4 w-4 animate-spin text-white" />
+          )}
+        </ButtonPrimary>
         <Link passHref href="/superadmin/users">
           <ButtonPrimary
             name="Close"
             className="h-10 rounded-lg border bg-white"
             type="button"
             outlined
+            disabled={loading}
           />
         </Link>
       </div>
