@@ -36,7 +36,7 @@ const Form: React.FC = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-32"
+      className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-8"
     >
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
@@ -448,7 +448,7 @@ const Form: React.FC = () => {
           ></iframe>
         </div>
       </div>
-      <div className="col-span-2 flex w-full flex-col gap-4">
+      <div className="col-span-2 flex w-full flex-col gap-4 mt-6">
         <ButtonPrimary title="Save" name="Save" className="rounded-lg" />
         <Link passHref href="/superadmin/users">
           <ButtonPrimary

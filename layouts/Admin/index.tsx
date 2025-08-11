@@ -75,20 +75,39 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     );
   }
 
+  // if (route?.includes('/admin/users')) {
+  //   return (
+  //     <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6">
+  //       <div className="sticky top-0 z-50 bg-background pb-4">
+  //         <PrimaryHeader user={user!} />
+  //       </div>
+  //       <div className="flex h-full w-full overflow-hidden">
+  //         <div className="flex-shrink-0">
+  //           <DynamicSidebar renderKey="users" />
+  //         </div>
+  //         <div className="flex-grow overflow-auto min-w-0">{children}</div>
+  //       </div>
+  //       <ModalBottom />
+  //     </main>
+  //   );
+  // }
+
   if (route?.includes('/admin/users')) {
     return (
-      <main style={mainStyle} className="relative h-full w-screen gap-4 bg-background p-6">
-        <div className="sticky top-0 z-50 bg-background pb-4">
-          <PrimaryHeader user={user!} />
-        </div>
-        <div className="flex h-full w-full overflow-hidden">
-          <div className="flex-shrink-0">
-            <DynamicSidebar renderKey="users" />
+      <div className="relative h-screen w-screen overflow-hidden">
+        <main style={mainStyle} className="flex flex-col h-screen w-full bg-background p-6">
+          <div className="sticky top-0 z-50 bg-background pb-4">
+            <PrimaryHeader user={user!} />
           </div>
-          <div className="flex-grow overflow-auto min-w-0">{children}</div>
-        </div>
-        <ModalBottom />
-      </main>
+          <div className="flex flex-1 w-full overflow-hidden">
+            <div className="flex-shrink-0">
+              <DynamicSidebar renderKey="users" />
+            </div>
+            <div className="flex-grow overflow-auto min-w-0">{children}</div>
+          </div>
+          <ModalBottom />
+        </main>
+      </div>
     );
   }
 
