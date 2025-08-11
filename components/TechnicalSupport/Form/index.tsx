@@ -21,9 +21,9 @@ const Form: ClientComponent = () => {
     <>
       <form
         onSubmit={onSubmit}
-        className="flex w-full flex-col gap-6 font-poppins"
+        className="flex w-full flex-col gap-2 font-poppins"
       >
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
           <div className="flex w-full items-center gap-3 text-xs">
             <InputSelect
               onClick={() => handleClick('forgot_password')}
@@ -42,7 +42,7 @@ const Form: ClientComponent = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
           <div className="flex w-full items-center gap-3 text-xs">
             <InputSelect
               onClick={() => handleClick('can_not_find_anything')}
@@ -61,7 +61,7 @@ const Form: ClientComponent = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
           <div className="flex w-full items-center gap-3 text-xs">
             <InputSelect
               onClick={() => handleClick('others')}
@@ -72,7 +72,7 @@ const Form: ClientComponent = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
           <div className="w-full">
             <InputBasic
               label="Email"
