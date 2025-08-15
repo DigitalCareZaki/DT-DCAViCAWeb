@@ -229,7 +229,7 @@ export type DoctorProfileProps = {
   middle_name: string;
   last_name: string;
   dob: string;
-  branch?: string;
+  associated_branches?: any;
   uri: string | null;
   role: UserRole;
   gender: UserGender;

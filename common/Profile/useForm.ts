@@ -38,13 +38,12 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
     if (!data) return;
 
 
-
     // setValue('speciality', data?.doctor?.specialities[0]?.title);
     setValue('title', data.title);
     setValue('firstName', data.first_name);
     setValue('middleName', data.middle_name ?? '');
     setValue('lastName', data.last_name);
-    setValue('branch', data?.branch || "");
+    setValue('branch', data.associated_branches[0].name || "");
     setValue('email', data.email);
     // setValue('npiNumber', data?.doctor?.npi_number);
     setValue('phoneNumber', data.phone_number);
