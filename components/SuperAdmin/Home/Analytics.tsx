@@ -56,13 +56,18 @@ const Analytics: ServerComponent = async () => {
       </div>
       <div className="flex flex-1 flex-col items-center justify-center h-32 bg-gradient-to-b from-green-400 to-green-500 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-3">
         <span className="text-xl font-black text-white sm:text-3xl">
-          <PrimaryCounter
-            value={data.branches}
-            prefix=""
-          />
+          <Link href="/superadmin/branches?role=superadmin" passHref>
+            <PrimaryCounter
+              value={data.branches}
+              prefix=""
+            />
+          </Link>
+
         </span>
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white opacity-90">
-          Total Branches
+          <Link href="/superadmin/branches?role=superadmin" passHref>
+            Total Branches
+          </Link>
         </span>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center h-32 bg-gradient-to-b from-green-400 to-green-500 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-3">
@@ -73,7 +78,7 @@ const Analytics: ServerComponent = async () => {
           />
         </span>
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white opacity-90">
-          Total Specialties
+          Total Medications
         </span>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center h-32 bg-gradient-to-b from-green-400 to-green-500 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-3">
