@@ -25,7 +25,8 @@ const useFormHook = (
       id: string;
     })
     | undefined,
-  categories: { name: string; value: string }[]
+  categories?: { name: string; value: string }[],
+  role?: string
 ): UseFormProps => {
   const dispatch = useDispatch();
 
@@ -50,6 +51,7 @@ const useFormHook = (
     reset,
   } = useForm<TabletProps>({
     resolver: vestResolver(validator),
+    context: { role },
   });
 
   const handleSelect = useCallback((name: string, value: string) => {
@@ -68,18 +70,35 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
 
+      console.log('Data data >>>>>:', data);
+
+
+      // Prepare payload
+
+      let payload: any = {
+        title: data.title,
+        serial_number: data.serial_number,
+        category: role === 'admin' ? 'ECG' : data.category,
+      };
+
+      console.log('before create >>>>>:', payload);
+
+
       // create case
       if (!prevData) {
+        console.log('payload:', payload);
+
         const res = await createTablet(
           btoa(
             JSON.stringify({
               title: data.title,
               serial_number: data.serial_number,
-              category: data.category,
+              category: role === 'admin' ? 'ECG' : data.category,
             })
           )
         );
@@ -99,7 +118,7 @@ const useFormHook = (
             JSON.stringify({
               title: data.title,
               serial_number: data.serial_number,
-              category: data.category,
+              category: role === 'admin' ? 'ECG' : data.category,
             })
           ),
           prevData.id
@@ -134,9 +153,9 @@ const useFormHook = (
       setSelectedValues({
         category: {
           name:
-            categories.find((cat) => cat.value === prevData.category)?.name ||
+            categories?.find((cat) => cat.value === prevData.category)?.name ||
             prevData.category,
-          value: prevData.category,
+          value: prevData.category as MeasurementType,
         },
       });
     }

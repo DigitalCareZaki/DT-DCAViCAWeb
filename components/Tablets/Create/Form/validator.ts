@@ -11,7 +11,7 @@ const validMeasurementTypes: MeasurementType[] = [
   'TEMPERATURE',
 ];
 
-export const validator = create((data: TabletProps) => {
+export const validator = create((data: TabletProps, fieldName, ctx?: { role?: string }) => {
   test('title', 'Title is required', () => {
     enforce(data.title).isNotEmpty();
   });
@@ -20,15 +20,19 @@ export const validator = create((data: TabletProps) => {
     enforce(data.title).isNotEmpty();
   });
 
-  test('category', 'Category is required', () => {
-    enforce(data.category).isNotEmpty();
-  });
+  // test('category', 'Category is required', () => {
+  //   enforce(data.category = "").isNotEmpty();
+  // });
 
-  test(
-    'category',
-    `Category must be ${validMeasurementTypes.join(', or ')}`,
-    () => {
-      enforce(data.category).inside(validMeasurementTypes);
-    }
-  );
+  // console.log("ctx?.role?.toLowerCase()", ctx?.role?.toLowerCase());
+
+  // // If role is admin, skip category type check
+  // if (ctx?.role?.toLowerCase() === 'admin') {
+  //   test(
+  //     'category',
+  //     () => {
+  //       enforce(data.category).inside("ECG");
+  //     }
+  //   );
+  // }
 });

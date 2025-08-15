@@ -7,7 +7,7 @@ import type { UseFormRegister, FieldErrors } from 'react-hook-form';
 export interface TabletProps {
   title: string;
   serial_number: string;
-  category: MeasurementType;
+  category?: MeasurementType | string;
 }
 
 export type UseFormProps = [

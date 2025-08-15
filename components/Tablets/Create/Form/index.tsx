@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 
 import Category from './Category';
+import { useUser } from '@selectors';
 
 import {
   InputBasic,
@@ -17,6 +18,10 @@ import type { ClientComponentProps } from '@types';
 import type { CreateTabletProps } from './types';
 
 const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
+
+  const [user] = useUser();
+  const role = user?.role?.toLowerCase();
+
   const categories = useMemo(
     () => [
       {
@@ -43,8 +48,9 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
     []
   );
 
+
   const [register, onSubmit, errors, loading, selectedValues, handleSelect] =
-    useForm(data, categories);
+    useForm(data, categories, role);
 
   const router = useRouter();
 
@@ -85,25 +91,27 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
         </div>
       </div>
 
-      {/* Second row: Tablet category */}
-      <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
-        <div className="w-full">
-          <DropdownSecondary
-            title="Select tablet category"
-            label="Category"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="MdPin"
-            error={!!errors.category?.message?.length}
-            errorMessage={errors.category?.message || '&'}
-            selected={selectedValues?.category?.value}
-          >
-            <ClientGenerator data={categories} handleSelect={handleSelect}>
-              <Category />
-            </ClientGenerator>
-          </DropdownSecondary>
+      {/* Second row: Tablet category (hidden for admin) */}
+      {role !== 'admin' && (
+        <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
+          <div className="w-full">
+            <DropdownSecondary
+              title="Select tablet category"
+              label="Category"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              icon="MdPin"
+              error={!!errors.category?.message?.length}
+              errorMessage={errors.category?.message || '&'}
+              selected={selectedValues?.category?.value}
+            >
+              <ClientGenerator data={categories} handleSelect={handleSelect}>
+                <Category />
+              </ClientGenerator>
+            </DropdownSecondary>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Submit Button */}
       <ButtonPrimary
