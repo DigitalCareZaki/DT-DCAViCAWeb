@@ -34,6 +34,7 @@ export { default as EducationLeftBarSkeleton } from './Education/LeftBar/Skeleto
 export { default as EducationRightBarSkeleton } from './Education/Rightbar/Skeleton';
 export { default as EducationContentSkeleton } from './Education/Content/Skeleton';
 export { default as EditorBasic } from './Editor';
+export { default as AllAppointmentsList } from './Appointments'
 
 export { default as SettingsTelemed } from './Telemed/Dashboard/Settings';
 export { default as Logs } from './Logs';

@@ -14,6 +14,8 @@ export { default as searchNurse } from './searchNurse';
 export { default as addPatientNurse } from './patients/addPatientNurse';
 export { default as getPatientAppointments } from './patients/getPatientAppointment';
 export { default as getAnalytics } from './telemed/getAnalytics';
+export { default as getAppointmentSuperAdmin } from './telemed/getAppintmentsListSuperAdmin';
+
 export { default as getPasswordLists } from './changepassword/getpasswordList'
 export { default as getDoctorProfile } from './doctors/getDoctorProfile';
 export { default as updateDoctorProfile } from './doctors/updateDoctorProfile';

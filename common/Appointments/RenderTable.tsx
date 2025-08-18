@@ -71,9 +71,10 @@ const RenderTable: ClientComponent = () => {
   return (
     <>
       {setPatientAppointmentsListing?.map((el: any) => {
-        const appointment = el?.appointment;
-        const organizer = el?.appointment?.organizer;
-        const observation = el?.appointment?.appointmentObservation;
+        console.log('el >>>>', el);
+        const appointment = el
+        const organizer = el
+        const observation = el;
 
 
         return (
@@ -85,18 +86,18 @@ const RenderTable: ClientComponent = () => {
             <td className="px-6 py-4">{appointment?.description || 'N/A'}</td>
             <td className="px-6 py-4">{appointment?.type}</td>
             <td className="px-6 py-4">
-              {new Date(appointment?.start_date).toLocaleDateString()}
+              {new Date(appointment?.AppointmetDate).toLocaleDateString()}
             </td>
             <td className="px-6 py-4">
-              {new Date(appointment?.start_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+              {new Date(appointment?.AppointmetDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </td>
             <td className="px-6 py-4">{el?.status}</td>
-            <td className="px-6 py-4">{observation?.diagnosis || 'N/A'}</td>
-            <td className="px-6 py-4">
+            <td className="px-6 py-4">{observation?.about || 'N/A'}</td>
+            {/* <td className="px-6 py-4">
               {organizer?.first_name} {organizer?.last_name}
-            </td>
+            </td> */}
 
-            <td className="px-6 py-4">
+            {/* <td className="px-6 py-4">
               <div className="flex gap-2">
                 <div
                   onClick={() => {
@@ -120,7 +121,7 @@ const RenderTable: ClientComponent = () => {
                   <FaPhone size={16} />
                 </div>
               </div>
-            </td>
+            </td> */}
           </tr>
         );
       })}

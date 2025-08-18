@@ -84,13 +84,18 @@ const Analytics: ServerComponent = async () => {
       </div>
       <div className="flex flex-1 flex-col items-center justify-center h-32 bg-gradient-to-b from-green-400 to-green-500 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-3">
         <span className="text-xl font-black text-white sm:text-3xl">
-          <PrimaryCounter
-            value={data.appointments}
-            prefix=""
-          />
+          <Link href="/superadmin/appointments?role=superadmin" passHref>
+
+            <PrimaryCounter
+              value={data.appointments}
+              prefix=""
+            />
+          </Link>
         </span>
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white opacity-90">
-          Total Appointments
+          <Link href="/superadmin/appointments?role=superadmin" passHref>
+            Total Appointments
+          </Link>
         </span>
       </div>
     </div>

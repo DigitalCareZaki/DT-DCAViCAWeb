@@ -7,7 +7,7 @@ import { ClientTable } from '@common';
 import { setPatientAppointmentsListingReducer } from '@slice';
 
 import RenderTable from './RenderTable';
-import { getAnalytics } from '@service';
+import { getAppointmentSuperAdmin } from '@service';
 
 import type { TableProps } from './types';
 import type { ClientComponentProps, PatientNursesProps } from '@types';
@@ -36,7 +36,7 @@ const Table: ClientComponentProps<any> = ({ }) => {
   useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
-      const res = await getAnalytics(1, 10);
+      const res = await getAppointmentSuperAdmin(1, 10);
       console.log('Initial data response:', res);
 
       if (res?.success) {
@@ -56,7 +56,7 @@ const Table: ClientComponentProps<any> = ({ }) => {
     setLoading(true);
     setCurrentPage(page);
 
-    let appointments = await getAnalytics(
+    let appointments = await getAppointmentSuperAdmin(
       page,
       pagination.perPage
     );
@@ -78,7 +78,7 @@ const Table: ClientComponentProps<any> = ({ }) => {
             <div className="loader border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
           </div>
         )}
-        <ClientTable heads={['Title', 'Description', 'Type', 'Appointment Date', 'Appointment Time', 'Status', 'Diagnosis', 'Patient', "Action"]}>
+        <ClientTable heads={['Title', 'Description', 'Type', 'Appointment Date', 'Appointment Time', 'Status', 'Diagnosis']}>
           {!loading && !initialLoad ? <RenderTable /> : <></>}
         </ClientTable>
       </div>

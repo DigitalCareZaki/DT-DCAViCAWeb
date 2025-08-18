@@ -9,7 +9,7 @@ async function getAppointmentSuperAdmin(
 ): Promise<any> {
 
     const res = await fetch(
-        `/api/v1/web/telemed/appointment-list?page=${page}&limit=${limit}`
+        `/api/v1/web/telemed/organization-appointments?page=${page}&limit=${limit}`
     );
 
     const data = await res.json();
