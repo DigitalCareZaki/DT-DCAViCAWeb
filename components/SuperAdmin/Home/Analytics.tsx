@@ -75,6 +75,7 @@ const Analytics: ServerComponent = async () => {
           <PrimaryCounter
             value={data.medications}
             prefix=""
+
           />
         </span>
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white opacity-90">
