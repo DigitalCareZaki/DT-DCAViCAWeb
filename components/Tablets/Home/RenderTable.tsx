@@ -30,7 +30,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
             </Link>
           </th>
           <td className="px-6 py-4">{el.serial_number}</td>
-          <td className="px-6 py-4">{el.category}</td>
+          {/* <td className="px-6 py-4">{el.category}</td> */}
           <td className="px-6 py-4">
             {getName({
               ...el.created_by,

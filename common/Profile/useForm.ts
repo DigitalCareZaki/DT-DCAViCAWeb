@@ -37,17 +37,17 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
   useEffect(() => {
     if (!data) return;
 
-
+    console.log('data >>>>>>>>>>>>>>', data);
     // setValue('speciality', data?.doctor?.specialities[0]?.title);
-    setValue('title', data.title);
-    setValue('firstName', data.first_name);
-    setValue('middleName', data.middle_name ?? '');
+    setValue('title', data?.title);
+    setValue('firstName', data?.first_name);
+    setValue('middleName', data?.middle_name ?? '');
     setValue('lastName', data.last_name);
-    setValue('branch', data.associated_branches[0].name || "");
-    setValue('email', data.email);
+    setValue('branch', data?.associated_branches[0]?.name || "");
+    setValue('email', data?.email);
     // setValue('npiNumber', data?.doctor?.npi_number);
-    setValue('phoneNumber', data.phone_number);
-    setValue('address', data.location.address);
+    setValue('phoneNumber', data?.phone_number);
+    setValue('address', data?.location?.address);
     setValue('pmdcNumber', data?.doctor?.pmdc_number);
     setValue('contractType', data?.doctor?.contract_type);
     setValue('dob', new Date(data.dob).toLocaleDateString());

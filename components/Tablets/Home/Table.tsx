@@ -70,7 +70,7 @@ const Table = ({ userRole, patient }: TableProps) => {
           heads={[
             'Title',
             'Serial',
-            'Category',
+            // 'Category',
             'Added By',
             'Status',
             'Added At',
