@@ -92,7 +92,7 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
       </div>
 
       {/* Second row: Tablet category (hidden for admin) */}
-      {role !== 'admin' && (
+      {/* {role !== 'admin' && (
         <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
           <div className="w-full">
             <DropdownSecondary
@@ -111,7 +111,7 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
             </DropdownSecondary>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Submit Button */}
       <ButtonPrimary

@@ -83,7 +83,7 @@ const useFormHook = (
       let payload: any = {
         title: data.title,
         serial_number: data.serial_number,
-        category: role === 'admin' ? 'ECG' : data.category,
+        category: "ECG",
       };
 
       console.log('before create >>>>>:', payload);
@@ -98,7 +98,7 @@ const useFormHook = (
             JSON.stringify({
               title: data.title,
               serial_number: data.serial_number,
-              category: role === 'admin' ? 'ECG' : data.category,
+              category: "ECG",
             })
           )
         );
@@ -118,7 +118,7 @@ const useFormHook = (
             JSON.stringify({
               title: data.title,
               serial_number: data.serial_number,
-              category: role === 'admin' ? 'ECG' : data.category,
+              category: "ECG",
             })
           ),
           prevData.id
