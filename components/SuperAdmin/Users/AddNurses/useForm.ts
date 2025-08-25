@@ -242,7 +242,7 @@ const useFormHook = (): useFormProps => {
       });
     })();
 
-    return () => {};
+    return () => { };
   }, [selectors.branch.id]);
 
   return [

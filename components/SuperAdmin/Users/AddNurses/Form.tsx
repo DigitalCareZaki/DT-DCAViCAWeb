@@ -361,6 +361,20 @@ const Form: ClientComponent = () => {
         </div>
         <div className="w-1/2">
           <InputBasic
+            title="Enter unique company ID"
+            label="Employee ID"
+            placeholder="Enter nurse phone number with country code"
+            icon="FaSquarePhone"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            inputClassName="bg-background"
+            hookProps={register('employee_id')}
+            error={!!errors.employee_id?.message}
+            errorMessage={errors.employee_id?.message || '&'}
+          />
+        </div>
+        {/* <div className="w-1/2">
+          <InputBasic
             title="Enter Contract Type"
             label="Contract"
             placeholder="Enter Contract Type"
@@ -372,7 +386,7 @@ const Form: ClientComponent = () => {
             error={!!errors.Contract?.message}
             errorMessage={errors.Contract?.message || '&'}
           />
-        </div>
+        </div> */}
       </div>
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
@@ -389,7 +403,7 @@ const Form: ClientComponent = () => {
             errorMessage={errors.npi_number?.message || '&'}
           />
         </div>
-        <div className="w-1/2">
+        {/* <div className="w-1/2">
           <InputBasic
             title="Enter unique company ID"
             label="Employee ID"
@@ -402,7 +416,7 @@ const Form: ClientComponent = () => {
             error={!!errors.employee_id?.message}
             errorMessage={errors.employee_id?.message || '&'}
           />
-        </div>
+        </div> */}
       </div>
       <div className="mt-5">
         <h3 className="mb-3 text-lg font-medium">Location</h3>
