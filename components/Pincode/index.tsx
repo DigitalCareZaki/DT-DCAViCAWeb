@@ -40,10 +40,8 @@ const Pincode: ClientComponentProps<PincodeProps> = ({ show, handleReset }) => {
               </div>
               <InputBasic
                 label="Pincode"
-                placeholder="Enter your pincode to coninue"
+                placeholder="Enter your pincode to continue"
                 borderTheme
-                inputWrapperClassName="bg-background"
-                inputClassName="bg-background"
                 type="password"
                 title="We need a pincode to verify your identity"
                 value={pincode}

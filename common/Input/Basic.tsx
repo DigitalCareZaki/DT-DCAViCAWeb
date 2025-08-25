@@ -6,6 +6,7 @@ import { useUser } from '@selectors';
 import { roleColors } from '@constants';
 import { Icon } from '../Icon';
 import { CircleSpinner } from 'react-spinners-kit';
+import { useState } from 'react';
 
 import type { ClientComponentProps } from '@types';
 import type { InputBaseProps } from './types';
@@ -37,6 +38,27 @@ const InputBasic: ClientComponentProps<any> = ({
   ...props
 }) => {
   const [user] = useUser();
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Check if this is a password input
+  const isPasswordInput = props.type === 'password';
+
+  // Debug logging
+  console.log('InputBasic render:', {
+    type: props.type,
+    isPasswordInput,
+    showPassword,
+    label: label || 'no-label'
+  });
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+    console.log('Password visibility toggled:', !showPassword);
+  };
+
+  // Determine input type based on password visibility
+  const inputType = isPasswordInput && showPassword ? 'text' : props.type;
 
   return (
     <div className="flex w-full flex-col gap-3 text-xs sm:text-base md:text-lg">
@@ -94,6 +116,7 @@ const InputBasic: ClientComponentProps<any> = ({
         <input
           {...props}
           {...hookProps}
+          type={inputType}
           className={twMerge(
             'h-full w-full select-none rounded-lg py-4 text-[12px] sm:text-sm md:text-base font-semibold text-gray-600 outline-none placeholder:font-normal placeholder:text-gray-400 disabled:bg-gray-200/10', // Adjusted placeholder color
             icon ? 'px-4' : 'px-0',
@@ -114,15 +137,28 @@ const InputBasic: ClientComponentProps<any> = ({
             size={18} // Increased spinner size
           />
         ) : (
-          secondaryIcon && (
-            <Icon
-              size={iconSize}
-              name={secondaryIcon}
-              color={iconColor}
-              className={secondaryIconClassName}
-              onClick={secondaryOnClick}
-            />
-          )
+          <>
+            {/* Show eye icon for password inputs */}
+            {isPasswordInput && (
+              <Icon
+                size={24}
+                name={showPassword ? 'FaEyeSlash' : 'FaEye'}
+                color="#6B7280"
+                className="cursor-pointer hover:text-blue-600 transition-colors ml-3 flex-shrink-0 text-gray-600 hover:text-blue-600 relative z-20 border border-gray-200 rounded p-1 bg-white"
+                onClick={togglePasswordVisibility}
+              />
+            )}
+            {/* Show secondary icon if provided and not a password input */}
+            {secondaryIcon && !isPasswordInput && (
+              <Icon
+                size={iconSize}
+                name={secondaryIcon}
+                color={iconColor}
+                className={secondaryIconClassName}
+                onClick={secondaryOnClick}
+              />
+            )}
+          </>
         )}
       </div>
       {errorMessage && (

@@ -78,10 +78,10 @@ export default function Icon({
       <FaLock {...props} className={twMerge('text-gray-500', className)} />
     );
   if (name === 'FaEye')
-    return <FaEye {...props} className={twMerge('text-gray-500', className)} />;
+    return <FaEye {...props} className={twMerge('text-gray-500 hover:text-gray-700', className)} />;
   if (name === 'FaEyeSlash')
     return (
-      <FaEyeSlash {...props} className={twMerge('text-gray-500', className)} />
+      <FaEyeSlash {...props} className={twMerge('text-gray-500 hover:text-gray-700', className)} />
     );
   if (name === 'FaApple')
     return (
