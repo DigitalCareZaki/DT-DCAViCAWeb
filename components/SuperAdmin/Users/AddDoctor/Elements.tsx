@@ -33,7 +33,7 @@ export const City = ({ name, id, handleSelect }: { [key: string]: any }) => (
     className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
   >
     <span className="font-medium">{name}</span>
-    <IoMdMale size={18} />
+    {/* <IoMdMale size={18} /> */}
   </div>
 );
 
@@ -43,6 +43,6 @@ export const Country = ({ name, id, handleSelect }: { [key: string]: any }) => (
     className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
   >
     <span className="font-medium">{name}</span>
-    <IoMdMale size={18} />
+    {/* <IoMdMale size={18} /> */}
   </div>
 );
