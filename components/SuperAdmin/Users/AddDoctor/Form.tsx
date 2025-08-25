@@ -253,7 +253,7 @@ const Form: React.FC = () => {
             label="Select Country"
             borderTheme
             inputWrapperClassName="bg-background"
-            // icon="FaLocationDot"
+            icon="FaLocationDot"
             iconSize={16}
             error={!!errors.country?.message}
             errorMessage={errors.country?.message || '&'}
@@ -272,7 +272,7 @@ const Form: React.FC = () => {
             label="Select City"
             borderTheme
             inputWrapperClassName="bg-background"
-            // icon="FaLocationDot"
+            icon="FaLocationDot"
             iconSize={16}
             error={!!errors.city?.message}
             errorMessage={errors.city?.message || '&'}
