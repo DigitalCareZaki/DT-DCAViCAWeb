@@ -31,3 +31,8 @@ export type SetBranchesProps = (
   state: StoreSuperAdminState,
   payload: PayloadAction<{ branches: BranchesDataProps[] }>
 ) => void;
+
+export type UpdateUserStatusFunc = (
+  state: StoreSuperAdminState,
+  payload: PayloadAction<{ userId: string; active: boolean }>
+) => void;

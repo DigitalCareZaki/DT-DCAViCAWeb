@@ -5,6 +5,7 @@ import {
   setCurrentOrganization,
   setOrganizationUsers,
   setBranches,
+  updateUserStatus,
 } from './organizaton.reducer';
 
 const superadminSlice = createSlice({
@@ -14,6 +15,7 @@ const superadminSlice = createSlice({
     setCurrentOrganization,
     setOrganizationUsers,
     setBranches,
+    updateUserStatus,
   },
 });
 
@@ -21,6 +23,7 @@ export const {
   setCurrentOrganization: setCurrentOrganizationReducer,
   setOrganizationUsers: setOrganizationUsersReducer,
   setBranches: setBranchesReducer,
+  updateUserStatus: updateUserStatusReducer,
 } = superadminSlice.actions;
 
 export default superadminSlice.reducer;
