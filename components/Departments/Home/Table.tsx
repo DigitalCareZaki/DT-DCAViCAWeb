@@ -32,7 +32,8 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           'Branch',
           'Doctors',
           'Nurses',
-          'Created On',
+          'Created',
+          'Action',
         ]}
       >
         <RenderTable />
