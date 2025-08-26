@@ -96,6 +96,7 @@ export { default as getDepartmentBranches } from './departments/getBranches';
 export { default as getDepartmentCities } from './departments/getCities';
 export { default as createDepartment } from './departments/createDepartment';
 export { default as updateDepartment } from './departments/updateDepartment';
+export { default as getDepartment } from './departments/getDepartment';
 
 export { default as getLogs } from './logs/getLogs';
 export { default as getNotifications } from './notifications/getNotifications';

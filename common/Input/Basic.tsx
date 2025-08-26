@@ -44,12 +44,7 @@ const InputBasic: ClientComponentProps<any> = ({
   const isPasswordInput = props.type === 'password';
 
   // Debug logging
-  console.log('InputBasic render:', {
-    type: props.type,
-    isPasswordInput,
-    showPassword,
-    label: label || 'no-label'
-  });
+
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {

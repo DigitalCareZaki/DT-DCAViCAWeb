@@ -92,6 +92,7 @@ export { default as AddEMR } from './EMR/Add';
 // Departments
 export { default as Departments } from './Departments';
 export { default as CreateDepartment } from './Departments/Create';
+export { default as EditDepartment } from './Departments/Edit';
 
 // Devices
 export { default as Devices } from './Devices';
