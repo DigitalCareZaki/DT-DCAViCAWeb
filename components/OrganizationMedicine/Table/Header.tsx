@@ -58,7 +58,10 @@ const Header: ClientComponent = () => {
     setIsModalOpen(false);
   };
   const handleAddMedicine = async (medicine: string) => {
-    await dispatch<any>(addOrganizationMedicineAndUpdate(medicine));
+    const res = await dispatch<any>(addOrganizationMedicineAndUpdate(medicine));
+    if (!res?.success) {
+      throw new Error(res?.message || 'Failed to add medicine');
+    }
     setIsModalOpen(false);
   };
 

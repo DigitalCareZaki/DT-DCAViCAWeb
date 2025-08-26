@@ -4,10 +4,10 @@ import { InputBasic, ButtonPrimary } from '@common';
 interface MedicineModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onAdd?: (medicine: string) => void;
+    onAdd?: (medicine: string) => Promise<void> | void;
     isEdit?: boolean;
     initialValue?: string;
-    onUpdate?: (medicine: string) => void;
+    onUpdate?: (medicine: string) => Promise<void> | void;
 }
 
 const MedicineModal: React.FC<MedicineModalProps> = ({ isOpen, onClose, onAdd, isEdit = false, initialValue = '', onUpdate }) => {
@@ -22,19 +22,25 @@ const MedicineModal: React.FC<MedicineModalProps> = ({ isOpen, onClose, onAdd, i
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!medicine.trim()) {
             setError('Medicine name is required');
             return;
         }
-        if (isEdit && onUpdate) {
-            onUpdate(medicine.trim());
-        } else if (onAdd) {
-            onAdd(medicine.trim());
+
+        try {
+            if (isEdit && onUpdate) {
+                await onUpdate(medicine.trim());
+            } else if (onAdd) {
+                await onAdd(medicine.trim());
+            }
+            setMedicine('');
+            setError('');
+        } catch (err: any) {
+            const backendMessage = err?.response?.data?.message || err?.message;
+            setError(backendMessage || 'Failed to save medicine');
         }
-        setMedicine('');
-        setError('');
     };
 
     return (
