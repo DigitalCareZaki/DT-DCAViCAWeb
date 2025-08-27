@@ -19,8 +19,8 @@ const Notifications: ClientComponent = () => {
   >((state) => state.notifications);
 
   // Debug logging
-  console.log('Notifications data:', notifications);
-  console.log('Unread status:', unread);
+  // console.log('Notifications data:', notifications);
+  // console.log('Unread status:', unread);
 
   const timeoutRef = useRef<any | null>(null);
   const [show, setShow] = useState<boolean>(false);
