@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import type { ClientComponentProps } from '@types';
+import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 
 const Row: ClientComponentProps<any> = ({ ...el }) => {
   return (
@@ -25,9 +26,10 @@ const Row: ClientComponentProps<any> = ({ ...el }) => {
       <td className="px-6 py-4">{new Date(el.created_at).toDateString()}</td>
       <td className="px-6 py-4">
         <Link href={`/admin/departments/${el.id}/edit`} className="text-primary-600 hover:text-primary-800" title="Edit">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487a2.1 2.1 0 1 1 2.97 2.97L7.5 19.789 3 21l1.211-4.5 12.651-12.013z" />
-          </svg>
+          <FaEdit
+            title="Edit Department"
+            className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
+          />
         </Link>
       </td>
     </tr>

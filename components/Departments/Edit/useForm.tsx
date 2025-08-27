@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 
 import {
+    getDepartment,
     getDepartmentBranches,
     getDepartmentCities,
     updateDepartment,
@@ -32,10 +33,6 @@ const EditDepartmentForm = ({ id }: { id: string }) => {
         branch: { id: undefined, name: undefined },
         city: { id: undefined, name: undefined },
     });
-
-    // Try to get department data from Redux store
-    const departments = useSelector((state: any) => state.departments?.departments || []);
-    const currentDepartment = departments.find((dept: any) => dept.id === id);
 
     const {
         register,
@@ -63,7 +60,8 @@ const EditDepartmentForm = ({ id }: { id: string }) => {
     useEffect(() => {
         const run = async () => {
             try {
-                const [bs, cs] = await Promise.all([
+                const [dep, bs, cs] = await Promise.all([
+                    getDepartment(id),
                     getDepartmentBranches(),
                     getDepartmentCities(),
                 ]);
@@ -71,38 +69,26 @@ const EditDepartmentForm = ({ id }: { id: string }) => {
                 if (bs.success) setBranches(bs.data as any);
                 if (cs.success) setCities(cs.data as any);
 
-                console.log('Branches loaded:', bs.data);
-                console.log('Cities loaded:', cs.data);
+                if (dep.success) {
+                    const d = dep.data;
+                    setValue('title', d?.title ?? '');
+                    setValue('description', d?.description ?? '');
+                    setValue('address', d?.location?.address ?? d?.address ?? '');
+                    setValue('zipcode', d?.location?.zipcode ?? d?.zipcode ?? '');
+                    setValue('branch_id', d?.branch?.id ?? d?.branch_id ?? '');
+                    setValue('city', d?.location?.city?.id ?? d?.city_id ?? '');
+
+                    setSelectedValues({
+                        branch: { id: d?.branch?.id ?? d?.branch_id, name: d?.branch?.name },
+                        city: { id: d?.location?.city?.id ?? d?.city_id, name: d?.location?.city?.name },
+                    });
+                }
             } catch (error) {
-                console.error('Error loading data:', error);
+                console.error('Error loading department:', error);
             }
         };
         run();
-    }, []);
-
-    // Set form values when currentDepartment is available
-    useEffect(() => {
-        if (currentDepartment) {
-            console.log('Setting values from Redux store:', currentDepartment);
-            setValue('title', currentDepartment?.title ?? '');
-            setValue('description', currentDepartment?.description ?? '');
-            setValue('address', currentDepartment?.location?.address ?? currentDepartment?.address ?? '');
-            setValue('zipcode', currentDepartment?.location?.zipcode ?? currentDepartment?.zipcode ?? '');
-            setValue('branch_id', currentDepartment?.branch?.id ?? currentDepartment?.branch_id ?? '');
-            setValue('city', currentDepartment?.location?.city?.id ?? currentDepartment?.city_id ?? '');
-
-            setSelectedValues({
-                branch: {
-                    id: currentDepartment?.branch?.id ?? currentDepartment?.branch_id,
-                    name: currentDepartment?.branch?.name
-                },
-                city: {
-                    id: currentDepartment?.location?.city?.id ?? currentDepartment?.city_id,
-                    name: currentDepartment?.location?.city?.name
-                },
-            });
-        }
-    }, [currentDepartment, setValue]);
+    }, [id]);
 
     const onSubmit = handleSubmit(async (data) => {
         const payload = {
