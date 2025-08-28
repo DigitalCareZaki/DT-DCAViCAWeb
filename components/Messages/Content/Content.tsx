@@ -30,6 +30,7 @@ const Content: ClientComponent = () => {
     <div className="flex h-[85%] w-full flex-col gap-6 overflow-y-auto p-6 bg-white">
       {mainMessageArray.map((item: any, i: number) =>
         item?.threadMessages?.map((msg: any, index: number) => {
+          console.log('msg >>>>', msg);
           const isLast = index === item.threadMessages.length - 1;
           return (
             <div
@@ -41,7 +42,7 @@ const Content: ClientComponent = () => {
                 <div className="flex gap-2">
                   <div className="relative h-10 w-10 rounded-full">
                     <Image
-                      src={getProfilePicture(msg.sender.uri)}
+                      src={getProfilePicture(msg.reciever.uri)}
                       alt="profile picture"
                       fill
                       className="h-full w-full rounded-full object-contain"
@@ -50,12 +51,12 @@ const Content: ClientComponent = () => {
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold text-gray-800">
                       {getName({
-                        first_name: msg.sender.first_name ?? '',
-                        middle_name: msg.sender.middle_name ?? '',
-                        last_name: msg.sender.last_name ?? '',
+                        first_name: msg.reciever.first_name ?? '',
+                        middle_name: msg.reciever.middle_name ?? '',
+                        last_name: msg.reciever.last_name ?? '',
                       })}
                     </span>
-                    <span className="text-xs text-gray-500">{msg.sender.email}</span>
+                    <span className="text-xs text-gray-500">{msg.reciever.email}</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end">

@@ -60,6 +60,8 @@ const MessageBar: ClientComponent = () => {
         if (res.success) media = res.url;
       }
 
+      console.log('media >>>>', media);
+
       dispatch(
         handleEventReducer({
           event: 'message',
