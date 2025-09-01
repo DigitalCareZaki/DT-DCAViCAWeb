@@ -1,11 +1,11 @@
-'use server';
+'use client';
 
 import { getName } from '@init-globals';
 
-import type { ServerComponentProps } from '@types';
+import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
 
-const RenderTable: ServerComponentProps<Props> = async ({ data }) => {
+const RenderTable: ClientComponentProps<Props> = ({ data }) => {
   if (!data) return <></>;
   return (
     <>

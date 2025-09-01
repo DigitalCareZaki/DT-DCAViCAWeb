@@ -1,25 +1,27 @@
-'use server';
+'use client';
 
-import Header from './Home/Header';
-import Table from './Home/Table';
+import { useEffect, useState } from 'react';
+import VideosClient from './Home/VideosClient';
+import { getVideos, getUser } from '@service';
 
-import { getVideos } from '@service';
+import type { ClientComponent } from '@types';
 
-import type { ServerComponent } from '@types';
+const Videos: ClientComponent = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
-const Videos: ServerComponent = async () => {
-  const res = await getVideos();
+  useEffect(() => {
+    Promise.all([getVideos(), getUser()]).then(([res, user]) => {
+      if (res.success && res.data && user?.role) {
+        setData(res.data);
+        setUserRole(user.role);
+      }
+    });
+  }, []);
 
+  if (!data.length || !userRole) return <></>;
 
-  if (!res.success) return <></>;
-  if (!res.data) return <></>;
-
-  return (
-    <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
-      <Header />
-      <Table data={res?.data || []} />
-    </div>
-  );
+  return <VideosClient data={data} userRole={userRole} />;
 };
 
 export default Videos;

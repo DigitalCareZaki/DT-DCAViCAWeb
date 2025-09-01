@@ -1,14 +1,16 @@
-import { ServerTable } from '@common';
+'use client';
+
+import { ClientTable } from '@common';
 
 import RenderTable from './RenderTable';
 
-import type { ServerComponentProps } from '@types';
+import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
 
-const Table: ServerComponentProps<Props> = async ({ data }) => {
+const Table: ClientComponentProps<Props> = ({ data }) => {
   return (
     <div className="relative mt-4 overflow-x-auto pb-28 shadow-md sm:rounded-lg">
-      <ServerTable
+      <ClientTable
         heads={[
           'Title',
           'Description',
@@ -20,7 +22,7 @@ const Table: ServerComponentProps<Props> = async ({ data }) => {
         ]}
       >
         <RenderTable data={data || []} />
-      </ServerTable>
+      </ClientTable>
     </div>
   );
 };
