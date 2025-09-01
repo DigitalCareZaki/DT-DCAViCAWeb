@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrganizationMedicines } from "../../store/organizationMedicine.thunks";
 import { updateOrganizationMedicineAndUpdate } from '../../store/organizationMedicine.thunks';
@@ -8,9 +8,9 @@ import Header from "./Table/Header";
 import Table from "./Table/RenderTable";
 import { twMerge } from 'tailwind-merge';
 import MedicineModal from './Table/MedicineModal';
-import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { InputBasic } from '@common';
 
 
 const mainStyle = {
@@ -29,6 +29,19 @@ const OrganizationMedicine = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editMedicine, setEditMedicine] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filter medicines based on search term
+    const filteredMedicines = useMemo(() => {
+        if (!searchTerm.trim()) {
+            return medicines;
+        }
+
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        return medicines.filter((medicine: any) =>
+            medicine.name.toLowerCase().includes(lowerSearchTerm)
+        );
+    }, [medicines, searchTerm]);
 
 
     console.log('medicines >>>', medicines);
@@ -73,6 +86,19 @@ const OrganizationMedicine = () => {
                 onUpdate={handleUpdate}
             />
             <Header />
+            <div className="mt-6 flex w-full justify-between items-center px-4">
+                <div className="w-full max-w-md">
+                    <InputBasic
+                        icon="IoSearch"
+                        placeholder="Search medicines..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        borderTheme
+                        inputWrapperClassName="bg-white"
+                        inputClassName="bg-white"
+                    />
+                </div>
+            </div>
             {loading ? (
                 <div
                     style={mainStyle}
@@ -98,7 +124,7 @@ const OrganizationMedicine = () => {
                             </tr>
                         </thead>
                         <tbody className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
-                            {medicines.map((item: any) => (
+                            {filteredMedicines.map((item: any) => (
                                 <tr key={item.id} className="border-b odd:bg-white even:bg-gray-50">
                                     <td className="px-6 py-4">{item.name}</td>
                                     <td className="px-6 py-4">{new Date(item.created_at).toLocaleString()}</td>
