@@ -126,6 +126,14 @@ const useFormHook = (
             show: true,
           });
           return;
+        } else {
+          // Handle success case
+          handleShowModal({
+            type: 'SUCCESS',
+            message: 'Device created successfully',
+            show: true,
+          });
+          router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
         }
       } else {
         // update case
@@ -148,15 +156,24 @@ const useFormHook = (
             show: true,
           });
           return;
+        } else {
+          // Handle success case
+          handleShowModal({
+            type: 'SUCCESS',
+            message: 'Device updated successfully',
+            show: true,
+          });
+          router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+
         }
       }
 
-      handleShowModal({
-        type: 'SUCCESS',
-        message: `Device ${prevData ? 'updated' : 'added'} successfully`,
-        show: true,
-      });
-      router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+      // handleShowModal({
+      //   type: 'SUCCESS',
+      //   message: `Device ${prevData ? 'updated' : 'added'} successfully`,
+      //   show: true,
+      // });
+      // router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
     } catch (err) {
     } finally {
       setLoading(false);
