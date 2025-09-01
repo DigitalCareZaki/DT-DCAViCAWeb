@@ -4,7 +4,7 @@ import { FaUserMd } from '@react-icons/all-files/fa/FaUserMd';
 import { FaUserNurse } from '@react-icons/all-files/fa/FaUserNurse';
 import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
 import { getName } from '@init-globals';
-
+import Image from 'next/image';
 interface UserProfileModalProps {
     user: any;
     onClose: () => void;
@@ -16,7 +16,7 @@ const valueClass = 'text-base font-semibold text-gray-900';
 const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) => {
     if (!user) return null;
 
-    console.log('user kia coming nurse >>>', user.nurse);
+    console.log('user kia coming profile >>>', user);
 
     // Helper to render fields
     const renderField = (label: string, value: any) => (
@@ -71,9 +71,21 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
                 </button>
                 <div className="flex flex-col items-center pt-8 pb-4 px-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-2xl">
                     <div className="mb-2">
-                        {user.role === 'DOCTOR' && <FaUserMd className="text-blue-500 bg-white rounded-full border-4 border-blue-100 shadow-lg" size={60} />}
-                        {user.role === 'NURSE' && <FaUserNurse className="text-green-500 bg-white rounded-full border-4 border-green-100 shadow-lg" size={60} />}
-                        {user.role === 'PATIENT' && <FaUser className="text-purple-500 bg-white rounded-full border-4 border-purple-100 shadow-lg" size={60} />}
+                        {user?.uri ? (
+                            <Image
+                                src={user?.uri}
+                                alt="Profile"
+                                className="w-[60px] h-[60px] object-cover rounded-full border-4 border-purple-100 shadow-lg bg-white"
+                                width={60}
+                                height={60}
+                            />
+                        ) : (
+                            <>
+                                {user.role === 'DOCTOR' && <FaUserMd className="text-blue-500 bg-white rounded-full border-4 border-blue-100 shadow-lg" size={60} />}
+                                {user.role === 'NURSE' && <FaUserNurse className="text-green-500 bg-white rounded-full border-4 border-green-100 shadow-lg" size={60} />}
+                                {user.role === 'PATIENT' && <FaUser className="text-purple-500 bg-white rounded-full border-4 border-purple-100 shadow-lg" size={60} />}
+                            </>
+                        )}
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-1 tracking-tight">
                         {getName({
