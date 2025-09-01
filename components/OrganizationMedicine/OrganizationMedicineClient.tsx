@@ -92,7 +92,7 @@ const OrganizationMedicine = () => {
                         icon="IoSearch"
                         placeholder="Search medicines..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e: any) => setSearchTerm(e.target.value)}
                         borderTheme
                         inputWrapperClassName="bg-white"
                         inputClassName="bg-white"

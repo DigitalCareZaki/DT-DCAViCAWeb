@@ -3,6 +3,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
+import { FaUser } from '@react-icons/all-files/fa/FaUser';
+
 import { FaUserNurse } from '@react-icons/all-files/fa/FaUserNurse';
 import { FaShieldAlt } from '@react-icons/all-files/fa/FaShieldAlt';
 
@@ -14,20 +16,21 @@ import { getName } from '@init-globals';
 import type { ClientComponentProps } from '@types';
 import type { RenderTableProps } from './types';
 import type { ReduxProps, StoreSuperAdminState } from '@store-types';
+
 import { useState } from 'react';
 import { CircleSpinner } from 'react-spinners-kit';
+import UserProfileModal from './UserProfileModal';
 
 const RenderTable: ClientComponentProps<RenderTableProps> = () => {
   const dispatch = useDispatch();
   const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<{ id: string; active: boolean; name: string } | null>(null);
+  const [selectedUser, setSelectedUser] = useState<any | null>(null);
+  const [showProfile, setShowProfile] = useState(false);
 
   const { users } = useSelector<ReduxProps, StoreSuperAdminState>(
     (state) => state.superadmin
   );
-
-  console.log('users >>>>>>>>>>> ', users);
 
   const handleDisable = async (id: string) => {
     try {
@@ -85,9 +88,15 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
         first_name: user.first_name,
         last_name: user.last_name,
         middle_name: user.middle_name,
-      })
+      }),
+      ...user
     });
     setShowConfirmation(true);
+  };
+
+  const handleProfileClick = (user: any) => {
+    setSelectedUser(user);
+    setShowProfile(true);
   };
 
   const handleConfirmAction = async () => {
@@ -142,10 +151,21 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
                 className={`${!el.active ? 'text-red-500' : 'text-green-500'} hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary`}
               />
             )}
-            {el.role === 'PATIENT' && (
+
+
+            <FaUser
+              title="User Profile"
+              className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary cursor-pointer"
+              onClick={() => handleProfileClick(el)}
+            />
+
+
+            {/* {el.role === 'PATIENT' || el.role === 'DOCTOR' || el.role === 'NURSE' && (
               <>
-                <FaEdit
-                  title="Assign patient to a doctor"
+                <FaUser
+                  // title="Assign patient to a doctor"
+                  title="User Profile"
+
                   className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary"
                 />
                 <FaUserNurse
@@ -153,7 +173,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
                   className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary"
                 />
               </>
-            )}
+            )} */}
           </td>
         </tr>
       ))}
@@ -192,6 +212,11 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* User Profile Modal */}
+      {showProfile && selectedUser && (
+        <UserProfileModal user={selectedUser} onClose={() => setShowProfile(false)} />
       )}
     </>
   );
