@@ -75,24 +75,15 @@ const useFormHook = (
     try {
       setLoading(true);
 
-      console.log('Data data >>>>>:', data);
-
-
       // Prepare payload
-
       let payload: any = {
         title: data.title,
         serial_number: data.serial_number,
         category: "ECG",
       };
 
-      console.log('before create >>>>>:', payload);
-
-
       // create case
       if (!prevData) {
-        console.log('payload:', payload);
-
         const res = await createTablet(
           btoa(
             JSON.stringify({
@@ -102,15 +93,34 @@ const useFormHook = (
             })
           )
         );
+        console.log('res >>>>>', res);
 
         if (!res.success) {
+          // Check for duplicate error message
+          if (res?.message) {
+            handleShowModal({
+              type: 'ERROR',
+              message: 'Accessory already exists in your organization.',
+              show: true,
+            });
+          } else {
+            handleShowModal({
+              type: 'ERROR',
+              message: res?.message ?? 'Unable to create a new tablet',
+              show: true,
+            });
+          }
+          return;
+        } else {
+          // Handle success case
           handleShowModal({
-            type: 'ERROR',
-            message: res?.message ?? 'Unable to create a new tablet',
+            type: 'SUCCESS',
+            message: 'Tablet created successfully',
             show: true,
           });
-          return;
+          router.push(`/${user.role?.toLocaleLowerCase()}/tablets`);
         }
+
       } else {
         // update case
         const res = await updateTablet(
@@ -132,14 +142,15 @@ const useFormHook = (
           });
           return;
         }
+        handleShowModal({
+          type: 'SUCCESS',
+          message: `Tablet updated successfully`,
+          show: true,
+        });
+        router.push(`/${user.role?.toLocaleLowerCase()}/tablets`);
       }
 
-      handleShowModal({
-        type: 'SUCCESS',
-        message: `Tablet ${prevData ? 'updated' : 'added'} successfully`,
-        show: true,
-      });
-      router.push(`/${user.role?.toLocaleLowerCase()}/tablets`);
+
     } catch (err) {
     } finally {
       setLoading(false);
