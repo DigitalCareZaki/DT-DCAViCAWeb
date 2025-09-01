@@ -134,6 +134,8 @@ const useFormHook = (
             show: true,
           });
           router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+          return;
+
         }
       } else {
         // update case
@@ -164,6 +166,7 @@ const useFormHook = (
             show: true,
           });
           router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+          return;
 
         }
       }
