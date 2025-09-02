@@ -33,8 +33,15 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
   });
 
   const [selectedMonth, setSelectedMonth] = useState<string>('');
+  const [slotP, setSlotP] = useState<SlotParent | undefined>(undefined);
 
   useEffect(() => {
+
+    // Check if API calls are temporarily disabled
+    if ((window as any).__PREVENT_API_CALLS__) {
+      return;
+    }
+
     if (!selectedUserId) {
       setSlotP(undefined);
       return;
@@ -199,8 +206,6 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     handleSelectDate(new Date(startDate), new Date(endDate));
   };
 
-  const [slotP, setSlotP] = useState<SlotParent | undefined>(undefined);
-
   return (
     <>
       <div className="flex w-full flex-col gap-6 py-10">
@@ -222,7 +227,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
                 </div>
                 <div className="flex gap-4">
                   {getAvailableMonths().map((month) => (
-                    <button
+                    <div
                       key={month}
                       onClick={() => onSelectMonth(month)}
                       className={`px-4 py-2 rounded-full text-lg font-semibold transition-all duration-300 ${selectedMonth === month
@@ -231,7 +236,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
                         }`}
                     >
                       {month}
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>

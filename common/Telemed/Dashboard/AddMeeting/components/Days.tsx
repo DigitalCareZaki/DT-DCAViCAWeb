@@ -18,8 +18,19 @@ const Days: ClientComponentProps<DaysProps> = ({ onSelect, selected, startDate, 
   const [days, setDays] = useState<Date[]>([]);
   const [groupedDays, setGroupedDays] = useState<{ month: string; dates: Date[] }[]>([]);
 
+  // Memoize the filtered days processing to prevent unnecessary recalculations
+  const processedDays = useMemo(() => {
+    if (selectedMonth && filteredDays && filteredDays.length > 0) {
+      return filteredDays;
+    } else if (startDate && endDate) {
+      return generateDatesNew(startDate, endDate);
+    }
+    return [];
+  }, [selectedMonth, filteredDays, startDate, endDate]);
+
   useEffect(() => {
-    if (!startDate || !endDate) return;
+
+    if (!processedDays.length) return;
 
     // If we have filtered days for a specific month, use those
     if (selectedMonth && filteredDays && filteredDays.length > 0) {
@@ -29,17 +40,16 @@ const Days: ClientComponentProps<DaysProps> = ({ onSelect, selected, startDate, 
       setGroupedDays(grouped);
     } else {
       // Use all days from start to end date
-      var data = generateDatesNew(startDate, endDate);
       setTestS({
-        data: data.map((el) => ({ value: el })),
+        data: processedDays.map((el) => ({ value: el })),
       });
-      setDays(data);
+      setDays(processedDays);
 
       // Group days by month
-      const grouped = groupDaysByMonth(data);
+      const grouped = groupDaysByMonth(processedDays);
       setGroupedDays(grouped);
     }
-  }, [startDate, endDate, selectedMonth, filteredDays]);
+  }, [selectedMonth, processedDays]); // Simplified dependencies
 
   const groupDaysByMonth = (dates: Date[]) => {
     const groups: { month: string; dates: Date[] }[] = [];
