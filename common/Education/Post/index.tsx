@@ -70,17 +70,17 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
       <span className="text-xs">{data.content}</span>
       <div className="mt-10 flex flex-col gap-1 ">
         <span className="text-xs font-semibold text-gray-600">Refrences</span>
-        <div className="flex items-center gap-2">
-          <span className="hover:theme-text-color cursor-pointer text-xs font-bold text-gray-400">
-            Gardp
-          </span>
-          <span className="hover:theme-text-color cursor-pointer text-xs font-bold text-gray-400">
-            Google
-          </span>
-          <span className="hover:theme-text-color cursor-pointer text-xs font-bold text-gray-400">
-            Being
-          </span>
-        </div>
+        {data?.refrence.length === 0 && (
+          <span className="text-xs font-semibold text-gray-600">No refrences</span>
+        )}
+        {Array.isArray(data?.refrence) && data?.refrence?.map((el) => (
+          <div className="flex items-center gap-2">
+            <span className="hover:theme-text-color cursor-pointer text-xs font-bold text-gray-400">
+              {el}
+            </span>
+          </div>
+        ))}
+
       </div>
 
       <Actions

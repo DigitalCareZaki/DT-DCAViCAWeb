@@ -14,20 +14,20 @@ const RenderTable: ClientComponent = () => {
 
   return (
     <>
-      {patientNurseListing.map((el) => (
+      {patientNurseListing?.map((el) => (
         <tr
-          key={el.user.email}
+          key={el?.user?.email}
           className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
         >
           <th
             scope="row"
             className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
           >
-            {getName(el.user)}
+            {getName(el?.user)}
           </th>
-          <td className="px-6 py-4">{el.department.title}</td>
-          <td className="px-6 py-4">{el.user.email}</td>
-          <td className="px-6 py-4">{el.user.phone_number}</td>
+          <td className="px-6 py-4">{el?.department?.title}</td>
+          <td className="px-6 py-4">{el?.user?.email}</td>
+          <td className="px-6 py-4">{el?.user?.phone_number}</td>
         </tr>
       ))}
     </>
