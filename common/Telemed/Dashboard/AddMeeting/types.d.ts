@@ -1,8 +1,10 @@
 export type DaysProps = {
   onSelect?: (value: Date | undefined) => void;
   selected: Date | undefined;
-  startDate : Date | undefined;
-  endDate : Date | undefined;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+  selectedMonth?: string;
+  filteredDays?: Date[];
 };
 
 interface SelectedDateProps {

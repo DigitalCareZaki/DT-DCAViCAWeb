@@ -32,6 +32,8 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     },
   });
 
+  const [selectedMonth, setSelectedMonth] = useState<string>('');
+
   useEffect(() => {
     if (!selectedUserId) {
       setSlotP(undefined);
@@ -39,15 +41,64 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     }
 
     getCalendar(selectedUserId).then((data) => {
-      console.log('check >>>>>>>>>>>', data.data);
       setSlotP(data.data);
+      // Set the first month as default selected month
+      if (data.data?.startTime) {
+        const firstMonth = new Date(data.data.startTime).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        setSelectedMonth(firstMonth);
+      }
     });
   }, [selectedUserId]);
+
+  // Get available months from startTime to endTime
+  const getAvailableMonths = () => {
+    if (!slotP?.startTime || !slotP?.endTime) return [];
+
+    const months: string[] = [];
+    const currentDate = new Date(slotP.startTime);
+    const endDate = new Date(slotP.endTime);
+
+    while (currentDate <= endDate) {
+      const monthKey = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      if (!months.includes(monthKey)) {
+        months.push(monthKey);
+      }
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+
+    return months;
+  };
+
+  // Filter days to show only selected month
+  const getFilteredDays = () => {
+    if (!selectedMonth || !slotP?.startTime || !slotP?.endTime) return [];
+
+    const startDate = new Date(slotP.startTime);
+    const endDate = new Date(slotP.endTime);
+    const dates: Date[] = [];
+    const currentDate = new Date(startDate);
+
+    while (currentDate <= endDate) {
+      const monthKey = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      if (monthKey === selectedMonth) {
+        dates.push(new Date(currentDate));
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+  };
 
   const onSelect = (date: Date | undefined) => {
     if (!date) return;
 
     setSelectedDate((prev) => ({ ...prev, day: date }));
+  };
+
+  const onSelectMonth = (month: string) => {
+    setSelectedMonth(month);
+    // Don't reset selected date when month changes - preserve user selections
+    // setSelectedDate((prev) => ({ ...prev, day: undefined }));
   };
 
   const getSlots = () => {
@@ -164,20 +215,57 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
           }
           {slotP && slotP.endTime && slotP.startTime &&
             <>
+              {/* Month Selector */}
+              <div className="flex w-full flex-col items-center gap-4 mb-6">
+                <div className="text-sm text-emerald-700 bg-emerald-50 px-4 py-2 rounded-full">
+                  💡 Select a month to view dates, then choose any date from any month for your appointment
+                </div>
+                <div className="flex gap-4">
+                  {getAvailableMonths().map((month) => (
+                    <button
+                      key={month}
+                      onClick={() => onSelectMonth(month)}
+                      className={`px-4 py-2 rounded-full text-lg font-semibold transition-all duration-300 ${selectedMonth === month
+                        ? 'bg-emerald-500 text-white shadow-lg scale-105'
+                        : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:scale-105'
+                        }`}
+                    >
+                      {month}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-              <div className="flex gap-1 rounded-full bg-emerald-500 p-2 px-4 text-xs text-fuchsia-50">
+              {/* <div className="flex gap-1 rounded-full bg-emerald-500 p-2 px-4 text-xs text-fuchsia-50">
                 <span className='text-lg'>
-                  {new Date().toLocaleDateString('en-US', {
-                    month: 'long',
-                  })}
+                  {selectedMonth || new Date().toLocaleDateString('en-US', { month: 'long' })}
                 </span>
                 <span className='text-lg'>{new Date().getFullYear()}</span>
-              </div>
+              </div> */}
+
+              {/* Show message if selected date is from different month */}
+              {selectedDate?.day && selectedMonth && (
+                (() => {
+                  const selectedDateMonth = new Date(selectedDate.day).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                  if (selectedDateMonth !== selectedMonth) {
+                    return (
+                      <div className="text-sm text-blue-600 bg-blue-50 px-4 py-2 rounded-full border border-blue-200">
+                        📅 Currently viewing {selectedMonth}, but you have a date selected from {selectedDateMonth}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()
+              )}
 
               <Days
                 startDate={new Date(slotP.startTime!)}
                 endDate={new Date(slotP.endTime!)}
-                onSelect={onSelect} selected={selectedDate.day} />
+                onSelect={onSelect}
+                selected={selectedDate.day}
+                selectedMonth={selectedMonth}
+                filteredDays={getFilteredDays()}
+              />
 
               {selectedDate?.day !== undefined && (
                 <div className="flex w-full items-center justify-center gap-2 text-gray-600">
