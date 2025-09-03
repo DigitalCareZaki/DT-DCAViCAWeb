@@ -182,14 +182,14 @@ const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
         </Link>
         {user.type === 'DOCTOR' && (
           <>
-            <Link href={getPath('/logs')}>
+            {/* <Link href={getPath('/logs')}>
               <span
                 className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/logs')) ? '' : 'border-transparent'}`}
                 style={isActive(getPath('/logs')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
               >
                 Logs
               </span>
-            </Link>
+            </Link> */}
             <Link href={getPath('/vl')}>
               <span
                 className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/vl')) ? '' : 'border-transparent'}`}
