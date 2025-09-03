@@ -24,8 +24,9 @@ const Search: ClientComponent = () => {
     try {
       setLoading(true);
       const data = await searchArticle(value);
+      console.log('Serach data <<<', data);
 
-      if (!data.success) return;
+      if (!data.success) return setLoading(false);
 
       dispatch(setArticlesReducer({ articles: data?.data ?? [] }));
     } catch (err) {

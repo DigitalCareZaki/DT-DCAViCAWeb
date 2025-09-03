@@ -16,7 +16,7 @@ const Content: ClientComponentProps<ContentProps> = ({ data }) => {
     dispatch(setArticlesReducer({ articles }));
 
   useEffect(() => {
-    setArticles(data);
+    setArticles(data ?? []);
   }, [data]);
 
   return (

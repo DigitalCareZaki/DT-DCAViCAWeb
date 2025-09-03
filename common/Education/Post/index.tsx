@@ -21,12 +21,12 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
   const [viewed] = useIntersectView(ref);
 
   useEffect(() => {
-    if (viewed && data.id) {
+    if (viewed && data?.id) {
       viewArticlePost(data.id)
         .then(() => { })
         .catch(() => { });
     }
-  }, [data.id, viewed]);
+  }, [data?.id, viewed]);
 
   return (
     <div
@@ -34,14 +34,14 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
       className="flex h-fit w-full flex-col gap-2 rounded-xl border border-gray-100 bg-white p-6 font-poppins"
     >
       <Author
-        name={getName(data.author)}
+        name={getName(data?.author)}
         specialty={data?.author?.doctor?.specialities[0]?.title}
         uri={data?.author?.uri}
       />
       <div className="relative h-96 w-full rounded-lg">
-        {imageExtension.includes(getFileExtension(data.uri)) ? (
+        {imageExtension.includes(getFileExtension(data?.uri)) ? (
           <Image
-            src={data.uri}
+            src={data?.uri}
             alt="article-image"
             className="rounded-lg object-contain"
             fill
@@ -50,7 +50,7 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
           <div className="theme-bg-color flex h-full w-full flex-col items-center justify-center rounded-lg">
             <BsFileText size={50} className="text-white" />
             <span className="text-xs font-bold uppercase text-white">
-              {getFileExtension(data.uri)}
+              {getFileExtension(data?.uri)}
             </span>
           </div>
         )}
@@ -59,28 +59,26 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
         <span className="text-ssx text-gray-500">Few minutes ago</span>
         <div className="flex items-center gap-2">
           <span className="text-ssx font-bold text-gray-500">
-            {data.views_count}
+            {data?.views_count}
           </span>
           <AiFillEye className="text-gray-400" />
         </div>
       </div>
       <span className="mt-10 text-md font-semibold text-gray-600">
-        {data.title}
+        {data?.title}
       </span>
-      <span className="text-xs">{data.content}</span>
+      <span className="text-xs">{data?.content}</span>
       <div className="mt-10 flex flex-col gap-1 ">
         <span className="text-xs font-semibold text-gray-600">Refrences</span>
-        {data?.refrence.length === 0 && (
-          <span className="text-xs font-semibold text-gray-600">No refrences</span>
-        )}
-        {Array.isArray(data?.refrence) && data?.refrence?.map((el) => (
-          <div className="flex items-center gap-2">
+        {Array.isArray(data?.refrence) && data?.refrence?.map((el, index) => (
+          <div key={index} className="flex items-center gap-2">
             <span className="hover:theme-text-color cursor-pointer text-xs font-bold text-gray-400">
               {el}
             </span>
           </div>
-        ))}
+        ))
 
+        }
       </div>
 
       <Actions
