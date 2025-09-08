@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 
-import { composeMessage, searchUsersMessages } from '@service';
+import { composeMessage, searchUsersMessages, uploadFileS3 } from '@service';
 import { useUser } from '@selectors';
 import {
   showModalReducer,
@@ -90,12 +90,29 @@ const useFormHook = (): UseFormProps => {
 
       setLoading(true);
 
+      // Prepare attachments: upload any File objects, keep URLs as-is
+      let attachments: string[] = [];
+      if (Array.isArray(composeMessageState.attachments) && composeMessageState.attachments.length > 0) {
+        const uploadResults = await Promise.all(
+          composeMessageState.attachments.map(async (item: any) => {
+            if (typeof item === 'string') return item;
+            try {
+              const formdata = new FormData();
+              formdata.append('file', item as File);
+              const res = await uploadFileS3(formdata);
+              return res.success && res.url ? res.url : undefined;
+            } catch {
+              return undefined;
+            }
+          })
+        );
+        attachments = uploadResults.filter((u): u is string => typeof u === 'string');
+      }
+
       // Always include parent_id in the payload
       const payload = {
         ...data,
-        attachments: Array.isArray(composeMessageState.attachments) && composeMessageState.attachments.length > 0
-          ? composeMessageState.attachments
-          : [],
+        attachments,
         parent_id: composeMessageState.parent_id || null,
       };
 

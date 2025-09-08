@@ -42,6 +42,7 @@ export { default as getSuperAdminBranches } from './superadmin/getBranches';
 export { default as addSuperAdminBranch } from './superadmin/addBranch';
 export { default as getCurrentPatientProfile } from './patients/getCurrentPatientProfile';
 export { default as uploadFile } from './upload/file';
+export { default as uploadFileS3 } from './upload/fileS3';
 export { default as createArticle } from './articles/createArticle';
 export { default as getTrendingArticles } from './articles/getTrendingArticles';
 export { default as viewArticlePost } from './articles/viewArticle';

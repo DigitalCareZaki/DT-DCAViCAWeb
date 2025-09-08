@@ -19,6 +19,7 @@ import type { EditorProps } from './types';
 const SlateEditor: ClientComponentProps<EditorProps> = ({
   onChange,
   defaultValue,
+  extraToolbarContent = null,
 }) => {
   const [initlized, setInitlized] = useState<number>(0);
   const editor = useMemo(
@@ -151,6 +152,7 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
             <MarkButton format="code" icon="FaCode" />
 
             {/* <LinkButton /> */}
+            {extraToolbarContent}
           </Toolbar>
           <Editable
             className="min-h-[400px] rounded-lg bg-gray-100 px-[16px] py-2 outline-none"

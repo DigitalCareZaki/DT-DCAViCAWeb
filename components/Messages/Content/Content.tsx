@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 
 import NoContentSelected from './NoContent';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Icon } from '@common';
 import type { ClientComponent } from '@types';
 import type { ReduxProps, StoreGlobalState } from '@store-types';
 import { getProfilePicture, getName } from '@init-globals';
@@ -25,6 +27,8 @@ const Content: ClientComponent = () => {
   // Find if we are replying (parent_id set)
   const isReplying = !!composeMessage.parent_id;
 
+
+  const isImage = (url: string) => /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(url);
 
   return (
     <div className="flex h-[85%] w-full flex-col gap-6 overflow-y-auto p-6 bg-white">
@@ -81,6 +85,79 @@ const Content: ClientComponent = () => {
                 className="prose max-w-full px-6 pb-6 pt-2 text-sm text-gray-800"
                 dangerouslySetInnerHTML={{ __html: msg.content ?? '' }}
               />
+
+              {/* Attachments */}
+              {Array.isArray(msg.attachments) && msg.attachments.length > 0 && (
+                <div className="px-6 pb-5">
+                  <div className="flex flex-wrap gap-4">
+                    {msg.attachments.map((url: string, aIdx: number) => {
+                      const name = url.split('/').pop() || 'attachment';
+                      const ext = (name.split('.').pop() || '').toUpperCase();
+                      if (isImage(url)) {
+                        return (
+                          <div
+                            key={`${url}-${aIdx}`}
+                            className="group relative h-[120px] w-[120px] overflow-hidden rounded-lg border bg-gray-50 shadow-sm"
+                          >
+                            <Image
+                              src={url}
+                              alt={name}
+                              fill
+                              className="object-cover"
+                            />
+                            <div className="pointer-events-none absolute inset-0 hidden items-end bg-black/40 p-2 opacity-0 transition group-hover:flex group-hover:opacity-100">
+                              <div className="flex w-full items-center justify-between gap-2 text-[10px] text-white">
+                                <a
+                                  href={url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="pointer-events-auto rounded bg-white/20 px-2 py-[2px] backdrop-blur hover:bg-white/30"
+                                >
+                                  View
+                                </a>
+                                <a
+                                  href={url}
+                                  download
+                                  className="pointer-events-auto rounded bg-white/20 px-2 py-[2px] backdrop-blur hover:bg-white/30"
+                                >
+                                  Download
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return (
+                        <div
+                          key={`${url}-${aIdx}`}
+                          className="inline-flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-700 shadow-sm"
+                          title={name}
+                        >
+                          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-gray-600 ring-1 ring-gray-200">
+                            <Icon name="IoDocumentText" size={14} />
+                          </span>
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="max-w-[220px] truncate hover:underline"
+                          >
+                            {name}
+                          </a>
+                          <span className="rounded bg-gray-200 px-1.5 py-[2px] text-[10px] text-gray-600">{ext}</span>
+                          <a
+                            href={url}
+                            download
+                            className="ml-1 rounded-full px-2 py-1 text-[10px] text-blue-600 hover:bg-blue-50"
+                          >
+                            Download
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               {/* Inline reply below last message if replying */}
               {isLast && isReplying && <div className="mt-4"><Compose inline /></div>}
             </div>

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode:false,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -87,7 +87,10 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'res.cloudinary.com',
       },
-      
+      {
+        protocol: 'https',
+        hostname: 'avica-health.s3.ap-southeast-1.amazonaws.com',
+      },
     ],
   },
 };

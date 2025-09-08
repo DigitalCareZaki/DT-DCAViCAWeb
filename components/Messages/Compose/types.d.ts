@@ -6,7 +6,7 @@ interface MessageComposeProps {
   send_to: string;
   subject: string;
   content: string;
-  attachments: string[];
+  attachments: (string | File)[];
 }
 
 export type UseFormProps = [
