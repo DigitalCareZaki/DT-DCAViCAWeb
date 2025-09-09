@@ -12,14 +12,50 @@ import type { ReduxProps, StoreGlobalState } from '@store-types';
 import { getProfilePicture, getName } from '@init-globals';
 import MessageContentSkeleton from './MessageContentSkeleton';
 import Compose from '../Compose';
+import { useUser } from '@selectors';
 
 const Content: ClientComponent = () => {
-
   const pathname = usePathname();
+  const [user] = useUser();
 
   const { message, composeMessage, modals } = useSelector<ReduxProps, StoreGlobalState>(
     (state) => state.global
   );
+
+  // Determine if we should show sender or receiver based on route and user role
+  const shouldShowSender = () => {
+    if (!pathname) return false;
+
+    // For "sent" messages, always show receiver (who received the message)
+    if (pathname?.includes('/sent')) {
+      return false;
+    }
+
+    // If user is DOCTOR and on /doctor/messages (but not sent), show sender
+    if (user?.role === 'DOCTOR' && pathname?.startsWith('/doctor/messages') && !pathname?.includes('/sent')) {
+      return true;
+    }
+    // If user is NURSE and on /nurse/messages (but not sent), show sender
+    if (user?.role === 'NURSE' && pathname?.startsWith('/nurse/messages') && !pathname?.includes('/sent')) {
+      return true;
+    }
+    // If user is PATIENT and on /patient/messages (but not sent), show sender
+    if (user?.role === 'PATIENT' && pathname?.startsWith('/patient/messages') && !pathname?.includes('/sent')) {
+      return true;
+    }
+    // If user is ADMIN and on /admin/messages (but not sent), show sender
+    if (user?.role === 'ADMIN' && pathname?.startsWith('/admin/messages') && !pathname?.includes('/sent')) {
+      return true;
+    }
+    // If user is SUPERADMIN and on /superadmin/messages (but not sent), show sender
+    if (user?.role === 'SUPERADMIN' && pathname?.startsWith('/superadmin/messages') && !pathname?.includes('/sent')) {
+      return true;
+    }
+    // For any other route, show receiver
+    return false;
+  };
+
+  const showSender = shouldShowSender();
 
   if (message.loading) return <MessageContentSkeleton />;
 
@@ -30,15 +66,15 @@ const Content: ClientComponent = () => {
 
   // Find if we are replying (parent_id set)
   const isReplying = !!composeMessage.parent_id;
-  const getPerson = (msg: any) => pathname?.includes("/messages") ? msg.sender : msg.reciever;
-  const isImage = (url: string) => /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(url);
+
+  const isImage = (url: string) => /\.(png|jpe?g|gif|webp|bmp|svg|ico|tiff?|psd|raw|heic|heif|avif|jfif)$/i.test(url);
 
   return (
     <div className="flex h-[85%] w-full flex-col gap-6 overflow-y-auto p-6 bg-white">
       {mainMessageArray.map((item: any, i: number) =>
         item?.threadMessages?.map((msg: any, index: number) => {
-          const person = getPerson(msg);
           const isLast = index === item.threadMessages.length - 1;
+          console.log('showSender >>>>', showSender);
           return (
             <div
               key={`${i}-${index}`}
@@ -49,7 +85,7 @@ const Content: ClientComponent = () => {
                 <div className="flex gap-2">
                   <div className="relative h-10 w-10 rounded-full">
                     <Image
-                      src={getProfilePicture(person.uri)}
+                      src={getProfilePicture(showSender ? msg.sender?.uri : msg.reciever?.uri)}
                       alt="profile picture"
                       fill
                       className="h-full w-full rounded-full object-contain"
@@ -58,12 +94,14 @@ const Content: ClientComponent = () => {
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold text-gray-800">
                       {getName({
-                        first_name: person.first_name ?? '',
-                        middle_name: person.middle_name ?? '',
-                        last_name: person.last_name ?? '',
+                        first_name: showSender ? (msg.sender?.first_name ?? '') : (msg.reciever?.first_name ?? ''),
+                        middle_name: showSender ? (msg.sender?.middle_name ?? '') : (msg.reciever?.middle_name ?? ''),
+                        last_name: showSender ? (msg.sender?.last_name ?? '') : (msg.reciever?.last_name ?? ''),
                       })}
                     </span>
-                    <span className="text-xs text-gray-500">{person.email}</span>
+                    <span className="text-xs text-gray-500">
+                      {showSender ? msg.sender?.email : msg.reciever?.email}
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
