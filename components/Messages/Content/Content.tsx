@@ -1,7 +1,8 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-
+import { usePathname } from 'next/navigation';
+// ...existing code...
 import NoContentSelected from './NoContent';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,6 +14,9 @@ import MessageContentSkeleton from './MessageContentSkeleton';
 import Compose from '../Compose';
 
 const Content: ClientComponent = () => {
+
+  const pathname = usePathname();
+
   const { message, composeMessage, modals } = useSelector<ReduxProps, StoreGlobalState>(
     (state) => state.global
   );
@@ -26,15 +30,14 @@ const Content: ClientComponent = () => {
 
   // Find if we are replying (parent_id set)
   const isReplying = !!composeMessage.parent_id;
-
-
+  const getPerson = (msg: any) => pathname?.includes("/messages") ? msg.sender : msg.reciever;
   const isImage = (url: string) => /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(url);
 
   return (
     <div className="flex h-[85%] w-full flex-col gap-6 overflow-y-auto p-6 bg-white">
       {mainMessageArray.map((item: any, i: number) =>
         item?.threadMessages?.map((msg: any, index: number) => {
-          console.log('msg >>>>', msg);
+          const person = getPerson(msg);
           const isLast = index === item.threadMessages.length - 1;
           return (
             <div
@@ -46,7 +49,7 @@ const Content: ClientComponent = () => {
                 <div className="flex gap-2">
                   <div className="relative h-10 w-10 rounded-full">
                     <Image
-                      src={getProfilePicture(msg.reciever.uri)}
+                      src={getProfilePicture(person.uri)}
                       alt="profile picture"
                       fill
                       className="h-full w-full rounded-full object-contain"
@@ -55,12 +58,12 @@ const Content: ClientComponent = () => {
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold text-gray-800">
                       {getName({
-                        first_name: msg.reciever.first_name ?? '',
-                        middle_name: msg.reciever.middle_name ?? '',
-                        last_name: msg.reciever.last_name ?? '',
+                        first_name: person.first_name ?? '',
+                        middle_name: person.middle_name ?? '',
+                        last_name: person.last_name ?? '',
                       })}
                     </span>
-                    <span className="text-xs text-gray-500">{msg.reciever.email}</span>
+                    <span className="text-xs text-gray-500">{person.email}</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
