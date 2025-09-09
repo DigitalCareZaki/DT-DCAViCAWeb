@@ -11,7 +11,7 @@ async function uploadFileS3(data: FormData): Promise<{
 }> {
     try {
         const res = await fetch(
-            `/api/v1/web/uploader/uploads3`,
+            `/api/v1/web/uploader`,
             {
                 method: 'POST',
                 body: data,
