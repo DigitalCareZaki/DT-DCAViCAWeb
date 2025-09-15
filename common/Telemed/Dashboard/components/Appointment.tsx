@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import Image from 'next/image';
@@ -25,24 +25,28 @@ const colors = {
     secondary: 'bg-blue-600',
     text: 'text-blue-700',
     border: 'border-blue-800',
+    ring: 'ring-blue-600',
   },
   NURSE: {
     primary: 'bg-green-100',
     secondary: 'bg-green-600',
     text: 'text-green-700',
     border: 'border-green-800',
+    ring: 'ring-green-600',
   },
   PATIENT: {
     primary: 'bg-teal-100',
     secondary: 'bg-teal-600',
     text: 'text-teal-700',
     border: 'border-teal-800',
+    ring: 'ring-teal-600',
   },
   DEFAULT: {
     primary: 'bg-gray-100',
     secondary: 'bg-gray-400',
     text: 'text-gray-700',
     border: 'border-gray-800',
+    ring: 'ring-gray-400',
   },
 };
 
@@ -58,12 +62,14 @@ const Appointment: ClientComponentProps<Appointment> = ({
 
   const [statusState, setStatusState] = useState<string>(status ?? '');
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const optionsRef = useRef<HTMLDivElement | null>(null);
+  const optionsButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Assign color based on organizer role
   const role = typeof appointment?.organizer?.role === 'string' ? appointment.organizer.role.toUpperCase() : 'DEFAULT';
   const theme = colors[role as keyof typeof colors] || colors.DEFAULT;
 
-  const { primary, secondary, text, border } = useMemo(() => theme, [theme]);
+  const { primary, secondary, text, border, ring } = useMemo(() => theme, [theme]);
 
 
   const handleShowModal = useCallback(
@@ -118,6 +124,33 @@ const Appointment: ClientComponentProps<Appointment> = ({
 
     setStatusState(status);
   }, [status]);
+
+  useEffect(() => {
+    if (!showOptions) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(target) &&
+        optionsButtonRef.current &&
+        !optionsButtonRef.current.contains(target)
+      ) {
+        setShowOptions(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowOptions(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showOptions]);
 
 
   return (
@@ -257,7 +290,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
           {appointment?.description}
         </span>
       </div>
-      <div className="flex w-full items-center gap-2">
+      <div className="relative flex w-full items-center gap-2">
         <button
           className={twMerge(
             'flex h-11 w-[90%] cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300',
@@ -282,10 +315,12 @@ const Appointment: ClientComponentProps<Appointment> = ({
           )}
         </button>
         <button
+          ref={optionsButtonRef}
           onClick={handleToggleOptions}
           className={twMerge(
-            'flex h-11 w-[20%] cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300 hover:shadow-xl',
+            'flex h-11 w-[20%] cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300 hover:shadow-xl focus-visible:outline-none focus:ring-2 focus:ring-offset-2',
             secondary,
+            ring,
             user.role !== 'DOCTOR' && 'opacity-50 cursor-not-allowed'
           )}
           disabled={user.role !== 'DOCTOR'}
@@ -295,57 +330,38 @@ const Appointment: ClientComponentProps<Appointment> = ({
         <AnimatePresence>
           {showOptions && (
             <motion.div
-              initial={{
-                opacity: 0,
-                bottom: -250,
-              }}
-              animate={{
-                opacity: 1,
-                bottom: -210,
-              }}
-              exit={{
-                opacity: 0,
-              }}
+              ref={optionsRef}
+              role="menu"
+              aria-label="Appointment status options"
+              initial={{ opacity: 0, scale: 0.95, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: 4 }}
               className={twMerge(
-                'hidescrollbar absolute -bottom-48 z-30 flex h-60 w-56 flex-col gap-2 overflow-y-scroll rounded-lg border bg-white p-4 text-xs font-bold shadow-2xl shadow-black/50'
+                'absolute right-0 -bottom-2 z-30 w-56 rounded-xl border bg-white p-2 text-sm font-semibold shadow-xl backdrop-blur-md',
+                border,
+                text,
+                primary
               )}
             >
-              <div
-                className={twMerge(
-                  'flex h-11 w-full shrink-0 cursor-pointer items-center rounded-lg bg-gray-200 px-4 text-gray-500 hover:bg-gray-300'
-                )}
-                onClick={() => handleAccept('HOLD')}
-              >
-                {loading ? (
-                  <CircleSpinner size={20} color="#000000" />
-                ) : (
-                  <span>HOLD</span>
-                )}
-              </div>
-              <div
-                onClick={() => handleAccept('CANCELLED')}
-                className="flex h-11 w-full shrink-0 cursor-pointer items-center rounded-lg bg-gray-200 px-4 text-gray-500 hover:bg-gray-300"
-              >
-                <span>CANCELLED </span>
-              </div>
-              <div
-                onClick={() => handleAccept('ONGOING')}
-                className="flex h-11 w-full shrink-0 cursor-pointer items-center rounded-lg bg-gray-200 px-4 text-gray-500 hover:bg-gray-300"
-              >
-                <span>ONGOING</span>
-              </div>
-              <div
-                onClick={() => handleAccept('ACTIVE')}
-                className="flex h-11 w-full shrink-0 cursor-pointer items-center rounded-lg bg-gray-200 px-4 text-gray-500 hover:bg-gray-300"
-              >
-                <span>ACTIVE</span>
-              </div>
-              <div
-                onClick={() => handleAccept('PENDING')}
-                className="flex h-11 w-full shrink-0 cursor-pointer items-center rounded-lg bg-gray-200 px-4 text-gray-500 hover:bg-gray-300"
-              >
-                <span>PENDING</span>
-              </div>
+              {['HOLD', 'CANCELLED', 'ONGOING', 'ACTIVE', 'PENDING'].map((opt) => (
+                <button
+                  key={opt}
+                  role="menuitem"
+                  onClick={() => handleAccept(opt as any)}
+                  className={twMerge(
+                    'flex h-10 w-full items-center justify-between rounded-lg px-3 transition-colors hover:bg-black/5 focus:bg-black/5 focus:outline-none',
+                    text,
+                    statusState === opt && 'bg-black/5'
+                  )}
+                >
+                  <span>{opt}</span>
+                  {loading && statusState === opt ? (
+                    <CircleSpinner size={18} color="#4b5563" />
+                  ) : (
+                    <span className="text-[10px] uppercase tracking-wider opacity-50">{opt === statusState ? 'Current' : ''}</span>
+                  )}
+                </button>
+              ))}
             </motion.div>
           )}
         </AnimatePresence>
