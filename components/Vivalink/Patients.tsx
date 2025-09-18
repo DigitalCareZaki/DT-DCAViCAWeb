@@ -7,7 +7,7 @@ import '@init-globals';
 import RenderPatients from './RenderPatients';
 import Graph from './Graph';
 
-import { getDoctorSinglePatientFromVl } from '@service';
+import { getDoctorSinglePatientFromVl, getECGReportByDate } from '@service';
 
 import type { ClientComponentProps } from '@types';
 import type { Props, SelectedPatient } from './types';
@@ -23,6 +23,9 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
   });
   const [selectedDuration, setSelectedDuration] = useState("1 minute");
   const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [reportLoading, setReportLoading] = useState(false);
   const durations = {
     duration: ["1 minute", "2 minute", "3 minute"],
 
@@ -72,6 +75,43 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     }
   };
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const generateECGReport = async () => {
+    if (!selectedPatient.name || !selectedDate) {
+      alert("Please select a patient and date first!");
+      return;
+    }
+
+    setReportLoading(true);
+
+    try {
+
+      const ecgRecordId = data[selectedPatient.name]?.[0]?.replace('/', '_');
+
+      if (!ecgRecordId) {
+        throw new Error("ECG Record ID not found!");
+      }
+
+      const formattedDate = selectedDate;
+
+      const res = await getECGReportByDate(ecgRecordId, formattedDate);
+
+      if (res.success && res.data?.pdfUrl) {
+        window.open(res.data.pdfUrl, '_blank');
+      } else {
+        alert("ECG Report not available for the selected date. Please try a different date.");
+      }
+    } catch (error) {
+      console.error("Error generating ECG report:", error);
+      alert("ECG Report not available for the selected date. Please try a different date.");
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
   const handleSetSelectedPatient = useCallback(
     async (name: string) => {
       if (name === selectedPatient.name) return;
@@ -85,6 +125,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
       })
 
       setLoading(true);
+      setShowDatePicker(true);
 
       const patchSn = data[name][0]?.replace('/', '%2F');
 
@@ -176,6 +217,27 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                 <p><strong>Respiratory Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.rr}</p>
                 <p><strong>Heart Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.hr}</p>
                 <p><strong>Record Time:</strong> {new Date(selectedPatient?.otherAttributes?.recordTime).toLocaleString()}</p>
+                {showDatePicker && (
+                  <div className="mt-4 flex items-center gap-3">
+                    <label className="font-semibold text-gray-700">
+                      Select Date To Get ECG Report:
+                    </label>
+                    <input
+                      type="date"
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                      max={new Date().toISOString().split('T')[0]}
+                    />
+                    <button
+                      onClick={generateECGReport}
+                      disabled={!selectedDate || reportLoading}
+                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+                    >
+                      {reportLoading ? 'Generating...' : 'Generate Report'}
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
