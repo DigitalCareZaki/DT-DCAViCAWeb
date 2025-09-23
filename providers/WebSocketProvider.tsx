@@ -11,6 +11,8 @@ import {
   setToRoomChatsReducer,
   showModalReducer,
   setNewNotificationsReducer,
+  // chat
+  applyRoomUpdateReducer,
 } from '@slice';
 import { fetchRoomChats } from '@service';
 
@@ -171,28 +173,28 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     });
   }, [selectedRooms]);
 
-  // useEffect(() => {
-  //   if (!socket.current || !emitters?.payload?.appointment_id) return;
+  // Listen for room list update events to reorder rooms and bump unread counts
+  useEffect(() => {
+    if (!socket.current) return;
+    if (!user?.id) return;
 
-  //   const chatEvent = `${emitters.payload.appointment_id}:meeting-chat-client`;
-  //   const participantsEvent = `${emitters.payload.appointment_id}:totalParticiapnts`;
+    const event = `${user.id}:room_update`;
+    const handler = (payload: { room_id: string; last_message_at?: number; unread_increment?: number }) => {
+      dispatch(
+        applyRoomUpdateReducer({
+          room_id: payload.room_id,
+          last_message_at: payload.last_message_at,
+          unread_increment: payload.unread_increment ?? 1,
+        })
+      );
+    };
 
-  //   const chatHandler = (data: any) => {
-  //     dispatch(addToChatsReducer({ chat: data }));
-  //   };
-  //   const participantsHandler = (data: any) => {
-  //     dispatch(addToParticipantsReducer({ data }));
-  //   };
+    socket.current.on(event, handler);
+    return () => {
+      socket.current?.off(event, handler);
+    };
+  }, [user]);
 
-  //   socket.current.on(chatEvent, chatHandler);
-  //   socket.current.on(participantsEvent, participantsHandler);
-
-  //   // Cleanup to prevent multiple listeners
-  //   return () => {
-  //     socket.current?.off(chatEvent, chatHandler);
-  //     socket.current?.off(participantsEvent, participantsHandler);
-  //   };
-  // }, [emitters?.payload?.appointment_id]);
 
   return <>{children}</>;
 };

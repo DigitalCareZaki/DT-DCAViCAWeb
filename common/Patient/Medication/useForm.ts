@@ -120,10 +120,6 @@ const useFormHook = (
       if (data.frequency >= 2 && data.time2) time.push(data.time2);
       if (data.frequency >= 3 && data.time3) time.push(data.time3);
 
-      console.log('data', data);
-      console.log('start_date', start_date);
-      console.log('end_date', end_date);
-      console.log('time', time);
 
       const res = await addPatientMedication(
         btoa(

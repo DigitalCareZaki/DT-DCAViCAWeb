@@ -79,6 +79,7 @@ export { default as fetchChatRooms } from './chat/getRooms';
 export { default as searchChatRooms } from './chat/searchRooms';
 export { default as createRoom } from './chat/createRoom';
 export { default as fetchRoomChats } from './chat/getRoomChats';
+export { default as readRoom } from './chat/readRoom';
 
 
 export { default as searchArticle } from './articles/searchArticle';

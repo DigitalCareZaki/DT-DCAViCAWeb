@@ -71,7 +71,6 @@ const RenderTable: ClientComponent = () => {
   return (
     <>
       {setPatientAppointmentsListing?.map((el: any) => {
-        console.log('el >>>>', el);
         const appointment = el
         const organizer = el
         const observation = el;

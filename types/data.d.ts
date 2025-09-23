@@ -580,6 +580,8 @@ export interface ChatRoomProps {
     role: string;
   }[];
   hasNewMessage?: boolean;
+  unread_count?: number | null;
+  last_message_at?: number | null;
 }
 
 export interface SearchChatRoomsProps {

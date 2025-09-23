@@ -9,7 +9,7 @@ import { MdMail } from '@react-icons/all-files/md/MdMail';
 
 import { getName, getProfilePicture } from '@init-globals';
 import { setSelectedRoomReducer, pushToSelectedRoomReducer } from '@slice';
-import { createRoom } from '@service';
+import { createRoom, readRoom } from '@service';
 
 import type { ClientComponentProps } from '@types';
 import type { MessageProps } from './types';
@@ -25,6 +25,12 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
     () => selectedRooms?.id === id,
     [selectedRooms?.id, id]
   );
+
+  const unreadCount = useMemo(() => {
+    if (!id) return 0;
+    const room = rooms.find((r) => r.id === id);
+    return room?.unread_count ?? 0;
+  }, [rooms, id]);
 
   const handleSelect = useCallback(async () => {
     if (!id) {
@@ -64,6 +70,10 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
     }
 
     dispatch(setSelectedRoomReducer({ room: { id, users: users ?? [] } }));
+    // mark as read on server (best-effort)
+    if (id) {
+      readRoom(id).catch(() => { });
+    }
   }, [id, users, rooms]);
 
   if (!users?.length) return <></>;
@@ -98,7 +108,7 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
           />
         </div>
         <div className="flex w-full flex-col">
-          <div className="relative flex w-full">
+          <div className="relative flex w-full pr-10">
             <span className="text-xs font-semibold text-white">
               {getName({
                 first_name: users[0]?.first_name,
@@ -106,11 +116,11 @@ const Message: ClientComponentProps<MessageProps> = ({ id, users }) => {
                 middle_name: users[0]?.middle_name,
               })}
             </span>
-            {/* Show new message badge if there are unread messages */}
-            {users[0]?.hasNewMessage && (
-              <div className="absolute right-0 top-1 flex items-center group">
-                <MdMail className="text-red-500 w-4 h-4 animate-bounce" />
-                <span className="ml-1 hidden rounded bg-red-500 px-2 py-0.5 text-xs text-black group-hover:inline-block">New message</span>
+            {unreadCount > 0 && (
+              <div className="absolute right-0 top-0 flex items-center">
+                <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
               </div>
             )}
           </div>

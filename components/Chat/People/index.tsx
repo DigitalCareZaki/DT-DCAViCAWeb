@@ -10,6 +10,9 @@ import type { ServerComponent } from '@types';
 const People: ServerComponent = async () => {
   const res = await fetchChatRooms();
 
+
+  console.log('chat coming  >>>>>', res.data[0].users);
+
   if (!res.success) return <></>;
 
   return (

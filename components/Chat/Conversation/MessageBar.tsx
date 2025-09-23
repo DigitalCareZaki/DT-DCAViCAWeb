@@ -60,8 +60,6 @@ const MessageBar: ClientComponent = () => {
         if (res.success) media = res.url;
       }
 
-      console.log('media >>>>', media);
-
       dispatch(
         handleEventReducer({
           event: 'message',
@@ -78,6 +76,7 @@ const MessageBar: ClientComponent = () => {
               role: user.role,
             },
             room_id: selectedRooms?.id,
+            reciever_id: selectedRooms?.users[0].id,
             media,
           },
         })

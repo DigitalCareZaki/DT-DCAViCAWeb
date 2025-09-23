@@ -13,7 +13,9 @@ export const setRooms: SetRoomsReducer = (state, payload) => {
 export const setSelectedRoom: SelectRoomReducer = (state, payload) => {
   state.selectedRooms = payload.payload.room;
   state.rooms = state.rooms.map((room) =>
-    room.id === payload.payload.room.id ? { ...room, hasNewMessage: false } : room
+    room.id === payload.payload.room.id
+      ? { ...room, hasNewMessage: false, unread_count: 0 }
+      : room
   );
 };
 
@@ -44,8 +46,39 @@ export const pushToRoomChats: PushToRoomChats = (state, payload) => {
   const chats = state.chats[payload.payload.key];
   state.chats[payload.payload.key] = [...chats, payload.payload.data];
   state.rooms = state.rooms.map((room) =>
-    room.id === payload.payload.key ? { ...room, hasNewMessage: true } : room
+    room.id === payload.payload.key
+      ? {
+        ...room,
+        hasNewMessage: true,
+        unread_count: (room.unread_count ?? 0) + 1,
+        last_message_at: payload.payload.data.created_at,
+      }
+      : room
   );
+};
+
+// Apply incremental room updates coming from socket events
+export const applyRoomUpdate = (
+  state: any,
+  payload: { payload: { room_id: string; unread_increment?: number; last_message_at?: number } }
+) => {
+  const { room_id, unread_increment = 0, last_message_at } = payload.payload;
+
+  state.rooms = state.rooms
+    .map((r) =>
+      r.id === room_id
+        ? {
+          ...r,
+          unread_count: (r.unread_count ?? 0) + unread_increment,
+          last_message_at: last_message_at ?? r.last_message_at ?? 0,
+        }
+        : r
+    )
+    .sort((a, b) => {
+      const ud = (b.unread_count ?? 0) - (a.unread_count ?? 0);
+      if (ud) return ud;
+      return (b.last_message_at ?? 0) - (a.last_message_at ?? 0);
+    });
 };
 
 export const setToRoomChats: SetToRoomChats = (state, payload) => {

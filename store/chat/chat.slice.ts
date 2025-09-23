@@ -8,6 +8,8 @@ import {
   pushToSelectedRoom,
   pushToRoomChats,
   setToRoomChats,
+  // @ts-ignore custom reducer (not typed in types.d.ts)
+  applyRoomUpdate,
 } from './chat.reducer';
 
 const chatSlice = createSlice({
@@ -20,6 +22,8 @@ const chatSlice = createSlice({
     pushToSelectedRoom,
     pushToRoomChats,
     setToRoomChats,
+    // socket-driven room updates
+    applyRoomUpdate,
   },
 });
 
@@ -30,6 +34,7 @@ export const {
   pushToSelectedRoom: pushToSelectedRoomReducer,
   pushToRoomChats: pushToRoomChatsReducer,
   setToRoomChats: setToRoomChatsReducer,
+  applyRoomUpdate: applyRoomUpdateReducer,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
