@@ -12,6 +12,7 @@ import readMessage from '../../../service/messages/readMessage';
 import readThread from '../../../service/messages/readThread';
 import getInbox from '../../../service/messages/getInbox';
 import { FaCircle } from 'react-icons/fa';
+// no manual message emits here; backend pushes inbox_update
 
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
 
       setDateTimeString(`${date} ${time}`);
     }
-  }, [data?.created_at]);
+  }, [data?.created_at, data.is_read]);
 
   return (
     <div className="relative flex w-full flex-col border-b py-3">

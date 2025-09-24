@@ -13,8 +13,9 @@ import {
   setNewNotificationsReducer,
   // chat
   applyRoomUpdateReducer,
+  setInboxReducer,
 } from '@slice';
-import { fetchRoomChats } from '@service';
+import { fetchRoomChats, getInbox } from '@service';
 
 import type { ClientComponentProps, ChildrenComponentProps } from '@types';
 import type {
@@ -42,6 +43,8 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
   useEffect(() => {
     if (!user?.id) return;
 
+    console.log('[WS] Initializing socket for user:', user.id);
+
     // Haris
     // wss://mobility-health-backend-production.up.railway.app
 
@@ -49,8 +52,8 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     // wss://avica.up.railway.app
 
     socket.current = io(
-      process.env.NEXT_PUBLIC_SOCKET_URL || 'wss://api.avica.health',
-      // 'wss://avica.up.railway.app',
+      // process.env.NEXT_PUBLIC_SOCKET_URL || 'wss://api.avica.health',
+      'ws://localhost:7000',
       {
         transports: ['websocket'],
         autoConnect: false,
@@ -60,6 +63,18 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
 
     if (!socket.current.connected) {
       socket.current.connect();
+
+      socket.current.on('connect', () => {
+        console.log('[WS] Connected. Socket ID:', socket.current?.id);
+      });
+
+      socket.current.on('disconnect', (reason) => {
+        console.warn('[WS] Disconnected:', reason);
+      });
+
+      socket.current.on('connect_error', (err) => {
+        console.error('[WS] Connect error:', err?.message || err);
+      });
 
       // Log all events received
       // socket.current.onAny((event, ...args) => {
@@ -81,9 +96,26 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
 
       socket.current.on(`${user.id}:recieve_notification`, handler);
 
+      // Listen for inbox updates to refresh inbox list
+      const inboxHandler = async () => {
+        try {
+          const inboxRes = await getInbox('inbox');
+          console.log('socket real time  >>>', inboxRes);
+          if (inboxRes.success) {
+            dispatch(setInboxReducer(inboxRes.data));
+          }
+        } catch (e) {
+          // swallow
+        }
+      };
+      const inboxEvent = `${user.id}:inbox_update`;
+      console.log('[WS] Listening for:', inboxEvent);
+      socket.current.on(inboxEvent, inboxHandler);
+
       // CLEANUP: Remove the event listener on unmount or user change
       return () => {
         socket.current?.off(`${user.id}:recieve_notification`, handler);
+        socket.current?.off(`${user.id}:inbox_update`, inboxHandler);
       };
     }
 
