@@ -65,7 +65,7 @@ export const applyRoomUpdate = (
   const { room_id, unread_increment = 0, last_message_at } = payload.payload;
 
   state.rooms = state.rooms
-    .map((r) =>
+    .map((r: any) =>
       r.id === room_id
         ? {
           ...r,
@@ -74,7 +74,7 @@ export const applyRoomUpdate = (
         }
         : r
     )
-    .sort((a, b) => {
+    .sort((a: any, b: any) => {
       const ud = (b.unread_count ?? 0) - (a.unread_count ?? 0);
       if (ud) return ud;
       return (b.last_message_at ?? 0) - (a.last_message_at ?? 0);
