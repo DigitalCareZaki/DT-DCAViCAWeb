@@ -231,9 +231,13 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                     />
                     <button
                       onClick={generateECGReport}
-                      disabled={!selectedDate || reportLoading}
-                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+                      disabled={!selectedDate}
+                      aria-busy={reportLoading}
+                      className="relative bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition flex items-center gap-2"
                     >
+                      {reportLoading && (
+                        <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      )}
                       {reportLoading ? 'Generating...' : 'Generate Report'}
                     </button>
                   </div>
