@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getName, getProfilePicture } from '@init-globals';
 import { selectMessageReducer, setInboxReducer } from '@slice';
+import { useSelector } from 'react-redux';
+import type { ReduxProps, StoreGlobalState } from '@store-types';
 import type { ClientComponentProps } from '@types';
 import type { PreviewProps } from './types';
 import { getThreadMessages } from '@service';
@@ -16,7 +18,9 @@ import { FaCircle } from 'react-icons/fa';
 
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
+  const { inbox } = useSelector<ReduxProps, StoreGlobalState>((state) => state.global);
   const [isRead, setIsRead] = useState(data.is_read);
+  const [dateTimeString, setDateTimeString] = useState<string>('');
 
   const onClick = async () => {
     // Show skeleton loader in Content
@@ -26,19 +30,25 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
     if (data.root_id === null && isRead === false && data.id) {
       await readMessage(data.id);
       setIsRead(true);
-      // Refetch inbox and update Redux state
-      const inboxRes = await getInbox('inbox');
-      if (inboxRes.success) {
-        dispatch(setInboxReducer(inboxRes.data));
+      // Optimistically update only this item in Redux inbox
+      if (Array.isArray(inbox)) {
+        const updated = inbox.map((item: any) =>
+          item.id === data.id ? { ...item, is_read: true } : item
+        );
+        dispatch(setInboxReducer(updated));
       }
     }
 
     if (data.root_id !== null && isRead === false && data.root_id) {
       await readThread(data.root_id);
       setIsRead(true);
-      const inboxRes = await getInbox('inbox');
-      if (inboxRes.success) {
-        dispatch(setInboxReducer(inboxRes.data));
+      if (Array.isArray(inbox)) {
+        const updated = inbox.map((item: any) =>
+          item.root_id === data.root_id || item.id === data.id
+            ? { ...item, is_read: true }
+            : item
+        );
+        dispatch(setInboxReducer(updated));
       }
     }
 
@@ -52,23 +62,28 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
     });
   };
 
-  const [dateTimeString, setDateTimeString] = useState<string>('');
 
+
+  // Keep local isRead in sync with latest inbox data from Redux
   useEffect(() => {
-    if (data?.created_at) {
-      const dateObj = new Date(data.created_at);
+    setIsRead(data.is_read);
+  }, [data.is_read]);
 
-      const time = dateObj.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      });
+  // useEffect(() => {
+  //   if (data?.created_at) {
+  //     const dateObj = new Date(data.created_at);
 
-      const date = dateObj.toDateString(); // e.g., Tue Apr 22 2025
+  //     const time = dateObj.toLocaleTimeString([], {
+  //       hour: '2-digit',
+  //       minute: '2-digit',
+  //       hour12: true,
+  //     });
 
-      setDateTimeString(`${date} ${time}`);
-    }
-  }, [data?.created_at, data.is_read]);
+  //     const date = dateObj.toDateString(); // e.g., Tue Apr 22 2025
+
+  //     setDateTimeString(`${date} ${time}`);
+  //   }
+  // }, [data?.created_at]);
 
   return (
     <div className="relative flex w-full flex-col border-b py-3">
