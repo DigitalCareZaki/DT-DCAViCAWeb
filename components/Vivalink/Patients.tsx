@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useTransition } from 'react';
 
 import '@init-globals';
 
@@ -27,6 +27,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [reportLoading, setReportLoading] = useState(false);
+  const [isDatePending, startDateTransition] = useTransition();
 
   // Memoize flattened ECG data to avoid heavy recomputation on each render
   const flattenedEcgData = useMemo(() => {
@@ -82,9 +83,10 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     }
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(e.target.value);
-  };
+  const handleDateChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    startDateTransition(() => setSelectedDate(value));
+  }, []);
 
   const generateECGReport = async () => {
     if (reportLoading) return;
@@ -248,7 +250,7 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                     <label className="font-semibold text-gray-700">
                       Select Date To Get ECG Report:
                     </label>
-                    <div className="w-[300px]">
+                    <div className="w-[300px]" aria-busy={isDatePending}>
                       <InputPrimary
                         type="date"
                         value={selectedDate}
@@ -256,6 +258,9 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                         max={new Date().toISOString().split('T')[0]}
                         inputClassName='text-base font-semibold'
                       />
+                      {isDatePending && (
+                        <span className="ml-2 inline-block h-4 w-4 align-middle border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      )}
                     </div>
                     <div className="w-[220px]">
                       <ButtonPrimary
@@ -270,40 +275,36 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
               </>
             )}
           </div>
-          {selectedPatient.ecg && selectedPatient.ecg.length > 0 && (
-            <>
-              <div className="mt-5 mb-5 flex items-center gap-3">
-                <label htmlFor="duration" className="font-semibold text-gray-700">
-                  Select Duration:
-                </label>
-                <select
-                  id="duration"
-                  className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  value={selectedDuration}
-                  onChange={getDuration}
-                >
-                  <option value="" disabled>
-                    Select a duration
-                  </option>
-                  {durations.duration.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
+          {useMemo(() => (
+            selectedPatient?.ecg && selectedPatient?.ecg?.length > 0 ? (
+              <>
+                <div className="mt-5 mb-5 flex items-center gap-3">
+                  <label htmlFor="duration" className="font-semibold text-gray-700">
+                    Select Duration:
+                  </label>
+                  <select
+                    id="duration"
+                    className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                    value={selectedDuration}
+                    onChange={getDuration}
+                  >
+                    <option value="" disabled>
+                      Select a duration
                     </option>
-                  ))}
-                </select>
-              </div>
-              <div style={{ overflowX: 'auto', width: '100%' }}>
-                <ECGPlot data={flattenedEcgData}></ECGPlot>
-
-
-
-              </div>
-            </>
-
-
-          )}
+                    {durations?.duration?.map((time, index) => (
+                      <option key={index} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ overflowX: 'auto', width: '100%' }}>
+                  <ECGPlot data={flattenedEcgData}></ECGPlot>
+                </div>
+              </>
+            ) : null
+          ), [flattenedEcgData, selectedDuration, selectedPatient?.name])}
         </div>
-
       </div>
     </>
   );
