@@ -17,6 +17,12 @@ const Compliance: ServerComponent = async () => {
 
   const data = await getPatientList(user.toLocaleUpperCase(), 1, 10);
 
+  console.log('data >>>>>>>>>>>>>>>>>>>>>>>', data.data[0]?.patient);
+
+  console.log('data >>>>>>>>>>>>>>>>>>>>>>>', data.data[0]?.measurements);
+
+
+
   if (!data.success) return <></>;
 
   return (

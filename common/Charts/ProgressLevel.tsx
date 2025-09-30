@@ -12,7 +12,7 @@ import { PatientCompliance } from '@types';
 const Chart = dynamic(() => import('react-apexcharts'));
 
 export default function ProgressLevel({
-  colors = ['#0070FA', '#2A9B8A', '#9B2A2A'],
+  colors = ['#0070FA', '#2A9B8A', '#9B2A2A', '#F59E0B', '#6B7280'],
 }: ProgressLevelProps): JSX.Element {
   const chartContainer = useRef<HTMLDivElement>(null);
   const [dynamics, setDynamics] = useState({
@@ -70,7 +70,8 @@ export default function ProgressLevel({
             plotOptions: {
               bar: {
                 horizontal: false,
-                columnWidth: '20%',
+                columnWidth: '12%',
+                borderRadius: 6,
               },
             },
             dataLabels: {
@@ -126,6 +127,16 @@ export default function ProgressLevel({
               name: 'Not Compliant',
               data: Object.values(compliance).map(
                 (el: any) => el?.not_taken ?? 0
+              ),
+            },
+            {
+              name: 'Pending',
+              data: Object.values(compliance).map((el: any) => el?.pending ?? 0),
+            },
+            {
+              name: 'No Action Taken',
+              data: Object.values(compliance).map(
+                (el: any) => el?.not_action_taken ?? 0
               ),
             },
           ]}
