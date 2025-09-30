@@ -15,6 +15,7 @@ export default memo(function InputPrimary({
   error,
   errorMessage,
   validatorErrors,
+  inputClassName,
   ...props
 }: InputBaseProps): JSX.Element {
   const [showText, setShowText] = useState<boolean>(false);
@@ -79,7 +80,7 @@ export default memo(function InputPrimary({
             {...props}
             {...hookProps}
             type={showText ? 'text' : password ? 'password' : props.type}
-            className="h-full w-full select-none rounded-xl p-4 outline-none placeholder:font-normal placeholder:text-gray-300"
+            className={`h-full w-full select-none rounded-xl p-4 outline-none placeholder:font-normal placeholder:text-gray-300 ${inputClassName}`}
           />
           {showPassword[showPasswordState]}
         </div>
