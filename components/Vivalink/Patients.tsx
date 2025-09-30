@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useTransition } from 'react';
 
 import '@init-globals';
 
@@ -8,6 +8,7 @@ import RenderPatients from './RenderPatients';
 import Graph from './Graph';
 
 import { getDoctorSinglePatientFromVl, getECGReportByDate } from '@service';
+import { InputPrimary, ButtonPrimary } from '@common';
 
 import type { ClientComponentProps } from '@types';
 import type { Props, SelectedPatient } from './types';
@@ -26,6 +27,13 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [reportLoading, setReportLoading] = useState(false);
+  const [isDatePending, startDateTransition] = useTransition();
+
+  // Memoize flattened ECG data to avoid heavy recomputation on each render
+  const flattenedEcgData = useMemo(() => {
+    if (!selectedPatient?.ecg || selectedPatient.ecg.length === 0) return [];
+    return selectedPatient.ecg.reduce((acc: any, curr: any) => [...acc, ...curr], []);
+  }, [selectedPatient?.ecg]);
   const durations = {
     duration: ["1 minute", "2 minute", "3 minute"],
 
@@ -75,11 +83,13 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
     }
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(e.target.value);
-  };
+  const handleDateChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    startDateTransition(() => setSelectedDate(value));
+  }, []);
 
   const generateECGReport = async () => {
+    if (reportLoading) return;
     if (!selectedPatient.name || !selectedDate) {
       alert("Please select a patient and date first!");
       return;
@@ -87,25 +97,43 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
 
     setReportLoading(true);
 
+    let reportWindow: Window | null = null;
     try {
-
       const ecgRecordId = data[selectedPatient.name]?.[0]?.replace('/', '_');
-
       if (!ecgRecordId) {
         throw new Error("ECG Record ID not found!");
       }
 
       const formattedDate = selectedDate;
 
-      const res = await getECGReportByDate(ecgRecordId, formattedDate);
+      // Open a placeholder tab immediately to avoid popup blocking
+      reportWindow = typeof window !== 'undefined' ? window.open('', '_blank') : null;
+      if (reportWindow) {
+        reportWindow.document.write('<html><head><title>Generating Report...</title></head><body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">Generating ECG Report... Please wait.</body></html>');
+      }
+
+      // Ensure loader shows for at least 5 seconds before opening report
+      const delay = new Promise((resolve) => setTimeout(resolve, 3000));
+      const [res] = await Promise.all([
+        getECGReportByDate(ecgRecordId, formattedDate),
+        delay,
+      ]);
 
       if (res.success && res.data?.pdfUrl) {
-        window.open(res.data.pdfUrl, '_blank');
+        if (reportWindow) {
+          reportWindow.location.href = res.data.pdfUrl;
+        } else {
+          window.open(res.data.pdfUrl, '_blank');
+        }
       } else {
+        if (reportWindow) reportWindow.close();
         alert("ECG Report not available for the selected date. Please try a different date.");
       }
     } catch (error) {
       console.error("Error generating ECG report:", error);
+      if (reportWindow && !reportWindow.closed) {
+        reportWindow.close();
+      }
       alert("ECG Report not available for the selected date. Please try a different date.");
     } finally {
       setReportLoading(false);
@@ -218,70 +246,65 @@ const Patients: ClientComponentProps<Props> = ({ data }) => {
                 <p><strong>Heart Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.hr}</p>
                 <p><strong>Record Time:</strong> {new Date(selectedPatient?.otherAttributes?.recordTime).toLocaleString()}</p>
                 {showDatePicker && (
-                  <div className="mt-4 flex items-center gap-3">
+                  <div className="mt-4 flex items-center gap-3 text-base">
                     <label className="font-semibold text-gray-700">
                       Select Date To Get ECG Report:
                     </label>
-                    <input
-                      type="date"
-                      value={selectedDate}
-                      onChange={handleDateChange}
-                      className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                      max={new Date().toISOString().split('T')[0]}
-                    />
-                    <button
-                      onClick={generateECGReport}
-                      disabled={!selectedDate || reportLoading}
-                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-                    >
-                      {reportLoading ? 'Generating...' : 'Generate Report'}
-                    </button>
+                    <div className="w-[300px]" aria-busy={isDatePending}>
+                      <InputPrimary
+                        type="date"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        max={new Date().toISOString().split('T')[0]}
+                        inputClassName='text-base font-semibold'
+                      />
+                      {isDatePending && (
+                        <span className="ml-2 inline-block h-4 w-4 align-middle border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      )}
+                    </div>
+                    <div className="w-[220px]">
+                      <ButtonPrimary
+                        onClick={generateECGReport}
+                        disabled={!selectedDate}
+                        loading={reportLoading}
+                        name={reportLoading ? 'Generating...' : 'Generate Report'}
+                      />
+                    </div>
                   </div>
                 )}
               </>
             )}
           </div>
-          {selectedPatient.ecg && selectedPatient.ecg.length > 0 && (
-            <>
-              <div className="mt-5 mb-5 flex items-center gap-3">
-                <label htmlFor="duration" className="font-semibold text-gray-700">
-                  Select Duration:
-                </label>
-                <select
-                  id="duration"
-                  className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  value={selectedDuration}
-                  onChange={getDuration}
-                >
-                  <option value="" disabled>
-                    Select a duration
-                  </option>
-                  {durations.duration.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
+          {useMemo(() => (
+            selectedPatient?.ecg && selectedPatient?.ecg?.length > 0 ? (
+              <>
+                <div className="mt-5 mb-5 flex items-center gap-3">
+                  <label htmlFor="duration" className="font-semibold text-gray-700">
+                    Select Duration:
+                  </label>
+                  <select
+                    id="duration"
+                    className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                    value={selectedDuration}
+                    onChange={getDuration}
+                  >
+                    <option value="" disabled>
+                      Select a duration
                     </option>
-                  ))}
-                </select>
-              </div>
-              <div style={{ overflowX: 'auto', width: '100%' }}>
-
-                <ECGPlot data={
-                  // combine all the ecg data into a single array
-                  selectedPatient.ecg.reduce(
-                    (acc: any, curr: any) => [...acc, ...curr],
-                    []
-                  )
-                }></ECGPlot>
-
-
-
-              </div>
-            </>
-
-
-          )}
+                    {durations?.duration?.map((time, index) => (
+                      <option key={index} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ overflowX: 'auto', width: '100%' }}>
+                  <ECGPlot data={flattenedEcgData}></ECGPlot>
+                </div>
+              </>
+            ) : null
+          ), [flattenedEcgData, selectedDuration, selectedPatient?.name])}
         </div>
-
       </div>
     </>
   );
