@@ -16,6 +16,8 @@ export type ComplianceProps = {
       total: number;
       taken: number;
       not_taken: number;
+      pending: number;
+      not_action_taken: number;
     };
   };
 };

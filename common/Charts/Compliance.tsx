@@ -9,7 +9,7 @@ const Chart = dynamic(() => import('react-apexcharts'));
 
 export default function Compliance({
   data,
-  colors = ['#0070FA', '#2A9B8A', '#9B2A2A'],
+  colors = ['#0070FA', '#2A9B8A', '#9B2A2A', '#F59E0B', '#6B7280'],
 }: ComplianceProps): JSX.Element {
   const chartContainer = useRef<HTMLDivElement>(null);
   const [dynamics, setDynamics] = useState({
@@ -96,6 +96,14 @@ export default function Compliance({
             {
               name: 'Not Taken',
               data: Object.values(data).map((v) => v.not_taken),
+            },
+            {
+              name: 'Pending',
+              data: Object.values(data).map((v) => v.pending),
+            },
+            {
+              name: 'Not Action Taken',
+              data: Object.values(data).map((v) => v.not_action_taken),
             },
           ]}
           type="line"
