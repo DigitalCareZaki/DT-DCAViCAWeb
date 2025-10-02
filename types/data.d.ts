@@ -977,6 +977,9 @@ export interface VideoProps {
   title: string;
   description: string;
   uri: string;
+  branch: {
+    name: string;
+  };
   priority: VideoPriority;
   category: VideoCategory;
   author: {

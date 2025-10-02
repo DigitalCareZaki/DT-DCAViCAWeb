@@ -15,6 +15,7 @@ const Table: ClientComponentProps<Props> = ({ data }) => {
           'Title',
           'Description',
           'Category',
+          'Branch',
           'Priority',
           'Video',
           'Created By',
