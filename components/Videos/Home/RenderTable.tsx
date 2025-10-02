@@ -23,9 +23,9 @@ const RenderTable: ClientComponentProps<Props> = ({ data }) => {
           </th>
           <td className="line-clamp-1 px-6 py-14">{el.description}</td>
           <td className="px-6 py-4">{el.category}</td>
-          <td className="px-6 py-4">{el.branch.name}</td>
           <td className="px-6 py-4">{el.priority}</td>
           <td className="px-6 py-4">{el.uri}</td>
+          <td className="px-6 py-4">{el.branch.name}</td>
           <td className="px-6 py-4">
             {getName({
               ...el.author,
