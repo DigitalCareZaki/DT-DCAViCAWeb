@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createVideo } from '@service';
+import { createVideo, getSuperAdminBranches } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
@@ -18,17 +18,16 @@ import { validator } from './validator';
 import type { UseFormProps, CreateVideoProps, SelectorProps } from './types';
 import type { ModalState } from '@store-types';
 
-const useFormHook = (): UseFormProps => {
+const useFormHook = (): any => {
   const dispatch = useDispatch();
-
   const router = useRouter();
   const [user] = useUser();
-
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [branches, setBranches] = useState<any[]>([]);
   const [selectors, setSelectors] = useState<SelectorProps>({
     priority: undefined,
     category: undefined,
+    branch_id: undefined,
   });
 
   const {
@@ -41,6 +40,20 @@ const useFormHook = (): UseFormProps => {
     resolver: vestResolver(validator),
   });
 
+  // Fetch branches for superadmin
+  useEffect(() => {
+    const fetchBranches = async () => {
+      if ((user?.role as any) === 'SUPERADMIN') {
+        const res = await getSuperAdminBranches();
+        if (res?.success && Array.isArray(res.data)) {
+          console.log('Branches Payload>>>', res.data);
+          setBranches(res.data);
+        }
+      }
+    };
+    fetchBranches();
+  }, [user]);
+
   const handleShowModal = (payload: ModalState) => {
     dispatch(showModalReducer(payload));
   };
@@ -48,23 +61,20 @@ const useFormHook = (): UseFormProps => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
-
-      console.log('Video Payload >>>', data);
-
-      const res = await createVideo(
-        btoa(
-          JSON.stringify({
-            title: data.title,
-            description: data.description,
-            uri: data.uri,
-            priority: data.priority,
-            category: data.category,
-          })
-        )
-      );
-
+      // Only include branch_id for superadmin
+      const payload: any = {
+        title: data.title,
+        description: data.description,
+        uri: data.uri,
+        priority: data.priority,
+        category: data.category,
+      };
+      if ((user?.role as any) === 'SUPERADMIN' && selectors.branch_id) {
+        payload.branch_id = selectors.branch_id;
+      }
+      console.log('Video Payload >>>', payload);
+      const res = await createVideo(btoa(JSON.stringify(payload)));
       console.log('res', res);
-
       if (!res.success) {
         handleShowModal({
           type: 'ERROR',
@@ -73,7 +83,6 @@ const useFormHook = (): UseFormProps => {
         });
         return;
       }
-
       handleShowModal({
         type: 'SUCCESS',
         message: `Video created successfully`,
@@ -92,7 +101,7 @@ const useFormHook = (): UseFormProps => {
     clearErrors(type as any);
   };
 
-  return [register, onSubmit, errors, loading, handleSelect, selectors];
+  return [register, onSubmit, errors, loading, handleSelect, selectors, branches];
 };
 
 export default useFormHook;

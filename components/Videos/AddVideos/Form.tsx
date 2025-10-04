@@ -1,15 +1,20 @@
 'use client';
 
+
 import useForm from './useForm';
 import { useRouter } from 'next/navigation';
 import { InputBasic, ButtonPrimary, DropdownSecondary } from '@common';
-
+// Removed getUser import and useEffect for role
 import type { ClientComponent } from '@types';
+import { useUser } from '@selectors';
 
 const Form: ClientComponent = () => {
-  const [register, onSubmit, errors, loading, handleSelect, selectors] = useForm();
-
+  // Update useForm to return user/role as well
+  const [register, onSubmit, errors, loading, handleSelect, selectors, branches] = useForm();
   const router = useRouter();
+  const [user] = useUser();
+
+  console.log('selectors >>>', selectors);
 
   return (
     <form
@@ -62,6 +67,40 @@ const Form: ClientComponent = () => {
             errorMessage={errors.uri?.message || '&'}
           />
         </div>
+
+        {/* // Dropdown Branches start */}
+        {user?.role === 'SUPERADMIN' && (
+          // <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
+          <div className="w-full">
+            <DropdownSecondary
+              title="Branch"
+              label="Branch"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              error={!!errors.branch_id?.message}
+              errorMessage={errors.branch_id?.message}
+              selected={branches.find((b: any) => b.id === selectors.branch_id)?.name || ''}
+            >
+              {branches && branches.length > 0 ? (
+                branches.map((branch: any) => (
+                  <div
+                    key={branch.id}
+                    onClick={() => handleSelect('branch_id')(branch.id)}
+                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                  >
+
+                    <span className="font-medium">{branch.name}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="p-2 text-gray-400">No branches found</div>
+              )}
+            </DropdownSecondary>
+          </div>
+          // </div>
+        )}
+        {/* // Dropdown Branches end */}
+
       </div>
 
       <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
