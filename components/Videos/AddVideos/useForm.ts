@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createVideo, getSuperAdminBranches } from '@service';
+import { createVideo, createVideoSuperadmin, getSuperAdminBranches } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
@@ -61,7 +61,7 @@ const useFormHook = (): any => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
-      // Only include branch_id for superadmin
+
       const payload: any = {
         title: data.title,
         description: data.description,
@@ -73,7 +73,10 @@ const useFormHook = (): any => {
         payload.branch_id = selectors.branch_id;
       }
       console.log('Video Payload >>>', payload);
-      const res = await createVideo(btoa(JSON.stringify(payload)));
+      const isSuperadmin = (user?.role as any) === 'SUPERADMIN';
+      const res = isSuperadmin
+        ? await createVideoSuperadmin(btoa(JSON.stringify(payload)))
+        : await createVideo(btoa(JSON.stringify(payload)));
       console.log('res', res);
       if (!res.success) {
         handleShowModal({

@@ -155,6 +155,7 @@ export { default as getTodayMedicationAlerts } from './patients/getTodayMedicati
 // video
 export { default as getVideos } from './videos/getVideos';
 export { default as createVideo } from './videos/createVideo';
+export { default as createVideoSuperadmin } from './videos/createVideoSuperadmin';
 
 // tablet
 export { default as getTablets } from './tablets/getTablets';
