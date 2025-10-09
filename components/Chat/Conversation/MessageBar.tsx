@@ -148,9 +148,9 @@ const MessageBar: ClientComponent = () => {
           className="rounded-full object-cover"
         />
       </div>
-      <div className="h-10 w-[80%] bg-transparent text-xs">
+      <div className="h-10 w-[80%] bg-transparent text-base">
         <input
-          className="h-full w-full bg-transparent text-gray-main text-white/80 outline-none"
+          className="h-full w-full bg-transparent text-gray-main text-white/90 outline-none"
           placeholder="Type your message.."
           onChange={onChange}
           value={value}
