@@ -107,7 +107,7 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
                 middle_name: data.sender?.middle_name ?? '',
                 last_name: data.sender?.last_name ?? '',
               })}
-              className="w-[60%] truncate text-ellipsis text-xs font-semibold text-gray-500"
+              className="w-[60%] truncate text-ellipsis text-sm font-semibold text-gray-700"
             >
               {getName({
                 first_name: data.sender?.first_name ?? '',
@@ -115,14 +115,14 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
                 last_name: data.sender?.last_name ?? '',
               })}
             </span>
-            <span className="w-[60%] truncate text-ellipsis text-[10px] font-semibold text-gray-400">
+            <span className="w-[60%] truncate text-ellipsis text-xs font-semibold text-gray-500">
               {dateTimeString}
             </span>
             {/* NEW/UNREAD INDICATOR */}
             {data.root_id === null && isRead === false && (
               <span
                 title="New message"
-                className="ml-2 px-2 py-0.5 text-xs font-semibold text-white bg-blue-600 rounded-full shadow-sm"
+                className="ml-2 px-2 py-0.5 text-sm font-semibold text-white bg-blue-600 rounded-full shadow-sm"
               >
                 New
               </span>
@@ -130,7 +130,7 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
             {data.root_id !== null && isRead === false && (
               <span
                 title="New message"
-                className="inline-block ml-2 px-2 py-0.5 text-xs font-medium text-white bg-green-600 rounded-full whitespace-nowrap"
+                className="inline-block ml-2 px-2 py-0.5 text-sm font-medium text-white bg-green-600 rounded-full whitespace-nowrap"
               >
                 New Replies
               </span>
@@ -145,12 +145,12 @@ const Preview: ClientComponentProps<any> = ({ ...data }) => {
             )} */}
           </div>
           <div className="flex w-full">
-            <span className="text-sm font-bold text-gray-600">
+            <span className="text-base font-bold text-gray-700">
               {data.subject ? data.subject.slice(0, 30) : <span className="italic text-gray-400">(No Subject)</span>}
             </span>
           </div>
           <div className="flex w-full">
-            <span className="text-xs text-gray-500">
+            <span className="text-sm text-gray-600">
               {data.content?.trimHTML()?.slice(0, 60)}
               {(data.content?.length ?? 0) > 60 ? '..' : ''}
             </span>

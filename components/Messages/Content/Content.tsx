@@ -92,23 +92,23 @@ const Content: ClientComponent = () => {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-gray-800">
+                    <span className="text-base font-semibold text-gray-800">
                       {getName({
                         first_name: showSender ? (msg.sender?.first_name ?? '') : (msg.reciever?.first_name ?? ''),
                         middle_name: showSender ? (msg.sender?.middle_name ?? '') : (msg.reciever?.middle_name ?? ''),
                         last_name: showSender ? (msg.sender?.last_name ?? '') : (msg.reciever?.last_name ?? ''),
                       })}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-sm text-gray-500">
                       {showSender ? msg.sender?.email : msg.reciever?.email}
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-xs text-gray-500">
+                  <span className="text-sm text-gray-500">
                     {new Date(msg.created_at).toDateString()}
                   </span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-sm text-gray-500">
                     {new Date(msg.created_at).toLocaleTimeString()}
                   </span>
                 </div>
@@ -116,14 +116,14 @@ const Content: ClientComponent = () => {
 
               {/* Subject */}
               {msg.subject && (
-                <div className="px-6 pt-2 text-base font-semibold text-gray-700">
+                <div className="px-6 pt-2 text-lg font-semibold text-gray-700">
                   {msg.subject}
                 </div>
               )}
 
               {/* Body */}
               <div
-                className="prose max-w-full px-6 pb-6 pt-2 text-sm text-gray-800"
+                className="prose max-w-full px-6 pb-6 pt-2 text-base text-gray-800"
                 dangerouslySetInnerHTML={{ __html: msg.content ?? '' }}
               />
 
@@ -147,7 +147,7 @@ const Content: ClientComponent = () => {
                               className="object-cover"
                             />
                             <div className="pointer-events-none absolute inset-0 hidden items-end bg-black/40 p-2 opacity-0 transition group-hover:flex group-hover:opacity-100">
-                              <div className="flex w-full items-center justify-between gap-2 text-[10px] text-white">
+                              <div className="flex w-full items-center justify-between gap-2 text-xs text-white">
                                 <a
                                   href={url}
                                   target="_blank"
@@ -171,7 +171,7 @@ const Content: ClientComponent = () => {
                       return (
                         <div
                           key={`${url}-${aIdx}`}
-                          className="inline-flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-700 shadow-sm"
+                          className="inline-flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 shadow-sm"
                           title={name}
                         >
                           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-gray-600 ring-1 ring-gray-200">
@@ -185,11 +185,11 @@ const Content: ClientComponent = () => {
                           >
                             {name}
                           </a>
-                          <span className="rounded bg-gray-200 px-1.5 py-[2px] text-[10px] text-gray-600">{ext}</span>
+                          <span className="rounded bg-gray-200 px-1.5 py-[2px] text-xs text-gray-600">{ext}</span>
                           <a
                             href={url}
                             download
-                            className="ml-1 rounded-full px-2 py-1 text-[10px] text-blue-600 hover:bg-blue-50"
+                            className="ml-1 rounded-full px-2 py-1 text-xs text-blue-600 hover:bg-blue-50"
                           >
                             Download
                           </a>
