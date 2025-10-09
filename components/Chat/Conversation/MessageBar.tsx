@@ -138,7 +138,7 @@ const MessageBar: ClientComponent = () => {
   return (
     <form
       onSubmit={handleMessage}
-      className="w-90 focus-within:theme-border-color flex h-12 items-center gap-4 rounded-lg border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border mt-2 mb-4"
+      className="w-90 focus-within:theme-border-color flex h-14 items-center gap-4 rounded-lg border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border mt-2 mb-4"
     >
       <div className="relative h-8 w-8 rounded-full">
         <Image
@@ -148,7 +148,7 @@ const MessageBar: ClientComponent = () => {
           className="rounded-full object-cover"
         />
       </div>
-      <div className="h-10 w-[80%] bg-transparent text-base">
+      <div className="h-12 w-[80%] bg-transparent text-2xl">
         <input
           className="h-full w-full bg-transparent text-gray-main text-white/90 outline-none"
           placeholder="Type your message.."

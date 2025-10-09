@@ -23,7 +23,7 @@ const Sender: ClientComponentProps<SenderProps> = ({
           alt="profile-picture"
         />
       </div>
-      <div className="relative flex w-fit max-w-[80%] flex-col rounded-bl-sm rounded-br-xl rounded-tl-xl rounded-tr-xl bg-gray-700 p-3 py-2 text-base leading-relaxed text-white">
+      <div className="relative flex w-fit max-w-[80%] flex-col rounded-bl-sm rounded-br-xl rounded-tl-xl rounded-tr-xl bg-gray-700 p-3 py-2 text-2xl leading-relaxed text-white">
         {media && (
           <div className="relative my-2 h-48 w-48 rounded-lg">
             <Image
@@ -35,7 +35,7 @@ const Sender: ClientComponentProps<SenderProps> = ({
           </div>
         )}
         <p className="whitespace-pre-wrap break-words">{message}</p>
-        <span className="mt-1 text-xs text-white/60">{sendedAt}</span>
+        <span className="mt-1 text-2xl text-white/60">{sendedAt}</span>
       </div>
     </div>
   );

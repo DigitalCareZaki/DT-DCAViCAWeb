@@ -116,14 +116,14 @@ const Content: ClientComponent = () => {
 
               {/* Subject */}
               {msg.subject && (
-                <div className="px-6 pt-2 text-lg font-semibold text-gray-700">
+                <div className="px-6 pt-2 text-2xl font-semibold text-gray-700">
                   {msg.subject}
                 </div>
               )}
 
               {/* Body */}
               <div
-                className="prose max-w-full px-6 pb-6 pt-2 text-base text-gray-800"
+                className="prose max-w-full px-6 pb-6 pt-2 text-2xl text-gray-800"
                 dangerouslySetInnerHTML={{ __html: msg.content ?? '' }}
               />
 
