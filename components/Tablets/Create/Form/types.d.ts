@@ -8,6 +8,7 @@ export interface TabletProps {
   title: string;
   serial_number: string;
   category?: MeasurementType | string;
+  branch_id?: string; // Optional: only for superadmin selection
 }
 
 export type UseFormProps = [
@@ -19,6 +20,8 @@ export type UseFormProps = [
   loading: boolean,
   selectedValues: SelectedValuesProps,
   handleSelect: (name: string, value: string) => void,
+  selectors?: any,
+  branches?: any
 ];
 
 export interface SelectedValuesProps {
@@ -26,6 +29,13 @@ export interface SelectedValuesProps {
     name: string | undefined;
     value: MeasurementType | undefined;
   };
+}
+
+
+export interface SelectorProps {
+  priority: VideoPriority | undefined;
+  category: VideoCategory | undefined;
+  branch_id?: string; // Only for superadmin
 }
 
 export interface CreateTabletProps {

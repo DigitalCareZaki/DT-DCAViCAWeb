@@ -164,7 +164,7 @@ export { default as createTablet } from './tablets/createTablet';
 export { default as updateTablet } from './tablets/updateTablet';
 export { default as manageTablet } from './tablets/manageTablet';
 export { default as getAllTabletsForPatient } from './tablets/getAllTabletsForPatient';
-
+export { default as createTabletSuperadmin } from './tablets/createVideoSuperadmin';
 // organization medicine
 export { default as getOrganizationMedicines } from './superadmin/getOrganizationMedicines';
 export { default as addOrganizationMedicine } from './superadmin/addOrganizationMedicines';

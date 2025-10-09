@@ -992,6 +992,7 @@ export interface VideoProps {
 }
 
 export interface TabletProps {
+  branch?: any;
   id: string;
   title: string;
   serial_number: string;

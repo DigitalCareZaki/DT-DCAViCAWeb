@@ -8,14 +8,14 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createTablet, updateTablet } from '@service';
+import { createTablet, updateTablet, getSuperAdminBranches, createTabletSuperadmin } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
 
-import type { UseFormProps, SelectedValuesProps, TabletProps } from './types';
+import type { UseFormProps, SelectedValuesProps, TabletProps, SelectorProps } from './types';
 import type { ModalState } from '@store-types';
 import type { MeasurementType } from '@types';
 
@@ -41,6 +41,12 @@ const useFormHook = (
       value: undefined,
     },
   });
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectors, setSelectors] = useState<SelectorProps>({
+    priority: undefined,
+    category: undefined,
+    branch_id: undefined,
+  });
 
   const {
     register,
@@ -54,17 +60,43 @@ const useFormHook = (
     context: { role },
   });
 
-  const handleSelect = useCallback((name: string, value: string) => {
-    setValue('category', value as MeasurementType);
-    clearErrors('category');
+  // Fetch branches for superadmin
+  useEffect(() => {
+    const fetchBranches = async () => {
+      if ((user?.role as any) === 'SUPERADMIN') {
+        const res = await getSuperAdminBranches();
+        if (res?.success && Array.isArray(res.data)) {
+          console.log('Branches Payload>>>', res.data);
+          setBranches(res.data);
+        }
+      }
+    };
+    fetchBranches();
+  }, [user]);
 
-    setSelectedValues({
-      category: {
-        name,
-        value: value as MeasurementType,
-      },
-    });
-  }, []);
+
+  const handleSelect = useCallback(
+    (name: string, value: string) => {
+      if (name === 'category') {
+        setValue('category', value as MeasurementType);
+        clearErrors('category');
+
+        setSelectedValues({
+          category: {
+            name,
+            value: value as MeasurementType,
+          },
+        });
+        return;
+      }
+
+      if (name === 'branch_id') {
+        setSelectors((prev) => ({ ...prev, branch_id: value }));
+        return;
+      }
+    },
+    []
+  );
 
   const handleShowModal = (payload: ModalState) => {
     dispatch(showModalReducer(payload));
@@ -82,18 +114,30 @@ const useFormHook = (
         category: "ECG",
       };
 
+      if ((user?.role as any) === 'SUPERADMIN' && selectors.branch_id) {
+        payload.branch_id = selectors.branch_id;
+      }
+      const isSuperadmin = (user?.role as any) === 'SUPERADMIN';
+
+      const res = isSuperadmin
+        ? await createTabletSuperadmin(btoa(JSON.stringify(payload)))
+        : await createTablet(btoa(JSON.stringify(payload)));
+
+
+
+
       // create case
       if (!prevData) {
-        const res = await createTablet(
-          btoa(
-            JSON.stringify({
-              title: data.title,
-              serial_number: data.serial_number,
-              category: "ECG",
-            })
-          )
-        );
-        console.log('res >>>>>', res);
+        // const res = await createTablet(
+        //   btoa(
+        //     JSON.stringify({
+        //       title: data.title,
+        //       serial_number: data.serial_number,
+        //       category: "ECG",
+        //     })
+        //   )
+        // );
+        // console.log('res >>>>>', res);
 
         if (!res.success) {
           // Check for duplicate error message
@@ -106,7 +150,7 @@ const useFormHook = (
           } else {
             handleShowModal({
               type: 'ERROR',
-              message: res?.message ?? 'Unable to create a new tablet',
+              message: res?.message ?? 'Unable to create a new Accessory',
               show: true,
             });
           }
@@ -115,7 +159,7 @@ const useFormHook = (
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: 'Tablet created successfully',
+            message: 'Accessory created successfully',
             show: true,
           });
           router.push(`/${user.role?.toLocaleLowerCase()}/tablets`);
@@ -137,14 +181,14 @@ const useFormHook = (
         if (!res.success) {
           handleShowModal({
             type: 'ERROR',
-            message: res?.message ?? 'Unable to update tablet',
+            message: res?.message ?? 'Unable to update Accessory',
             show: true,
           });
           return;
         }
         handleShowModal({
           type: 'SUCCESS',
-          message: `Tablet updated successfully`,
+          message: `Accessory updated successfully`,
           show: true,
         });
         router.push(`/${user.role?.toLocaleLowerCase()}/tablets`);
@@ -174,7 +218,16 @@ const useFormHook = (
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, handleSelect];
+  return [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    selectedValues,
+    handleSelect,
+    selectors,
+    branches,
+  ];
 };
 
 export default useFormHook;

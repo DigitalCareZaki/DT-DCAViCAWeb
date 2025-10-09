@@ -49,8 +49,7 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
   );
 
 
-  const [register, onSubmit, errors, loading, selectedValues, handleSelect] =
-    useForm(data, categories, role);
+  const [register, onSubmit, errors, loading, selectedValues, handleSelect, selectors, branches] = useForm(data, categories, role);
 
   const router = useRouter();
 
@@ -90,6 +89,45 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
           />
         </div>
       </div>
+
+      {/* Branch Dropdown Start  */}
+
+      {user?.role === 'SUPERADMIN' && (
+        // <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
+        <div className="w-full">
+          <DropdownSecondary
+            title="Branch"
+            label="Branch"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            error={!!errors.branch_id?.message}
+            errorMessage={errors.branch_id?.message}
+            selected={branches.find((b: any) => b.id === selectors.branch_id)?.name || ''}
+          >
+            {branches && branches.length > 0 ? (
+              branches.map((branch: any) => (
+                <div
+                  key={branch.id}
+                  onClick={() => handleSelect('branch_id', branch.id)}
+                  className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                >
+
+                  <span className="font-medium">{branch.name}</span>
+                </div>
+              ))
+            ) : (
+              <div className="p-2 text-gray-400">No branches found</div>
+            )}
+          </DropdownSecondary>
+        </div>
+        // </div>
+      )}
+
+
+      {/* Branch Dropdown End  */}
+
+
+
 
       {/* Second row: Tablet category (hidden for admin) */}
       {/* {role !== 'admin' && (

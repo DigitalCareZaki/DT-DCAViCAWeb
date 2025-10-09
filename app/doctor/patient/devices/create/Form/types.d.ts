@@ -20,6 +20,7 @@ export type UseFormProps = [
   loading: boolean,
   selectedValues: SelectedValuesProps,
   handleSelect: (name: string, value: string) => void,
+
 ];
 
 export interface SelectedValuesProps {
