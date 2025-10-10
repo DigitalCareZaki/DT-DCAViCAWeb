@@ -507,6 +507,14 @@ export interface TelemedDetailsProps {
     last_name: string;
     middle_name: string;
   };
+  appointmentObservation?: {
+    id: string;
+    observations: string;
+    diagnosis: string;
+    medications: string;
+    procedure: string;
+    follow_up_date: Date;
+  };
 }
 
 export interface MeetingMetaDataProps {
