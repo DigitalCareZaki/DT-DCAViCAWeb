@@ -13,8 +13,6 @@ import type { Props } from './types';
 const ViewMeeting: ServerComponentProps<Props> = async ({ id }) => {
   const res = await getTelemedDetails(id);
 
-  console.log('res >> Medication', res);
-
   return (
     <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4 py-4">
       {/* <Header /> */}
