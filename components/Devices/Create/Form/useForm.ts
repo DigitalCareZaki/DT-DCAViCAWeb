@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createDevice, updateDevice } from '@service';
+import { createDevice, updateDevice, getSuperAdminBranches, createDeviceSuperadmin } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
@@ -32,6 +32,10 @@ const useFormHook = (
   const [user] = useUser();
 
   const [selectedSerial, setSelectedSerial] = useState<string>('');
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectors, setSelectors] = useState<any>({
+    branch_id: undefined,
+  });
 
   const [loading, setLoading] = useState<boolean>(false);
   const [serials, setSerials] = useState<string[]>([]);
@@ -103,21 +107,47 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  // Fetch branches for superadmin
+  useEffect(() => {
+    const fetchBranches = async () => {
+      if ((user?.role as any) === 'SUPERADMIN') {
+        const res = await getSuperAdminBranches();
+        if (res?.success && Array.isArray(res.data)) {
+          setBranches(res.data);
+        }
+      }
+    };
+    fetchBranches();
+  }, [user]);
+
+  const handleSelectBranch = useCallback((branchId: string) => {
+    setSelectors((prev: any) => ({ ...prev, branch_id: branchId }));
+    try {
+      // Extend form values to include optional branch_id for submission convenience
+      setValue('branch_id' as any, branchId as any);
+    } catch (_) { }
+  }, [setValue]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
       // create case
       if (!prevData) {
-        const res = await createDevice(
-          btoa(
-            JSON.stringify({
-              title: data.title,
-              description: data.description,
-              category: data.category,
-              serial_number: data.serial_number
-            })
-          )
-        );
+        const payload: any = {
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          serial_number: data.serial_number,
+        };
+
+        if ((user?.role as any) === 'SUPERADMIN') {
+          payload.branch_id = selectors.branch_id;
+        }
+
+        const encoded = btoa(JSON.stringify(payload));
+        const res = (user?.role as any) === 'SUPERADMIN'
+          ? await createDeviceSuperadmin(encoded)
+          : await createDevice(encoded);
 
         if (!res.success) {
           handleShowModal({
@@ -200,7 +230,7 @@ const useFormHook = (
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch];
 };
 
 export default useFormHook;

@@ -37,6 +37,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
               ...el.created_by,
             })}
           </td>
+          <td className="px-6 py-4">{el.branch.name}</td>
           <td className="px-6 py-4">{el.assigned ? 'Assigned' : 'Not Assigned'}</td>
           <td className="px-6 py-4">
             {new Date(el.created_at).toLocaleString()}

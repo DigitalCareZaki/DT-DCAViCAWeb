@@ -49,6 +49,7 @@ const Table = ({ userRole, patient }: TableProps) => {
         }
       } else {
         res = await getDevices(page, pagination.perPage);
+        console.log('res >>>>>>', res);
         if (res.success) {
           dispatch(setDevices(res.data ?? []));
           setPagination(res.pagination ?? pagination);
@@ -69,6 +70,7 @@ const Table = ({ userRole, patient }: TableProps) => {
             'Description',
             'Category',
             'Added By',
+            'Branch',
             'Status',
             'Added On',
             'Action',

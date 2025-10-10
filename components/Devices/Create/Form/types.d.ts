@@ -9,6 +9,8 @@ export interface DeviceProps {
   description: string | null;
   serial_number: string;
   category: MeasurementType;
+  // Optional branch for SUPERADMIN create flow
+  branch_id?: string;
 }
 
 export type UseFormProps = [

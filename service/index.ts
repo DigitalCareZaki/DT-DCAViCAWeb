@@ -108,6 +108,7 @@ export { default as getNotifications } from './notifications/getNotifications';
 export { default as getDevices } from './device/getDevices';
 export { default as getSingleDevice } from './device/getSingleDevice';
 export { default as createDevice } from './device/createDevice';
+export { default as createDeviceSuperadmin } from './device/createDeviceSuperadmin';
 export { default as assignDevice } from './device/assignDevice';
 export { default as updateDevice } from './device/updateDevice';
 export { default as manageDevice } from './device/manageDevice';
