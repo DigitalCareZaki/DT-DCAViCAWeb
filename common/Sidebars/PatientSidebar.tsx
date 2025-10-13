@@ -98,11 +98,11 @@ const Sidebar: ClientComponent = () => {
         opacity: 1,
         width: sidebar ? '10%' : '5%',
       }}
-      className="h-full w-[5%] py-6 pb-16 "
+      className="h-full w-[5%] py-6 pb-4 "
     >
       <div
         className={twMerge(
-          'theme-text-color flex h-full w-full flex-col items-center rounded-xl bg-white px-2 py-6',
+          'theme-text-color flex h-full w-full flex-col items-center rounded-xl bg-white px-2 py-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400',
           sidebar ? 'gap-6' : 'gap-4'
         )}
       >
