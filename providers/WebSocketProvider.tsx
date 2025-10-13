@@ -43,7 +43,7 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
   useEffect(() => {
     if (!user?.id) return;
 
-    console.log('[WS] Initializing socket for user:', user.id);
+
 
     // Haris
     // wss://mobility-health-backend-production.up.railway.app

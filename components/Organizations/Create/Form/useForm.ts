@@ -53,7 +53,7 @@ const useFormHook: UseFormProps = () => {
         uri = res?.url ?? null;
       }
 
-      console.log(uri);
+
 
       const payload = {
         name: data.name,

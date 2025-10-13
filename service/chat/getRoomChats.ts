@@ -11,7 +11,6 @@ async function fetchRoomChats(roomId: string): Promise<GetRoomChats> {
 
   const data = await res.json();
 
-  console.log(data);
 
   return {
     success: res.ok,

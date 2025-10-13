@@ -46,7 +46,7 @@ const useFormHook = (): any => {
       if ((user?.role as any) === 'SUPERADMIN') {
         const res = await getSuperAdminBranches();
         if (res?.success && Array.isArray(res.data)) {
-          console.log('Branches Payload>>>', res.data);
+
           setBranches(res.data);
         }
       }
@@ -72,12 +72,12 @@ const useFormHook = (): any => {
       if ((user?.role as any) === 'SUPERADMIN' && selectors.branch_id) {
         payload.branch_id = selectors.branch_id;
       }
-      console.log('Video Payload >>>', payload);
+
       const isSuperadmin = (user?.role as any) === 'SUPERADMIN';
       const res = isSuperadmin
         ? await createVideoSuperadmin(btoa(JSON.stringify(payload)))
         : await createVideo(btoa(JSON.stringify(payload)));
-      console.log('res', res);
+
       if (!res.success) {
         handleShowModal({
           type: 'ERROR',

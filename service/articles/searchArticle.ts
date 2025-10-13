@@ -16,8 +16,6 @@ async function searchArticle(value: string): Promise<SearchArticileProps> {
 
   const data = await res.json();
 
-  console.log('education data >>>>>>', data);
-
   return {
     success: res.ok,
     data: data,

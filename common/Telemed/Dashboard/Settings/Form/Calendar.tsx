@@ -127,20 +127,12 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
             endTime: data.endTime ? new Date(data.endTime) : null
         };
 
-        console.log('Processed data:', processedData);
-        console.log('Original startTime:', data.startTime);
-        console.log('Converted startTime:', processedData.startTime);
+
 
         return processedData;
     });
 
-    // Debug: Log the data structure
-    console.log('Calendar data:', data);
-    console.log('Opp state:', opp);
-    console.log('Start Time:', opp.startTime, 'Type:', typeof opp.startTime);
-    console.log('End Time:', opp.endTime, 'Type:', typeof opp.endTime);
-    console.log('Should show weekly days:', !!(opp.startTime && opp.endTime));
-    console.log('Should show update button:', !!(opp.startTime && opp.endTime));
+
 
     const onUpdate = (data: SlotWrapper) => {
         let temp = [...opp.slots];

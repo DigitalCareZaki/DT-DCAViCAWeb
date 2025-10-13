@@ -14,7 +14,7 @@ const Form: ClientComponent = () => {
   const router = useRouter();
   const [user] = useUser();
 
-  console.log('selectors >>>', selectors);
+
 
   return (
     <form

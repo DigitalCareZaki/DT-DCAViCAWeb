@@ -52,7 +52,7 @@ const Table = ({ userRole, patient }: TableProps) => {
       } else {
         res = await getTablets(page, pagination.perPage);
         if (res.success) {
-          console.log('inside the brnch coming >>>>', res.data);
+
           dispatch(setTablets(res.data ?? []));
           setPagination(res.pagination ?? pagination);
         }

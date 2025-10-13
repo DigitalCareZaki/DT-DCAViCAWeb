@@ -60,7 +60,7 @@ const useFormHook = (
 
       handleHideForm.call(this);
     } catch (err) {
-      console.log('error at submitting the form');
+
     } finally {
       setLoading(false);
     }

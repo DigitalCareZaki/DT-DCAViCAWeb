@@ -46,7 +46,7 @@ const Table = () => {
   };
 
 
-  console.log('data >>>>>>>>>>', data[0]?.patient?.doctors?.[0]?.departments?.[0]?.title);
+
 
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">

@@ -18,7 +18,6 @@ async function addRecord(data: any): Promise<any> {
       body: JSON.stringify(decodedData),
     });
 
-    console.log('res upload image >>>', res);
 
     if (res.status !== 201) {
       throw new Error('Failed to add record');

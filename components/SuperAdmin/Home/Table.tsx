@@ -27,7 +27,7 @@ const Table = () => {
     setLoading(true);
     const userTypeHeader = await getUserTypeHeaders();
     const res = await getOrganizationPatients(page, 10);
-    console.log('getOrganizationPatients res >>>>', res.data);
+
 
     if (res.success) {
       setUserType(userTypeHeader?.toLowerCase() ?? 'doctor');
@@ -46,7 +46,7 @@ const Table = () => {
     fetchData(page);
   };
 
-  console.log('data >>>', data);
+
 
 
 

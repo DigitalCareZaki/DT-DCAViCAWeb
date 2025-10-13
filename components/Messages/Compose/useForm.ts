@@ -60,7 +60,7 @@ const useFormHook = (): UseFormProps => {
       try {
         setSearching(true);
         const res = await searchUsersMessages(e[0].target.value);
-        console.log('res >>> search uuser', res.data);
+
 
         if (!res.success) return;
 
@@ -138,8 +138,7 @@ const useFormHook = (): UseFormProps => {
         show: true,
       });
 
-      console.log('data.send_to >>>>', data);
-      console.log('data.send_to >>>>', composeMessageState);
+
 
 
       // // Notify backend to push realtime inbox update to receiver

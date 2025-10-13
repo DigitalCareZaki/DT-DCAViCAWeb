@@ -49,7 +49,7 @@ const InputBasic: ClientComponentProps<any> = ({
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-    console.log('Password visibility toggled:', !showPassword);
+
   };
 
   // Determine input type based on password visibility

@@ -19,7 +19,7 @@ const Sidebar: ServerComponentProps<SidebarProps> = async ({
 
   // Keep data as-is; backend ordering preferred (unread first / newest first)
   const initialData = Array.isArray(res.data) ? res.data : [];
-  console.log('initialData >>>>>>', initialData);
+
 
   return (
     <div className="flex h-[95%] w-[20%] flex-col items-center justify-between gap-10 border-r bg-white p-11 px-4">

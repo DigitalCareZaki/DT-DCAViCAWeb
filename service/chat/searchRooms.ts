@@ -13,7 +13,6 @@ async function searchRooms(search: string): Promise<SearchRoomsProps> {
 
   const data = await res.json();
 
-  console.log('data >>>', data);
 
   const computed = data?.map((el: any) => ({
     users: [el]

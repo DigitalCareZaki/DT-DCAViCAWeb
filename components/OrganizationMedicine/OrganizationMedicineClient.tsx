@@ -46,7 +46,7 @@ const OrganizationMedicine = () => {
     }, [medicines, searchTerm]);
 
 
-    console.log('medicines >>>', medicines);
+
 
     useEffect(() => {
         setLoading(true);

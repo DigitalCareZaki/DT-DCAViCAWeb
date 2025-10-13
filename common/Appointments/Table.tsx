@@ -37,7 +37,6 @@ const Table: ClientComponentProps<any> = ({ }) => {
     const fetchInitialData = async () => {
       setLoading(true);
       const res = await getAppointmentSuperAdmin(1, 10);
-      console.log('Initial data response:', res);
 
       if (res?.success) {
         setData(res.data.data, res.data.pagination);

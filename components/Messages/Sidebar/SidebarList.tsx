@@ -16,7 +16,7 @@ const SidebarList: ClientComponentProps<Props> = ({ initialData }) => {
 
     const list = Array.isArray(inbox) && inbox.length ? inbox : initialData;
 
-    console.log('list >>>>>>', list);
+
     return (
         <ClientGenerator data={list}>
             <Preview />

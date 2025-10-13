@@ -8,7 +8,7 @@ export default function VitalsServerWrapper({ id }: ServerWrapperProps) {
   // For now, just render Vitals with an empty array
   let appointmentId = id;
 
-  console.log('vital id >>>>', id);
+
 
   return <Vitals data={[]} appointmentId={appointmentId} />;
 }

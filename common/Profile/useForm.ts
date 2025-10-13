@@ -37,7 +37,7 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
   useEffect(() => {
     if (!data) return;
 
-    console.log('data >>>>>>>>>>>>>>', data);
+
     // setValue('speciality', data?.doctor?.specialities[0]?.title);
     setValue('title', data?.title);
     setValue('firstName', data?.first_name);

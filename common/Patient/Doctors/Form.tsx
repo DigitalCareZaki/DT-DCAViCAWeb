@@ -111,7 +111,7 @@ const Form: ClientComponent = () => {
     setSelectedDoctor({ name, id: value });
 
     // 👇 Use this doctor ID for further actions
-    console.log('Selected Doctor:', { name, id: value });
+
   };
 
   // const handleSelectedDoctor = (data: SearchDoctorProps) => {

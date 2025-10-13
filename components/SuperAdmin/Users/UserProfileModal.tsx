@@ -16,7 +16,7 @@ const valueClass = 'text-base font-semibold text-gray-900';
 const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) => {
     if (!user) return null;
 
-    console.log('user kia coming profile >>>', user);
+
 
     // Helper to render fields
     const renderField = (label: string, value: any) => (

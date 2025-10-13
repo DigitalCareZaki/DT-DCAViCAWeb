@@ -66,7 +66,7 @@ const useFormHook = (
       if ((user?.role as any) === 'SUPERADMIN') {
         const res = await getSuperAdminBranches();
         if (res?.success && Array.isArray(res.data)) {
-          console.log('Branches Payload>>>', res.data);
+
           setBranches(res.data);
         }
       }

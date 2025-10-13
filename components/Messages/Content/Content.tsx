@@ -74,7 +74,7 @@ const Content: ClientComponent = () => {
       {mainMessageArray.map((item: any, i: number) =>
         item?.threadMessages?.map((msg: any, index: number) => {
           const isLast = index === item.threadMessages.length - 1;
-          console.log('showSender >>>>', showSender);
+
           return (
             <div
               key={`${i}-${index}`}

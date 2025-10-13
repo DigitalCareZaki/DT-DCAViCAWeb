@@ -9,7 +9,7 @@ async function composeMessage(data: any): Promise<ComposeMessageProps> {
     const decodedData = await JSON.parse(
       Buffer.from(data, 'base64').toString('utf-8')
     );
-    console.log('[composeMessage] Payload:', decodedData);
+
 
     const res = await fetch('/api/v1/web/message/compose', {
       method: 'POST',
@@ -18,7 +18,7 @@ async function composeMessage(data: any): Promise<ComposeMessageProps> {
     });
 
     const body = await res.json();
-    console.log('[composeMessage] API Response:', body);
+
 
     if (res.status !== 201) {
       throw new Error(body?.message?.toString());
