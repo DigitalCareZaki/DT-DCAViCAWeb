@@ -5,6 +5,7 @@ export { default as PrivacyPolicy } from './PrivacyPolicy';
 
 // Admin
 export { default as AdminHome } from './Admin';
+export { default as AdminAppointments } from './Admin/Appointments';
 
 // Common
 export { default as Chat } from './Chat';

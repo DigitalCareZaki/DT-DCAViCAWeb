@@ -78,7 +78,7 @@ const Analytics: ServerComponent = async () => {
       </Link>
 
       {/* Appointments */}
-      <Link href="/admin/#" passHref>
+      <Link href="/admin/appointments" passHref>
         <div className="flex min-h-28 flex-col items-center justify-center rounded-xl bg-gradient-to-r bg-[#8697fa] shadow-md hover:shadow-lg transition-shadow gap-1">
           <span className="text-white text-3xl font-extrabold flex items-center gap-2">
             <Icon name="FaCalendarAlt" size={24} className="text-white" />
