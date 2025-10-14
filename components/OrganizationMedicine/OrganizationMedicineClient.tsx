@@ -46,8 +46,6 @@ const OrganizationMedicine = () => {
     }, [medicines, searchTerm]);
 
 
-
-
     useEffect(() => {
         setLoading(true);
         dispatch<any>(fetchOrganizationMedicines(page))
