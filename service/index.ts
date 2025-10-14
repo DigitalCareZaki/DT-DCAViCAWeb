@@ -168,8 +168,10 @@ export { default as getAllTabletsForPatient } from './tablets/getAllTabletsForPa
 export { default as createTabletSuperadmin } from './tablets/createVideoSuperadmin';
 // organization medicine
 export { default as getOrganizationMedicines } from './superadmin/getOrganizationMedicines';
+export { default as getOrganizationMedicinesSuperadmin } from './superadmin/getOrganizationMedicinesSuperadmin';
 export { default as addOrganizationMedicine } from './superadmin/addOrganizationMedicines';
 export { default as addAdminOrganizationMedicine } from './superadmin/addAdminMedicines';
+export { default as addAdminOrganizationMedicineSuperadmin } from './superadmin/addAdminMedicinesSuperadmin';
 
 // technical support
 export { default as createTechnicalSupportQuery } from './technicalSupport/createSupportQuery';

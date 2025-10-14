@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ButtonPrimary } from '@common';
 import MedicineModal from './MedicineModal';
 import { addOrganizationMedicine, addAdminOrganizationMedicine } from '@service';
-import { addOrganizationMedicineAndUpdate } from '../../../store/organizationMedicine.thunks';
+import { addOrganizationMedicineAndUpdate, addOrganizationMedicineAndUpdateSuperadmin } from '../../../store/organizationMedicine.thunks';
 import { useUser } from '@selectors';
 
 import type { ClientComponent } from '@types';
@@ -57,8 +57,14 @@ const Header: ClientComponent = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const handleAddMedicine = async (medicine: string) => {
-    const res = await dispatch<any>(addOrganizationMedicineAndUpdate(medicine));
+  const handleAddMedicine = async (medicine: string, branchId?: string) => {
+    let res;
+    if (user?.role === 'SUPERADMIN') {
+      res = await dispatch<any>(addOrganizationMedicineAndUpdateSuperadmin(medicine, branchId));
+    } else {
+      res = await dispatch<any>(addOrganizationMedicineAndUpdate(medicine));
+    }
+
     if (!res?.success) {
       throw new Error(res?.message || 'Failed to add medicine');
     }
