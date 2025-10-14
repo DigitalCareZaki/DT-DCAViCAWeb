@@ -127,11 +127,11 @@ const OrganizationMedicine = () => {
                             </tr>
                         </thead>
                         <tbody className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
-                            {filteredMedicines.map((item: any) => (
+                            {filteredMedicines?.map((item: any) => (
                                 <tr key={item.id} className="border-b odd:bg-white even:bg-gray-50">
-                                    <td className="px-6 py-4">{item.name}</td>
-                                    <td className="px-6 py-4">{new Date(item.created_at).toLocaleString()}</td>
-                                    <td className="px-6 py-4">{item.addedBy.first_name}</td>
+                                    <td className="px-6 py-4">{item?.name}</td>
+                                    <td className="px-6 py-4">{new Date(item?.created_at).toLocaleString()}</td>
+                                    <td className="px-6 py-4">{item?.addedBy?.first_name}</td>
                                     <td className="px-6 py-4 flex items-center gap-2">
 
                                         <FaEdit
