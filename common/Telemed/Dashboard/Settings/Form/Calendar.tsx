@@ -127,9 +127,11 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
             endTime: data.endTime ? new Date(data.endTime) : null
         };
 
-
+        console.log('processedData', processedData);
 
         return processedData;
+
+        // return processedData;
     });
 
 
@@ -267,6 +269,8 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                                                 key={item.day}
                                                 onUpdate={onUpdate}
                                                 data={item}
+                                                startDate={opp.startTime}
+                                                endDate={opp.endTime}
                                             />
                                         )
                                     })
@@ -293,9 +297,40 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
 
 
                                 setLoading(true);
-                                await updateCalendar(
-                                    btoa(JSON.stringify(opp))
-                                );
+                                // create a copy of opp where slot times are normalized
+                                // so the calendar date chosen by the user is preserved when
+                                // converted to UTC/ISO string for backend storage.
+                                const payload = JSON.parse(JSON.stringify(opp));
+
+                                // payload.slots -> array of SlotWrapper
+                                if (payload.slots && Array.isArray(payload.slots)) {
+                                    payload.slots = payload.slots.map((wrapper: any) => {
+                                        if (!wrapper || !wrapper.slots) return wrapper;
+                                        const slots = wrapper.slots.map((s: any) => {
+                                            const out: any = { ...s };
+                                            function normalize(dateLike: any) {
+                                                if (!dateLike) return dateLike;
+                                                const d = new Date(dateLike);
+                                                // Use local date components (year, month, date) and
+                                                // construct a UTC Date so its ISO date matches the
+                                                // local calendar date selected by the user.
+                                                const y = d.getFullYear();
+                                                const mo = d.getMonth();
+                                                const da = d.getDate();
+                                                const hh = d.getHours();
+                                                const mm = d.getMinutes();
+                                                return new Date(Date.UTC(y, mo, da, hh, mm, 0, 0)).toISOString();
+                                            }
+
+                                            out.startTime = normalize(s.startTime);
+                                            out.endTime = normalize(s.endTime);
+                                            return out;
+                                        });
+                                        return { ...wrapper, slots };
+                                    });
+                                }
+
+                                await updateCalendar(btoa(JSON.stringify(payload)));
                                 setLoading(false);
                             }}
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

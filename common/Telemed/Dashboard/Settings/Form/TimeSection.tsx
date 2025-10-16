@@ -17,6 +17,7 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
   onChange,
   deleteSlot,
   setSlot,
+  baseDate,
 }) => {
   const [show, setShow] = useState<boolean>(false);
 
@@ -26,7 +27,9 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
 
   function setTimeOnDate(baseLike: Date | string | number | undefined, hhmm: string): Date {
     const [h, m] = hhmm.split(':').map(Number);
-    const base = baseLike ? new Date(baseLike) : new Date();
+    // prefer provided baseLike, then provided baseDate prop, otherwise today
+    const base = baseLike ? new Date(baseLike) : baseDate ? new Date(baseDate) : new Date();
+    // preserve only date part of base and set hours/minutes
     base.setHours(h, m, 0, 0); // interpret as local 24h time
     return base;
   }
@@ -91,7 +94,7 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
                 max={max}
                 onChange={(e) => {
                   const startTime = setTimeOnDate(slot?.startTime, e.target.value); // no "am" append
-                  setSlot({ ...slot, startTime });
+                  setSlot({ ...(slot || {}), startTime });
                 }}
               />
             </div>
@@ -105,7 +108,7 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
                 max={max}
                 onChange={(e) => {
                   const endTime = setTimeOnDate(slot?.endTime, e.target.value); // no "am" append
-                  setSlot({ ...slot, endTime });
+                  setSlot({ ...(slot || {}), endTime });
                 }}
               />
             </div>
@@ -139,7 +142,9 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
             {onAdded && <button
               className="flex  items-center justify-center rounded-lg  text-fuchsia-500 hover:bg-fuchsia-400 hover:text-white transition"
               onClick={() => {
-                onAdded && onAdded(slot);
+                if (slot && slot.startTime && slot.endTime) {
+                  onAdded(slot);
+                }
                 setSlot({
                   startTime: undefined,
                   endTime: undefined,

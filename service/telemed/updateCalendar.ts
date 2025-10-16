@@ -12,6 +12,8 @@ async function addCalendar(data: any): Promise<AddDataProps> {
       Buffer.from(data, 'base64').toString('utf-8')
     );
 
+    console.log('decodedData', JSON.stringify(decodedData));
+
     const res = await fetch(`/api/v1/web/telemed/calendar`, {
       method: 'POST',
       cache: 'no-cache',

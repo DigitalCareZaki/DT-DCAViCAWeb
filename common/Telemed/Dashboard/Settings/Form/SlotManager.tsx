@@ -10,6 +10,8 @@ import { ClientGenerator } from '@common';
 const SlotManager: ClientComponentProps<SlotProps> = ({
     data,
     onUpdate,
+    startDate,
+    endDate,
 }) => {
 
     const convertIntToString = (index: number) => {
@@ -52,8 +54,42 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
 
     const [slotState, setSlotState] = useState<SlotWrapper>(data);
 
+    // Compute a representative date for this weekday within the provided calendar range.
+    // If startDate/endDate are provided, prefer the earliest date within the range that
+    // matches slotState.day. Otherwise fallback to today.
+    function computeBaseDate(): Date {
+        const targetWeekday = slotState.day; // 0 = Sunday
+        const now = new Date();
+
+        if (startDate && endDate) {
+            let cursor = new Date(startDate);
+            // normalize time
+            cursor.setHours(0, 0, 0, 0);
+            const last = new Date(endDate);
+            last.setHours(0, 0, 0, 0);
+
+            while (cursor <= last) {
+                if (cursor.getDay() === targetWeekday) return new Date(cursor);
+                cursor.setDate(cursor.getDate() + 1);
+            }
+        }
+
+        // fallback: find next date (including today) matching weekday
+        const fallback = new Date(now);
+        for (let i = 0; i < 7; i++) {
+            if (fallback.getDay() === targetWeekday) return fallback;
+            fallback.setDate(fallback.getDate() + 1);
+        }
+
+        return now;
+    }
+    const baseDate = computeBaseDate();
+
     const onAdd = (slot: Slot) => {
         const newSlot = [...slotState.slots, slot];
+
+        console.log("newSlot", newSlot);
+
         setSlotState({
             ...slotState,
             slots: newSlot
@@ -101,11 +137,12 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
                 {slotEnabled && <>
                     {
                         slotState.slots.map((item, index) => {
-                            return <>
-                                <TimeSlot setSlot={
-                                    (slot: Slot) => {
+                            return (
+                                <TimeSlot
+                                    key={`${slotState.day}-${index}`}
+                                    setSlot={(s: Slot) => {
                                         const newSlot = [...slotState.slots];
-                                        newSlot[index] = slot;
+                                        newSlot[index] = s;
                                         setSlotState({
                                             ...slotState,
                                             slots: newSlot
@@ -114,11 +151,9 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
                                             ...slotState,
                                             slots: newSlot
                                         });
-
-                                        console.log("updated");
-
-                                    }
-                                } slot={item}
+                                    }}
+                                    slot={item}
+                                    baseDate={baseDate}
                                     deleteSlot={() => {
                                         const newSlot = [...slotState.slots];
                                         newSlot.splice(index, 1);
@@ -130,18 +165,19 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
                                             ...slotState,
                                             slots: newSlot
                                         });
-                                    }
-                                    }
-                                ></TimeSlot>
-                            </>
+                                    }}
+                                />
+                            )
                         })
                     }
                     <TimeSlot
                         slot={slotToAdd}
+                        baseDate={baseDate}
                         setSlot={(s) => {
                             setSlotToAdd(s);
                         }}
-                        onAdded={onAdd}></TimeSlot>
+                        onAdded={onAdd}
+                    />
                 </>}
             </div>
         </>

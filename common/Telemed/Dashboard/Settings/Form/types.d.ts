@@ -5,8 +5,12 @@ export interface TimeSectionProps {
   onAdded?: (slot: Slot) => void;
   min?: string;
   max?: string;
-  slot: useState<Slot | undefined>;
+  // the slot data currently being edited/added
+  slot?: Slot;
   setSlot: (slot: Slot) => void;
+  // when provided, TimeSection will use this date as the base (day/month/year)
+  // for newly selected times. This prevents falling back to the current date.
+  baseDate?: Date;
   onChange?: (
     e: ChangeEvent<HTMLInputElement>,
     type: string,
@@ -19,6 +23,10 @@ export interface TimeSectionProps {
 export interface SlotProps {
   data: SlotWrapper;
   onUpdate: (data: SlotWrapper) => void;
+  // parent calendar range (optional) so SlotManager can compute the exact
+  // date for a weekday when creating new slots
+  startDate?: Date | null;
+  endDate?: Date | null;
 }
 
 export interface SlotParentProps {
