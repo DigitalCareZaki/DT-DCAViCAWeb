@@ -11,6 +11,10 @@ export interface TimeSectionProps {
   // when provided, TimeSection will use this date as the base (day/month/year)
   // for newly selected times. This prevents falling back to the current date.
   baseDate?: Date;
+  // optional parent calendar boundaries so TimeSection can validate
+  // selected times do not fall outside the configured range
+  startDate?: Date | null;
+  endDate?: Date | null;
   onChange?: (
     e: ChangeEvent<HTMLInputElement>,
     type: string,

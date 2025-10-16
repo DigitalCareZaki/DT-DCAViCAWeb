@@ -18,8 +18,11 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
   deleteSlot,
   setSlot,
   baseDate,
+  startDate,
+  endDate,
 }) => {
   const [show, setShow] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSelect = () => {
     setShow((prev) => !prev);
@@ -142,15 +145,61 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
             {onAdded && <button
               className="flex  items-center justify-center rounded-lg  text-fuchsia-500 hover:bg-fuchsia-400 hover:text-white transition"
               onClick={() => {
-                if (slot && slot.startTime && slot.endTime) {
-                  onAdded(slot);
+                // validation: slot must have both times
+                if (!slot || !slot.startTime || !slot.endTime) {
+                  setError('Please select both start and end times');
+                  window.setTimeout(() => setError(null), 3000);
+                  return;
                 }
+
+                const s = new Date(slot.startTime);
+                const e = new Date(slot.endTime);
+                // ensure same calendar date (no cross-day unless allowed elsewhere)
+                if (s.getFullYear() !== e.getFullYear() || s.getMonth() !== e.getMonth() || s.getDate() !== e.getDate()) {
+                  // If baseDate is provided, this likely means user picked a time that
+                  // rolled to the next calendar day (e.g., start 11:19, end 02:19 -> next day).
+                  setError('End time falls on a different date. Please choose an end time on the same day.');
+                  window.setTimeout(() => setError(null), 4000);
+                  return;
+                }
+
+                if (e.getTime() <= s.getTime()) {
+                  setError('End time must be after start time');
+                  window.setTimeout(() => setError(null), 3000);
+                  return;
+                }
+
+                // If parent calendar boundaries were supplied, ensure the slot's
+                // date is inside the configured start/end dates.
+                if (baseDate && (startDate || endDate)) {
+                  const slotDate = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+                  if (startDate) {
+                    const st = new Date(startDate);
+                    st.setHours(0, 0, 0, 0);
+                    if (slotDate.getTime() < st.getTime()) {
+                      setError('Selected time falls before the calendar start date');
+                      window.setTimeout(() => setError(null), 3500);
+                      return;
+                    }
+                  }
+                  if (endDate) {
+                    const ed = new Date(endDate);
+                    ed.setHours(0, 0, 0, 0);
+                    if (slotDate.getTime() > ed.getTime()) {
+                      setError('Selected time falls after the calendar end date');
+                      window.setTimeout(() => setError(null), 3500);
+                      return;
+                    }
+                  }
+                }
+
+                onAdded(slot);
                 setSlot({
                   startTime: undefined,
                   endTime: undefined,
                 });
 
-                // clsoe it
+                // close it
                 setShow(false);
               }}
             >
@@ -168,6 +217,11 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
               </svg>
             </button>
             }
+            {error && (
+              <div className="absolute -bottom-40 left-0 z-50 w-64 rounded-md bg-red-50 text-red-700 px-3 py-2 text-sm">
+                {error}
+              </div>
+            )}
 
           </motion.div>
         )}

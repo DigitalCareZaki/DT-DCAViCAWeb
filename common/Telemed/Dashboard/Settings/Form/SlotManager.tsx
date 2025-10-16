@@ -154,6 +154,8 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
                                     }}
                                     slot={item}
                                     baseDate={baseDate}
+                                    startDate={startDate}
+                                    endDate={endDate}
                                     deleteSlot={() => {
                                         const newSlot = [...slotState.slots];
                                         newSlot.splice(index, 1);
@@ -173,6 +175,8 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
                     <TimeSlot
                         slot={slotToAdd}
                         baseDate={baseDate}
+                        startDate={startDate}
+                        endDate={endDate}
                         setSlot={(s) => {
                             setSlotToAdd(s);
                         }}
