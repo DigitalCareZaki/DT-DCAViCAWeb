@@ -79,6 +79,31 @@ export default function Compliance({
                 new Date(k).toLocaleDateString()
               ),
             },
+            yaxis: (() => {
+              // compute maximum value across all series so we can set sensible integer ticks
+              const vals = Object.values(data).flatMap((v: any) => [
+                v.total ?? 0,
+                v.taken ?? 0,
+                v.not_taken ?? 0,
+                v.pending ?? 0,
+                v.not_action_taken ?? 0,
+              ]);
+              const max = Math.max(0, ...vals);
+
+              // If max is small (<=3) we can ask for integer ticks up to that value.
+              // Use labels.formatter to only display integer labels (hide 0.5, 1.5 etc).
+              return {
+                min: 0,
+                max,
+                forceNiceScale: false,
+                tickAmount: Math.min(Math.ceil(max), 3) + 1,
+                labels: {
+                  formatter: function (val: number) {
+                    return Number.isInteger(val) ? String(val) : '';
+                  },
+                },
+              };
+            })(),
             colors,
             grid: {
               show: false,

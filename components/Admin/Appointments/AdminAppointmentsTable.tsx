@@ -34,7 +34,6 @@ const AdminAppointmentsTable = () => {
     };
 
     const setData = (appointments: any, paginationData: any) => {
-        console.log('fetching appointments', appointments);
         const transformed = transformAppointments(appointments);
         dispatch(setPatientAppointmentsListingReducer({ appointments: transformed, pagination: paginationData }));
     };
@@ -44,8 +43,8 @@ const AdminAppointmentsTable = () => {
             setLoading(true);
             const res = await getBranchAppointments(1, 10);
             if (res?.success) {
-                setData(res.data.data, res.data.pagination);
-                setPagination(res.data.pagination);
+                setData(res?.data?.data, res?.data?.pagination);
+                setPagination(res?.data?.pagination);
             }
             setLoading(false);
             setInitialLoad(false);
@@ -62,8 +61,8 @@ const AdminAppointmentsTable = () => {
 
         let appointments = await getBranchAppointments(page, pagination.perPage);
         if (appointments?.success) {
-            setData(appointments.data.data, appointments.data.pagination);
-            setPagination(appointments.data.pagination);
+            setData(appointments?.data?.data, appointments?.data?.pagination);
+            setPagination(appointments?.data?.pagination);
         }
 
         setLoading(false);

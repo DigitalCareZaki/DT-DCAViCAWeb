@@ -49,7 +49,7 @@ const Header: ClientComponent = () => {
   };
 
   return (
-    <div className="mt-8 flex w-full items-center justify-between px-4 sm:px-6 lg:px-8">
+    <div className="mt-12 flex w-full items-center justify-between px-4 sm:px-6 lg:px-8">
       {/* Form for department search */}
       <form onSubmit={onSubmit} className="flex w-full max-w-xs sm:max-w-md">
         {/* Input component with increased font size and padding for readability */}
