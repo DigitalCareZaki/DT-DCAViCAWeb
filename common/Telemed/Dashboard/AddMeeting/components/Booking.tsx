@@ -48,11 +48,47 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     }
 
     getCalendar(selectedUserId).then((data) => {
-      setSlotP(data.data);
-      // Set the first month as default selected month
-      if (data.data?.startTime) {
-        const firstMonth = new Date(data.data.startTime).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-        setSelectedMonth(firstMonth);
+      // convert API ISO datetimes (UTC) into local Date objects that preserve
+      // the original numeric date/time components (year, month, day, hour, min)
+      // This avoids browser timezone conversion showing +offset hours.
+      function isoToLocalPreserve(iso?: string | Date | null) {
+        if (!iso) return null;
+        const d = typeof iso === 'string' ? new Date(iso) : (iso instanceof Date ? iso : new Date(String(iso)));
+        const y = d.getUTCFullYear();
+        const mo = d.getUTCMonth();
+        const da = d.getUTCDate();
+        const hh = d.getUTCHours();
+        const mm = d.getUTCMinutes();
+        return new Date(y, mo, da, hh, mm, 0, 0);
+      }
+
+      const incoming = data.data;
+      if (incoming) {
+        const processed: any = { ...incoming };
+        processed.startTime = isoToLocalPreserve(incoming.startTime) || null;
+        processed.endTime = isoToLocalPreserve(incoming.endTime) || null;
+
+        if (processed.slots && Array.isArray(processed.slots)) {
+          processed.slots = processed.slots.map((wrapper: any) => {
+            if (!wrapper || !wrapper.slots) return wrapper;
+            const slots = wrapper.slots.map((s: any) => {
+              const out: any = { ...s };
+              out.startTime = s.startTime ? isoToLocalPreserve(s.startTime) : undefined;
+              out.endTime = s.endTime ? isoToLocalPreserve(s.endTime) : undefined;
+              return out;
+            });
+            return { ...wrapper, slots };
+          });
+        }
+
+        setSlotP(processed as SlotParent);
+
+        if (processed?.startTime) {
+          const firstMonth = new Date(processed.startTime).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+          setSelectedMonth(firstMonth);
+        }
+      } else {
+        setSlotP(data.data);
       }
     });
   }, [selectedUserId]);
