@@ -106,32 +106,59 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
     // }
 
     const [opp, setOpp] = useState<SlotParent>(() => {
+        // helper: convert an ISO string saved in UTC (YYYY-MM-DDTHH:mm:00.000Z)
+        // into a local Date whose numeric Y/M/D/H/M match the ISO's UTC components.
+        // This preserves the original numbers selected by the user when the
+        // payload was created using UTC(date components).
+        function isoToLocalPreserve(iso?: string | Date | null) {
+            if (!iso) return null;
+            // accept ISO string or Date object
+            const d = typeof iso === 'string' ? new Date(iso) : (iso instanceof Date ? iso : new Date(String(iso)));
+            const y = d.getUTCFullYear();
+            const mo = d.getUTCMonth();
+            const da = d.getUTCDate();
+            const hh = d.getUTCHours();
+            const mm = d.getUTCMinutes();
+            return new Date(y, mo, da, hh, mm, 0, 0);
+        }
+
         // Ensure we have proper data structure
         if (!data || !data.slots || data.slots.length === 0) {
-            // Initialize with default 7 days if no data
             const defaultSlots = Array.from({ length: 7 }, (_, index) => ({
                 day: index,
                 slots: []
             }));
             return {
                 slots: defaultSlots,
-                startTime: data?.startTime || null,
-                endTime: data?.endTime || null
+                startTime: isoToLocalPreserve(data?.startTime) || null,
+                endTime: isoToLocalPreserve(data?.endTime) || null
             };
         }
 
-        // Convert string dates to Date objects if they exist
-        const processedData = {
+        // Convert string dates to Date objects and also convert nested slot times
+        const processedData: any = {
             ...data,
-            startTime: data.startTime ? new Date(data.startTime) : null,
-            endTime: data.endTime ? new Date(data.endTime) : null
+            startTime: isoToLocalPreserve(data.startTime) || null,
+            endTime: isoToLocalPreserve(data.endTime) || null,
         };
+
+        // convert nested slot times so UI shows the intended hour/minute numbers
+        if (processedData.slots && Array.isArray(processedData.slots)) {
+            processedData.slots = processedData.slots.map((wrapper: any) => {
+                if (!wrapper || !wrapper.slots) return wrapper;
+                const slots = wrapper.slots.map((s: any) => {
+                    const out: any = { ...s };
+                    out.startTime = s.startTime ? isoToLocalPreserve(s.startTime) : undefined;
+                    out.endTime = s.endTime ? isoToLocalPreserve(s.endTime) : undefined;
+                    return out;
+                });
+                return { ...wrapper, slots };
+            });
+        }
 
         console.log('processedData', processedData);
 
         return processedData;
-
-        // return processedData;
     });
 
 

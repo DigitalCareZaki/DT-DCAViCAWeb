@@ -10,6 +10,8 @@ async function getReqCal(userId?: string): Promise<GetRequestedCalendar> {
   var queryS = userId ? `?userId=${userId}` : '';
   const res = await fetch(`/api/v1/web/telemed/calendar${queryS}`);
 
+  console.log('API Response:', res);
+
   const data = await res.json();
 
   return {
