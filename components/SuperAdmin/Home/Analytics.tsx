@@ -79,7 +79,9 @@ const Analytics: ServerComponent = async () => {
           />
         </span>
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white opacity-90">
-          Total Medications
+          <Link href="/superadmin/settings/medications" passHref>
+            Total Medications
+          </Link>
         </span>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center h-32 bg-gradient-to-b from-green-400 to-green-500 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-3">

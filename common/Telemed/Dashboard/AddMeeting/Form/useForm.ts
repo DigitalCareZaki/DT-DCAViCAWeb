@@ -141,7 +141,10 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
         end_date: selectedTime.endTime,
         users: selectedUsers.map((u) => u.id),
       };
+
+
       const res = await addTelemed(btoa(JSON.stringify(payload)));
+
 
       if (!res.success) {
         handleShowModal({

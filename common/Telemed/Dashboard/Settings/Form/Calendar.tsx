@@ -324,10 +324,30 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
 
 
                                 setLoading(true);
-                                // create a copy of opp where slot times are normalized
-                                // so the calendar date chosen by the user is preserved when
-                                // converted to UTC/ISO string for backend storage.
+                                // create a copy of opp where slot times and top-level
+                                // start/end dates are normalized so the calendar date
+                                // chosen by the user is preserved when converted to
+                                // a UTC ISO string for backend storage.
                                 const payload = JSON.parse(JSON.stringify(opp));
+
+                                // normalization helper — takes a Date or date-like value
+                                // and returns an ISO string whose UTC components match
+                                // the local Y/M/D/H/M of the provided value. This keeps
+                                // the numeric date/time the user selected intact.
+                                function normalize(dateLike: any) {
+                                    if (!dateLike) return dateLike;
+                                    const d = new Date(dateLike);
+                                    const y = d.getFullYear();
+                                    const mo = d.getMonth();
+                                    const da = d.getDate();
+                                    const hh = d.getHours();
+                                    const mm = d.getMinutes();
+                                    return new Date(Date.UTC(y, mo, da, hh, mm, 0, 0)).toISOString();
+                                }
+
+                                // normalize top-level start/end dates as well
+                                payload.startTime = normalize(payload.startTime);
+                                payload.endTime = normalize(payload.endTime);
 
                                 // payload.slots -> array of SlotWrapper
                                 if (payload.slots && Array.isArray(payload.slots)) {
@@ -335,19 +355,6 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                                         if (!wrapper || !wrapper.slots) return wrapper;
                                         const slots = wrapper.slots.map((s: any) => {
                                             const out: any = { ...s };
-                                            function normalize(dateLike: any) {
-                                                if (!dateLike) return dateLike;
-                                                const d = new Date(dateLike);
-                                                // Use local date components (year, month, date) and
-                                                // construct a UTC Date so its ISO date matches the
-                                                // local calendar date selected by the user.
-                                                const y = d.getFullYear();
-                                                const mo = d.getMonth();
-                                                const da = d.getDate();
-                                                const hh = d.getHours();
-                                                const mm = d.getMinutes();
-                                                return new Date(Date.UTC(y, mo, da, hh, mm, 0, 0)).toISOString();
-                                            }
 
                                             out.startTime = normalize(s.startTime);
                                             out.endTime = normalize(s.endTime);
