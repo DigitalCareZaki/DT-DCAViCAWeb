@@ -15,7 +15,7 @@ const AdminAppointmentsRenderTable = () => {
     if (!appointments || appointments.length === 0) {
         return (
             <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                     No appointments found
                 </td>
             </tr>
@@ -24,44 +24,61 @@ const AdminAppointmentsRenderTable = () => {
 
     return (
         <>
-            {appointments.map((appointment: any, index: number) => (
-                <tr
-                    key={appointment.id || index}
-                    className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
-                >
-                    {/* Title */}
-                    <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                        {appointment.title || 'N/A'}
-                    </th>
-                    {/* Description */}
-                    <td className="px-6 py-4 text-gray-500">
-                        {appointment.description || 'N/A'}
-                    </td>
-                    {/* Type */}
-                    <td className="px-6 py-4 text-gray-500">
-                        {appointment.type || 'N/A'}
-                    </td>
-                    {/* About */}
-                    <td className="px-6 py-4 text-gray-500">
-                        {appointment.about || 'N/A'}
-                    </td>
-                    {/* Status */}
-                    <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${appointment.status === 'COMPLETED'
-                            ? 'bg-green-100 text-green-800'
-                            : appointment.status === 'ACTIVE'
-                                ? 'bg-blue-100 text-blue-800'
-                                : appointment.status === 'PENDING'
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : appointment.status === 'CANCELLED'
-                                        ? 'bg-red-100 text-red-800'
-                                        : 'bg-gray-100 text-gray-800'
-                            }`}>
-                            {appointment.status || 'N/A'}
-                        </span>
-                    </td>
-                </tr>
-            ))}
+            {appointments.map((appointment: any, index: number) => {
+                const participants = appointment.participants || [];
+                const doctorPart = participants.find((p: any) => p?.user?.role === 'DOCTOR');
+                const patientPart = participants.find((p: any) => p?.user?.role === 'PATIENT');
+
+                const doctorName = doctorPart?.user ? getName(doctorPart.user) : 'N/A';
+                const patientName = patientPart?.user ? getName(patientPart.user) : 'N/A';
+
+                return (
+                    <tr
+                        key={appointment.id || index}
+                        className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
+                    >
+                        {/* Title */}
+                        <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                            {appointment.title || 'N/A'}
+                        </th>
+                        {/* Description */}
+                        <td className="px-6 py-4 text-gray-500">
+                            {appointment.description || 'N/A'}
+                        </td>
+                        {/* Type */}
+                        <td className="px-6 py-4 text-gray-500">
+                            {appointment.type || 'N/A'}
+                        </td>
+                        {/* Doctor (participant) */}
+                        <td className="px-6 py-4 text-gray-500">
+                            {doctorName}
+                        </td>
+                        {/* Patient (participant) */}
+                        <td className="px-6 py-4 text-gray-500">
+                            {patientName}
+                        </td>
+                        {/* About */}
+                        <td className="px-6 py-4 text-gray-500">
+                            {appointment.about || 'N/A'}
+                        </td>
+                        {/* Status */}
+                        <td className="px-6 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${appointment.status === 'COMPLETED'
+                                ? 'bg-green-100 text-green-800'
+                                : appointment.status === 'ACTIVE'
+                                    ? 'bg-blue-100 text-blue-800'
+                                    : appointment.status === 'PENDING'
+                                        ? 'bg-yellow-100 text-yellow-800'
+                                        : appointment.status === 'CANCELLED'
+                                            ? 'bg-red-100 text-red-800'
+                                            : 'bg-gray-100 text-gray-800'
+                                }`}>
+                                {appointment.status || 'N/A'}
+                            </span>
+                        </td>
+                    </tr>
+                );
+            })}
         </>
     );
 };

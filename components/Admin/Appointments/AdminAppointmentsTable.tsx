@@ -80,6 +80,8 @@ const AdminAppointmentsTable = () => {
                 'Title',
                 'Description',
                 'Type',
+                'Doctor',
+                'Patient',
                 'About',
                 'Status'
             ]}>
