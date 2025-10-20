@@ -56,7 +56,7 @@ const Notifications = () => {
   </div>;
 
   return (
-    <div className="h-screen pb-96 font-poppins">
+    <div className="min-h-screen pb-24 md:pb-96 font-poppins">
       <div className="flex w-full justify-between">
         <span className="screen-title">Notifications</span>
       </div>
@@ -64,26 +64,28 @@ const Notifications = () => {
       {/* <Header /> */}
       <Table data={data ?? []} pagination={pagination} />
       {pagination && (
-        <div className="flex items-center justify-center gap-4 py-7">
-          <button
-            onClick={() => setPage(p => Math.max(p - 1, 1))}
-            disabled={!pagination.hasPrevPage}
-            className="rounded-full bg-gray-200 px-3 py-1 disabled:opacity-50"
-          >
-            <FaArrowLeft className="w-5 h-5 text-gray-700 " />
-          </button>
+        <div className="md:static fixed bottom-0 left-0 right-0 bg-white md:bg-transparent z-30 py-4 md:py-7 shadow md:shadow-none">
+          <div className="max-w-7xl mx-auto flex items-center justify-center gap-4">
+            <button
+              onClick={() => setPage(p => Math.max(p - 1, 1))}
+              disabled={!pagination.hasPrevPage}
+              className="rounded-full bg-gray-200 px-3 py-1 disabled:opacity-50"
+            >
+              <FaArrowLeft className="w-5 h-5 text-gray-700 " />
+            </button>
 
-          <span className="text-sm">
-            Page {pagination.currentPage} of {pagination.totalPages}
-          </span>
+            <span className="text-sm">
+              Page {pagination.currentPage} of {pagination.totalPages}
+            </span>
 
-          <button
-            onClick={() => setPage(p => Math.min(p + 1, pagination.totalPages))}
-            disabled={!pagination.hasNextPage}
-            className="rounded-full bg-gray-200 px-3 py-1 disabled:opacity-50"
-          >
-            <FaArrowRight className="w-5 h-5 text-gray-700" />
-          </button>
+            <button
+              onClick={() => setPage(p => Math.min(p + 1, pagination.totalPages))}
+              disabled={!pagination.hasNextPage}
+              className="rounded-full bg-gray-200 px-3 py-1 disabled:opacity-50"
+            >
+              <FaArrowRight className="w-5 h-5 text-gray-700" />
+            </button>
+          </div>
         </div>
       )}
     </div>
