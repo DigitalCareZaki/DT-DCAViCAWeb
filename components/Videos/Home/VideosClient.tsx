@@ -39,7 +39,7 @@ const VideosClient: React.FC<VideosClientProps> = ({ data, userRole }) => {
                     </div>
                 )}
             </div>
-            <Table data={filteredData} />
+            <Table data={filteredData || []} />
         </div>
     );
 };

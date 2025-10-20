@@ -7,10 +7,20 @@ import type { Props } from './types';
 
 const RenderTable: ClientComponentProps<Props> = ({ data }) => {
   if (!data) return <></>;
+
+  if (data.length === 0) {
+    return (
+      <tr className="border-b odd:bg-white even:bg-gray-50">
+        <td colSpan={8} className="px-6 py-8 text-center text-gray-600">
+          No videos available.
+        </td>
+      </tr>
+    );
+  }
+
   return (
     <>
-
-      {data.length > 0 && data?.map((el) => (
+      {data.map((el) => (
         <tr
           key={el?.id}
           className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"

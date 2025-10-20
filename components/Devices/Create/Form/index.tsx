@@ -10,7 +10,7 @@ import {
   ButtonPrimary,
   ClientGenerator,
 } from '@common';
-
+import { useUser } from '@selectors';
 import useForm from './useForm';
 import { useRouter } from 'next/navigation';
 import type { ClientComponentProps } from '@types';
@@ -20,7 +20,7 @@ import fetchWrapper from '@fetch';
 const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
   const router = useRouter();
-
+  const [user] = useUser();
   // const [selectedSerial, setSelectedSerial] = useState<string[]>([]);
   const categories = useMemo(
     () => [
@@ -133,37 +133,39 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
 
       </div>
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
-        {/* Branch Code Start  */}
-        {selectors && branches && (
-          <div className="w-full sm:w-1/2">
-            <DropdownSecondary
-              title="Branch"
-              label="Branch"
-              borderTheme
-              inputWrapperClassName="bg-background"
-              error={!!errors.branch_id?.message?.length}
-              errorMessage={(errors as any).branch_id?.message || '&'}
-              selected={(branches as any)?.find((b: any) => b.id === selectors.branch_id)?.name || ''}
-            >
-              {Array.isArray(branches) && branches.length > 0 ? (
-                branches.map((branch: any) => (
-                  <div
-                    key={branch.id}
-                    onClick={() => handleSelectBranch(branch.id)}
-                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                  >
-                    <span className="font-medium">{branch.name}</span>
-                  </div>
-                ))
-              ) : (
-                <div className="p-2 text-gray-400">No branches found</div>
-              )}
-            </DropdownSecondary>
-          </div>
-        )}
-        {/* Branch Code End  */}
-      </div>
+      {user?.role === 'SUPERADMIN' && (
+        <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+          {/* Branch Code Start  */}
+          {selectors && branches && (
+            <div className="w-full sm:w-1/2">
+              <DropdownSecondary
+                title="Branch"
+                label="Branch"
+                borderTheme
+                inputWrapperClassName="bg-background"
+                error={!!errors.branch_id?.message?.length}
+                errorMessage={(errors as any).branch_id?.message || '&'}
+                selected={(branches as any)?.find((b: any) => b.id === selectors.branch_id)?.name || ''}
+              >
+                {Array.isArray(branches) && branches.length > 0 ? (
+                  branches.map((branch: any) => (
+                    <div
+                      key={branch.id}
+                      onClick={() => handleSelectBranch(branch.id)}
+                      className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                    >
+                      <span className="font-medium">{branch.name}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-2 text-gray-400">No branches found</div>
+                )}
+              </DropdownSecondary>
+            </div>
+          )}
+          {/* Branch Code End  */}
+        </div>
+      )}
       {/* Submit Button */}
       <ButtonPrimary
         title={data ? 'Update' : 'Save'}
