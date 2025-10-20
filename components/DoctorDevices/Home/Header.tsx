@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { ButtonPrimary, ExportButton } from '@common';
-
+import { useUser } from '@selectors';
 import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const Header: ServerComponentProps<any> = async ({ userRole, data, patientId }) => {
+
+  // const [user] = useUser();
 
   return (
     <div className="flex w-full justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -14,15 +16,18 @@ const Header: ServerComponentProps<any> = async ({ userRole, data, patientId }) 
         Devices
       </span>
       <div className="flex w-fit flex-row gap-4">
-        <div className="w-40 sm:w-48">
-          <Link passHref href={`/${userRole}/patient/devices/add?patient_id=${patientId}`}>
-            <ButtonPrimary
-              title="Add Device"
-              name="Add device"
-              className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
-            />
-          </Link>
-        </div>
+        {userRole === 'DOCTOR' && (
+          <div className="w-40 sm:w-48">
+
+            <Link passHref href={`/${userRole}/patient/devices/add?patient_id=${patientId}`}>
+              <ButtonPrimary
+                title="Add Device"
+                name="Add device"
+                className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
+              />
+            </Link>
+          </div>
+        )}
         <ExportButton
           data={data.map((el: any) => ({
             ...el,
