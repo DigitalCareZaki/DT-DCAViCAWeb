@@ -42,15 +42,17 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
     setValue('title', data?.title);
     setValue('firstName', data?.first_name);
     setValue('middleName', data?.middle_name ?? '');
-    setValue('lastName', data.last_name);
-    setValue('branch', data?.associated_branches[0]?.name || "");
+    setValue('lastName', data?.last_name);
+    // guard against associated_branches being undefined or empty
+    setValue('branch', data?.associated_branches?.[0]?.name ?? "");
     setValue('email', data?.email);
     // setValue('npiNumber', data?.doctor?.npi_number);
     setValue('phoneNumber', data?.phone_number);
     setValue('address', data?.location?.address);
     setValue('pmdcNumber', data?.doctor?.pmdc_number);
     setValue('contractType', data?.doctor?.contract_type);
-    setValue('dob', new Date(data.dob).toLocaleDateString());
+    // dob might be undefined or invalid — guard and fallback to empty string
+    setValue('dob', data?.dob ? new Date(data.dob).toLocaleDateString() : '');
     // setValue('department', data?.doctor?.departments[0]?.title);
   }, [data]);
 
