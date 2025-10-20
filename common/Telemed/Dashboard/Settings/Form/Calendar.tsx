@@ -161,6 +161,10 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
         return processedData;
     });
 
+    // Helper to produce a fresh empty weekly slots array
+    const createDefaultSlots = () =>
+        Array.from({ length: 7 }, (_, index) => ({ day: index, slots: [] }));
+
 
 
     const onUpdate = (data: SlotWrapper) => {
@@ -217,10 +221,12 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                             inputIdProp: 'start',
                             defaultDate: opp.startTime ? new Date(opp.startTime) : undefined,
                         }} onChange={(v) => {
-                            setOpp({
-                                ...opp,
-                                startTime: v
-                            });
+                            // When user changes the start date, reset the weekly slots
+                            setOpp(prev => ({
+                                ...prev,
+                                startTime: v,
+                                slots: createDefaultSlots(),
+                            }));
                             // Clear error when date is selected
                             if (v && errors.startDate) {
                                 setErrors(prev => ({ ...prev, startDate: undefined }));
@@ -237,10 +243,12 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                     </label>
                     <div className="mt-2">
                         <Datepicker options={{ ...options, inputNameProp: 'end', inputIdProp: 'end', defaultDate: opp.endTime ? new Date(opp.endTime) : undefined, }} onChange={(v) => {
-                            setOpp({
-                                ...opp,
-                                endTime: v
-                            });
+                            // When user changes the end date, reset the weekly slots
+                            setOpp(prev => ({
+                                ...prev,
+                                endTime: v,
+                                slots: createDefaultSlots(),
+                            }));
                             // Clear error when date is selected
                             if (v && errors.endDate) {
                                 setErrors(prev => ({ ...prev, endDate: undefined }));
@@ -286,7 +294,7 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                             </h3>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-x-6 gap-y-8 2xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 px-10 gap-6 align-top text-gray-600">
+                        <div className="grid gap-x-6 gap-y-8 2xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 px-10 gap-6 align-top text-gray-600">
 
                             {
                                 opp.slots && opp.slots.length > 0 ? (

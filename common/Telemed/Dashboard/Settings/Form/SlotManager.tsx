@@ -1,6 +1,6 @@
 'use client';
 
-import { cloneElement, useState } from 'react';
+import { cloneElement, useEffect, useState } from 'react';
 
 import type { ClientComponentProps } from '@types';
 import { Slot, SlotProps, SlotWrapper } from './types';
@@ -52,7 +52,20 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
         }));
     };
 
+    // Keep a local copy of the day's slots but keep it in sync with the
+    // incoming `data` prop. Previously this component only read `data` on
+    // mount which caused the UI to show stale or empty slots when the
+    // parent updated dates or rehydrated data. Use an effect to update the
+    // internal state whenever the prop changes.
     const [slotState, setSlotState] = useState<SlotWrapper>(data);
+
+    useEffect(() => {
+        // Defensive: ensure data has expected shape
+        if (!data) return;
+        setSlotState(data);
+        // keep slotEnabled consistent with incoming data
+        setSlotEnabled(Array.isArray(data.slots) ? data.slots.length > 0 : false);
+    }, [data]);
 
     // Compute a representative date for this weekday within the provided calendar range.
     // If startDate/endDate are provided, prefer the earliest date within the range that
@@ -101,7 +114,7 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
         });
     }
 
-    const [slotEnabled, setSlotEnabled] = useState<boolean>(true);
+    const [slotEnabled, setSlotEnabled] = useState<boolean>(Array.isArray(data?.slots) ? data.slots.length > 0 : true);
     const [slotToAdd, setSlotToAdd] = useState<Slot>({
         startTime: undefined,
         endTime: undefined,
