@@ -1037,10 +1037,20 @@ export interface TabletProps {
 }
 
 export interface AppointmentStats {
-  hold: number;
-  cancelled: number;
-  ongoing: number;
-  active: number;
-  completed: number;
-  pending: number;
+  today: {
+    hold: number;
+    cancelled: number;
+    ongoing: number;
+    active: number;
+    completed: number;
+    pending: number;
+  };
+  tomorrow: {
+    hold: number;
+    cancelled: number;
+    ongoing: number;
+    active: number;
+    completed: number;
+    pending: number;
+  };
 }
