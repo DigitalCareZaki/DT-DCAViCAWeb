@@ -12,6 +12,7 @@ interface AppointmentProps {
 const AppointmentsCard: ClientComponentProps<AppointmentProps> = ({
   appointments
 }) => {
+
   return (
     <div className="flex h-auto w-full flex-col rounded-2xl border bg-white p-4 doctor:border-theme-doctor-primary nurse:border-theme-nurse-primary md:h-52 md:p-6">
       <div className="w-full text-center">
@@ -20,9 +21,12 @@ const AppointmentsCard: ClientComponentProps<AppointmentProps> = ({
         </span>
       </div>
       <RenderCounter
-        ongoing={appointments.ongoing}
-        active={appointments.active}
-        pending={appointments.pending}
+        ongoing={appointments?.today?.ongoing}
+        active={appointments?.today?.active}
+        pending={appointments?.today?.pending}
+        tomorrowOngoing={appointments?.tomorrow?.ongoing}
+        tomorrowActive={appointments?.tomorrow?.active}
+        tomorrowPending={appointments?.tomorrow?.pending}
       />
     </div>
   );

@@ -30,15 +30,21 @@ const Counter = ({
   );
 };
 
-const RenderCounter: ClientComponentProps<
-  Pick<AppointmentStats, 'ongoing' | 'active' | 'pending'>
-> = ({ ongoing, active, pending }) => {
-  const scheduledForToday = ongoing + active + pending;
+const RenderCounter: ClientComponentProps<{
+  ongoing?: number;
+  active?: number;
+  pending?: number;
+  tomorrowOngoing?: number;
+  tomorrowActive?: number;
+  tomorrowPending?: number;
+}> = ({ ongoing, active, pending, tomorrowOngoing, tomorrowActive, tomorrowPending }) => {
+  const scheduledForToday = (ongoing || 0) + (active || 0) + (pending || 0);
+  const scheduledForTomorrow = (tomorrowOngoing || 0) + (tomorrowActive || 0) + (tomorrowPending || 0);
 
   return (
     <div className="flex h-full w-full flex-col gap-4 p-2 md:flex-row md:gap-2 md:p-4">
       <Counter title="Scheduled for today" value={scheduledForToday} />
-      <Counter title="Scheduled for tomorrow" value={0} />
+      <Counter title="Scheduled for tomorrow" value={scheduledForTomorrow} />
     </div>
   );
 };

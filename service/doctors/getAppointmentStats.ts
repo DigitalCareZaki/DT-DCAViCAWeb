@@ -9,7 +9,6 @@ async function getAppointmentStats(
   const res = await fetch(`/api/v1/web/${userType}/stats`);
 
   const data = await res.json();
-
   return {
     data,
     success: res.ok,
