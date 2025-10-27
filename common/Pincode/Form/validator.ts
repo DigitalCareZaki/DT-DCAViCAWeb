@@ -8,11 +8,11 @@ export const validator = create((data: FormProps) => {
   });
 
   test('password', 'Password must be at least 8 characters long', () => {
-    enforce(data.password).isString().longerThan(7);
+    enforce(data.password).isString().longerThanOrEquals(8);
   });
 
   test('password', 'Password is too short', () => {
-    if (data.password.length >= 7) throw new Error('Password is too short');
+    if (data.password.length >= 8) throw new Error('Password is too short');
 
     return true;
   });
