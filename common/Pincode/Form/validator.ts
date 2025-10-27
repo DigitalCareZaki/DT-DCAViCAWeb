@@ -12,7 +12,7 @@ export const validator = create((data: FormProps) => {
   });
 
   test('password', 'Password is too short', () => {
-    if (data.password.length >= 8) throw new Error('Password is too short');
+    if (data.password.length < 8) throw new Error('Password is too short');
 
     return true;
   });
