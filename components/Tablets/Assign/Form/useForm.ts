@@ -121,7 +121,9 @@ const useFormHook = (tabletId: string): UseFormProps => {
         const res = await getSingleTablet(tabletId);
         if (!res.success) return;
 
-        setValue('tablet_id', tabletId);
+
+
+        setValue('tablet_id', res?.data?.serial_number);
         setSelectedPatients(
           res.data.patient_tablets.map((el) => ({
             id: el.issued_to.user.id,
