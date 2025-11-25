@@ -38,6 +38,7 @@ const Table = ({ userRole, patient }: TableProps) => {
         res = await getAllTabletsForPatient(patient);
         if (res.success) {
           dispatch(setTablets(res.data ?? []));
+          console.log('tablets if >>>>', res.data);
           setPagination({
             totalItems: res.data?.length ?? 0,
             perPage: res.data?.length ?? 0,
@@ -51,6 +52,7 @@ const Table = ({ userRole, patient }: TableProps) => {
         }
       } else {
         res = await getTablets(page, pagination.perPage);
+        console.log('tablets else>>>>', res.data);
         if (res.success) {
 
           dispatch(setTablets(res.data ?? []));
