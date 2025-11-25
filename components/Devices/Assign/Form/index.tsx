@@ -27,7 +27,6 @@ const Form: ClientComponent = () => {
   useEffect(() => {
     async function fetchDevice() {
       const res = await getSingleDevice(deviceId);
-
       if (res?.success) setAssigned(!!res.data.assigned);
     }
     fetchDevice();
