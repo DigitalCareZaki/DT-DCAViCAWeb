@@ -934,6 +934,9 @@ export interface DeviceProps {
     last_name: string;
     email: string;
   };
+  branch?: {
+    name: string;
+  };
   patient_devices: {
     issued_to: {
       user: {

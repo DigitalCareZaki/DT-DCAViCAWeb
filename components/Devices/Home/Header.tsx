@@ -16,6 +16,7 @@ interface HeaderProps {
 }
 
 const Header = ({ userRole, data }: HeaderProps) => {
+
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>('');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -77,6 +78,7 @@ const Header = ({ userRole, data }: HeaderProps) => {
           data={data.map((el: DeviceProps) => ({
             ...el,
             status: el.assigned === true ? "Assigned" : "Un Assigned",
+            branch: el.branch?.name || '',
             created_at: new Date(el.created_at).toLocaleDateString(),
             created_by: `${el.created_by.first_name} ${el.created_by.last_name}`,
           }))}
@@ -96,6 +98,10 @@ const Header = ({ userRole, data }: HeaderProps) => {
             {
               label: 'Category',
               key: 'category',
+            },
+            {
+              label: 'Branch',
+              key: 'branch',
             },
             {
               label: 'Created By',
