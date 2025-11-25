@@ -18,6 +18,8 @@ interface HeaderProps {
 const Header = ({ userRole }: HeaderProps) => {
   const dispatch = useDispatch();
   const tablets = useSelector((state: ReduxProps) => state.tablets.tablets);
+
+  console.log('tablets >>>>', tablets);
   const [value, setValue] = useState<string>('');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -63,14 +65,10 @@ const Header = ({ userRole }: HeaderProps) => {
         <ExportButton
           data={tablets.map((el: TabletProps) => ({
             ...el,
+            status: el.assigned === true ? "Assigned" : "Un Assigned",
+            branch: el.branch?.name || '',
+            created_at: new Date(el.created_at).toLocaleDateString(),
             created_by: `${el.created_by.first_name} ${el.created_by.last_name}`,
-            issued_to: el.patient_tablets
-              .map(
-                (el) =>
-                  `${el.issued_to.user.first_name} ${el.issued_to.user.last_name}`
-              )
-              .join(', '),
-            created_at: new Date(el.created_at).toLocaleString(),
           }))}
           headers={[
             {
@@ -86,10 +84,19 @@ const Header = ({ userRole }: HeaderProps) => {
               key: 'created_by',
             },
             {
-              label: 'Issued to',
-              key: 'issued_to',
+              label: 'Branch',
+              key: 'branch',
+            },
+            {
+              label: 'Status',
+              key: 'status',
+            },
+            {
+              label: 'Added On',
+              key: 'created_at',
             },
           ]}
+          filename="Accessories List"
         />
         <Link passHref href={`/${userRole}/tablets/add`}>
           <ButtonPrimary
