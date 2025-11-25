@@ -83,7 +83,7 @@ const useFormHook = (tabletId: string): UseFormProps => {
       const res = await manageTablet(
         btoa(
           JSON.stringify({
-            tablet_id: data.tablet_id,
+            tablet_id: tabletId,
             patient_ids: _selectedPatients.map((el) => el.id),
           })
         )
