@@ -88,24 +88,24 @@ const Header = ({ userRole, data }: HeaderProps) => {
               key: 'title',
             },
             {
-              label: 'Description',
-              key: 'description',
-            },
-            {
               label: 'Serial',
               key: 'serial_number',
+            },
+            {
+              label: 'Description',
+              key: 'description',
             },
             {
               label: 'Category',
               key: 'category',
             },
             {
-              label: 'Branch',
-              key: 'branch',
+              label: 'Added By',
+              key: 'created_by',
             },
             {
-              label: 'Created By',
-              key: 'created_by',
+              label: 'Branch',
+              key: 'branch',
             },
             {
               label: 'Status',

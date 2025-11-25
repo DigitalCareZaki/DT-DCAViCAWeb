@@ -65,7 +65,7 @@ const Header = ({ userRole }: HeaderProps) => {
         <ExportButton
           data={tablets.map((el: TabletProps) => ({
             ...el,
-            status: el.assigned === true ? "Assigned" : "Un Assigned",
+            status: el?.patient_tablets[0]?.issued_to ? 'Assigned' : 'Un Assigned',
             branch: el.branch?.name || '',
             created_at: new Date(el.created_at).toLocaleDateString(),
             created_by: `${el.created_by.first_name} ${el.created_by.last_name}`,
