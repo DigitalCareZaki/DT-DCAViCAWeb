@@ -171,12 +171,13 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         title={data ? 'Update' : 'Save'}
         name={data ? 'Update' : 'Save'}
         loading={loading}
+        className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-xl"
       />
       <ButtonPrimary
         title={'Close'}
         name={'Close'}
         onClick={() => router.back()}
-      // loading={loading}
+        className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-xl"
       />
     </form>
   );
