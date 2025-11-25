@@ -54,9 +54,19 @@ const useFormHook = (deviceId: string): UseFormProps => {
     try {
       setSearching(true);
       const res = await getAllPatients();
-
+      console.log('yahe api chal rahe han');
       if (!res.success) return;
-      setPatients(res.data);
+
+      if (value) {
+        const filteredData = res.data.filter((patient) =>
+          patient.first_name?.toLowerCase().includes(value.toLowerCase()) ||
+          patient.last_name?.toLowerCase().includes(value.toLowerCase()) ||
+          patient.email?.toLowerCase().includes(value.toLowerCase())
+        );
+        setPatients(filteredData);
+      } else {
+        setPatients(res.data);
+      }
     } catch (err: any) {
       console.log(err?.message);
     } finally {
