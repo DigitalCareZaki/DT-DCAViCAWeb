@@ -18,6 +18,7 @@ import {
   composeEmail,
   toggleAddMeasurementForm,
   setInbox,
+  clearMessage,
 } from './global.reducer';
 
 const globalSlice = createSlice({
@@ -40,6 +41,7 @@ const globalSlice = createSlice({
     composeEmail,
     toggleAddMeasurementForm,
     setInbox,
+    clearMessage,
   },
 });
 
@@ -61,6 +63,7 @@ export const {
   composeEmail: composeEmailReducer,
   toggleAddMeasurementForm: toggleAddMeasurementFormReducer,
   setInbox: setInboxReducer,
+  clearMessage: clearMessageReducer,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

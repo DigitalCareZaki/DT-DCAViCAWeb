@@ -1,6 +1,7 @@
 'use client';
 
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
 // ...existing code...
 import NoContentSelected from './NoContent';
@@ -9,6 +10,7 @@ import Link from 'next/link';
 import { Icon } from '@common';
 import type { ClientComponent } from '@types';
 import type { ReduxProps, StoreGlobalState } from '@store-types';
+import { clearMessageReducer } from '@slice';
 import { getProfilePicture, getName } from '@init-globals';
 import MessageContentSkeleton from './MessageContentSkeleton';
 import Compose from '../Compose';
@@ -16,11 +18,16 @@ import { useUser } from '@selectors';
 
 const Content: ClientComponent = () => {
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const [user] = useUser();
 
   const { message, composeMessage, modals } = useSelector<ReduxProps, StoreGlobalState>(
     (state) => state.global
   );
+
+  useEffect(() => {
+    dispatch(clearMessageReducer());
+  }, [pathname, dispatch]);
 
   // Determine if we should show sender or receiver based on route and user role
   const shouldShowSender = () => {

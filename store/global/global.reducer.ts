@@ -86,3 +86,11 @@ export const toggleAddMeasurementForm: ReducerFuncSecondary = (state) => {
 export const setInbox: SetInboxFunc = (state, payload) => {
   state.inbox = payload.payload;
 };
+
+export const clearMessage: ReducerFuncSecondary = (state) => {
+  state.message = {
+    show: false,
+    data: undefined,
+    loading: false,
+  };
+};
