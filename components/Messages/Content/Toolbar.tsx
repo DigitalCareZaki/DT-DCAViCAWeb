@@ -15,6 +15,7 @@ import {
   updateMessageReducer,
   toggleComposeMessageReducer,
   composeEmailReducer,
+  setInboxReducer,
 } from '@slice';
 
 import type { ClientComponent } from '@types';
@@ -23,7 +24,7 @@ import type { ReduxProps, StoreGlobalState } from '@store-types';
 const Toolbar: ClientComponent = () => {
   const dispatch = useDispatch();
 
-  const { message } = useSelector<ReduxProps, StoreGlobalState>(
+  const { message, inbox } = useSelector<ReduxProps, StoreGlobalState>(
     (state) => state.global
   );
 
@@ -33,13 +34,31 @@ const Toolbar: ClientComponent = () => {
 
 
   const onSuccessStarred = useCallback(() => {
+    const newThreadMessages = [...(message.data?.threadMessages || [])];
+    if (newThreadMessages.length > 0) {
+      newThreadMessages[0] = {
+        ...newThreadMessages[0],
+        starred: !newThreadMessages[0].starred,
+      };
+    }
+
     dispatch(
       updateMessageReducer({
         ...(message.data as any),
-        starred: rootMessage?.starred,
+        threadMessages: newThreadMessages,
       })
     );
-  }, [dispatch, message.data]);
+
+    if (inbox) {
+      const updatedInbox = inbox.map((msg: any) => {
+        if (msg.id === rootMessage?.id) {
+          return { ...msg, starred: !msg.starred };
+        }
+        return msg;
+      });
+      dispatch(setInboxReducer(updatedInbox));
+    }
+  }, [dispatch, message.data, inbox, rootMessage]);
 
   const onSuccessDeleted = useCallback(() => {
     dispatch(updateMessageReducer({ ...(message.data as any), deleted: true }));
