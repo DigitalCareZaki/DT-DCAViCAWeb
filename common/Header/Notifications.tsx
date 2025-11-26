@@ -50,8 +50,8 @@ const Notifications: ClientComponent = () => {
   return (
     <>
       <div
-        onMouseEnter={handleOnFocus}
-        onMouseLeave={handleOnBlur}
+        // onMouseEnter={handleOnFocus}
+        // onMouseLeave={handleOnBlur}
         className={
           'theme-bg-color relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition duration-200 hover:scale-[105%]'
         }
