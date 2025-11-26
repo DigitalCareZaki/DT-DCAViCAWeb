@@ -25,7 +25,7 @@ const Sidebar: ServerComponentProps<SidebarProps> = async ({
     <div className="flex h-[95%] w-[20%] flex-col items-center justify-between gap-10 border-r bg-white p-11 px-4">
       <Header type={type} search={search} />
       <div className="hidescrollbar flex h-full w-full flex-col overflow-y-scroll ">
-        <SidebarList initialData={initialData} />
+        <SidebarList initialData={initialData} type={type} />
       </div>
     </div>
   );
