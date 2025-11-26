@@ -70,7 +70,7 @@ const Toolbar: ClientComponent = () => {
       composeEmailReducer({
         to: rootMessage?.sender.email,
         parent_id: rootMessage?.id,
-        // subject: `Reply: ${rootMessage?.subject}`,
+        subject: `${rootMessage?.subject}`,
       })
     );
     dispatch(toggleComposeMessageReducer());
