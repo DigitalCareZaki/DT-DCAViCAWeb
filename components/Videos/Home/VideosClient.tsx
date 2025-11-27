@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import { ButtonPrimary } from '@common';
@@ -16,6 +16,11 @@ interface VideosClientProps {
 
 const VideosClient: React.FC<VideosClientProps> = ({ data, userRole }) => {
     const [filteredData, setFilteredData] = useState<VideoProps[]>(data);
+
+    // Sync filteredData when data prop changes (e.g., when videos are loaded)
+    useEffect(() => {
+        setFilteredData(data);
+    }, [data]);
 
     return (
         <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">

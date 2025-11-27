@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 import { InputBasic } from '@common';
 
@@ -14,28 +14,32 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ data, onSearchResults }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredData = useMemo(() => {
-        if (!searchTerm.trim()) {
-            return data;
-        }
+    // Debounced search with 300ms delay
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (!searchTerm.trim()) {
+                onSearchResults(data);
+                return;
+            }
 
-        const lowerSearchTerm = searchTerm.toLowerCase();
+            const lowerSearchTerm = searchTerm.toLowerCase();
 
-        return data.filter((video) => {
-            return (
-                video.title.toLowerCase().includes(lowerSearchTerm) ||
-                video.description.toLowerCase().includes(lowerSearchTerm) ||
-                video.category.toLowerCase().includes(lowerSearchTerm) ||
-                video.priority.toLowerCase().includes(lowerSearchTerm) ||
-                `${video.author.first_name} ${video.author.last_name}`.toLowerCase().includes(lowerSearchTerm)
-            );
-        });
-    }, [data, searchTerm]);
+            const filteredData = data.filter((video) => {
+                return (
+                    video.title.toLowerCase().includes(lowerSearchTerm) ||
+                    video.description.toLowerCase().includes(lowerSearchTerm) ||
+                    video.category.toLowerCase().includes(lowerSearchTerm) ||
+                    video.priority.toLowerCase().includes(lowerSearchTerm) ||
+                    `${video.author.first_name} ${video.author.last_name}`.toLowerCase().includes(lowerSearchTerm)
+                );
+            });
 
-    // Update parent component with filtered results
-    useMemo(() => {
-        onSearchResults(filteredData);
-    }, [filteredData, onSearchResults]);
+            onSearchResults(filteredData);
+        }, 300); // 300ms debounce delay
+
+        // Cleanup function to clear timeout if user keeps typing
+        return () => clearTimeout(timeoutId);
+    }, [data, searchTerm]); // Removed onSearchResults from dependencies to prevent infinite loop
 
     return (
         <div className="w-full max-w-md">
