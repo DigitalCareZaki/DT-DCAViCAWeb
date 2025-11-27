@@ -29,24 +29,24 @@ const RenderTable: ClientComponentProps<Props> = ({ data }) => {
             scope="row"
             className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
           >
-            {el.title}
+            {el?.title}
           </th>
-          <td className="line-clamp-1 px-6 py-14">{el.description}</td>
-          <td className="px-6 py-4">{el.category}</td>
-          <td className="px-6 py-4">{el.priority}</td>
+          <td className="line-clamp-1 px-6 py-14">{el?.description}</td>
+          <td className="px-6 py-4">{el?.category}</td>
+          <td className="px-6 py-4">{el?.priority}</td>
           <td className="px-6 py-4">
-            <Link href={el.uri} target="_blank">
-              {el.uri}
+            <Link href={el?.uri} target="_blank">
+              {el?.uri}
             </Link>
           </td>
-          <td className="px-6 py-4">{el.branch.name}</td>
+          <td className="px-6 py-4">{el?.branch?.name}</td>
           <td className="px-6 py-4">
             {getName({
-              ...el.author,
+              ...el?.author,
             })}
           </td>
           <td className="px-6 py-4">
-            {new Date(el.created_at).toLocaleString()}
+            {new Date(el?.created_at).toLocaleString()}
           </td>
         </tr>
       ))}
