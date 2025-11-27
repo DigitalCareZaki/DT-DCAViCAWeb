@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 import { vestResolver } from '@hookform/resolvers/vest';
 import { updateDoctorProfile, uploadFile } from '@service';
@@ -16,6 +17,7 @@ import type { DoctorProfileProps } from '@types';
 
 const useFormHook = (data: DoctorProfileProps): useFormProps => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [user] = useUser();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -101,6 +103,13 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
           type: 'SUCCESS',
         })
       );
+
+      // Redirect to dashboard after successful update
+      setTimeout(() => {
+        const userRole = user?.role?.toLowerCase() || user?.type?.toLowerCase();
+        router.push(`/${userRole}`);
+      }, 1500); // Wait 1.5 seconds to show success message before redirecting
+
     } catch (err: any) {
       dispatch(
         showModalReducer({
