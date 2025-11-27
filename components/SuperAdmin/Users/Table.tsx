@@ -14,6 +14,8 @@ import type { TableProps } from './types';
 const Table: ClientComponentProps<TableProps> = ({ data }) => {
   const dispatch = useDispatch();
 
+  console.log('data ---->', data);
+
   const setData = (payload: { users: OrganizationUsersProps[] }) =>
     dispatch(setOrganizationUsersReducer(payload));
 
@@ -28,12 +30,13 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           data={data.map((el) => ({
             full_name: `${el.first_name} ${el.last_name}`,
             branch: el.associated_branches[0].name,
+            department: el.doctor?.departments[0].title || el.patient?.doctors[0].departments[0].title,
             ...el,
           }))}
           headers={[
             { label: 'Name', key: 'full_name' },
-            { label: 'Username', key: 'username' },
             { label: 'Email', key: 'email' },
+            { label: 'Department', key: 'department' },
             { label: 'Phone', key: 'phone_number' },
             { label: 'Role', key: 'role' },
             { label: 'Gender', key: 'gender' },
