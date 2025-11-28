@@ -14,9 +14,10 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 interface TableProps {
   userRole: string;
   patient?: string | null;
+  searchTerm?: string;
 }
 
-const Table = ({ userRole, patient }: TableProps) => {
+const Table = ({ userRole, patient, searchTerm }: TableProps) => {
   const dispatch = useDispatch();
   const tablets = useSelector((state: ReduxProps) => state.tablets.tablets);
   const [page, setPage] = useState(1);
@@ -29,6 +30,17 @@ const Table = ({ userRole, patient }: TableProps) => {
     hasPrevPage: false,
     nextPage: null,
     prevPage: null,
+  });
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  // Filter tablets based on search term
+  const filteredTablets = tablets.filter((tablet) => {
+    if (!searchTerm) return true;
+    const searchLower = searchTerm.toLowerCase().trim();
+    return (
+      tablet.title?.toLowerCase().includes(searchLower) ||
+      tablet.serial_number?.toLowerCase().includes(searchLower)
+    );
   });
 
   useEffect(() => {
@@ -50,19 +62,20 @@ const Table = ({ userRole, patient }: TableProps) => {
             prevPage: null,
           });
         }
-      } else {
-        res = await getTablets(page, pagination.perPage);
+      } else if (!initialLoadDone) {
+        // Fetch ALL tablets for global frontend search
+        res = await getTablets(1, 10000);
         console.log('tablets else>>>>', res.data);
         if (res.success) {
-
           dispatch(setTablets(res.data ?? []));
           setPagination(res.pagination ?? pagination);
+          setInitialLoadDone(true);
         }
       }
     }
     fetchTablets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, patient, page]);
+  }, [dispatch, patient]);
 
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
@@ -80,7 +93,7 @@ const Table = ({ userRole, patient }: TableProps) => {
             'Action',
           ]}
         >
-          <RenderTable userRole={userRole} data={tablets} />
+          <RenderTable userRole={userRole} data={filteredTablets} />
         </ClientTable>
         {!patient && (
           <div className="flex items-center justify-center gap-4 py-6">
