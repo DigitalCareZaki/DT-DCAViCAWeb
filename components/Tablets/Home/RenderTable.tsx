@@ -47,7 +47,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
               {/* Edit Accessories Icon */}
               <Link passHref href={`/${userRole}/tablets/edit-accessory?id=${el.id}`}>
                 <FaPencilAlt
-                  title="Edit Accessories"
+                  title="Edit Accessory"
                   className="text-lg hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
                 />
               </Link>
@@ -55,7 +55,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
               {/* Assign Tablet Icon */}
               <Link passHref href={`/${userRole}/tablets/assign/?id=${el.id}`}>
                 <FaEdit
-                  title="Assign Tablet"
+                  title="Assign Accessory"
                   className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
                 />
               </Link>
