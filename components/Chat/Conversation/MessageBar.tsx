@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { FaImage } from '@react-icons/all-files/fa/FaImage';
 import { IoSend } from '@react-icons/all-files/io5/IoSend';
+import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
 
 import { useUser } from '@selectors';
 import { handleEventReducer } from '@slice';
@@ -28,6 +29,7 @@ const MessageBar: ClientComponent = () => {
 
   const [file, setFile] = useState<File | undefined>(undefined);
   const [value, setValue] = useState<string>('');
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
 
   const { selectedRooms } = useSelector<ReduxProps, StoreChatState>(
     (state) => state.chats
@@ -36,6 +38,16 @@ const MessageBar: ClientComponent = () => {
   const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   }, []);
+
+  useEffect(() => {
+    if (!file) {
+      setPreviewUrl(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
 
   // Hide the message bar if no chat is selected
   if (!selectedRooms?.id) {
@@ -109,7 +121,7 @@ const MessageBar: ClientComponent = () => {
     console.log('submitting form');
     e?.preventDefault();
 
-    if (!value) return;
+    if (!value && !file) return;
 
     await sentMessage(file, user, value);
   };
@@ -124,49 +136,62 @@ const MessageBar: ClientComponent = () => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
         // Handle the selected file here
-
         setFile(file);
-        sentMessage(file, user, '')
-          .then((res) => { })
-          .catch(() => { });
-        // You can add further processing or state updates here
       }
     };
     input.click();
   };
 
   return (
-    <form
-      onSubmit={handleMessage}
-      className="w-90 focus-within:theme-border-color flex h-14 items-center gap-4 rounded-lg border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border mt-2 mb-4"
-    >
-      <div className="relative h-8 w-8 rounded-full">
-        <Image
-          src={getProfilePicture(user.uri)}
-          alt="profile-picture"
-          fill
-          className="rounded-full object-cover"
-        />
-      </div>
-      <div className="h-12 w-[80%] bg-transparent text-2xl">
-        <input
-          className="h-full w-full bg-transparent text-gray-main text-white/90 outline-none"
-          placeholder="Type your message.."
-          onChange={onChange}
-          value={value}
-          autoFocus
-        />
-      </div>
-      <div className="flex h-10 w-[20%] items-center justify-end gap-4 text-white/80">
-        <FaImage
-          onClick={onFileSelected}
-          className="hover:theme-text-color cursor-pointer transition duration-300 hover:text-blue-500"
-        />
-        <button className="hover:theme-text-color flex h-full w-[40%] cursor-pointer items-center justify-center border-l border-gray-main/50 outline-none transition duration-300">
-          <IoSend />
-        </button>
-      </div>
-    </form>
+    <div className="w-full mt-2 mb-4">
+      {file && previewUrl && (
+        <div className="flex items-center gap-2 mb-2 px-2 ml-14">
+          <div className="relative h-16 w-16 rounded overflow-hidden border border-gray-300">
+            <Image
+              src={previewUrl}
+              alt="preview"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <FaTimes
+            className="cursor-pointer text-red-500 hover:text-red-700"
+            onClick={() => setFile(undefined)}
+          />
+        </div>
+      )}
+      <form
+        onSubmit={handleMessage}
+        className="w-90 focus-within:theme-border-color flex h-14 items-center gap-4 rounded-lg border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border mt-0 mb-0"
+      >
+        <div className="relative h-8 w-8 rounded-full">
+          <Image
+            src={getProfilePicture(user.uri)}
+            alt="profile-picture"
+            fill
+            className="rounded-full object-cover"
+          />
+        </div>
+        <div className="h-12 w-[80%] bg-transparent text-2xl">
+          <input
+            className="h-full w-full bg-transparent text-gray-main text-white/90 outline-none"
+            placeholder="Type your message.."
+            onChange={onChange}
+            value={value}
+            autoFocus
+          />
+        </div>
+        <div className="flex h-10 w-[20%] items-center justify-end gap-4 text-white/80">
+          <FaImage
+            onClick={onFileSelected}
+            className="hover:theme-text-color cursor-pointer transition duration-300 hover:text-blue-500"
+          />
+          <button className="hover:theme-text-color flex h-full w-[40%] cursor-pointer items-center justify-center border-l border-gray-main/50 outline-none transition duration-300">
+            <IoSend />
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
