@@ -119,6 +119,7 @@ export { default as AddVideos } from './Videos/AddVideos';
 export { default as Tablets } from './Tablets';
 export { default as CreateTablet } from './Tablets/Create';
 export { default as AssignTablet } from './Tablets/Assign';
+export { default as EditAccessory } from './Tablets/EditAccessory';
 
 // Organization Medicine
 export { default as OrganizationMedicine } from './OrganizationMedicine';

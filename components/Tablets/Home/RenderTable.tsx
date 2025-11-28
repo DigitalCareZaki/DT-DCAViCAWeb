@@ -1,6 +1,7 @@
 'use client';
 
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
+import { FaPencilAlt } from '@react-icons/all-files/fa/FaPencilAlt';
 
 import Link from 'next/link';
 
@@ -42,22 +43,23 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
             {new Date(el.created_at).toLocaleString()}
           </td>
           <td className="px-6 py-4">
-            {/* {el.assigned ? (
-              <span title="Already assigned">
-                <FaEdit
-                  title="Edit Tablet"
-                  className="text-gray-400 cursor-not-allowed"
-                  style={{ pointerEvents: 'none', opacity: 0.5 }}
+            <div className="flex items-center gap-3">
+              {/* Edit Accessories Icon */}
+              <Link passHref href={`/${userRole}/tablets/edit-accessory?id=${el.id}`}>
+                <FaPencilAlt
+                  title="Edit Accessories"
+                  className="text-lg hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
                 />
-              </span>
-            ) : ( */}
-            <Link passHref href={`/${userRole}/tablets/assign/?id=${el.id}`}>
-              <FaEdit
-                title="Edit Tablet"
-                className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
-              />
-            </Link>
-            {/* )} */}
+              </Link>
+
+              {/* Assign Tablet Icon */}
+              <Link passHref href={`/${userRole}/tablets/assign/?id=${el.id}`}>
+                <FaEdit
+                  title="Assign Tablet"
+                  className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
+                />
+              </Link>
+            </div>
           </td>
         </tr>
       ))}
