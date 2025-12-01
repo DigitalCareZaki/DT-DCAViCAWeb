@@ -9,10 +9,10 @@ export default async function Header(): Promise<JSX.Element> {
         <LogoPrimary />
       </div>
       <div className="flex flex-col gap-4 text-center">
-        <h1 className="font-poppins text-2xl font-bold text-t-color-primary">
+        <h1 className="font-poppins text-6xl font-bold text-t-color-primary">
           Aman Ventures brings Avica
         </h1>
-        <span className="text-sm font-medium text-t-color-secondary">
+        <span className="text-5xl font-medium text-t-color-secondary">
           {`"`}A holistic platform for patient monitoring, education, <br />{' '}
           empowerment, engagement and compliance!{`"`}
         </span>
