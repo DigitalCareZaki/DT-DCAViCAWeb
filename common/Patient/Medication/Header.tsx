@@ -139,8 +139,8 @@ const MedicationHeader: ClientComponentProps<{
           data={data.map((el) => ({
             ...el,
             start_date: new Date(el.start_date).toDateString(),
-            end_date: new Date(el.start_date).toDateString(),
-            time: new Date(el.time).toLocaleTimeString(),
+            end_date: new Date(el.end_date).toDateString(),
+            time: Array.isArray(el.time) ? el.time.join(', ') : el.time,
             doctor: `${el.doctor.user.first_name} ${el.doctor.user.last_name}`,
           }))}
           headers={[
