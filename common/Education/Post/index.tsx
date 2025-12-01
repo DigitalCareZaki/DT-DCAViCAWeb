@@ -56,23 +56,23 @@ const Post: ClientComponentProps<ArticleProps> = ({ ...data }) => {
         )}
       </div>
       <div className="flex w-full items-center justify-between">
-        <span className="text-ssx text-gray-500">Few minutes ago</span>
+        <span className="text-xs text-gray-500">Few minutes ago</span>
         <div className="flex items-center gap-2">
-          <span className="text-ssx font-bold text-gray-500">
+          <span className="text-xs font-bold text-gray-500">
             {data?.views_count}
           </span>
           <AiFillEye className="text-gray-400" />
         </div>
       </div>
-      <span className="mt-10 text-md font-semibold text-gray-600">
+      <span className="mt-10 text-2xl font-semibold text-gray-600">
         {data?.title}
       </span>
-      <span className="text-xs">{data?.content}</span>
+      <span className="text-lg">{data?.content}</span>
       <div className="mt-10 flex flex-col gap-1 ">
-        <span className="text-xs font-semibold text-gray-600">Refrences</span>
+        <span className="text-sm font-semibold text-gray-600">Refrences</span>
         {Array.isArray(data?.refrence) && data?.refrence?.map((el, index) => (
           <div key={index} className="flex items-center gap-2">
-            <span className="hover:theme-text-color cursor-pointer text-xs font-bold text-gray-400">
+            <span className="hover:theme-text-color cursor-pointer text-sm font-bold text-gray-400">
               {el}
             </span>
           </div>

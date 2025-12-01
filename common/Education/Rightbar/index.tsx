@@ -25,7 +25,7 @@ const Rightbar: ServerComponent = async () => {
       {/* Articles Section */}
       <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-4 font-poppins">
         <div className="flex w-full items-center justify-between">
-          <span className="text-xs font-semibold tracking-wide text-gray-500">
+          <span className="text-lg font-semibold tracking-wide text-gray-500">
             My Articles
           </span>
           <IoDocumentText size={20} />

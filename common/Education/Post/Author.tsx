@@ -18,8 +18,8 @@ const Author: ClientComponentProps<AuthorProps> = ({ uri, name, specialty }) => 
         />
       </div>
       <div className="flex flex-col font-semibold">
-        <span className="text-ssx text-gray-500">{name}</span>
-        <span className="text-ssx font-normal text-gray-400">{specialty}</span>
+        <span className="text-sm text-gray-500">{name}</span>
+        <span className="text-xs font-normal text-gray-400">{specialty}</span>
       </div>
     </div>
   );

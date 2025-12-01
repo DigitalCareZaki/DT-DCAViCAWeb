@@ -22,7 +22,7 @@ const Leftbar: ServerComponent = async () => {
       <Search />
       <div className="hidescrollbar flex h-full w-full flex-col gap-4 overflow-y-scroll rounded-lg border border-gray-100 bg-white p-4">
         <div className="flex w-full items-center justify-between">
-          <span className="text-xs font-semibold tracking-wide text-gray-500">
+          <span className="text-lg font-semibold tracking-wide text-gray-500">
             Trending Now
           </span>
           <AiOutlineRise />

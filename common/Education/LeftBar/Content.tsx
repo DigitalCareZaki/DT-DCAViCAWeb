@@ -42,11 +42,11 @@ const Content: ServerComponentProps<Props> = async ({
             </div>
           )}
         </div>
-        <div className="flex h-full flex-col py-2 text-ssx font-medium">
-          <span title={title} className="font-semibold">
+        <div className="flex h-full flex-col py-2 text-sm font-medium">
+          <span title={title} className="text-base font-bold">
             {title}
           </span>
-          <span title={content} className="font-medium">
+          <span title={content} className="text-xs font-medium">
             {content?.slice(0, 28) + '..'}
           </span>
         </div>
