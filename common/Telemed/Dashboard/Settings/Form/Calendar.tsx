@@ -20,6 +20,7 @@ import { IOptions } from 'tailwind-datepicker-react/types/Options';
 import { SlotParent, SlotParentProps, SlotWrapper } from './types';
 import SlotManager from './SlotManager';
 import { updateCalendar } from '@service';
+import toast from 'react-hot-toast';
 
 const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
     const [times, setTimes] = useState(timeConstant);
@@ -155,8 +156,6 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                 return { ...wrapper, slots };
             });
         }
-
-        console.log('processedData', processedData);
 
         return processedData;
     });
@@ -372,7 +371,13 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                                     });
                                 }
 
-                                await updateCalendar(btoa(JSON.stringify(payload)));
+                                const res = await updateCalendar(btoa(JSON.stringify(payload)));
+
+                                if (res.success) {
+                                    toast.success('Calendar updated successfully');
+                                } else {
+                                    toast.success(res.message || 'Calendar updated successfully');
+                                }
                                 setLoading(false);
                             }}
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
