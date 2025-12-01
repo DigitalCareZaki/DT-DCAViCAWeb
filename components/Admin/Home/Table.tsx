@@ -52,23 +52,23 @@ const Table = () => {
     <div className="flex h-full w-full flex-col items-end gap-4">
       <ExportButton
         data={data.map((el) => ({
+          patient_name: el?.first_name + ' ' + el?.middle_name + ' ' + el?.last_name,
+          patient_email: el?.email,
           emr: el.patient.emr,
           assigned_doctor: `${el.patient.first_assigned_doctor?.user.first_name ? el.patient.first_assigned_doctor?.user.first_name : ""} ${el.patient.first_assigned_doctor?.user.middle_name ? el.patient.first_assigned_doctor?.user.middle_name : ""} ${el.patient.first_assigned_doctor?.user.last_name ? el.patient.first_assigned_doctor?.user.last_name : ""}`,
+          department: el.patient?.doctors?.[0]?.departments?.[0]?.title ?? '',
           height: el.patient.height,
           weight: el.patient.weight,
-          department: el.patient?.doctors?.[0]?.departments?.[0]?.title ?? '',
           ...el,
         }))}
         headers={[
-          { label: 'First name', key: 'first_name' },
-          { label: 'Middle name', key: 'middle_name' },
-          { label: 'Last name', key: 'last_name' },
+          { label: 'Patient Name', key: 'patient_name' },
+          { label: 'Patient Email', key: 'patient_email' },
           { label: 'EMR', key: 'emr' },
-          { label: 'Email', key: 'email' },
           { label: 'Assigned Doctor', key: 'assigned_doctor' },
-          { label: 'Height', key: 'height' },
-          { label: 'Weight', key: 'weight' },
           { label: 'Department', key: 'department' },
+          { label: 'Height (in meters)', key: 'height' },
+          { label: 'Weight (in kg)', key: 'weight' },
         ]}
         filename="Patient List Data"
       />
