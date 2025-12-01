@@ -117,6 +117,12 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
         });
 
         // Return updated data for Form component
+
+        setTimeout(() => {
+          const userRole = user?.role?.toLowerCase() || user?.type?.toLowerCase();
+          router.push(`/${userRole}`);
+        }, 1500); // Wait 1.5 seconds to show success message before redirecting
+
         return {
           success: true,
           updatedData: {
