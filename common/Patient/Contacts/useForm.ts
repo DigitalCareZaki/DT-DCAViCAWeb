@@ -29,6 +29,7 @@ const useFormHook = (
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateContactProps>({
     resolver: vestResolver(validator),
   });
@@ -57,10 +58,10 @@ const useFormHook = (
 
       delete res?.success;
       setContacts(res);
-
+      reset();
       handleHideForm.call(this);
     } catch (err) {
-
+      console.log(err);
     } finally {
       setLoading(false);
     }
