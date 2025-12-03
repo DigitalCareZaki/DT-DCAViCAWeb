@@ -94,5 +94,5 @@ export const setPatientMedicationListing: SetPatientMedicationListingProps = (
 export const pushIntoPatientMedicationListing: PushIntoPatientMedicationListingProps =
   (state, payload) => {
     const medications = state.patientMedicationListing;
-    medications.push(payload.payload.medication);
+    medications.unshift(payload.payload.medication);
   };
