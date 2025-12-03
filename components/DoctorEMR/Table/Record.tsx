@@ -1,17 +1,23 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Image from 'next/image';
 
 import { IoDownload } from '@react-icons/all-files/io5/IoDownload';
 import { IoMdTrash } from 'react-icons/io';
 
 import { getName, getProfilePicture } from '@init-globals';
+import { deleteEmrRecordSlice } from '@slice';
 
 import type { ClientComponentProps } from '@types';
 import { CircleSpinner } from 'react-spinners-kit';
 
+import { deletePatientEMRRecord } from '@service';
+
 const Record: ClientComponentProps<any> = ({
+  _id,
+  id,
   patient,
   uri,
   title,
@@ -21,7 +27,9 @@ const Record: ClientComponentProps<any> = ({
   onDelete,
   showPatientNameColumn,
 }) => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
 
   const handleDownload = useCallback(() => {
     setLoading(true);
@@ -37,11 +45,18 @@ const Record: ClientComponentProps<any> = ({
     setLoading(false);
   }, [uri]);
 
-  const handleDelete = useCallback(() => {
-    if (onDelete) {
-      onDelete(); // Trigger delete action
+  const handleDelete = useCallback(async () => {
+    setDeleting(true);
+    const recordId = _id || id;
+    const res = await deletePatientEMRRecord(recordId);
+    if (res.success) {
+      dispatch(deleteEmrRecordSlice({ id: recordId }));
+      if (onDelete) {
+        onDelete(); // Trigger delete action
+      }
     }
-  }, [onDelete]);
+    setDeleting(false);
+  }, [onDelete, _id, id, dispatch]);
 
   return (
     <tr className="border-b odd:bg-white even:bg-gray-50">
@@ -121,7 +136,11 @@ const Record: ClientComponentProps<any> = ({
           onClick={handleDelete}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white transition duration-200 hover:scale-[110%]"
         >
-          <IoMdTrash size={16} />
+          {deleting ? (
+            <CircleSpinner size={16} color="#fff" />
+          ) : (
+            <IoMdTrash size={16} />
+          )}
         </div>
       </td>
     </tr>

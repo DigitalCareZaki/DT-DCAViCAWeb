@@ -87,6 +87,7 @@ export { default as searchArticle } from './articles/searchArticle';
 export { default as searchUsersMessages } from './messages/searchUsers';
 export { default as getPatientEMRRecords } from './emr/getPatientRecords';
 export { default as addPatientEMRRecord } from './emr/addRecord';
+export { default as deletePatientEMRRecord } from './emr/deleteRecord';
 export { default as getLatestPatientMeasurement } from './patients/getLatestPatientMeasurements';
 export { default as getDoctorPatientsFromVl } from './doctors/getPatientsFromVl';
 export { default as getDoctorSinglePatientFromVl } from './doctors/getSinglePatientFromVl';
