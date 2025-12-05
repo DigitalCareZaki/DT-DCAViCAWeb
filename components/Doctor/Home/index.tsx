@@ -33,10 +33,6 @@ const Dashboard: ServerComponent = async () => {
       retryApi(() => getAppointmentStats('doctor'))
     ]);
 
-
-    console.log('stats data >>>>>>>>', stats.data);
-
-
     if (!res?.success || !compliance?.success || !stats?.success) {
       return <></>;
     }
