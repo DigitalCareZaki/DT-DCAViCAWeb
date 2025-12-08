@@ -17,12 +17,14 @@ import {
   composeEmailReducer,
   setInboxReducer,
 } from '@slice';
+import { useUser } from '@selectors';
 
 import type { ClientComponent } from '@types';
 import type { ReduxProps, StoreGlobalState } from '@store-types';
 
 const Toolbar: ClientComponent = () => {
   const dispatch = useDispatch();
+  const [user] = useUser();
 
   const { message, inbox } = useSelector<ReduxProps, StoreGlobalState>(
     (state) => state.global
@@ -65,16 +67,19 @@ const Toolbar: ClientComponent = () => {
   }, [dispatch, message.data]);
 
   const handleReply = useCallback(() => {
-    console.log('rootMessage >>>>>', rootMessage);
+    // If current user is the sender, reply to the receiver, otherwise reply to the sender
+    const isSender = user?.email === rootMessage?.sender?.email;
+    const toEmail = isSender ? (rootMessage as any)?.reciever?.email : rootMessage?.sender?.email;
+
     dispatch(
       composeEmailReducer({
-        to: rootMessage?.sender.email,
+        to: toEmail,
         parent_id: rootMessage?.id,
         subject: `${rootMessage?.subject}`,
       })
     );
     dispatch(toggleComposeMessageReducer());
-  }, [dispatch, message?.data]);
+  }, [dispatch, message?.data, user, rootMessage]);
 
   const handleForward = useCallback(() => {
     dispatch(

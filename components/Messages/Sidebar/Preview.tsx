@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getName, getProfilePicture } from '@init-globals';
-import { selectMessageReducer, setInboxReducer } from '@slice';
+import { selectMessageReducer, setInboxReducer, composeEmailReducer, toggleComposeMessageReducer } from '@slice';
 import { useSelector } from 'react-redux';
 import type { ReduxProps, StoreGlobalState } from '@store-types';
 import type { ClientComponentProps } from '@types';
@@ -18,11 +18,18 @@ import { FaCircle } from 'react-icons/fa';
 
 const Preview: ClientComponentProps<any> = ({ ...data }) => {
   const dispatch = useDispatch();
-  const { inbox } = useSelector<ReduxProps, StoreGlobalState>((state) => state.global);
+  const { inbox, modals } = useSelector<ReduxProps, StoreGlobalState>((state) => state.global);
   const [isRead, setIsRead] = useState(data.is_read);
   const [dateTimeString, setDateTimeString] = useState<string>('');
 
   const onClick = async () => {
+    // Close compose modal/inline reply if open
+    if (modals.composeMessage) {
+      dispatch(toggleComposeMessageReducer());
+    }
+    // Reset compose message state (close inline reply if open)
+    dispatch(composeEmailReducer({ to: '', subject: '', content: '', parent_id: '', attachments: [] }));
+
     // Show skeleton loader in Content
     dispatch(selectMessageReducer({ ...data, threadMessages: [], loading: true }));
 

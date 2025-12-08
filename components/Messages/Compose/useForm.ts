@@ -191,17 +191,9 @@ const useFormHook = (): UseFormProps => {
   };
 
   useEffect(() => {
-    if (composeMessageState.to) {
-      setValue('send_to', composeMessageState.to);
-    }
-
-    if (composeMessageState.subject) {
-      setValue('subject', composeMessageState.subject);
-    }
-
-    if (composeMessageState.content) {
-      setValue('content', composeMessageState.content);
-    }
+    setValue('send_to', composeMessageState.to || '');
+    setValue('subject', composeMessageState.subject || '');
+    setValue('content', composeMessageState.content || '');
   }, [composeMessageState, setValue]);
 
   return [
