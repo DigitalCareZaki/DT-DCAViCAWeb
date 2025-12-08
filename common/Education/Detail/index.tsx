@@ -33,7 +33,7 @@ const EducationDetail: ServerComponentProps<Props> = async ({ id }) => {
               <Image
                 src={res.data.uri}
                 alt="article-image"
-                className="rounded-lg object-cover"
+                className="rounded-lg object-contain"
                 fill
               />
             ) : (

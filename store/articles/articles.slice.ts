@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import initialState from './articles.init';
-import { setArticles, pushInArticles } from './articles.reducer';
+import { setArticles, pushInArticles, setIsSearching, setTrendingSearchArticles } from './articles.reducer';
 
 const articleSlice = createSlice({
   name: 'articles',
@@ -9,12 +9,16 @@ const articleSlice = createSlice({
   reducers: {
     setArticles,
     pushInArticles,
+    setIsSearching,
+    setTrendingSearchArticles,
   },
 });
 
 export const {
   setArticles: setArticlesReducer,
   pushInArticles: pushInArticlesReducer,
+  setIsSearching: setIsSearchingReducer,
+  setTrendingSearchArticles: setTrendingSearchArticlesReducer,
 } = articleSlice.actions;
 
 export default articleSlice.reducer;

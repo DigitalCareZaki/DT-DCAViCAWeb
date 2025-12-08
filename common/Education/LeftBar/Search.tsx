@@ -1,11 +1,10 @@
 'use client';
-
-import { FormEvent, type ChangeEvent, useState } from 'react';
+import { type ChangeEvent, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { InputBasic } from '@common';
 import { searchArticle } from '@service';
-import { setArticlesReducer } from '@slice';
+import { setArticlesReducer, setIsSearchingReducer, setTrendingSearchArticlesReducer } from '@slice';
 
 import type { ClientComponent } from '@types';
 
@@ -19,28 +18,37 @@ const Search: ClientComponent = () => {
     setValue(e.target.value);
   };
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const data = await searchArticle(value);
+  useEffect(() => {
+    const handler = setTimeout(async () => {
+      if (value.trim() === '') {
+        dispatch(setIsSearchingReducer(false));
+        return;
+      }
 
-      if (!data.success) return setLoading(false);
+      try {
+        setLoading(true);
+        dispatch(setIsSearchingReducer(true));
 
-      dispatch(setArticlesReducer({ articles: data?.data ?? [] }));
-    } catch (err) {
-      console.log(err);
-      console.log('error at search');
-    } finally {
-      setLoading(false);
-    }
-  };
+        const data = await searchArticle(value);
+
+        if (data.success) {
+          dispatch(setTrendingSearchArticlesReducer({ articles: data?.data ?? [] }));
+        }
+      } catch (err) {
+        console.log(err);
+        console.log('error at search');
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, dispatch]);
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="education-search-field flex h-14 w-full items-center justify-center rounded-lg border border-gray-100 bg-white p-2"
-    >
+    <div className="education-search-field flex h-14 w-full items-center justify-center rounded-lg border border-gray-100 bg-white p-2">
       <InputBasic
         placeholder="Search"
         icon="IoSearch"
@@ -50,7 +58,7 @@ const Search: ClientComponent = () => {
         onChange={handleChange}
         loading={loading}
       />
-    </form>
+    </div>
   );
 };
 

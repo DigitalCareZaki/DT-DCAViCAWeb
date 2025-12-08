@@ -8,7 +8,7 @@ import '@init-globals';
 
 async function searchArticle(value: string): Promise<SearchArticileProps> {
   const res = await fetch(
-    `/api/v1/web/education/search?value=${encodeURIComponent(value)}`,
+    `/api/v1/web/education/trending-posts?value=${encodeURIComponent(value)}`,
     {
       method: 'GET',
     }

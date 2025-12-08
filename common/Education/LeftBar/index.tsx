@@ -2,12 +2,11 @@
 
 import { AiOutlineRise } from '@react-icons/all-files/ai/AiOutlineRise';
 
-import { ServerGenerator } from '@common';
 import { getTrendingArticles } from '@service';
 import { getUser } from '@actions';
 
-import Content from './Content';
 import Search from './Search';
+import ArticlesList from './ArticlesList';
 
 import type { ServerComponent } from '@types';
 
@@ -27,9 +26,10 @@ const Leftbar: ServerComponent = async () => {
           </span>
           <AiOutlineRise />
         </div>
-        <ServerGenerator data={data.data} userRole={user?.role?.toLowerCase()}>
-          <Content />
-        </ServerGenerator>
+        <ArticlesList
+          initialData={data.data}
+          userRole={user?.role?.toLowerCase() as any}
+        />
       </div>
     </div>
   );

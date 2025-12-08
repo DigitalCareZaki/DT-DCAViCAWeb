@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,10 +8,10 @@ import { imageExtension } from '@constants';
 
 import DeleteArticle from './DeleteArticle';
 
-import type { ServerComponentProps } from '@types';
+import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
 
-const Content: ServerComponentProps<Props> = async ({
+const Content: ClientComponentProps<Props> = ({
   uri,
   title,
   content,
