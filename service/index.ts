@@ -149,6 +149,7 @@ export { default as updateMeasurementStatus } from './measurements/updateMeasure
 // medication
 export { default as getPatientMedications } from './medications/getPatientMedications';
 export { default as addPatientMedication } from './medications/addPatientMedication';
+export { default as exportPatientMedications } from './medications/exportPatientMedications';
 // patient reading (alert)
 export { default as getPatientReadingRange } from './readingRange/getPatientReadingRange';
 export { default as createPatientReadingRange } from './readingRange/createPatientReadingRange';

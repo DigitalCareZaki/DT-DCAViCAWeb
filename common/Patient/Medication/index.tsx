@@ -32,7 +32,7 @@ const Medication: FC<Props> = ({
   const [searchLoading, setSearchLoading] = useState(false);
   const [data, setData] = useState<PatientMedicationProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(10000);
   const [searchTerm, setSearchTerm] = useState('');
   const [pagination, setPagination] = useState({
     totalItems: 0,
@@ -95,8 +95,9 @@ const Medication: FC<Props> = ({
       data={data}
       onSearch={handleSearch}
       searchLoading={searchLoading}
+      patientId={patient}
     />
-  ), [hideCreateMedicationBtn, data, handleSearch, searchLoading]);
+  ), [hideCreateMedicationBtn, data, handleSearch, searchLoading, patient]);
 
   // Memoize the table and pagination to prevent re-renders during search
   const tableComponent = useMemo(() => (

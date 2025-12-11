@@ -30,8 +30,16 @@ export default async function fetchWrapper(
 
   requestHeaders.set('Authorization', token || '');
 
+  // Merge custom headers from init if provided
+  if (init?.headers) {
+    const customHeaders = new Headers(init.headers);
+    customHeaders.forEach((value, key) => {
+      requestHeaders.set(key, value);
+    });
+  }
+
   return fetch(`${BASE_URL}${input}`, {
-    headers: requestHeaders,
     ...init,
+    headers: requestHeaders,
   });
 }

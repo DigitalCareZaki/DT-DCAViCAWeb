@@ -11,6 +11,7 @@ import {
   searchNurse as searchNurseService,
   getPatientMeasurements as getPatientMeasurementsService,
   getPatientMedications as getPatientMedicationsService,
+  exportPatientMedications as exportPatientMedicationsService,
   getUser as getUserService,
   getCompliancePerPill as getCompliancePerPillService,
   getPasswordLists,
@@ -73,11 +74,14 @@ export const getPatientMeasurements = async (
 ) => getPatientMeasurementsService(id, type, page, pageSize);
 
 export const getPatientMedications = async (
-  id: string, 
-  search?: string, 
-  page?: number, 
+  id: string,
+  search?: string,
+  page?: number,
   perPage?: number
 ) => getPatientMedicationsService(id, search, page, perPage);
+
+export const exportPatientMedications = async (id: string) =>
+  exportPatientMedicationsService(id);
 
 export const getPatientCompilancePerPill = async (patientId: string) =>
   getCompliancePerPillService(patientId);

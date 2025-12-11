@@ -9,6 +9,7 @@ import {
   setPatientMedicationListingReduer,
 } from '@slice';
 import { InputBasic, ButtonPrimary, ExportButton } from '@common';
+import { exportPatientMedications } from '@actions';
 
 import type { ClientComponentProps, PatientMedicationProps } from '@types';
 
@@ -17,7 +18,8 @@ const MedicationHeader: ClientComponentProps<{
   data: PatientMedicationProps[];
   onSearch?: (searchValue: string) => void;
   searchLoading?: boolean;
-}> = ({ hideCreateMedicationBtn, data, onSearch, searchLoading }) => {
+  patientId?: string;
+}> = ({ hideCreateMedicationBtn, data, onSearch, searchLoading, patientId }) => {
   const dispatch = useDispatch();
   const params = useSearchParams();
 
@@ -31,6 +33,13 @@ const MedicationHeader: ClientComponentProps<{
   const timeoutRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
+  const [exportData, setExportData] = useState<any[]>([]);
+  const [exportLoading, setExportLoading] = useState(false);
+
+  // Reset export data when patient changes
+  useEffect(() => {
+    setExportData([]);
+  }, [patientId]);
 
   // Preserve focus during search operations
   useEffect(() => {
@@ -112,6 +121,40 @@ const MedicationHeader: ClientComponentProps<{
     }, 0);
   };
 
+  // Handle export with API call - fetch data when export button is hovered
+  const handleExportHover = useCallback(async () => {
+    if (!patientId || exportData.length > 0) return; // Only fetch once if data already exists
+
+    try {
+      setExportLoading(true);
+      const res = await exportPatientMedications(patientId);
+
+      if (res.success && res.data) {
+        const formattedData = res.data.map((el: PatientMedicationProps) => ({
+          ...el,
+          start_date: new Date(el.start_date).toDateString(),
+          end_date: new Date(el.end_date).toDateString(),
+          time: Array.isArray(el.time) ? el.time.join(', ') : el.time,
+          doctor: `${el.doctor.user.first_name} ${el.doctor.user.last_name}`,
+        }));
+        setExportData(formattedData);
+      }
+    } catch (error) {
+      console.error('Error exporting medications:', error);
+      // Fallback to current data if API fails
+      const formattedData = data.map((el) => ({
+        ...el,
+        start_date: new Date(el.start_date).toDateString(),
+        end_date: new Date(el.end_date).toDateString(),
+        time: Array.isArray(el.time) ? el.time.join(', ') : el.time,
+        doctor: `${el.doctor.user.first_name} ${el.doctor.user.last_name}`,
+      }));
+      setExportData(formattedData);
+    } finally {
+      setExportLoading(false);
+    }
+  }, [patientId, data, exportData.length]);
+
   // Memoize the input component to prevent re-renders that cause focus loss
   const searchInput = useMemo(() => (
     <InputBasic
@@ -135,50 +178,58 @@ const MedicationHeader: ClientComponentProps<{
         <div className="flex w-60">
           {searchInput}
         </div>
-        <ExportButton
-          data={data.map((el) => ({
-            ...el,
-            start_date: new Date(el.start_date).toDateString(),
-            end_date: new Date(el.end_date).toDateString(),
-            time: Array.isArray(el.time) ? el.time.join(', ') : el.time,
-            doctor: `${el.doctor.user.first_name} ${el.doctor.user.last_name}`,
-          }))}
-          headers={[
-            {
-              label: 'Name',
-              key: 'name',
-            },
-            {
-              label: 'Start',
-              key: 'start_date',
-            },
-            {
-              label: 'End',
-              key: 'end_date',
-            },
-            {
-              label: 'Time',
-              key: 'time',
-            },
-            {
-              label: 'Dosage',
-              key: 'dosage',
-            },
-            {
-              label: 'Frequency',
-              key: 'frequency',
-            },
-            {
-              label: 'Unit',
-              key: 'unit',
-            },
-            {
-              label: 'Doctor',
-              key: 'doctor',
-            },
-          ]}
-          filename="Medication Data"
-        />
+        <div onMouseEnter={handleExportHover}>
+          <ExportButton
+            data={exportData.length > 0 ? exportData : data.map((el) => ({
+              ...el,
+              start_date: new Date(el.start_date).toDateString(),
+              end_date: new Date(el.end_date).toDateString(),
+              time: Array.isArray(el.time) ? el.time.join(', ') : el.time,
+              doctor: `${el.doctor.user.first_name} ${el.doctor.user.last_name}`,
+              created_at: el.created_at.toLocaleString(),
+            }))}
+            headers={[
+              {
+                label: 'Name',
+                key: 'name',
+              },
+              {
+                label: 'Start',
+                key: 'start_date',
+              },
+              {
+                label: 'End',
+                key: 'end_date',
+              },
+              {
+                label: 'Time',
+                key: 'time',
+              },
+              {
+                label: 'Frequency',
+                key: 'frequency',
+              },
+              {
+                label: 'Dosage',
+                key: 'dosage',
+              },
+              {
+                label: 'Unit',
+                key: 'unit',
+              },
+              {
+                label: 'Doctor',
+                key: 'doctor',
+              },
+              {
+                label: 'Created At',
+                key: 'created_at',
+              }
+
+            ]}
+            filename="Medication Data"
+          />
+        </div>
         {!hideCreateMedicationBtn && (
           <div className="w-36">
             <ButtonPrimary
