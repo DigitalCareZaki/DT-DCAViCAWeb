@@ -75,7 +75,14 @@ const Form: FC<FormProps> = ({ inline = false }) => {
           inputWrapperClassName="bg-gray-100"
           inputClassName="bg-gray-100"
           icon="SiNamecheap"
-          hookProps={register('subject')}
+          hookProps={{
+            ...register('subject'),
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+              register('subject').onChange(e);
+              // Sync subject to Redux state to prevent clearing when attachments are updated
+              dispatch(composeEmailReducer({ subject: e.target.value }));
+            },
+          }}
           error={!!errors.subject?.message?.length}
           errorMessage={errors.subject?.message ?? '&'}
         />

@@ -75,6 +75,8 @@ const useFormHook = (): UseFormProps => {
 
   const handleSelectUser = (value: string) => {
     setValue('send_to', value);
+    // Sync selected user to Redux state
+    dispatch(composeEmailReducer({ to: value }));
     setForceRender((prev) => prev + 1);
   };
 
@@ -188,13 +190,33 @@ const useFormHook = (): UseFormProps => {
 
   const handleChangeEditorValue = (value: string) => {
     setValue('content', value);
+    // Sync content to Redux state
+    dispatch(composeEmailReducer({ content: value }));
   };
 
   useEffect(() => {
-    setValue('send_to', composeMessageState.to || '');
-    setValue('subject', composeMessageState.subject || '');
-    setValue('content', composeMessageState.content || '');
-  }, [composeMessageState, setValue]);
+    // Sync from Redux to form, but only if Redux has non-empty values
+    // This prevents clearing form fields when attachments are updated
+    // The reducer fix ensures existing values are preserved, so we can safely sync
+    if (composeMessageState.to) {
+      const currentTo = getValues('send_to');
+      if (currentTo !== composeMessageState.to) {
+        setValue('send_to', composeMessageState.to);
+      }
+    }
+    if (composeMessageState.subject) {
+      const currentSubject = getValues('subject');
+      if (currentSubject !== composeMessageState.subject) {
+        setValue('subject', composeMessageState.subject);
+      }
+    }
+    if (composeMessageState.content) {
+      const currentContent = getValues('content');
+      if (currentContent !== composeMessageState.content) {
+        setValue('content', composeMessageState.content);
+      }
+    }
+  }, [composeMessageState.to, composeMessageState.subject, composeMessageState.content, setValue, getValues]);
 
   return [
     register,

@@ -51,11 +51,11 @@ export const toggleComposeMessage: ReducerFuncSecondary = (state) => {
 
 export const composeEmail: ComposeEmailFunc = (state, payload) => {
   state.composeMessage = {
-    to: payload.payload?.to ?? '',
-    subject: payload.payload?.subject ?? '',
-    content: payload.payload?.content ?? '',
-    attachments: payload.payload?.attachments ?? [],
-    parent_id: payload.payload?.parent_id ?? '',
+    to: payload.payload?.to ?? state.composeMessage.to ?? '',
+    subject: payload.payload?.subject ?? state.composeMessage.subject ?? '',
+    content: payload.payload?.content ?? state.composeMessage.content ?? '',
+    attachments: payload.payload?.attachments ?? state.composeMessage.attachments ?? [],
+    parent_id: payload.payload?.parent_id ?? state.composeMessage.parent_id ?? '',
   };
 };
 
