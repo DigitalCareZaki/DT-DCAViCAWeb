@@ -11,6 +11,9 @@ import TableRender from './Table';
 import type { ClientComponentProps } from '@types';
 import type { TableProps } from './types';
 import { getAllPatientsReports, getPatientEMRRecords } from '@service';
+import { InputBasic } from '@common';
+import { debounce } from '@init-globals';
+import { type ChangeEvent } from 'react';
 
 const Table: ClientComponentProps<any> = ({ records }: any) => {
   const dispatch = useDispatch();
@@ -19,9 +22,9 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
   const [loading, setLoading] = useState(false); // ✅ loader state
 
 
-  const fetchReports = async (pageNumber: number) => {
+  const fetchReports = async (pageNumber: number, searchQuery?: string) => {
     setLoading(true); // ✅ start loader
-    const response = await getAllPatientsReports(pageNumber, 10);
+    const response = await getAllPatientsReports(pageNumber, 10, searchQuery !== undefined ? searchQuery : search);
 
     const filterData = Array.isArray(response.data.data)
       ? response.data.data.filter((e: any) => e.type && e.type.toUpperCase() === "RECORD")
@@ -44,6 +47,15 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
     fetchReports(page);
   }, [page]);
 
+  const [search, setSearch] = useState('');
+
+  const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>[]) => {
+    const value = e[0].target.value;
+    setSearch(value);
+    setPage(1); // Reset to first page on search
+    fetchReports(1, value);
+  }, 1000);
+
   const handleNext = () => {
     if (hasNextPage) setPage(prev => prev + 1);
   };
@@ -60,6 +72,16 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
 
   return (
     <div className="h-full w-full">
+      <div className="!mb-6 !w-96 sm:w-96">
+        <InputBasic
+          label=""
+          placeholder="Search for the records"
+          icon="IoSearch"
+          title="Search"
+          // loading={loading}
+          onChange={(e: any) => handleSearch(e)}
+        />
+      </div>
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
           <div className="loader border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
