@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ExportButton, ClientTable } from '@common';
+import { useEffect, useState, ChangeEvent } from 'react';
+import { ExportButton, ClientTable, InputBasic } from '@common';
 import { SuperAdminPatientListProps } from '@types';
 import RenderTable from './RenderTable';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import { getUserTypeHeaders } from '@actions';
 import { getAdminPatient } from '@service';
+import { debounce } from '@init-globals';
 
 
 const Table = () => {
@@ -23,11 +24,12 @@ const Table = () => {
   });
   const [loading, setLoading] = useState(true);
   const [userType, setUserType] = useState('doctor');
+  const [search, setSearch] = useState('');
 
-  const fetchData = async (page: number = 1) => {
+  const fetchData = async (page: number = 1, searchQuery?: string) => {
     setLoading(true);
     const userTypeHeader = await getUserTypeHeaders();
-    const res = await getAdminPatient(page, 10);
+    const res = await getAdminPatient(page, 10, searchQuery !== undefined ? searchQuery : search);
     if (res.success) {
       setUserType(userTypeHeader?.toLowerCase() ?? 'doctor');
       setData(res?.data);
@@ -42,36 +44,56 @@ const Table = () => {
   }, []);
 
   const handlePageChange = (page: number) => {
+    setPagination((prev) => ({ ...prev, currentPage: page }));
     fetchData(page);
   };
+
+  const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>[]) => {
+    const value = e[0].target.value;
+    setSearch(value);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    fetchData(1, value);
+  }, 1000);
 
 
 
 
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
-      <ExportButton
-        data={data.map((el) => ({
-          patient_name: el?.first_name + ' ' + el?.middle_name + ' ' + el?.last_name,
-          patient_email: el?.email,
-          emr: el.patient.emr,
-          assigned_doctor: `${el.patient.first_assigned_doctor?.user.first_name ? el.patient.first_assigned_doctor?.user.first_name : ""} ${el.patient.first_assigned_doctor?.user.middle_name ? el.patient.first_assigned_doctor?.user.middle_name : ""} ${el.patient.first_assigned_doctor?.user.last_name ? el.patient.first_assigned_doctor?.user.last_name : ""}`,
-          department: el.patient?.doctors?.[0]?.departments?.[0]?.title ?? '',
-          height: el.patient.height,
-          weight: el.patient.weight,
-          ...el,
-        }))}
-        headers={[
-          { label: 'Patient Name', key: 'patient_name' },
-          { label: 'Patient Email', key: 'patient_email' },
-          { label: 'EMR', key: 'emr' },
-          { label: 'Assigned Doctor', key: 'assigned_doctor' },
-          { label: 'Department', key: 'department' },
-          { label: 'Height (in meters)', key: 'height' },
-          { label: 'Weight (in kg)', key: 'weight' },
-        ]}
-        filename="Patient List Data"
-      />
+      <div className="flex w-full flex-col items-center justify-end gap-4 sm:flex-row">
+        <div className="w-full sm:w-96">
+          <InputBasic
+            label=""
+            placeholder="Search for the records"
+            icon="IoSearch"
+            title="Search"
+            // loading={loading}
+            onChange={(e: any) => handleSearch(e)}
+          />
+        </div>
+        <ExportButton
+          data={data.map((el) => ({
+            patient_name: el?.first_name + ' ' + el?.middle_name + ' ' + el?.last_name,
+            patient_email: el?.email,
+            emr: el.patient.emr,
+            assigned_doctor: `${el.patient.first_assigned_doctor?.user.first_name ? el.patient.first_assigned_doctor?.user.first_name : ""} ${el.patient.first_assigned_doctor?.user.middle_name ? el.patient.first_assigned_doctor?.user.middle_name : ""} ${el.patient.first_assigned_doctor?.user.last_name ? el.patient.first_assigned_doctor?.user.last_name : ""}`,
+            department: el.patient?.doctors?.[0]?.departments?.[0]?.title ?? '',
+            height: el.patient.height,
+            weight: el.patient.weight,
+            ...el,
+          }))}
+          headers={[
+            { label: 'Patient Name', key: 'patient_name' },
+            { label: 'Patient Email', key: 'patient_email' },
+            { label: 'EMR', key: 'emr' },
+            { label: 'Assigned Doctor', key: 'assigned_doctor' },
+            { label: 'Department', key: 'department' },
+            { label: 'Height (in meters)', key: 'height' },
+            { label: 'Weight (in kg)', key: 'weight' },
+          ]}
+          filename="Patient List Data"
+        />
+      </div>
 
       <div className="relative w-full overflow-x-auto pb-12 shadow-md sm:rounded-lg">
         <ClientTable
@@ -91,9 +113,9 @@ const Table = () => {
           {pagination.hasPrevPage && (
             <button
               onClick={() => handlePageChange(pagination.prevPage!)}
-              className="p-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition"
+              className="p-2 rounded-full border border-gray-300"
             >
-              <MdArrowBackIos size={18} />
+              <MdArrowBackIos size={18} color="black" />
             </button>
           )}
 
@@ -104,9 +126,9 @@ const Table = () => {
           {pagination.hasNextPage && (
             <button
               onClick={() => handlePageChange(pagination.nextPage!)}
-              className="p-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition"
+              className="p-2 rounded-full border border-gray-300"
             >
-              <MdArrowForwardIos size={18} />
+              <MdArrowForwardIos size={18} color="black" />
             </button>
           )}
         </div>

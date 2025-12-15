@@ -4,7 +4,7 @@ import fetch from '@fetch';
 
 import { SuperAdminPatientListProps } from '@types';
 
-async function getPatient(page = 1, limit = 10): Promise<{
+async function getPatient(page = 1, limit = 10, search?: string): Promise<{
   data: SuperAdminPatientListProps[];
   pagination: {
     totalItems: number;
@@ -18,7 +18,13 @@ async function getPatient(page = 1, limit = 10): Promise<{
   };
   success: boolean;
 }> {
-  const res = await fetch(`/api/v1/web/admin/patient?page=${page}&limit=${limit}`);
+  let url = `/api/v1/web/admin/patient?page=${page}&limit=${limit}`;
+
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const res = await fetch(url);
 
   const data = await res.json();
 
