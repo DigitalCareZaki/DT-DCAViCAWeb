@@ -46,6 +46,7 @@ const Form: ClientComponent = () => {
     serchingResults,
     currentMedicineName,
     handleSetCurrentMedicineName,
+    watch,
   ] = useForm(params?.get('patient')?.toString() ?? '', handleHideForm);
 
   // Get today's date in YYYY-MM-DD format for min attribute
@@ -56,6 +57,18 @@ const Form: ClientComponent = () => {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }, []);
+
+  const startDate = watch('start');
+
+  const minEndDate = useMemo(() => {
+    if (startDate) {
+      const d = new Date(startDate);
+      d.setUTCDate(d.getUTCDate() + 1);
+      return d.toISOString().split('T')[0];
+    }
+    return today;
+  }, [startDate, today]);
+
 
 
   return (
@@ -132,7 +145,8 @@ const Form: ClientComponent = () => {
                       title="End date"
                       defaultBorder
                       type="date"
-                      min={today}
+
+                      min={minEndDate}
                       hookProps={register('end')}
                       error={!!errors.end?.message?.length}
                       errorMessage={errors.end?.message}

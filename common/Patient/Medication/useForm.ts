@@ -56,6 +56,7 @@ const useFormHook = (
     formState: { errors },
     setValue,
     clearErrors,
+    reset,
   } = useForm<CreateMedicationProps>({
     resolver: vestResolver(validator),
   });
@@ -158,6 +159,12 @@ const useFormHook = (
         message: 'Medication added successfully',
         show: true,
       });
+
+      reset();
+      setSelectors({
+        unit: undefined,
+        frequency: undefined,
+      });
     } catch (err) {
     } finally {
       setLoading(false);
@@ -177,6 +184,7 @@ const useFormHook = (
     _searchingResults,
     watch('name'),
     handleSetCurrentMedicineName,
+    watch,
   ];
 };
 
