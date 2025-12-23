@@ -27,10 +27,10 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
     <div className="flex w-full flex-col items-end gap-4 pb-28">
       <div className="w-fit">
         <ExportButton
-          data={data.map((el) => ({
-            full_name: `${el.first_name} ${el.last_name}`,
-            branch: el.associated_branches[0].name,
-            department: el.doctor?.departments[0].title || el.patient?.doctors[0].departments[0].title,
+          data={data?.map((el) => ({
+            full_name: `${el?.first_name} ${el?.last_name}`,
+            branch: el?.associated_branches[0]?.name,
+            department: el?.doctor?.departments[0]?.title || el.patient?.doctors[0]?.departments[0]?.title,
             ...el,
           }))}
           headers={[
