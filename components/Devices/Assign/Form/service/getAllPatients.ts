@@ -13,7 +13,7 @@ import type { PatientListingData } from '@types-services';
 
 // services for each user returns a different response
 // make a uniform response for all users
-const getAllPatients = async (): Promise<AllPatientsRes> => {
+const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
   const user = await getUser();
 
   if (!user) {
@@ -26,7 +26,7 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
   if (userType === 'SUPERADMIN') {
     res = await getOrganizationPatients();
   } else if (userType === 'ADMIN') {
-    res = await getAdminPatient();
+    res = await getAdminPatient(1, 10, search);
   } else if (userType === 'DOCTOR') {
     res = await getPatientList(userType.toLowerCase());
   } else if (userType === 'NURSE') {
@@ -52,10 +52,8 @@ const getAllPatients = async (): Promise<AllPatientsRes> => {
         id: el.patient.id,
         first_name: el.patient.first_name,
         middle_name: el.patient.middle_name,
-        last_name: el.patient.first_name,
+        last_name: el.patient.last_name,
         email: el.patient.email,
-
-
       })),
     };
   } else if (userType === 'ADMIN') {
