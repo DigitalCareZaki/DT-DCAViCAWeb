@@ -6,18 +6,20 @@ import { InputBasic, ButtonPrimary } from '@common';
 import type { ClientComponentProps } from '@types';
 import type { TopbarProps } from './types';
 
-const Topbar: ClientComponentProps<TopbarProps> = ({ userType }: any) => {
+const Topbar: ClientComponentProps<TopbarProps> = ({ userType, onSearch, loading }) => {
   return (
     <div className="flex w-full items-center justify-between">
       <span className="text-md font-semibold text-gray-600">Appointments</span>
       <div className="flex items-center gap-4">
         <div className="w-60">
-          {/* <InputBasic
+          <InputBasic
             borderTheme
             icon="IoSearch"
             placeholder="Search appointments"
             name="search"
-          /> */}
+            onChange={onSearch}
+            loading={loading}
+          />
         </div>
         {userType?.toLowerCase() === 'patient' && (
           <div className="w-12">

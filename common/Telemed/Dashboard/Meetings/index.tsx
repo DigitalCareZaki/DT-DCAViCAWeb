@@ -8,6 +8,7 @@ import { getRequestedAppointments, getUser } from '@service';
 import type { UserRole } from "@types";
 import { BiLoaderAlt } from "react-icons/bi";
 import PatientLoader from "../../../Loader/PatientLoader";
+import { debounce, getName } from "@init-globals";
 
 async function fetchAppointments() {
   const appointmentsRes = await getRequestedAppointments();
@@ -24,6 +25,8 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -39,6 +42,35 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
     loadData();
   }, []);
 
+  const handleSearch = debounce((e: any) => {
+    setSearchTerm(e[0].target.value);
+    setSearchLoading(false);
+  }, 500);
+
+  const onSearch = (e: any) => {
+    setSearchLoading(true);
+    handleSearch(e);
+  };
+
+  const filteredAppointments = appointments.filter((appt) => {
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+
+    const appointment = appt.appointment;
+
+    if (!appointment) return false;
+
+    const organizerName = appointment.organizer ? getName(appointment.organizer).toLowerCase() : '';
+
+    return (
+      appointment.title?.toLowerCase().includes(term) ||
+      appointment.description?.toLowerCase().includes(term) ||
+      appointment.about?.toLowerCase().includes(term) ||
+      appointment.type?.toLowerCase().includes(term) ||
+      organizerName.includes(term)
+    );
+  });
+
   if (loading) {
     return <PatientLoader />;
   }
@@ -46,9 +78,13 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
   return (
     <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4 relative">
       {/* <PrimaryHeader user={user as any} /> */}
-      <Topbar userType={userType as UserRole} />
+      <Topbar
+        userType={userType as UserRole}
+        onSearch={onSearch}
+        loading={searchLoading}
+      />
       <div className="grid w-full grid-cols-4 flex-wrap gap-4 1000:grid-cols-3 1300:grid-cols-4 1600:grid-cols-5">
-        <ClientGenerator data={appointments} dynamicWidth>
+        <ClientGenerator data={filteredAppointments} dynamicWidth>
           <Patient />
         </ClientGenerator>
       </div>
