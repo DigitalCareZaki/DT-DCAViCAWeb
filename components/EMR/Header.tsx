@@ -5,9 +5,8 @@ import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 
 import { debounce } from '@init-globals';
-import { getPatientEMRRecords } from '@service';
 import { InputBasic, ButtonPrimary } from '@common';
-import { setEmrRecordsSlice } from '@slice';
+import { setSearchTermSlice } from '@slice';
 import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
@@ -19,29 +18,17 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
 
-
   const handleSearch = debounce(
-    async (event: ChangeEvent<HTMLInputElement>[]) => {
+    (event: ChangeEvent<HTMLInputElement>[]) => {
       const value = event[0].target.value;
-      try {
-        setLoading(true);
-        // const res = await getPatientEMRRecords(patient_id ?? '', value);
-
-        // if (!res.success) return;
-
-        // dispatch(setEmrRecordsSlice({ records: res.data }));
-      } catch (err: any) {
-        console.log(err?.message);
-      } finally {
-        setLoading(false);
-      }
+      dispatch(setSearchTermSlice({ searchTerm: value }));
     },
-    1000
+    500
   );
 
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-6">
-      {/* <div className="mb-4 w-full sm:mb-0 sm:w-auto">
+      <div className="mb-4 w-full sm:mb-0 sm:w-auto">
         <InputBasic
           label=""
           placeholder="Search for the records"
@@ -50,7 +37,7 @@ const Header: ClientComponentProps<{ patient_id?: string }> = ({
           loading={loading}
           onChange={handleSearch}
         />
-      </div> */}
+      </div>
       <div className="flex w-full flex-wrap gap-4 sm:w-auto">
         {user.role === 'DOCTOR' && (
           <>

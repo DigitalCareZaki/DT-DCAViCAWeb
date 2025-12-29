@@ -692,6 +692,8 @@ export interface PinCodeRecord {
 
 export interface EMRRecordsProps {
   title: string;
+  description: string;
+  type: string;
   uri: string;
   created: string;
   family_history: string;

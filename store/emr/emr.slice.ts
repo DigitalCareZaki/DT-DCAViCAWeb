@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import initialState from './emr.init';
-import { setEmrRecords, deleteEmrRecord } from './emr.reducer';
+import { setEmrRecords, deleteEmrRecord, setSearchTerm } from './emr.reducer';
 
 const emrSlice = createSlice({
   name: 'emr',
@@ -9,12 +9,14 @@ const emrSlice = createSlice({
   reducers: {
     setEmrRecords,
     deleteEmrRecord,
+    setSearchTerm,
   },
 });
 
 export const {
   setEmrRecords: setEmrRecordsSlice,
   deleteEmrRecord: deleteEmrRecordSlice,
+  setSearchTerm: setSearchTermSlice,
 } = emrSlice.actions;
 
 export default emrSlice.reducer;

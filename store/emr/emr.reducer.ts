@@ -16,3 +16,10 @@ export const deleteEmrRecord = (
     (record: any) => record._id !== action.payload.id && record.id !== action.payload.id
   );
 };
+
+export const setSearchTerm = (
+  state: StoreEMRState,
+  action: PayloadAction<{ searchTerm: string }>
+) => {
+  state.searchTerm = action.payload.searchTerm;
+};

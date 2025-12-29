@@ -12,7 +12,16 @@ const Table: ClientComponent = () => {
 
   const pathname = usePathname()
 
-  const { records } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
+  const { records, searchTerm } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
+
+  const filteredRecords = records.filter((record) => {
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+    const titleMatch = record.title?.toLowerCase().includes(term);
+    const descMatch = record.description?.toLowerCase().includes(term);
+    const typeMatch = record.type?.toLowerCase().includes(term);
+    return titleMatch || descMatch || typeMatch;
+  });
 
   return (
     <div className="relative overflow-x-auto pb-12 shadow-md sm:rounded-lg">
@@ -26,7 +35,7 @@ const Table: ClientComponent = () => {
           'Actions',
         ]}
       >
-        <ClientGenerator data={records}>
+        <ClientGenerator data={filteredRecords}>
           <Record />
         </ClientGenerator>
       </ClientTable>
