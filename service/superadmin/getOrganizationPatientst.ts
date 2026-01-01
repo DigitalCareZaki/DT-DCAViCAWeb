@@ -5,9 +5,16 @@ import type { GetOrganizationPatients } from '../types';
 
 const getOrganizationPatients = async (
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
+  search?: string
 ): Promise<GetOrganizationPatients> => {
-  const res = await fetch(`/api/v1/web/organization/web-patients?page=${page}&limit=${limit}`);
+  let url = `/api/v1/web/organization/web-patients?page=${page}&limit=${limit}`;
+
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const res = await fetch(url);
 
   const data = await res.json();
 

@@ -53,18 +53,10 @@ const useFormHook = (tabletId: string): UseFormProps => {
 
     try {
       setSearching(true);
-      const res = await getAllPatients();
+      const res = await getAllPatients(value);
       if (!res.success) return;
-      if (value) {
-        const filteredData = res.data.filter((patient) =>
-          patient.first_name?.toLowerCase().includes(value.toLowerCase()) ||
-          patient.last_name?.toLowerCase().includes(value.toLowerCase()) ||
-          patient.email?.toLowerCase().includes(value.toLowerCase())
-        );
-        setPatients(filteredData);
-      } else {
-        setPatients(res.data);
-      }
+
+      setPatients(res.data);
     } catch (err: any) {
       console.log(err?.message);
     } finally {

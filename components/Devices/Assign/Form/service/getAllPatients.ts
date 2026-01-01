@@ -24,7 +24,7 @@ const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
   let res: any = undefined;
 
   if (userType === 'SUPERADMIN') {
-    res = await getOrganizationPatients();
+    res = await getOrganizationPatients(1, 10, search);
   } else if (userType === 'ADMIN') {
     res = await getAdminPatient(1, 10, search);
   } else if (userType === 'DOCTOR') {
@@ -44,7 +44,13 @@ const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
     userType === 'DOCTOR' ||
     userType === 'NURSE'
   ) {
-    const patients: PatientListingData[] = res.data.data; // yaha doctor sa assign karty waqt backend sa payload change howa han 
+    let patients: PatientListingData[] = [];
+
+    if (userType === 'SUPERADMIN') {
+      patients = res.data;
+    } else {
+      patients = res.data.data;
+    }
 
     return {
       success: true,
