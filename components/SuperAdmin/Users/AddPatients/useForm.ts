@@ -227,6 +227,8 @@ const useFormHook = (): useFormProps => {
         nurse_id: selectors.nurse.id, // Use selector id for proper mapping
       };
 
+      console.log('payload console <<>>>>>>', payload);
+
       // Simulate data preparation step
       await new Promise(resolve => setTimeout(resolve, 300));
       setCurrentStep('submitting');
@@ -247,7 +249,7 @@ const useFormHook = (): useFormProps => {
 
       // Show success message and wait before redirecting
       handleShowModal({
-        message: 'Patient added successfully! Redirecting to users page...',
+        message: 'Patient added successfully',
         type: 'SUCCESS',
         show: true,
       });
