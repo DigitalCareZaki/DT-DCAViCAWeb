@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { updateDoctorProfile, uploadFile } from '@service';
 import { useUser } from '@selectors';
-import { showModalReducer } from '@slice';
+import { showModalReducer, setUserReducer } from '@slice';
 
 import { validator } from './validator';
 
@@ -95,6 +95,14 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
       );
 
       if (!res?.success) throw new Error(res?.message);
+      dispatch(
+        setUserReducer({
+          user: {
+            ...user,
+            ...payload,
+          } as any,
+        })
+      );
 
       dispatch(
         showModalReducer({
