@@ -1,6 +1,6 @@
 'use server';
 
-import { usePath } from '@hooks'; // Import custom hook to retrieve the current route info
+import usePath from '../../hooks/usePath'; // Import custom hook to retrieve the current route info
 import { PrimaryBreadCrumb } from '@common'; // Import the breadcrumb component
 
 import type { ServerComponent } from '@types'; // Import the type for the ServerComponent

@@ -5,7 +5,7 @@ import { InputBasic, ExportButton } from '@common';
 import type { ClientComponentProps } from '@types';
 import type { HeaderProps } from './types';
 
-const Header: ClientComponentProps<any> = ({ data }) => {
+const Header: ClientComponentProps<any> = ({ data, searchTerm, setSearchTerm }) => {
 
   console.log('data <<>>>><<<>>>', data);
 
@@ -22,17 +22,22 @@ const Header: ClientComponentProps<any> = ({ data }) => {
             placeholder="Name, email or ID"
             icon="IoSearch"
             borderTheme
+            value={searchTerm}
+            onChange={(e: any) => setSearchTerm(e.target.value)}
           />
           <ExportButton
-            data={data?.data?.map((el: any) => ({
-              patient_name: `${el?.patient?.first_name} ${el?.patient?.middle_name || ''} ${el?.patient?.last_name}`,
-              patient_email: el?.patient?.email,
-              glucose: el?.measurements?.BLOODGLUCOSE?.status || '-',
-              blood_pressure: el?.measurements?.BLOODPRESSURE?.status || '-',
-              temperature: el?.measurements?.TEMPERATURE?.status || '-',
-              spo2: el?.measurements?.SPO2?.status || '-',
-              ecg: el?.measurements?.ECG?.status || '-',
-            }))}
+            data={data?.data?.map((el: any) => {
+              const patient = el?.patient;
+              return {
+                patient_name: patient ? `${patient.first_name || ''} ${patient.middle_name || ''} ${patient.last_name || ''}` : 'Unknown',
+                patient_email: patient?.email || 'N/A',
+                glucose: el?.measurements?.BLOODGLUCOSE?.status || '-',
+                blood_pressure: el?.measurements?.BLOODPRESSURE?.status || '-',
+                temperature: el?.measurements?.TEMPERATURE?.status || '-',
+                spo2: el?.measurements?.SPO2?.status || '-',
+                ecg: el?.measurements?.ECG?.status || '-',
+              };
+            })}
             headers={[
               {
                 label: 'Patient name',

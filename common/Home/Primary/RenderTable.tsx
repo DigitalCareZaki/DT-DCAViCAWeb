@@ -18,10 +18,10 @@ const statusColors: any = {
 
 const measurementKeys = ["BLOODGLUCOSE", "BLOODPRESSURE", "TEMPERATURE", "SPO2", "ECG"];
 
-const RenderTable: ServerComponentProps<any> = async ({
+const RenderTable = ({
   data,
   userType,
-}) => {
+}: any) => {
   return (
     <>
       {data?.data?.map((el: any, i: any) => (
@@ -33,16 +33,20 @@ const RenderTable: ServerComponentProps<any> = async ({
             scope="row"
             className="whitespace-nowrap px-3 py-2 text-xs font-medium text-gray-900 sm:text-sm md:px-6 md:py-4 md:text-base lg:text-lg xl:text-xl"
           >
-            <Link
-              passHref
-              href={`/${userType}/patient/profile?patient=${el?.patient?.id}`}
-              className="hover:underline hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
-            >
-              {`${el?.patient?.first_name} ${el?.patient?.middle_name || ''} ${el?.patient?.last_name}`}
-            </Link>
+            {el?.patient ? (
+              <Link
+                passHref
+                href={`/${userType}/patient/profile?patient=${el.patient.id}`}
+                className="hover:underline hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
+              >
+                {`${el.patient.first_name || ''} ${el.patient.middle_name || ''} ${el.patient.last_name || ''}`}
+              </Link>
+            ) : (
+              'Unknown Patient'
+            )}
           </th>
           <td className="px-3 py-2 text-xs sm:text-sm md:px-6 md:py-4 md:text-base lg:text-lg xl:text-xl">
-            {el?.patient?.email}
+            {el?.patient?.email || 'No Email'}
           </td>
           {measurementKeys?.map((key) => {
             const measurement = el?.measurements?.[key];

@@ -2,37 +2,17 @@
 
 import type { ClientComponentProps } from '@types';
 import { ClientTable } from '@common';
-import { useEffect, useState } from 'react';
-import { getUserTypeHeaders, getPatientList } from '@actions';
-
+import { useState } from 'react';
 import RenderTable from './RenderTable';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 
-
-import type { ServerComponentProps } from '@types';
-import type { TableProps } from './types';
-
-const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagination }: any) => {
-  const [data, setData] = useState(initialData);
-  const [pagination, setPagination] = useState(initialPagination);
+const Table: ClientComponentProps<any> = ({ userType, data, pagination, fetchData, isLoading }: any) => {
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const limit = 10;
-
-  const fetchData = async (page: number) => {
-    setIsLoading(true);
-    const response = await getPatientList(userType, page, limit);
-    if (response.success) {
-      setData(response?.data);
-      setPagination(response?.data?.pagination);
-    }
-    setIsLoading(false);
-  };
 
   return (
     <div className="relative overflow-x-auto pb-8 shadow-md sm:rounded-lg">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 z-10">
           <div className="loader border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
         </div>
       )}
@@ -56,7 +36,7 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
       {pagination && (
         <div className="flex justify-center mt-4">
           <button
-            disabled={!pagination?.hasPrevPage}
+            disabled={!pagination?.hasPrevPage || isLoading}
             onClick={() => {
               fetchData(page - 1);
               setPage((prev) => prev - 1)
@@ -68,7 +48,7 @@ const Table: ClientComponentProps<any> = ({ userType, initialData, initialPagina
           </button>
           <span className="px-4 py-2 text-black">{`Page ${pagination.currentPage} of ${pagination.totalPages}`}</span>
           <button
-            disabled={!pagination?.hasNextPage}
+            disabled={!pagination?.hasNextPage || isLoading}
             onClick={() => {
               fetchData(page + 1);
               setPage((prev) => prev + 1)

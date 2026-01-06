@@ -1,8 +1,7 @@
 'use server';
 
-import Header from './Header';
-import Table from './Table';
 import Charts from './Charts';
+import PatientsSection from './PatientsSection';
 import { getUserTypeHeaders, getPatientList } from '@actions';
 
 import type { Props } from './types';
@@ -28,12 +27,11 @@ const HomePrimary: ServerComponentProps<Props> = async ({
       <Charts appointments={appointments} compliance={compliance} rag={rag} />
 
       {/* Header and Table Section */}
-      <div className="flex h-auto w-full flex-col gap-8 text-white">
-        <Header data={initialData?.data} />
-        <Table
-          userType={"doctor"}
-          initialData={initialData?.data} initialPagination={initialData?.data?.pagination} />
-      </div>
+      <PatientsSection
+        initialData={initialData?.data}
+        userType={userType?.toLowerCase()}
+        initialPagination={initialData?.data?.pagination}
+      />
     </div>
   );
 };
