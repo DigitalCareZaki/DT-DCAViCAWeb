@@ -37,30 +37,37 @@ const Header: ClientComponentProps<any> = ({ data }) => {
               {
                 label: 'Patient name',
                 key: 'patient_name',
+                width: '18%',
               },
               {
                 label: 'Patient email',
                 key: 'patient_email',
+                width: '27%',
               },
               {
                 label: 'Glucose',
                 key: 'glucose',
+                width: '11%',
               },
               {
                 label: 'Blood Pressure',
                 key: 'blood_pressure',
+                width: '11%',
               },
               {
                 label: 'Temperature',
                 key: 'temperature',
+                width: '11%',
               },
               {
                 label: 'SPO2',
                 key: 'spo2',
+                width: '11%',
               },
               {
                 label: 'ECG',
                 key: 'ecg',
+                width: '11%',
               },
             ]}
             filename="Patient List Data"

@@ -22,7 +22,13 @@ const PDFDocument = <T extends Record<string, any>>({
       <View style={styles.table}>
         <View style={[styles.tableRow, styles.tableHeader]}>
           {headers.map((header, index) => (
-            <Text key={index} style={styles.tableCell}>
+            <Text
+              key={index}
+              style={[
+                styles.tableCell,
+                header.width ? { width: header.width, flex: undefined } : {},
+              ]}
+            >
               {header.label}
             </Text>
           ))}
@@ -30,7 +36,13 @@ const PDFDocument = <T extends Record<string, any>>({
         {data.map((item, rowIndex) => (
           <View key={rowIndex} style={styles.tableRow}>
             {headers.map((header, cellIndex) => (
-              <Text key={cellIndex} style={styles.tableCell}>
+              <Text
+                key={cellIndex}
+                style={[
+                  styles.tableCell,
+                  header.width ? { width: header.width, flex: undefined } : {},
+                ]}
+              >
                 {item[header.key]}
               </Text>
             ))}
