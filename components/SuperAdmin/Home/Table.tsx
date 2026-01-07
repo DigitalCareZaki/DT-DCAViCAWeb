@@ -113,7 +113,7 @@ const Table = () => {
               onClick={() => handlePageChange(pagination.prevPage!)}
               className="p-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition"
             >
-              <MdArrowBackIos size={18} />
+              <MdArrowBackIos size={18} color="black" />
             </button>
           )}
 
@@ -126,7 +126,7 @@ const Table = () => {
               onClick={() => handlePageChange(pagination.nextPage!)}
               className="p-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition"
             >
-              <MdArrowForwardIos size={18} />
+              <MdArrowForwardIos size={18} color="black" />
             </button>
           )}
         </div>
