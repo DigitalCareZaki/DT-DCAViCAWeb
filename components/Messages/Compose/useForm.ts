@@ -47,11 +47,30 @@ const useFormHook = (): UseFormProps => {
   const handleShowSnackbar = (props: ModalState) =>
     dispatch(showModalReducer({ ...props }));
 
-  const closeComposeMessage = () => dispatch(toggleComposeMessageReducer());
+  const closeComposeMessage = () => {
+    dispatch(
+      composeEmailReducer({
+        to: '',
+        subject: '',
+        content: '',
+        parent_id: '',
+        attachments: [],
+      })
+    );
+    dispatch(toggleComposeMessageReducer());
+  };
 
   const closeComposeReply = () => {
     // Clear parent_id and close modal if open
-    dispatch(composeEmailReducer({ to: '', subject: '', parent_id: '' }));
+    dispatch(
+      composeEmailReducer({
+        to: '',
+        subject: '',
+        content: '',
+        parent_id: '',
+        attachments: [],
+      })
+    );
     dispatch(toggleComposeMessageReducer());
   };
 

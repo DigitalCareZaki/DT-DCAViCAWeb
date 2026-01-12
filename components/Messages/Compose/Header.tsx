@@ -15,7 +15,15 @@ const Header: ClientComponent = () => {
   const [user] = useUser();
 
   const closeModal = () => {
-    dispatch(composeEmailReducer({ to: '', subject: '' }));
+    dispatch(
+      composeEmailReducer({
+        to: '',
+        subject: '',
+        content: '',
+        parent_id: '',
+        attachments: [],
+      })
+    );
     dispatch(toggleComposeMessageReducer());
   };
 

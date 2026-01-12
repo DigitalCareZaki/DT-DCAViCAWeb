@@ -23,7 +23,15 @@ const Compose: FC<ComposeProps> = ({ inline = false }) => {
   } = useSelector<ReduxProps, StoreGlobalState>((state) => state.global);
 
   const handleCloseInline = () => {
-    dispatch(composeEmailReducer({ to: '', subject: '', parent_id: '' }));
+    dispatch(
+      composeEmailReducer({
+        to: '',
+        subject: '',
+        content: '',
+        parent_id: '',
+        attachments: [],
+      })
+    );
     dispatch(toggleComposeMessageReducer());
   };
 
