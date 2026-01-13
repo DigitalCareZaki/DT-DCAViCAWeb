@@ -62,9 +62,7 @@ const Form: ClientComponent = () => {
 
   const minEndDate = useMemo(() => {
     if (startDate) {
-      const d = new Date(startDate);
-      d.setUTCDate(d.getUTCDate() + 1);
-      return d.toISOString().split('T')[0];
+      return startDate;
     }
     return today;
   }, [startDate, today]);
