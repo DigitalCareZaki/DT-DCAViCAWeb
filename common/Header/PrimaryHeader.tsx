@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FaHome } from '@react-icons/all-files/fa/FaHome';
 import { IoNotifications } from '@react-icons/all-files/io5/IoNotifications';
 
-import { useCurrentOrganization } from '@selectors';
+import { useCurrentOrganization, useUser } from '@selectors';
 import { LogoMainClient } from '@common';
 import { getProfilePicture, getName } from '@init-globals';
 import ProfileDropDownOption from './ProfileDropDownOption';
@@ -20,10 +20,13 @@ import { IoReorderThreeOutline } from 'react-icons/io5';
 
 import type { HeaderProps, ClientComponentProps } from '@types';
 
-const Header: ClientComponentProps<HeaderProps> = ({ user }) => {
+const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [organization] = useCurrentOrganization();
+  const [userFromStore] = useUser();
+
+  const user = userFromStore || userProp;
 
   const [show, setShow] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
