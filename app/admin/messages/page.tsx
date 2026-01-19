@@ -10,7 +10,9 @@ import {
   MessageComposeModal,
 } from '@components';
 
-export default function Page(): JSX.Element {
+import type { PageProps } from '@types';
+
+export default function Page(props: PageProps): JSX.Element {
   return (
     <main className="relative flex h-full w-full p-2">
       <Suspense fallback={<MessageToolbarFallback />}>
@@ -18,7 +20,7 @@ export default function Page(): JSX.Element {
       </Suspense>
 
       <Suspense fallback={<MessageSidebarFallback />}>
-        <MessageSidebar />
+        <MessageSidebar search={props.searchParams?.search?.toString()} />
       </Suspense>
 
       <Suspense fallback={<MessageContentFallback />}>

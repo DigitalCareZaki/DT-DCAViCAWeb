@@ -21,11 +21,35 @@ const Header: ClientComponentProps<HeaderProps> = ({ type, search }) => {
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(pathname + '?search=' + encodeURIComponent(value));
+    if (!pathname) return;
+
+    if (value.trim()) {
+      router.push(pathname + '?search=' + encodeURIComponent(value));
+    } else {
+      router.push(pathname);
+    }
   };
 
+  // Debounced search effect
   useEffect(() => {
-    if (!search) return;
+    if (!pathname) return;
+
+    const timeoutId = setTimeout(() => {
+      if (value.trim()) {
+        router.push(pathname + '?search=' + encodeURIComponent(value));
+      } else {
+        router.push(pathname);
+      }
+    }, 500); // 500ms debounce delay
+
+    return () => clearTimeout(timeoutId);
+  }, [value, pathname, router]);
+
+  useEffect(() => {
+    if (!search) {
+      setValue('');
+      return;
+    }
 
     setValue(search);
   }, [search]);
