@@ -30,7 +30,11 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
         <div className="flex w-full gap-4">
           <div className="w-1/2">
             <ProfileCard
-              uri={data.uri}
+              // Prefer the URI from the logged-in user (Redux store) so that
+              // once the profile picture is updated, reopening this page
+              // shows the latest image even if the server response is cached
+              // or slightly behind.
+              uri={user?.uri ?? data.uri}
               first_name={data.first_name}
               middle_name={data.middle_name}
               last_name={data.last_name}

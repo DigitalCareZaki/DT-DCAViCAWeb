@@ -32,6 +32,9 @@ const ProfileCard: ClientComponentProps<ProfileCardProps> = ({
       >
         <div className="absolute z-[99999] h-full w-full rounded-full bg-black/50 opacity-0 transition duration-200 group-hover:opacity-100" />
         <Image
+          // use the image URI as a key so Next/Image reliably reflects
+          // the latest profile picture when it changes
+          key={selectedImage ?? uri}
           src={getProfilePicture(selectedImage ?? uri)}
           fill
           alt="profile-picture"
