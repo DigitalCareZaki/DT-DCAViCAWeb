@@ -34,7 +34,8 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     title: {
       title: data.title,
     },
-    profilePicture: data.uri || '',
+    // Prioritize user URI from Redux store over server data to show latest profile picture
+    profilePicture: user?.uri || data.uri || '',
   });
 
   const {

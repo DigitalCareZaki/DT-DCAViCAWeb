@@ -71,6 +71,8 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
         phone_number: data.phoneNumber,
       };
 
+      let updatedUri = user?.uri || '';
+
       if (file !== undefined) {
         const formdata = new FormData();
 
@@ -79,6 +81,7 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
         const res = await uploadFile(formdata);
 
         if (res.success) {
+          updatedUri = res.url || '';
           Object.assign(payload, {
             uri: res.url,
           });
@@ -95,12 +98,22 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
       );
 
       if (!res?.success) throw new Error(res?.message);
+
+      // Update user data in Redux store with new profile information
+      const updatedUserData = {
+        ...user,
+        title: data.title,
+        first_name: data.firstName,
+        middle_name: data.middleName,
+        last_name: data.lastName,
+        address: data.address,
+        phone_number: data.phoneNumber,
+        uri: updatedUri,
+      };
+
       dispatch(
         setUserReducer({
-          user: {
-            ...user,
-            ...payload,
-          } as any,
+          user: updatedUserData as any,
         })
       );
 
