@@ -100,11 +100,9 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
 
   const handleSelectUser = useCallback(
     (user: SearchTelemedResProps) => {
-      if (selectedUsers.find((u) => u.id === user.id)) return;
-
-      setSelectedUsers((prev) => [...prev, user]);
+      setSelectedUsers([user]);
     },
-    [selectedUsers]
+    []
   );
 
   const handleRemoveUser = useCallback((user: SearchTelemedResProps) => {
@@ -131,6 +129,8 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
           message: 'Select user',
           show: true,
         });
+
+        return;
       }
 
       const payload = {
