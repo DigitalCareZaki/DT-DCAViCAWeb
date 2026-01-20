@@ -26,9 +26,11 @@ const ButtonComponent: SpanComponent = (
     {...props}
     ref={ref}
     className={twMerge(
-      'cursor-pointer',
-      className,
-      reversed ? (active ? 'white' : '#aaa') : active ? 'black' : '#ccc'
+      'cursor-pointer transition-colors duration-200',
+      active
+        ? 'bg-blue-100 text-blue-700'
+        : 'text-gray-600 hover:bg-gray-200',
+      className
     )}
   />
 );
@@ -53,7 +55,7 @@ export const MenuComponent: DivComponent = ({ className, ...props }, ref) => (
   <div
     {...props}
     ref={ref}
-    className={twMerge(className, 'space-x-[15px] [&>*]:inline-block')}
+    className={twMerge('flex items-center gap-2', className)}
   />
 );
 
@@ -86,7 +88,7 @@ export const BlockButton = ({ format, icon }: { format: any; icon: icon }) => {
         event.preventDefault();
         toggleBlock(editor, format);
       }}
-      // className="h-fit w-fit rounded-lg bg-gray-100 p-2 transition duration-300 hover:bg-gray-200"
+    // className="h-fit w-fit rounded-lg bg-gray-100 p-2 transition duration-300 hover:bg-gray-200"
     >
       <Icon>{icon}</Icon>
     </Button>
@@ -102,7 +104,7 @@ export const MarkButton = ({ format, icon }: { format: any; icon: icon }) => {
         event.preventDefault();
         toggleMark(editor, format);
       }}
-      className="h-fit w-fit rounded-lg bg-gray-100 p-2 transition duration-300 hover:bg-gray-200"
+      className="flex h-8 w-8 items-center justify-center rounded-md"
     >
       <IconBasic name={icon} size={16} />
     </Button>
@@ -120,7 +122,7 @@ export const LinkButton = () => {
         if (!url) return;
         insertLink(editor, url);
       }}
-      className="h-fit w-fit rounded-lg bg-gray-100 p-2 transition duration-300 hover:bg-gray-200"
+      className="flex h-8 w-8 items-center justify-center rounded-md"
     >
       <IconBasic name="FaLink" size={16} />
     </Button>

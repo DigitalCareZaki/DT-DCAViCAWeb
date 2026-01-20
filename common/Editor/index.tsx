@@ -21,7 +21,6 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
   defaultValue,
   extraToolbarContent = null,
 }) => {
-  const [initlized, setInitlized] = useState<number>(0);
   const editor = useMemo(
     () => withLinks(withHistory(withReact(createEditor()))),
     []
@@ -41,6 +40,18 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
       // @ts-ignore
       if (node.bold) {
         string = `<strong>${string}</strong>`;
+      }
+      // @ts-ignore
+      if (node.italic) {
+        string = `<em>${string}</em>`;
+      }
+      // @ts-ignore
+      if (node.underline) {
+        string = `<u>${string}</u>`;
+      }
+      // @ts-ignore
+      if (node.code) {
+        string = `<code>${string}</code>`;
       }
       return string;
     }
@@ -74,13 +85,24 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
       return null;
     }
 
-    const nodeAttributes = { ...markAttributes };
+    const nodeAttributes: any = { ...markAttributes };
 
     // define attributes for text nodes
     switch (el.nodeName) {
       case 'STRONG':
-        // @ts-ignore
+      case 'B':
         nodeAttributes.bold = true;
+        break;
+      case 'EM':
+      case 'I':
+        nodeAttributes.italic = true;
+        break;
+      case 'U':
+        nodeAttributes.underline = true;
+        break;
+      case 'CODE':
+        nodeAttributes.code = true;
+        break;
     }
 
     const children = Array.from(el.childNodes)
@@ -113,18 +135,22 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
 
   useEffect(() => {
     if (!defaultValue?.length) {
-      setInitlized((prev) => prev + 1);
+      return;
+    }
+
+    // Only update the editor value if the defaultValue is different from the current content
+    // to avoid unnecessary re-renders and potential focus loss.
+    const serializedCurrent = serializeValue(value);
+    if (defaultValue === serializedCurrent) {
       return;
     }
 
     const document = new DOMParser().parseFromString(defaultValue, 'text/html');
     const parseValue = deserialize(document.body);
     if (!parseValue) {
-      setInitlized((prev) => prev + 1);
       return;
     }
     setValue([...parseValue]);
-    setInitlized((prev) => prev + 1);
   }, [defaultValue]);
 
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
@@ -138,7 +164,7 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
   };
 
   return (
-    <div key={initlized}>
+    <div>
       <Slate
         editor={editor as any as ReactEditor}
         initialValue={value}

@@ -106,11 +106,11 @@ const Form: FC<FormProps> = ({ inline = false }) => {
                   };
                   input.click();
                 }}
-                className="h-fit w-fit rounded-md bg-gray-100 p-2 transition duration-200 hover:bg-gray-200"
+                className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-200"
                 title="Add attachment"
                 aria-label="Add attachment"
               >
-                <Icon name="IoDocumentText" size={16} className="text-gray-600" />
+                <Icon name="IoDocumentText" size={16} />
               </button>
             }
           />
