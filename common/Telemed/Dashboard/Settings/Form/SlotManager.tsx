@@ -101,7 +101,7 @@ const SlotManager: ClientComponentProps<SlotProps> = ({
     const onAdd = (slot: Slot) => {
         const newSlot = [...slotState.slots, slot];
 
-        console.log("newSlot", newSlot);
+
 
         setSlotState({
             ...slotState,

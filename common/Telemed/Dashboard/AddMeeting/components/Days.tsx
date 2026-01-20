@@ -35,11 +35,9 @@ const Days: ClientComponentProps<DaysProps> = ({ onSelect, selected, startDate, 
     // If we have filtered days for a specific month, use those
     if (selectedMonth && filteredDays && filteredDays.length > 0) {
 
-      console.log('Using filtered days for selected month:', selectedMonth, filteredDays);
       setDays(filteredDays);
       // Group the filtered days by month (should be just one month)
       const grouped = groupDaysByMonth(filteredDays);
-      console.log('Grouped days:', grouped);
       setGroupedDays(grouped);
     } else {
       // Use all days from start to end date
@@ -47,12 +45,12 @@ const Days: ClientComponentProps<DaysProps> = ({ onSelect, selected, startDate, 
         data: processedDays.map((el) => ({ value: el })),
       });
 
-      console.log('processedDays (full range):', processedDays);
+
       setDays(processedDays);
 
       // Group days by month
       const grouped = groupDaysByMonth(processedDays);
-      console.log('Grouped days (full range):', grouped);
+
       setGroupedDays(grouped);
     }
   }, [selectedMonth, processedDays]); // Simplified dependencies

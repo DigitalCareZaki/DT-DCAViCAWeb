@@ -14,8 +14,6 @@ import type { TableProps } from './types';
 const Table: ClientComponentProps<TableProps> = ({ data }) => {
   const dispatch = useDispatch();
 
-  console.log('data ---->', data);
-
   const setData = (payload: { users: OrganizationUsersProps[] }) =>
     dispatch(setOrganizationUsersReducer(payload));
 

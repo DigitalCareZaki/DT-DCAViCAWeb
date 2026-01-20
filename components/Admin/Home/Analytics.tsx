@@ -11,7 +11,7 @@ const Analytics: ServerComponent = async () => {
   const user = await getUser();
   const data = await getSuperAdminStats(user?.role ?? 'superadmin');
 
-  console.log('toal Appointment', data.data.appointments);
+
 
 
 

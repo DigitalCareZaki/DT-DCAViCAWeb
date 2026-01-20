@@ -15,7 +15,6 @@ export default async function Page({
 
     const res = await getSingleTablet(tabletId);
 
-    console.log('id componut>>>>', res.data);
 
     if (!res.success) return <></>;
 

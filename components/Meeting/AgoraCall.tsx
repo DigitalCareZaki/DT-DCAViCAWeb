@@ -52,17 +52,17 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
   // Debug logs
   useEffect(() => {
-    console.log('🔍 DEBUG INFO:');
-    console.log('Token:', token);
-    console.log('Channel:', channelName);
-    console.log('AppID:', AppID);
-    console.log('Remote Users:', remoteUsers.length);
-    console.log('Audio Tracks:', audioTracks.length);
-    console.log('Local Mic Track:', !!localMicrophoneTrack);
-    console.log('Local Camera Track:', !!localCameraTrack);
-    console.log('Mute Mic:', muteMic);
-    console.log('Mute Camera:', muteCamera);
-    console.log('User ID (uid):', user?.id);
+    // console.log('🔍 DEBUG INFO:');
+    // console.log('Token:', token);
+    // console.log('Channel:', channelName);
+    // console.log('AppID:', AppID);
+    // console.log('Remote Users:', remoteUsers.length);
+    // console.log('Audio Tracks:', audioTracks.length);
+    // console.log('Local Mic Track:', !!localMicrophoneTrack);
+    // console.log('Local Camera Track:', !!localCameraTrack);
+    // console.log('Mute Mic:', muteMic);
+    // console.log('Mute Camera:', muteCamera);
+    // console.log('User ID (uid):', user?.id);
   }, [token, channelName, AppID, remoteUsers, audioTracks, localMicrophoneTrack, localCameraTrack, muteMic, muteCamera, user]);
 
   // Always publish mic + (camera or screen)
@@ -80,9 +80,9 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
   // Play remote audio tracks in effect
   useEffect(() => {
-    console.log('🎵 Playing audio tracks:', audioTracks.length);
+
     audioTracks.forEach((track, index) => {
-      console.log(`Playing track ${index}:`, track);
+
       track.play();
     });
   }, [audioTracks]);

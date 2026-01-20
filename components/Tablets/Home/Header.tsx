@@ -21,8 +21,6 @@ const Header = ({ userRole, searchTerm, setSearchTerm }: HeaderProps) => {
   const dispatch = useDispatch();
   const tablets = useSelector((state: ReduxProps) => state.tablets.tablets);
 
-  console.log('tablets >>>>', tablets);
-
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };

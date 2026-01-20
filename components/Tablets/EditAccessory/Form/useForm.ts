@@ -50,9 +50,6 @@ const useFormHook = (
         try {
             setLoading(true);
 
-            console.log('prevData >>>>>', prevData);
-            console.log('data >>>>>', data);
-
             if (!prevData?.id) {
                 handleShowModal({
                     type: 'ERROR',

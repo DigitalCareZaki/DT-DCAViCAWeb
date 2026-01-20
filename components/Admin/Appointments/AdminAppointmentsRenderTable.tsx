@@ -10,7 +10,7 @@ import { getName } from '@init-globals';
 const AdminAppointmentsRenderTable = () => {
     // Use correct property name from reducer
     const appointments = useSelector((state: any) => state.patients.setPatientAppointmentsListing);
-    console.log('appointments >>>>>>>', appointments);
+
 
     if (!appointments || appointments.length === 0) {
         return (

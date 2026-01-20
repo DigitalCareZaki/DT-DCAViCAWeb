@@ -50,7 +50,6 @@ const Table = ({ userRole, patient, searchTerm }: TableProps) => {
         res = await getAllTabletsForPatient(patient);
         if (res.success) {
           dispatch(setTablets(res.data ?? []));
-          console.log('tablets if >>>>', res.data);
           setPagination({
             totalItems: res.data?.length ?? 0,
             perPage: res.data?.length ?? 0,
@@ -65,7 +64,6 @@ const Table = ({ userRole, patient, searchTerm }: TableProps) => {
       } else if (!initialLoadDone) {
         // Fetch ALL tablets for global frontend search
         res = await getTablets(1, 10000);
-        console.log('tablets else>>>>', res.data);
         if (res.success) {
           dispatch(setTablets(res.data ?? []));
           setPagination(res.pagination ?? pagination);

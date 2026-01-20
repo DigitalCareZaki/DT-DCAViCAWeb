@@ -227,7 +227,6 @@ const useFormHook = (): useFormProps => {
         nurse_id: selectors.nurse.id, // Use selector id for proper mapping
       };
 
-      console.log('payload console <<>>>>>>', payload);
 
       // Simulate data preparation step
       await new Promise(resolve => setTimeout(resolve, 300));

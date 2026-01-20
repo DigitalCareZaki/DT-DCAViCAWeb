@@ -167,8 +167,6 @@ const useFormHook = (
 
       } else {
         // update case
-        console.log('prevData >>>>>', prevData);
-        console.log('data >>>>>', data);
 
         const res = await updateTablet(
           btoa(
