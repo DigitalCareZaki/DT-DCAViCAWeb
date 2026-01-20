@@ -35,7 +35,7 @@ const ModalBottom: ClientComponent = () => {
     return () => {
       clearTimeout(timeoutid);
     };
-  }, [modal.show]);
+  }, [modal]);
 
   const RenderIcon = {
     SUCCESS: <BiSolidHappy size={20} />,

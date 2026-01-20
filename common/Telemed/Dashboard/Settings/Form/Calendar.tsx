@@ -20,9 +20,11 @@ import { IOptions } from 'tailwind-datepicker-react/types/Options';
 import { SlotParent, SlotParentProps, SlotWrapper } from './types';
 import SlotManager from './SlotManager';
 import { updateCalendar } from '@service';
-import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { showModalReducer } from '@slice';
 
 const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
+    const dispatch = useDispatch();
     const [times, setTimes] = useState(timeConstant);
     const [show, setShow] = useState<boolean>(false);
     const [show1, setShow1] = useState<boolean>(false);
@@ -326,6 +328,11 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                             onClick={async () => {
                                 // Validate dates before submitting
                                 if (!validateDates()) {
+                                    dispatch(showModalReducer({
+                                        type: 'ERROR',
+                                        message: 'Please select both start and end dates',
+                                        show: true,
+                                    }));
                                     return;
                                 }
 
@@ -375,13 +382,25 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                                     const res = await updateCalendar(btoa(JSON.stringify(payload)));
 
                                     if (res.success) {
-                                        toast.success('Calendar updated successfully');
+                                        dispatch(showModalReducer({
+                                            type: 'SUCCESS',
+                                            message: 'Calendar updated successfully',
+                                            show: true,
+                                        }));
                                     } else {
-                                        toast.error(res.message || 'Failed to update calendar');
+                                        dispatch(showModalReducer({
+                                            type: 'ERROR',
+                                            message: res.message || 'Failed to update calendar',
+                                            show: true,
+                                        }));
                                     }
                                 } catch (error: any) {
                                     console.error('Calendar update error:', error);
-                                    toast.error(error?.message || 'An error occurred while updating the calendar');
+                                    dispatch(showModalReducer({
+                                        type: 'ERROR',
+                                        message: error?.message || 'An error occurred while updating the calendar',
+                                        show: true,
+                                    }));
                                 } finally {
                                     setLoading(false);
                                 }
