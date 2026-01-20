@@ -86,9 +86,9 @@ const Form: ClientComponent = () => {
 
           {/* Step Indicators */}
           <div className="flex items-center gap-2 mt-4">
-            {['validating', 'preparing', 'submitting', 'processing', 'success'].map((step, index) => {
+            {['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].map((step, index) => {
               const isActive = currentStep === step;
-              const isCompleted = ['validating', 'preparing', 'submitting', 'processing', 'success'].indexOf(currentStep) > index;
+              const isCompleted = ['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].indexOf(currentStep) > index;
 
               return (
                 <div
@@ -513,6 +513,49 @@ const Form: ClientComponent = () => {
             disabled={loading}
           />
         </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
+        <div className="w-1/2">
+          <DropdownSecondary
+            title="AViCardia Monitoring"
+            label="AViCardia Monitoring"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaHeartbeat"
+            error={!!errors.avicardiaMonitoring?.message}
+            errorMessage={errors.avicardiaMonitoring?.message || '&'}
+            selected={selectors.avicardiaMonitoring.title}
+            disabled={loading}
+          >
+            <>
+              <div
+                onClick={() => !loading && handleSelect('avicardiaMonitoring')('YES', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
+              >
+                <span className="font-medium">Yes</span>
+                <FaCheckCircle size={18} className="text-green-500" />
+              </div>
+              <div
+                onClick={() => !loading && handleSelect('avicardiaMonitoring')('NO', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
+              >
+                <span className="font-medium">No</span>
+                <FaExclamationTriangle size={18} className="text-red-500" />
+              </div>
+              <div
+                onClick={() => !loading && handleSelect('avicardiaMonitoring')('LATER', undefined)}
+                className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
+                  }`}
+              >
+                <span className="font-medium">Later</span>
+                <FaQuestion size={18} className="text-blue-500" />
+              </div>
+            </>
+          </DropdownSecondary>
+        </div>
+        <div className="w-1/2"></div>
       </div>
       <div className="mt-5">
         <h3 className="mb-3 text-lg font-medium">Location</h3>

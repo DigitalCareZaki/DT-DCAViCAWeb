@@ -13,6 +13,7 @@ import {
   addPatient,
   getOrganizationDoctors,
   getOrganizationNurses,
+  syncVivalink,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -37,6 +38,7 @@ export type LoadingStep =
   | 'preparing'
   | 'submitting'
   | 'processing'
+  | 'syncing'
   | 'success'
   | 'error';
 
@@ -83,6 +85,10 @@ const useFormHook = (): useFormProps => {
       id: undefined,
     },
     doctor: {
+      title: undefined,
+      id: undefined,
+    },
+    avicardiaMonitoring: {
       title: undefined,
       id: undefined,
     },
@@ -174,7 +180,13 @@ const useFormHook = (): useFormProps => {
         step: 'processing',
         title: 'Processing Request',
         description: 'Server is processing the patient creation...',
-        progress: 80,
+        progress: 70,
+      },
+      syncing: {
+        step: 'syncing',
+        title: 'Syncing with Vivalink...',
+        description: 'Synchronizing patient data with Vivalink monitoring system...',
+        progress: 85,
       },
       success: {
         step: 'success',
@@ -246,12 +258,36 @@ const useFormHook = (): useFormProps => {
 
       setCurrentStep('success');
 
-      // Show success message and wait before redirecting
-      handleShowModal({
-        message: 'Patient added successfully',
-        type: 'SUCCESS',
-        show: true,
-      });
+      // Sync with Vivalink if requested
+      if (selectors.avicardiaMonitoring.title === 'YES') {
+        setCurrentStep('syncing');
+        const syncRes = await syncVivalink({
+          ...payload,
+          avicardia_monitoring: 'YES'
+        });
+
+        if (!syncRes.success) {
+          handleShowModal({
+            message: syncRes?.message || 'Sync failed. Please check the connection.',
+            type: 'ERROR',
+            show: true,
+          });
+          // Even if sync fails, patient is added in AViCA
+        } else {
+          handleShowModal({
+            message: 'Sync successful and patient added successfully',
+            type: 'SUCCESS',
+            show: true,
+          });
+        }
+      } else {
+        // Show success message and wait before redirecting
+        handleShowModal({
+          message: 'Patient added successfully',
+          type: 'SUCCESS',
+          show: true,
+        });
+      }
 
       // Wait 3 seconds before redirecting to show success step
       setTimeout(() => {

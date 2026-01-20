@@ -27,6 +27,7 @@ export interface AddPatientProps {
   Nextofkin: string;
   nurse: string;
   doctor: string;
+  avicardiaMonitoring: string;
 }
 
 export interface SelectorsProps {
@@ -58,6 +59,10 @@ export interface SelectorsProps {
     title: string | undefined;
     id: string | undefined;
   };
+  avicardiaMonitoring: {
+    title: string | undefined;
+    id: string | undefined;
+  };
 }
 
 // Loading step types
@@ -67,6 +72,7 @@ export type LoadingStep =
   | 'preparing'
   | 'submitting'
   | 'processing'
+  | 'syncing'
   | 'success'
   | 'error';
 
