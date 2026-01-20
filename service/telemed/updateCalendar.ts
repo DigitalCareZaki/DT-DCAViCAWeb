@@ -22,8 +22,8 @@ async function addCalendar(data: any): Promise<AddDataProps> {
 
     const body = await res.json();
 
-    if (res.status !== 201) {
-      throw new Error(body?.message?.toString());
+    if (!res.ok) {
+      throw new Error(body?.message?.toString() || 'An error occurred during the update');
     }
 
     return {

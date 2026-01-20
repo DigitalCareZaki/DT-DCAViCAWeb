@@ -371,14 +371,20 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                                     });
                                 }
 
-                                const res = await updateCalendar(btoa(JSON.stringify(payload)));
+                                try {
+                                    const res = await updateCalendar(btoa(JSON.stringify(payload)));
 
-                                if (res.success) {
-                                    toast.success('Calendar updated successfully');
-                                } else {
-                                    toast.success(res.message || 'Calendar updated successfully');
+                                    if (res.success) {
+                                        toast.success('Calendar updated successfully');
+                                    } else {
+                                        toast.error(res.message || 'Failed to update calendar');
+                                    }
+                                } catch (error: any) {
+                                    console.error('Calendar update error:', error);
+                                    toast.error(error?.message || 'An error occurred while updating the calendar');
+                                } finally {
+                                    setLoading(false);
                                 }
-                                setLoading(false);
                             }}
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
