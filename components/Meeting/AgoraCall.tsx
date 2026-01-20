@@ -192,7 +192,7 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
     try {
       console.log('📡 Calling createTheToken API with channelName:', channelName);
       const response = await createTheToken({ channelName });
-      console.log('📡 API Response:', response);
+
 
       if (!response.success) {
         console.error('❌ Token generation failed:', response.message);
