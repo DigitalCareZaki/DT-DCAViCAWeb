@@ -72,8 +72,9 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
     (type: string, value: string) => {
       setValue(type as any, value);
       setSelectors((prev) => ({ ...prev, [type]: value }));
+      clearErrors(type as any);
     },
-    [setValue]
+    [setValue, clearErrors]
   );
 
   const handleSelectTme = useCallback((startTime: Date, endTime: Date) => {
