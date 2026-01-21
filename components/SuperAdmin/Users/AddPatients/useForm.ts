@@ -88,7 +88,7 @@ const useFormHook = (): useFormProps => {
       title: undefined,
       id: undefined,
     },
-    avicardiaMonitoring: {
+    cardiac_monitoring: {
       title: undefined,
       id: undefined,
     },
@@ -259,11 +259,11 @@ const useFormHook = (): useFormProps => {
       setCurrentStep('success');
 
       // Sync with Vivalink if requested
-      if (selectors.avicardiaMonitoring.title === 'YES') {
+      if (selectors.cardiac_monitoring.title === 'YES') {
         setCurrentStep('syncing');
         const syncRes = await syncVivalink({
           ...payload,
-          avicardia_monitoring: 'YES'
+          cardiac_monitoring: 'YES'
         });
 
         if (!syncRes.success) {

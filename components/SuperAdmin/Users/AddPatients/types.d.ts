@@ -27,7 +27,7 @@ export interface AddPatientProps {
   Nextofkin: string;
   nurse: string;
   doctor: string;
-  avicardiaMonitoring: string;
+  cardiac_monitoring?: string;
 }
 
 export interface SelectorsProps {
@@ -59,7 +59,7 @@ export interface SelectorsProps {
     title: string | undefined;
     id: string | undefined;
   };
-  avicardiaMonitoring: {
+  cardiac_monitoring: {
     title: string | undefined;
     id: string | undefined;
   };

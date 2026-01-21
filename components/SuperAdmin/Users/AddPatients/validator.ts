@@ -51,8 +51,8 @@ export const validator = create((data: AddPatientProps) => {
     enforce(data.dob).isNotEmpty();
   });
 
-  test('avicardiaMonitoring', 'AViCardia Monitoring is required', () => {
-    enforce(data.avicardiaMonitoring).isNotEmpty();
+  test('cardiac_monitoring', 'AViCardia Monitoring is required', () => {
+    enforce(data.cardiac_monitoring).isNotEmpty();
   });
 
   test('firstName', 'First name is too short', () => {

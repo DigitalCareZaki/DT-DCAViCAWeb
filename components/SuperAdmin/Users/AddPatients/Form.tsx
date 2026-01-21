@@ -517,40 +517,40 @@ const Form: ClientComponent = () => {
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
-            title="AViCardia Monitoring"
-            label="AViCardia Monitoring"
+            title="Patient Sync Vivalink"
+            label="Patient Sync Vivalink"
             borderTheme
             inputWrapperClassName="bg-background"
             icon="FaHeartbeat"
-            error={!!errors.avicardiaMonitoring?.message}
-            errorMessage={errors.avicardiaMonitoring?.message || '&'}
-            selected={selectors.avicardiaMonitoring.title}
+            error={!!errors.cardiac_monitoring?.message}
+            errorMessage={errors.cardiac_monitoring?.message || '&'}
+            selected={selectors.cardiac_monitoring.title}
             disabled={loading}
           >
             <>
               <div
-                onClick={() => !loading && handleSelect('avicardiaMonitoring')('YES', undefined)}
+                onClick={() => !loading && handleSelect('cardiac_monitoring')('YES', undefined)}
                 className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
                   }`}
               >
                 <span className="font-medium">Yes</span>
-                <FaCheckCircle size={18} className="text-green-500" />
+                {/* <FaCheckCircle size={18} className="text-green-500" /> */}
               </div>
               <div
-                onClick={() => !loading && handleSelect('avicardiaMonitoring')('NO', undefined)}
+                onClick={() => !loading && handleSelect('cardiac_monitoring')('NO', undefined)}
                 className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
                   }`}
               >
                 <span className="font-medium">No</span>
-                <FaExclamationTriangle size={18} className="text-red-500" />
+                {/* <FaExclamationTriangle size={18} className="text-red-500" /> */}
               </div>
               <div
-                onClick={() => !loading && handleSelect('avicardiaMonitoring')('LATER', undefined)}
+                onClick={() => !loading && handleSelect('cardiac_monitoring')('LATER', undefined)}
                 className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
                   }`}
               >
                 <span className="font-medium">Later</span>
-                <FaQuestion size={18} className="text-blue-500" />
+                {/* <FaQuestion size={18} className="text-blue-500" /> */}
               </div>
             </>
           </DropdownSecondary>
