@@ -27,7 +27,7 @@ export interface AddPatientProps {
   Nextofkin: string;
   nurse: string;
   doctor: string;
-  cardiac_monitoring?: string;
+  cardiac_monitoring: string;
 }
 
 export interface SelectorsProps {

@@ -2,6 +2,7 @@ import type { VLAllPatients, VLSinglePatientECG } from '@types';
 
 export type Props = {
   data: VLAllPatients;
+  avicaPatients?: any[];
 };
 
 export type SelectedPatient = {

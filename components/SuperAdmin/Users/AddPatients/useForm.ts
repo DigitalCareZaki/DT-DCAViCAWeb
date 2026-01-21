@@ -237,6 +237,7 @@ const useFormHook = (): useFormProps => {
         address: currentValues.address,
         doctor_id: selectors.doctor.id, // Use selector id for proper mapping
         nurse_id: selectors.nurse.id, // Use selector id for proper mapping
+        cardiac_monitoring: selectors.cardiac_monitoring.title,
       };
 
 
