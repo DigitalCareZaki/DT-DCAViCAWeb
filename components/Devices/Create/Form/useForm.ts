@@ -62,12 +62,13 @@ const useFormHook = (
       setValue('category', value as MeasurementType);
       clearErrors('category');
 
-      setSelectedValues({
+      setSelectedValues((prev) => ({
+        ...prev,
         category: {
           name,
           value: value as MeasurementType,
         },
-      });
+      }));
 
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/devices/devices/${value}`, {
@@ -95,12 +96,13 @@ const useFormHook = (
     setValue('category', value as MeasurementType);
     clearErrors('category');
 
-    setSelectedValues({
+    setSelectedValues((prev) => ({
+      ...prev,
       category: {
         name,
         value: value as MeasurementType,
       },
-    });
+    }));
   }, []);
 
   const handleShowModal = (payload: ModalState) => {
@@ -138,6 +140,7 @@ const useFormHook = (
           description: data.description,
           category: data.category,
           serial_number: data.serial_number,
+          cardiac_monitoring: data.cardiac_monitoring,
         };
 
         if ((user?.role as any) === 'SUPERADMIN') {
@@ -152,7 +155,9 @@ const useFormHook = (
         if (!res.success) {
           handleShowModal({
             type: 'ERROR',
-            message: res?.message ?? 'Unable to create a new device',
+            message: data.cardiac_monitoring === 'Yes'
+              ? 'Sync failed. Please check the connection.'
+              : (res?.message ?? 'Unable to create a new device'),
             show: true,
           });
           return;
@@ -160,7 +165,9 @@ const useFormHook = (
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: 'Device created successfully',
+            message: data.cardiac_monitoring === 'Yes'
+              ? 'Sync successful or The device successfully added.'
+              : 'Device created successfully',
             show: true,
           });
           router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
@@ -176,6 +183,7 @@ const useFormHook = (
               description: data.description,
               category: data.category,
               serial_number: data.serial_number,
+              cardiac_monitoring: data.cardiac_monitoring,
             })
           ),
           prevData.id
@@ -184,7 +192,9 @@ const useFormHook = (
         if (!res.success) {
           handleShowModal({
             type: 'ERROR',
-            message: res?.message ?? 'Unable to update device',
+            message: data.cardiac_monitoring === 'Yes'
+              ? 'Sync failed. Please check the connection.'
+              : (res?.message ?? 'Unable to update device'),
             show: true,
           });
           return;
@@ -192,7 +202,9 @@ const useFormHook = (
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: 'Device updated successfully',
+            message: data.cardiac_monitoring === 'Yes'
+              ? 'Sync successful or The device successfully added.'
+              : 'Device updated successfully',
             show: true,
           });
           router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
@@ -224,13 +236,17 @@ const useFormHook = (
             prevData.category,
           value: prevData.category,
         },
+        cardiac_monitoring: {
+          name: prevData.cardiac_monitoring || undefined,
+          value: (prevData.cardiac_monitoring as any) || undefined,
+        },
       });
     }
 
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues];
 };
 
 export default useFormHook;

@@ -43,6 +43,7 @@ import { MdPinDrop as MdPin } from '@react-icons/all-files/md/MdPinDrop';
 import { MdTitle } from '@react-icons/all-files/md/MdTitle';
 import { MdKeyboardReturn as MdOutlineKeyboardReturn } from '@react-icons/all-files/md/MdKeyboardReturn';
 import { MdKeyboardReturn as PiKeyReturnFill } from '@react-icons/all-files/md/MdKeyboardReturn';
+import { MdSync } from '@react-icons/all-files/md/MdSync';
 
 import { FaWaveSquare as SiNamecheap } from '@react-icons/all-files/fa/FaWaveSquare';
 import { VscReferences } from '@react-icons/all-files/vsc/VscReferences';
@@ -286,6 +287,13 @@ export default function Icon({
   if (name === 'IoClose')
     return (
       <IoClose {...props} className={twMerge('text-gray-500', className)} />
+    );
+  if (name === 'MdMonitorHeart')
+    return (
+      <MdSync
+        {...props}
+        className={twMerge('text-gray-500', className)}
+      />
     );
 
   return <></>;

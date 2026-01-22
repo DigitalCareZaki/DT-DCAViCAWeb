@@ -35,4 +35,12 @@ export const validator = create((data: DeviceProps) => {
       enforce(data.category).inside(validMeasurementTypes);
     }
   );
+
+  test('cardiac_monitoring', 'Cardiac monitoring option is required', () => {
+    enforce(data.cardiac_monitoring).isNotEmpty();
+  });
+
+  test('cardiac_monitoring', 'Invalid cardiac monitoring option', () => {
+    enforce(data.cardiac_monitoring).inside(['Yes', 'No', 'Later']);
+  });
 });

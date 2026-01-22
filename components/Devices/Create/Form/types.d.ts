@@ -9,6 +9,7 @@ export interface DeviceProps {
   description: string | null;
   serial_number: string;
   category: MeasurementType;
+  cardiac_monitoring: 'Yes' | 'No' | 'Later';
   // Optional branch for SUPERADMIN create flow
   branch_id?: string;
 }
@@ -27,7 +28,7 @@ export type UseFormProps = [
 export interface SelectedValuesProps {
   [key: string]: {
     name: string | undefined;
-    value: MeasurementType | undefined;
+    value: MeasurementType | string | undefined;
   };
 }
 

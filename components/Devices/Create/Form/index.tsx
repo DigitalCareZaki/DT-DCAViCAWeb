@@ -48,15 +48,21 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     []
   );
 
-  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch] =
+  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues] =
     useForm(data, categories);
 
   const handleSelectField = (field: string, value: any) => {
-    selectedValues[field] = value;
+    setSelectedValues((prev: any) => ({
+      ...prev,
+      [field]: value
+    }));
 
-    setSelectedSerial(value.name || []);
-    setValue('serial_number', value.name);
-
+    if (field === 'serial_number') {
+      setSelectedSerial(value.name || []);
+      setValue('serial_number', value.name);
+    } else {
+      setValue(field as any, value.value);
+    }
   };
 
   return (
@@ -133,6 +139,34 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
 
       </div>
+      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+        <div className="w-full sm:w-1/2">
+          <DropdownSecondary
+            title="Cardiac remote monitoring"
+            label="Cardiac remote monitoring"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="MdMonitorHeart"
+            error={!!errors.cardiac_monitoring?.message?.length}
+            errorMessage={(errors as any).cardiac_monitoring?.message || '&'}
+            selected={selectedValues?.cardiac_monitoring?.name}
+          >
+            {[
+              { name: 'Yes', value: 'Yes' },
+              { name: 'No', value: 'No' },
+              { name: 'Later', value: 'Later' },
+            ].map((option) => (
+              <div
+                key={option.value}
+                onClick={() => handleSelectField('cardiac_monitoring', option)}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">{option.name}</span>
+              </div>
+            ))}
+          </DropdownSecondary>
+        </div>
+      </div>
       {user?.role === 'SUPERADMIN' && (
         <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
           {/* Branch Code Start  */}
@@ -164,6 +198,14 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             </div>
           )}
           {/* Branch Code End  */}
+        </div>
+      )}
+      {loading && selectedValues?.cardiac_monitoring?.value === 'Yes' && (
+        <div className="flex flex-col gap-2">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+            <div className="h-full bg-blue-500 animate-pulse" style={{ width: '60%' }}></div>
+          </div>
+          <p className="text-sm font-medium text-blue-600">Syncing with Vivalink...</p>
         </div>
       )}
       {/* Submit Button */}
