@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Pincode } from '@components';
+import { getUser } from '@service';
 
 import type { ClientComponentProps, ChildrenComponentProps } from '@types';
 
@@ -53,6 +54,24 @@ const PincodeProvider: ClientComponentProps<ChildrenComponentProps> = ({
     const storedPincode = localStorage.getItem('requiredPincode');
     setIsRequiredPincode(storedPincode === 'true');
   }, []);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (requiredPincode) {
+      interval = setInterval(async () => {
+        try {
+          await getUser();
+        } catch (error) {
+          // Keep-alive failed
+        }
+      }, 1000 * 60 * 2); // 2 minutes
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [requiredPincode]);
 
   return (
     <>
