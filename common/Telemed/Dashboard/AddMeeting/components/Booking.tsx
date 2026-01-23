@@ -19,7 +19,7 @@ import TimeSlot from './TimeSlot';
 import type { SelectedDateProps } from '../types';
 import type { BookingProps } from './types';
 import type { ClientComponentProps } from '@types';
-import { getCalendar } from 'service';
+import { getCalendar, getSelectDoctorSlots } from 'service';
 import { SlotParent, SlotWrapper, Slot } from './../../Settings/Form/types';
 import { title } from 'process';
 
@@ -34,6 +34,18 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
 
   const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [slotP, setSlotP] = useState<SlotParent | undefined>(undefined);
+  const [currentSlots, setCurrentSlots] = useState<Slot[] | undefined>(undefined);
+
+  function isoToLocalPreserve(iso?: string | Date | null) {
+    if (!iso) return null;
+    const d = typeof iso === 'string' ? new Date(iso) : (iso instanceof Date ? iso : new Date(String(iso)));
+    const y = d.getUTCFullYear();
+    const mo = d.getUTCMonth();
+    const da = d.getUTCDate();
+    const hh = d.getUTCHours();
+    const mm = d.getUTCMinutes();
+    return new Date(y, mo, da, hh, mm, 0, 0);
+  }
 
   useEffect(() => {
 
@@ -51,16 +63,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
       // convert API ISO datetimes (UTC) into local Date objects that preserve
       // the original numeric date/time components (year, month, day, hour, min)
       // This avoids browser timezone conversion showing +offset hours.
-      function isoToLocalPreserve(iso?: string | Date | null) {
-        if (!iso) return null;
-        const d = typeof iso === 'string' ? new Date(iso) : (iso instanceof Date ? iso : new Date(String(iso)));
-        const y = d.getUTCFullYear();
-        const mo = d.getUTCMonth();
-        const da = d.getUTCDate();
-        const hh = d.getUTCHours();
-        const mm = d.getUTCMinutes();
-        return new Date(y, mo, da, hh, mm, 0, 0);
-      }
+
 
       const incoming = data.data;
       if (incoming) {
@@ -92,6 +95,29 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
       }
     });
   }, [selectedUserId]);
+
+  useEffect(() => {
+    if (selectedDate.day && selectedUserId) {
+      const date = new Date(selectedDate.day);
+      const offset = date.getTimezoneOffset();
+      const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+      const dateString = localDate.toISOString().split('T')[0];
+
+      getSelectDoctorSlots(selectedUserId, dateString).then((res) => {
+        if (res.success && res.data && res.data.slots) {
+          const slots = res.data.slots.map((s: any) => {
+            const out: any = { ...s };
+            out.startTime = s.startTime ? isoToLocalPreserve(s.startTime) : undefined;
+            out.endTime = s.endTime ? isoToLocalPreserve(s.endTime) : undefined;
+            return out;
+          });
+          setCurrentSlots(slots);
+        } else {
+          setCurrentSlots([]);
+        }
+      });
+    }
+  }, [selectedDate.day, selectedUserId]);
 
   // Get available months from startTime to endTime
   const getAvailableMonths = () => {
@@ -148,73 +174,29 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
     // get day of selected.day
     if (!selectedDate.day) return;
 
-    const day = new Date(selectedDate.day).getDay();
-
-    var slot = slotP?.slots.find((el) => el.day === day);
-
-    if (!slot) return;
-
-    return slot.slots;
+    return currentSlots;
   }
 
   const getSlotTimes = (slot: Slot) => {
+    const startTime = new Date(slot.startTime!);
+    const endTime = new Date(slot.endTime!);
 
-    var startTime = new Date(slot.startTime!);
-    var endTime = new Date(slot.endTime!);
+    const format = (d: Date) =>
+      d
+        .toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        })
+        .toUpperCase();
 
-    var startMinutes = startTime!.getMinutes() + startTime!.getHours() * 60;
-
-    var endMinutes = endTime!.getMinutes() + endTime!.getHours() * 60;
-
-
-    var ret = [];
-
-    for (var i = startMinutes; i <= endMinutes; i += 10) {
-      var hours = Math.floor(i / 60);
-      var minutes = i % 60;
-
-      var time = `${(hours).toString().padStart(2, '0')}:${(minutes).toString().padStart(2, '0')}`;
-
-      var endMins = i + 10;
-
-      var endHours = Math.floor(endMins / 60);
-      var endMinutes2 = endMins % 60;
-
-      // need end time in this format 13:00
-      var endTm = `${(endHours).toString().padStart(2, '0')}:${(endMinutes2).toString().padStart(2, '0')}`;
-
-
-
-      const startHours12 = hours % 12 || 12;
-      const endHours12 = endHours % 12 || 12;
-      const startAmPm = hours >= 12 ? 'PM' : 'AM';
-      const endAmPm = endHours >= 12 ? 'PM' : 'AM';
-      ret.push({
-        startTime: createHours(time + 'am'),
-        endTime: createHours(endTm + 'am'),
-        title: `${startHours12}:${minutes.toString().padStart(2, '0')} ${startAmPm} - ${endHours12}:${endMinutes2.toString().padStart(2, '0')} ${endAmPm}`,
-      });
-
-    }
-
-
-    return ret;
-  }
-  const createHours = (startTime: string): Date => {
-    const [time, period] = startTime.split(/(?=[ap]m)/i);
-    const [hours, minutes] = time.split(':');
-
-    const date = new Date();
-    let hour = parseInt(hours, 10);
-
-    if (period.toLowerCase() === 'pm' && hour !== 12) {
-      hour += 12;
-    } else if (period.toLowerCase() === 'am' && hour === 12) {
-      hour = 0;
-    }
-
-    date.setHours(hour, parseInt(minutes, 10), 0, 0);
-    return date;
+    return [
+      {
+        startTime,
+        endTime,
+        title: `${format(startTime)} - ${format(endTime)}`,
+      },
+    ];
   };
 
 

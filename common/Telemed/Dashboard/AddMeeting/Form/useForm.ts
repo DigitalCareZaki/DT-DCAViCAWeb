@@ -143,6 +143,8 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
         users: selectedUsers.map((u) => u.id),
       };
 
+      console.log('payload kia jaa raha han >>>', payload);
+
 
       const res = await addTelemed(btoa(JSON.stringify(payload)));
 

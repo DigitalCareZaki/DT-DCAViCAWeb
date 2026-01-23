@@ -66,6 +66,7 @@ export { default as addTelemed } from './telemed/addTelemed';
 export { default as getSelfAppointments } from './telemed/getSelfAppointments';
 export { default as getRequestedAppointments } from './telemed/getRequestedAppointment';
 export { default as getCalendar } from './telemed/getCalendar';
+export { default as getSelectDoctorSlots } from './telemed/getSelectDoctorSlots';
 export { default as updateCalendar } from './telemed/updateCalendar';
 export { default as updateTelemedAction } from './telemed/updateTelemedAction';
 export { default as getTelemedDetails } from './telemed/getTelemedDetails';
