@@ -184,24 +184,24 @@ const Day: ClientComponentProps<DayProps> = ({ value, onSelect, selected }) => {
     <div
       onClick={handleSelect}
       className={twMerge(
-        'flex h-20 w-20 shrink-0 cursor-pointer flex-col items-center justify-center rounded-full transition duration-300 hover:scale-105 hover:bg-emerald-400 hover:text-emerald-400',
+        'flex h-20 w-20 shrink-0 cursor-pointer flex-col items-center justify-center rounded-full transition duration-300',
         isActive
-          ? 'bg-emerald-500 text-fuchsia-200'
+          ? 'bg-emerald-500 text-white shadow-lg scale-110'
           : isFromDifferentMonth
-            ? 'bg-blue-200 text-blue-700 border-2 border-blue-400' // Different month indicator
-            : 'bg-emerald-200 text-gray-500'
+            ? 'bg-blue-50 text-blue-900 border-2 border-blue-500 hover:bg-blue-100 hover:scale-105 hover:shadow-md'
+            : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 hover:text-emerald-950 hover:scale-105 hover:shadow-md'
       )}
     >
-      <span className="text-base font-medium">
+      <span className={twMerge("font-bold", isFromDifferentMonth ? "text-xs uppercase tracking-wide opacity-90" : "text-base font-medium")}>
         {new Date(value as any)
           .toLocaleString('en-US', { weekday: 'long' })
           .slice(0, 3)}
       </span>
-      <span className="text-3xl font-bold">
+      <span className={twMerge("font-extrabold", isFromDifferentMonth ? "text-2xl" : "text-3xl")}>
         {new Date(value as any).getDate()}
       </span>
       {isFromDifferentMonth && (
-        <span className="text-xs text-blue-600 font-semibold">
+        <span className="text-[11px] text-blue-800 font-bold leading-none uppercase tracking-wide mt-0.5">
           {new Date(value as any).toLocaleDateString('en-US', { month: 'short' })}
         </span>
       )}
