@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
@@ -30,6 +30,28 @@ const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
 
   const [show, setShow] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShow(false);
+      }
+    };
+
+    if (show) {
+      document.addEventListener('mousedown', handleClickOutside, true);
+      document.addEventListener('touchstart', handleClickOutside, true);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside, true);
+      document.removeEventListener('touchstart', handleClickOutside, true);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside, true);
+      document.removeEventListener('touchstart', handleClickOutside, true);
+    };
+  }, [show]);
 
   const renderLinkType: 'master' | 'administration' | 'default' =
     useMemo(() => {
@@ -387,7 +409,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
         {renderLinks[renderLinkType]}
       </div>
 
-      <div className="relative flex w-fit flex-col">
+      <div ref={dropdownRef} className="relative flex w-fit flex-col">
         <div className="flex cursor-pointer items-center gap-2">
           <div className="flex flex-row-reverse items-center gap-2">
             <div
