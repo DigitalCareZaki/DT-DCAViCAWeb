@@ -33,7 +33,7 @@ const RequestedAppointments = async ({ pending }: RequestedAppointmentsProps) =>
 
       {/* Horizontal scroll container for appointment cards */}
       {/* <div className="hidescrollbar flex w-full items-center gap-4 overflow-x-auto py-4 sm:py-6"> */}
-      <div className="flex w-full items-center gap-4 overflow-x-auto py-4 sm:py-6">
+      <div className="flex w-full items-stretch gap-4 overflow-x-auto py-4 sm:py-6">
 
         {/* ServerGenerator component will iterate over fetched data and render Appointment components */}
         <ServerGenerator data={transformedData}>

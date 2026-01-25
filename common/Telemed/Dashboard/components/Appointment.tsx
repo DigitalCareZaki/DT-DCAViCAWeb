@@ -156,7 +156,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
   return (
     <div
       className={twMerge(
-        'flex h-[26rem] shrink-0 flex-col justify-between gap-4 rounded-lg p-4 font-semibold text-gray-600 transition duration-300',
+        'flex min-h-[26rem] h-auto shrink-0 flex-col justify-between gap-4 rounded-lg p-4 font-semibold text-gray-600 transition duration-300',
         primary,
         className,
         dynamicWidth ? 'w-full hover:scale-[105%]' : 'w-80'
@@ -285,7 +285,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className={twMerge('text-lg', text)}>{appointment?.title}</span>
+        <span className={twMerge('text-lg break-words', text)}>{appointment?.title}</span>
         <span className="truncate text-xs opacity-80">
           {appointment?.description}
         </span>
