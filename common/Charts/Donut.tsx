@@ -8,6 +8,17 @@ import type { DonutProps } from './types';
 const Chart = dynamic(() => import('react-apexcharts'));
 
 export default function Donut({ title, values }: DonutProps): JSX.Element {
+  const total = values?.reduce((acc, num) => acc + num, 0) || 0;
+  const hasData = total > 0;
+
+  const chartSeries = hasData ? values : [1];
+  const chartColors = hasData
+    ? ['#DB0000', '#00990F', '#F19F00', '#0400C1']
+    : ['#E5E7EB'];
+  const chartLabels = hasData
+    ? ['High', 'Normal', 'Low', 'No Reading']
+    : ['No Data'];
+
   return (
     <Suspense fallback={<span>Loading Chart</span>}>
       <div className="flex h-full w-full flex-col items-center justify-center">
@@ -45,8 +56,8 @@ export default function Donut({ title, values }: DonutProps): JSX.Element {
               align: 'center',
               margin: 10,
             },
-            labels: ['High', 'Normal', 'Low', 'No Reading'],
-            colors: ['#DB0000', '#00990F', '#F19F00', '#0400C1'],
+            labels: chartLabels,
+            colors: chartColors,
             legend: {
               show: false,
             },
@@ -56,14 +67,17 @@ export default function Donut({ title, values }: DonutProps): JSX.Element {
             fill: {
               type: 'gradient',
             },
+            tooltip: {
+              enabled: hasData,
+            },
           }}
-          series={values}
+          series={chartSeries}
           type="donut"
           width={200}
           height={150}
         />
         {/* <p>{values.filter((val) => val).length}</p> */}
-        <p>{values.reduce((acc, num) => acc + num, 0)}</p>
+        <p>{total}</p>
       </div>
     </Suspense>
   );
