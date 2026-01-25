@@ -62,7 +62,7 @@ const useFormHook = (deviceId: string): UseFormProps => {
     } finally {
       setSearching(false);
     }
-  }, 1000);
+  }, 500);
 
   const handleSelectPatient = useCallback(
     (patient: PatientData) => {

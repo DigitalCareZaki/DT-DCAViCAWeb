@@ -52,15 +52,31 @@ const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
       patients = res.data.data;
     }
 
+    const mappedData = patients?.map((el) => ({
+      id: el.patient.id,
+      first_name: el.patient.first_name,
+      middle_name: el.patient.middle_name,
+      last_name: el.patient.last_name,
+      email: el.patient.email,
+    }));
+
+    if (search && (userType === 'DOCTOR' || userType === 'NURSE')) {
+      const lowerSearch = search.toLowerCase();
+      return {
+        success: true,
+        data: mappedData.filter(
+          (patient) =>
+            patient.first_name?.toLowerCase().includes(lowerSearch) ||
+            patient.middle_name?.toLowerCase().includes(lowerSearch) ||
+            patient.last_name?.toLowerCase().includes(lowerSearch) ||
+            patient.email?.toLowerCase().includes(lowerSearch)
+        ),
+      };
+    }
+
     return {
       success: true,
-      data: patients?.map((el) => ({
-        id: el.patient.id,
-        first_name: el.patient.first_name,
-        middle_name: el.patient.middle_name,
-        last_name: el.patient.last_name,
-        email: el.patient.email,
-      })),
+      data: mappedData,
     };
   } else if (userType === 'ADMIN') {
     const patients: SuperAdminPatientListProps[] = res.data;
@@ -81,6 +97,7 @@ const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
       data: [],
     };
   }
+
 };
 
 export default getAllPatients;
