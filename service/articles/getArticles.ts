@@ -5,9 +5,7 @@ import type { GetArticlesProps } from '../types';
 
 async function getArticles(): Promise<GetArticlesProps> {
   const res = await fetch('/api/v1/web/articles', {
-    next: {
-      revalidate: 10,
-    },
+    cache: 'no-store',
   });
 
   const data = await res.json();

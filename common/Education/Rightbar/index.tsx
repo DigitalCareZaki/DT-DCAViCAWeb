@@ -23,16 +23,16 @@ const Rightbar: ServerComponent = async () => {
       <CreateArticle />
 
       {/* Articles Section */}
-      <div className="flex w-full flex-col gap-4 rounded-lg bg-white p-4 font-poppins">
-        <div className="flex w-full items-center justify-between">
-          <span className="text-lg font-semibold tracking-wide text-gray-500">
+      <div className="flex h-[80vh] w-full flex-col gap-4 rounded-xl bg-white p-5 shadow-sm font-poppins">
+        <div className="flex w-full items-center justify-between border-b pb-3">
+          <span className="text-lg font-bold tracking-wide text-gray-700">
             My Articles
           </span>
-          <IoDocumentText size={20} />
+          <IoDocumentText size={22} className="text-gray-800" />
         </div>
 
         {/* Articles list container */}
-        <div className="hidescrollbar flex h-full w-full flex-col gap-4 overflow-y-scroll">
+        <div className="hidescrollbar flex h-full w-full flex-col gap-3 overflow-y-auto">
           <ServerGenerator
             data={res.data}
             userRole={user?.role?.toLowerCase()}
@@ -42,6 +42,7 @@ const Rightbar: ServerComponent = async () => {
           </ServerGenerator>
         </div>
       </div>
+
     </div>
   );
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 
@@ -15,6 +16,7 @@ const DeleteArticle: ClientComponentProps<{
   selfContent: boolean;
 }> = ({ id, selfContent }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleDelete = async () => {
@@ -32,6 +34,7 @@ const DeleteArticle: ClientComponentProps<{
           show: true,
         })
       );
+      router.refresh();
     } catch (err) {
       dispatch(
         showModalReducer({
@@ -52,10 +55,16 @@ const DeleteArticle: ClientComponentProps<{
       {loading ? (
         <CircleSpinner size={20} color="#000000" />
       ) : (
-        <MdDelete onClick={handleDelete} size={20} />
+        <MdDelete
+          onClick={handleDelete}
+          className="cursor-pointer text-gray-400 transition duration-200 hover:text-red-500 group-hover:text-white"
+          size={20}
+        />
       )}
+
     </div>
   );
 };
 
 export default DeleteArticle;
+
