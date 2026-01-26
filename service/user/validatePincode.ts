@@ -19,6 +19,8 @@ async function verifyPincode(payload: string): Promise<VerifyPincodeProps> {
 
   const data = await res.json();
 
+  console.log('data verify pincode >>>>', data);
+
   return {
     success: res.ok,
     message: data?.message ?? '',

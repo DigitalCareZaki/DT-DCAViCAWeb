@@ -32,7 +32,7 @@ export async function login(data: any) {
     }
 
     cookieStore.set('jwt', body.token, {
-      maxAge: 2 * 60 * 60,
+      maxAge: 60 * 60 * 24 * 365, // 1 year in seconds
       httpOnly: false,
       secure: false,
       path: '/',
