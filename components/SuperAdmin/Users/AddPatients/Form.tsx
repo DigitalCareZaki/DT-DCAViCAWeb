@@ -533,7 +533,7 @@ const Form: ClientComponent = () => {
                 className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
                   }`}
               >
-                <span className="font-medium">Yes</span>
+                <span className="font-medium">YES</span>
                 {/* <FaCheckCircle size={18} className="text-green-500" /> */}
               </div>
               <div
@@ -541,7 +541,7 @@ const Form: ClientComponent = () => {
                 className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
                   }`}
               >
-                <span className="font-medium">No</span>
+                <span className="font-medium">NO</span>
                 {/* <FaExclamationTriangle size={18} className="text-red-500" /> */}
               </div>
               <div
@@ -549,7 +549,7 @@ const Form: ClientComponent = () => {
                 className={`flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200 ${loading ? 'cursor-not-allowed opacity-50' : ''
                   }`}
               >
-                <span className="font-medium">Later</span>
+                <span className="font-medium">LATER</span>
                 {/* <FaQuestion size={18} className="text-blue-500" /> */}
               </div>
             </>

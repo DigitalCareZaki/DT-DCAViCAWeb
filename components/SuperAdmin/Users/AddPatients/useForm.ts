@@ -13,7 +13,6 @@ import {
   addPatient,
   getOrganizationDoctors,
   getOrganizationNurses,
-  syncVivalink,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -257,38 +256,20 @@ const useFormHook = (): useFormProps => {
         return;
       }
 
-      setCurrentStep('success');
-
-      // Sync with Vivalink if requested
+      // If YES is selected, show the syncing step briefly as requested
       if (selectors.cardiac_monitoring.title === 'YES') {
         setCurrentStep('syncing');
-        const syncRes = await syncVivalink({
-          ...payload,
-          cardiac_monitoring: 'YES'
-        });
-
-        if (!syncRes.success) {
-          handleShowModal({
-            message: syncRes?.message || 'Sync failed. Please check the connection.',
-            type: 'ERROR',
-            show: true,
-          });
-          // Even if sync fails, patient is added in AViCA
-        } else {
-          handleShowModal({
-            message: 'Sync successful and patient added successfully',
-            type: 'SUCCESS',
-            show: true,
-          });
-        }
-      } else {
-        // Show success message and wait before redirecting
-        handleShowModal({
-          message: 'Patient added successfully',
-          type: 'SUCCESS',
-          show: true,
-        });
+        await new Promise(resolve => setTimeout(resolve, 1500));
       }
+
+      setCurrentStep('success');
+
+      // Show success message and wait before redirecting
+      handleShowModal({
+        message: 'Patient added successfully',
+        type: 'SUCCESS',
+        show: true,
+      });
 
       // Wait 3 seconds before redirecting to show success step
       setTimeout(() => {
