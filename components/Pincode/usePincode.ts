@@ -61,6 +61,7 @@ const usePincode: UsePincodeProps = (handleReset) => {
         setError('');
         handleReset();
       } catch (err) {
+        console.log('pincode error >>>>', err);
         setError('Something went wrong');
       } finally {
         setLoading(false);
