@@ -9,7 +9,7 @@ export interface DeviceProps {
   description: string | null;
   serial_number: string;
   category: MeasurementType;
-  cardiac_monitoring: 'Yes' | 'No' | 'Later';
+  cardiac_monitoring: 'YES' | 'NO' | 'LATER';
   // Optional branch for SUPERADMIN create flow
   branch_id?: string;
 }

@@ -155,7 +155,7 @@ const useFormHook = (
         if (!res.success) {
           handleShowModal({
             type: 'ERROR',
-            message: data.cardiac_monitoring === 'Yes'
+            message: data.cardiac_monitoring === 'YES'
               ? 'Sync failed. Please check the connection.'
               : (res?.message ?? 'Unable to create a new device'),
             show: true,
@@ -165,7 +165,7 @@ const useFormHook = (
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: data.cardiac_monitoring === 'Yes'
+            message: data.cardiac_monitoring === 'YES'
               ? 'Sync successful or The device successfully added.'
               : 'Device created successfully',
             show: true,
@@ -192,7 +192,7 @@ const useFormHook = (
         if (!res.success) {
           handleShowModal({
             type: 'ERROR',
-            message: data.cardiac_monitoring === 'Yes'
+            message: data.cardiac_monitoring === 'YES'
               ? 'Sync failed. Please check the connection.'
               : (res?.message ?? 'Unable to update device'),
             show: true,
@@ -202,7 +202,7 @@ const useFormHook = (
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: data.cardiac_monitoring === 'Yes'
+            message: data.cardiac_monitoring === 'YES'
               ? 'Sync successful or The device successfully added.'
               : 'Device updated successfully',
             show: true,
@@ -228,7 +228,10 @@ const useFormHook = (
   // for edit case
   useEffect(() => {
     if (prevData) {
-      reset(prevData);
+      reset({
+        ...prevData,
+        cardiac_monitoring: prevData.cardiac_monitoring?.toUpperCase() as any,
+      });
       setSelectedValues({
         category: {
           name:
@@ -237,8 +240,8 @@ const useFormHook = (
           value: prevData.category,
         },
         cardiac_monitoring: {
-          name: prevData.cardiac_monitoring || undefined,
-          value: (prevData.cardiac_monitoring as any) || undefined,
+          name: prevData.cardiac_monitoring?.toUpperCase() || undefined,
+          value: (prevData.cardiac_monitoring?.toUpperCase() as any) || undefined,
         },
       });
     }

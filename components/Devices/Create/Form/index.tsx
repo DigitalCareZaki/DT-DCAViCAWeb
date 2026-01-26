@@ -152,9 +152,9 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             selected={selectedValues?.cardiac_monitoring?.name}
           >
             {[
-              { name: 'Yes', value: 'Yes' },
-              { name: 'No', value: 'No' },
-              { name: 'Later', value: 'Later' },
+              { name: 'YES', value: 'YES' },
+              { name: 'NO', value: 'NO' },
+              { name: 'LATER', value: 'LATER' },
             ].map((option) => (
               <div
                 key={option.value}
@@ -200,7 +200,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           {/* Branch Code End  */}
         </div>
       )}
-      {loading && selectedValues?.cardiac_monitoring?.value === 'Yes' && (
+      {loading && selectedValues?.cardiac_monitoring?.value === 'YES' && (
         <div className="flex flex-col gap-2">
           <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
             <div className="h-full bg-blue-500 animate-pulse" style={{ width: '60%' }}></div>

@@ -20,6 +20,8 @@ const createDevice = async (data: any): Promise<any> => {
 
     const body = await res.json();
 
+    console.log('body >>>>>', body);
+
     if (res.status !== 201) {
       throw new Error(body?.message?.toString() || 'Something went wrong');
     }

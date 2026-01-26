@@ -41,6 +41,6 @@ export const validator = create((data: DeviceProps) => {
   });
 
   test('cardiac_monitoring', 'Invalid cardiac monitoring option', () => {
-    enforce(data.cardiac_monitoring).inside(['Yes', 'No', 'Later']);
+    enforce(data.cardiac_monitoring).inside(['YES', 'NO', 'LATER']);
   });
 });
