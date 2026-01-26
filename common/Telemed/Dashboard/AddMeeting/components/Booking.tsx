@@ -316,7 +316,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
                     }}
                     className="h-full w-full"
                   >
-                    <div className="flex w-full flex-col gap-6 px-10 text-gray-600">
+                    <div className="flex w-full flex-wrap gap-4 px-10 text-gray-600">
 
                       {
                         getSlots()?.map((item, index) => {

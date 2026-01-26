@@ -30,12 +30,14 @@ const TimeSlot: ClientComponentProps<TimeSlotProps> = ({
     <div
       onClick={handleSelect}
       className={twMerge(
-        'flex h-10 min-w-[120px] max-w-[160px] cursor-pointer items-center justify-center rounded-lg px-3 text-xs font-semibold transition duration-200 hover:bg-emerald-200 hover:text-emerald-900',
-        isActive ? '!bg-emerald-500 !text-white' : '!bg-emerald-100 text-emerald-900'
+        'flex w-auto min-w-[140px] cursor-pointer items-center justify-center rounded-full px-6 py-2 text-base font-bold transition-all duration-300 shadow-sm border hover:shadow-md hover:scale-105 whitespace-nowrap',
+        isActive
+          ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-transparent shadow-emerald-200/50'
+          : 'bg-white text-emerald-800 border-emerald-100 hover:border-emerald-300 hover:bg-emerald-50'
       )}
     >
       {title}
-    </div>
+    </div >
   );
 };
 
