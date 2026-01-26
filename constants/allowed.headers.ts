@@ -5,4 +5,5 @@ export const acceptHeaders = [
   'sec-ch-ua',
   'x-forwarded-host',
   'x-forwarded-proto',
+  'user-type',
 ];

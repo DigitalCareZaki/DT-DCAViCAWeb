@@ -26,7 +26,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
     otherAttributes: {},
   });
   const [selectedDuration, setSelectedDuration] = useState("1 minute");
-  const [loading, setLoading] = useState(false);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [reportLoading, setReportLoading] = useState(false);
@@ -123,7 +123,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
         otherAttributes: {}
       });
 
-      setLoading(true);
+      setSyncingId('FETCHING_PATIENT');
       setShowDatePicker(true);
 
       const patchSn = data[name][0]?.replace('/', '%2F');
@@ -132,11 +132,11 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
       const res = await getDoctorSinglePatientFromVl(patchSn, '1 minute');
 
       if (!res.success) {
-        setLoading(false);
+        setSyncingId(null);
         return;
       }
 
-      setLoading(false);
+      setSyncingId(null);
       setSelectedPatient({
         name,
         ecg: res.data.ecg,
@@ -150,15 +150,9 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
 
   const handleSyncPatient = async (patient: any) => {
     try {
-      setLoading(true);
-      const res = await syncVivalink({
-        first_name: patient.first_name,
-        last_name: patient.last_name,
-        email: patient.email,
-        phone_number: patient.phone_number,
-        gender: patient.gender,
-        cardiac_monitoring: 'YES'
-      });
+      setSyncingId(patient.id);
+      console.log('patient id >>>>', patient.id);
+      const res = await syncVivalink(patient.id);
 
       if (res.success) {
         dispatch(showModalReducer({
@@ -177,7 +171,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
     } catch (error) {
       console.error('Error syncing patient:', error);
     } finally {
-      setLoading(false);
+      setSyncingId(null);
     }
   };
 
@@ -228,7 +222,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
               </div>
             )}
           </div>
-          {loading && (
+          {syncingId && (
             <div className="flex items-center justify-center p-4">
               <div className="loader mr-2"></div>
               Processing...
@@ -345,12 +339,17 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [] }) => 
                     <td className="px-6 py-4 text-center">
                       {!isSynced ? (
                         <button
-                          disabled={loading}
+                          disabled={!!syncingId}
                           onClick={() => handleSyncPatient(patient)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 mx-auto disabled:opacity-50"
+                          className={`px-4 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2 mx-auto ${syncingId === patient.id
+                            ? 'bg-blue-600 text-white shadow-inner'
+                            : syncingId
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                              : 'bg-blue-500 hover:bg-blue-600 text-white'
+                            }`}
                         >
-                          <FaSync size={12} />
-                          {loading ? 'Syncing...' : 'Sync to Vivalink'}
+                          <FaSync size={12} className={syncingId === patient.id ? 'animate-spin' : ''} />
+                          {syncingId === patient.id ? 'Syncing...' : 'Sync to Vivalink'}
                         </button>
                       ) : (
                         <button

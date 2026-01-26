@@ -2,17 +2,20 @@
 
 import fetch from '@fetch';
 import '@init-globals';
+import { headers } from 'next/headers';
 import type { AddDataProps } from '../types';
 
-async function syncVivalink(data: any): Promise<AddDataProps> {
+async function syncVivalink(id: string): Promise<AddDataProps> {
     try {
-        const res = await fetch(`/api/v1/vl/patient/sync`, {
+        const userType = headers().get('user-type') || 'organization';
+        const res = await fetch(`/api/v1/web/${userType}/patient/sync/${id}`, {
             method: 'POST',
             cache: 'no-cache',
-            body: JSON.stringify(data),
         });
 
         const body = await res.json();
+
+        console.log('body >>>>', body);
 
         if (!res.ok) {
             throw new Error(body?.message?.toString() || 'Sync failed');
