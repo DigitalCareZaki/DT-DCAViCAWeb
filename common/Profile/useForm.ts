@@ -39,24 +39,29 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
   useEffect(() => {
     if (!data) return;
 
+    // For fields that are part of the logged-in user, prefer the latest
+    // values from Redux `user` (which we update on successful save)
+    // and fall back to the server `data` if Redux doesn't have them yet.
 
     // setValue('speciality', data?.doctor?.specialities[0]?.title);
-    setValue('title', data?.title);
-    setValue('firstName', data?.first_name);
-    setValue('middleName', data?.middle_name ?? '');
-    setValue('lastName', data?.last_name);
+    setValue('title', user?.title ?? data?.title);
+    setValue('firstName', user?.first_name ?? data?.first_name);
+    setValue('middleName', user?.middle_name ?? data?.middle_name ?? '');
+    setValue('lastName', user?.last_name ?? data?.last_name);
+
     // guard against associated_branches being undefined or empty
-    setValue('branch', data?.associated_branches?.[0]?.name ?? "");
+    setValue('branch', data?.associated_branches?.[0]?.name ?? '');
+
     setValue('email', data?.email);
     // setValue('npiNumber', data?.doctor?.npi_number);
-    setValue('phoneNumber', data?.phone_number);
-    setValue('address', data?.location?.address);
+    setValue('phoneNumber', user?.phone_number ?? data?.phone_number);
+    setValue('address', user?.address ?? data?.location?.address);
     setValue('pmdcNumber', data?.doctor?.pmdc_number);
     setValue('contractType', data?.doctor?.contract_type);
     // dob might be undefined or invalid — guard and fallback to empty string
     setValue('dob', data?.dob ? new Date(data.dob).toLocaleDateString() : '');
     // setValue('department', data?.doctor?.departments[0]?.title);
-  }, [data]);
+  }, [data, user]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {

@@ -96,7 +96,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
             ...payload,
           })
         ),
-        user?.type?.toLowerCase() as string
+        (user?.type?.toLowerCase() || 'patient') as string
       );
 
       if (res.success) {
@@ -120,7 +120,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
         // Return updated data for Form component
 
         setTimeout(() => {
-          const userRole = user?.role?.toLowerCase() || user?.type?.toLowerCase();
+          const userRole = user?.role?.toLowerCase() || user?.type?.toLowerCase() || 'patient';
           router.push(`/${userRole}`);
         }, 1500); // Wait 1.5 seconds to show success message before redirecting
 
@@ -129,7 +129,12 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
           updatedData: {
             ...data,
             uri: updatedUri,
-          },
+            patient: {
+              emr: data.emr,
+              height: data.height,
+              weight: data.weight,
+            },
+          } as unknown as PatientProfileData,
         };
       } else {
         handleShowModal({
@@ -154,17 +159,38 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
   useEffect(() => {
     if (!data?.created_at) return;
 
+    // Prefer latest values from Redux `user` (updated after profile save),
+    // and fall back to the server `data` if Redux doesn't have them yet.
     Object.keys(data).forEach((key) => {
       if (key === 'patient') return;
 
-      setValue(key as any, data[key as keyof PatientProfileData] as string);
+      const typedKey = key as keyof PatientProfileData;
+
+      // Map of fields that can come from the Redux `user` object
+      const userBackedFields: Partial<Record<keyof PatientProfileData, unknown>> =
+      {
+        first_name: user?.first_name,
+        middle_name: user?.middle_name,
+        last_name: user?.last_name,
+        uri: user?.uri,
+        gender: user?.gender,
+        title: user?.title,
+      };
+
+      const valueFromUser = userBackedFields[typedKey];
+      const value =
+        (valueFromUser as string | undefined) ??
+        (data[typedKey] as string | undefined);
+
+      if (typeof value !== 'undefined') {
+        setValue(key as any, value);
+      }
     });
 
     setValue('emr', data.patient.emr);
     setValue('height', data.patient.height);
     setValue('weight', data.patient.weight);
-
-  }, [data]);
+  }, [data, user]);
 
   useEffect(() => {
     if (!selectedImage) return;

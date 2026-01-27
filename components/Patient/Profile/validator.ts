@@ -68,7 +68,7 @@ export const validator = create((data: PatientProps) => {
     enforce(data.email).matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   });
 
-  test('heigt', 'Height must be a number', () => {
+  test('height', 'Height must be a number', () => {
     if (data.height && isNaN(data.height)) throw new Error();
 
     return true;

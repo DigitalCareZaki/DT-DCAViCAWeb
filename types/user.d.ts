@@ -1,6 +1,8 @@
-import type { UserRole } from '@types';
-
 export type UserProps = {
+  address?: string;
+  phone_number?: string;
+  title?: UserTitle;
+  gender?: UserGender;
   id: string | undefined;
   email: string | undefined;
   name: string | undefined;
