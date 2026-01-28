@@ -43,6 +43,7 @@ export default function Donut({ title, values }: DonutProps): JSX.Element {
                     },
                     value: {
                       show: true,
+                      formatter: (val: any) => (hasData ? val : total),
                     },
                     total: {
                       show: false,

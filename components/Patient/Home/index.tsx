@@ -24,6 +24,7 @@ const Dashboard: ServerComponentProps<Props> = async ({ patient, type }) => {
     temperature: res.data?.temperature
       ? Object.values(res.data.temperature)
       : [],
+    ecg: res.data?.ecg ? Object.values(res.data.ecg) : [],
   };
 
 

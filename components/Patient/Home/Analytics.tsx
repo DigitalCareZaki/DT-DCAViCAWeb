@@ -20,7 +20,7 @@ const Analytics = async ({ data }: any) => {
           <Donut title="Sp02 Reading" values={data?.spo2} />
           <Donut title="Blood Glucose" values={data?.bloodglucose} />
           <Donut title="Temperature" values={data?.temperature} />
-          <Donut title="ECG" values={[] as any} />
+          <Donut title="ECG" values={data?.ecg} />
         </div>
       </div>
     </div>
