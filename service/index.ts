@@ -92,6 +92,7 @@ export { default as deletePatientEMRRecord } from './emr/deleteRecord';
 export { default as getLatestPatientMeasurement } from './patients/getLatestPatientMeasurements';
 export { default as getDoctorPatientsFromVl } from './doctors/getPatientsFromVl';
 export { default as getDoctorSinglePatientFromVl } from './doctors/getSinglePatientFromVl';
+export { default as getAssignedPatientsVl } from './doctors/getAssignedPatientsVl';
 export { default as getECGReportByDate } from './doctors/getECGReportByDate';
 export { default as getAdminPatient } from './admin/getPatient';
 export { default as disableUser } from './superadmin/disableUser';

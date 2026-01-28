@@ -1,15 +1,16 @@
-import { getDoctorPatientsFromVl, getPatientList } from '@service';
+import { getDoctorPatientsFromVl, getAssignedPatientsVl } from '@service';
 import { getUserTypeHeaders } from '@actions';
 
-import type { ServerComponent } from '@types';
+import type { ServerComponentProps } from '@types';
 
 import Patients from './Patients';
 
-const Vivalink: ServerComponent = async () => {
-  const userType = await getUserTypeHeaders();
+const Vivalink: ServerComponentProps<{ searchParams: { [key: string]: string | string[] | undefined } }> = async ({ searchParams }) => {
+  const page = typeof searchParams?.page === 'string' ? parseInt(searchParams.page) : 1;
+
   const [vlRes, avicaRes] = await Promise.all([
     getDoctorPatientsFromVl(),
-    getPatientList(userType?.toLowerCase(), 1, 100) // Get more patients for management
+    getAssignedPatientsVl(page)
   ]);
 
   return (
@@ -20,6 +21,7 @@ const Vivalink: ServerComponent = async () => {
       <Patients
         data={vlRes.success ? vlRes.data : {}}
         avicaPatients={avicaRes.success ? avicaRes.data.data : []}
+        pagination={avicaRes.success ? avicaRes.data.pagination : undefined}
       />
     </div>
   );

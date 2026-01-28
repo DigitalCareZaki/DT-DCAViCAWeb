@@ -17,8 +17,8 @@ async function syncVivalink(id: string): Promise<AddDataProps> {
 
         console.log('body >>>>', body);
 
-        if (!res.ok) {
-            throw new Error(body?.message?.toString() || 'Sync failed');
+        if (!res.ok || body?.success === false) {
+            throw new Error(body?.message?.toString() || body?.error?.toString() || 'Sync failed');
         }
 
         return {
