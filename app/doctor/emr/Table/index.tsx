@@ -18,6 +18,7 @@ import { type ChangeEvent } from 'react';
 const Table: ClientComponentProps<any> = ({ records }: any) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false); // ✅ loader state
 
@@ -27,7 +28,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
     const response = await getAllPatientsReports(pageNumber, 10, searchQuery !== undefined ? searchQuery : search);
 
     const filterData = Array.isArray(response.data.data)
-      ? response.data.data.filter((e: any) => e.type && e.type.toUpperCase() === "RECORD")
+      ? response.data.data // removed .filter since everything here should be a report
       : []
 
     if (!response.success) {
@@ -40,6 +41,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
 
       dispatch(setEmrRecordsSlice({ records: filterData }));
       setHasNextPage(response.data.pagination?.hasNextPage);
+      setTotalPages(response.data.pagination?.totalPages || 1);
     }
   };
 
@@ -99,7 +101,7 @@ const Table: ClientComponentProps<any> = ({ records }: any) => {
           >
             <FaArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <span>Page 1 of {page}</span>
+          <span>Page {page} of {totalPages}</span>
           <button
             onClick={handleNext}
             disabled={!hasNextPage || loading}
