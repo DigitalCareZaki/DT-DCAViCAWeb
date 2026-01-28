@@ -48,6 +48,7 @@ const useFormHook = (
     clearErrors,
   } = useForm<CreateMeasurementProps>({
     resolver: vestResolver(validator),
+    mode: 'all',
   });
 
   const handleShowModal = (payload: ModalState) => {
