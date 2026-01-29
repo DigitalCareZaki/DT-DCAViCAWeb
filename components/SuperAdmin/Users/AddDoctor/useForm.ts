@@ -267,42 +267,6 @@ const useFormHook = (): useFormProps => {
       if (!loading) { // logic check: if we are here and not step=success/error? 
         // We generally keep loading true until redirect or error display.
       }
-      // If error, we might want to stop loading. If success, we wait for redirect.
-      // But we can just set loading false if error?
-      // For success, we want to keep showing the overlay until redirect happens.
-      // So maybe remove setLoading(false) for success path?
-      // The Patient useForm sets setLoading(false) in finally.
-      // BUT AddPatient Form uses {loading && <Overlay>}. So if loading is false, overlay disappears.
-      // If we redirect after 3 seconds, we want overlay to stay?
-      // In Patient useForm (Step 515), line 288 `setLoading(false)` is in finally.
-      // Line 275 `setTimeout(..., 3000)`.
-      // If `setLoading(false)` runs immediately, the overlay disappears.
-      // The async function `onSubmit` awaits `addDoctor`.
-      // It awaits `setTimeout` promises.
-      // Then it sets `setTimeout` for redirect.
-      // Then it exits `onSubmit`.
-      // Finally block runs. `setLoading(false)`.
-      // So the overlay disappears immediately after success message?
-      // Let's check Patient implementation again carefully.
-
-      // Patient useForm:
-      // Line 287 `} finally {`
-      // Line 288 `  setLoading(false);`
-      // Line 289 `}`
-
-      // So the overlay disappears. Then 3 seconds later redirect.
-      // But the user might see the form again.
-      // Maybe the intention is to show the "Success" step in the overlay?
-      // If overlay disappears, we don't see "Success".
-      // Maybe I should NOT set loading false if success?
-
-      // I'll stick to Patient implementation. If it disappears, it disappears.
-      // Wait, if step is 'success', the overlay should ideally stay.
-      // In Patient code, does `setLoading(false)` happen?
-      // Yes.
-      // Maybe `loading` prop passed to Form effectively controls overlay.
-      // If I want the overlay to persist during the 3s success message, I should delay setLoading(false).
-      // But I should act EXACTLY like Patient form.
 
       setLoading(false);
     }
