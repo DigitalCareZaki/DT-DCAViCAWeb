@@ -30,6 +30,7 @@ export interface AddDoctorProps {
   pmdc_number: string;
   department: string;
   site: string;
+  avicardia_monitoring: string;
 }
 
 export interface SelectorsProps {
@@ -61,6 +62,10 @@ export interface SelectorsProps {
     title: string | undefined;
     id: string | undefined;
   };
+  avicardia_monitoring: {
+    title: string | undefined;
+    id: string | undefined;
+  };
 }
 
 export type useFormProps = [
@@ -81,4 +86,23 @@ export type useFormProps = [
   departments: { loading: boolean; data: SelectOrganizationDepartments[] },
   sites: { loading: boolean; data: SiteProps[] },
   validator: Suite,
+  currentStep: LoadingStep,
+  getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
 ];
+
+export type LoadingStep =
+  | 'idle'
+  | 'validating'
+  | 'preparing'
+  | 'submitting'
+  | 'processing'
+  | 'syncing'
+  | 'success'
+  | 'error';
+
+export interface LoadingStepInfo {
+  step: LoadingStep;
+  title: string;
+  description: string;
+  progress: number;
+}

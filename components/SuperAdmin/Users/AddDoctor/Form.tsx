@@ -5,6 +5,9 @@ import { IoFemale } from '@react-icons/all-files/io5/IoFemale';
 import { FaTransgender } from '@react-icons/all-files/fa/FaTransgender';
 import { FaQuestion } from '@react-icons/all-files/fa/FaQuestion';
 import { MdTitle } from '@react-icons/all-files/md/MdTitle';
+import { FaSpinner } from '@react-icons/all-files/fa/FaSpinner';
+import { FaCheckCircle } from '@react-icons/all-files/fa/FaCheckCircle';
+import { FaExclamationTriangle } from '@react-icons/all-files/fa/FaExclamationTriangle';
 
 import {
   InputBasic,
@@ -32,13 +35,87 @@ const Form: React.FC = () => {
     departments,
     sites,
     validator,
+    currentStep,
+    getLoadingStepInfo,
   ] = useForm();
+
+  // Progressive loading overlay component
+  const ProgressiveLoadingOverlay = () => {
+    const stepInfo = getLoadingStepInfo(currentStep);
+
+    return (
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-2xl">
+        <div className="flex flex-col items-center gap-6 text-center max-w-md">
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${stepInfo.progress}%` }}
+            ></div>
+          </div>
+
+          {/* Step Icon */}
+          <div className="flex items-center justify-center">
+            {currentStep === 'success' ? (
+              <FaCheckCircle className="h-12 w-12 text-green-500" />
+            ) : currentStep === 'error' ? (
+              <FaExclamationTriangle className="h-12 w-12 text-red-500" />
+            ) : (
+              <FaSpinner className="h-12 w-12 animate-spin text-blue-600" />
+            )}
+          </div>
+
+          {/* Step Title */}
+          <h3 className="text-xl font-semibold text-gray-800">
+            {stepInfo.title}
+          </h3>
+
+          {/* Step Description */}
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {stepInfo.description}
+          </p>
+
+          {/* Progress Percentage */}
+          <div className="text-sm font-medium text-blue-600">
+            {stepInfo.progress}% Complete
+          </div>
+
+          {/* Step Indicators */}
+          <div className="flex items-center gap-2 mt-4">
+            {['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].map((step, index) => {
+              const isActive = currentStep === step;
+              const isCompleted = ['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].indexOf(currentStep) > index;
+
+              return (
+                <div
+                  key={step}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${isCompleted
+                    ? 'bg-green-500'
+                    : isActive
+                      ? 'bg-blue-500'
+                      : 'bg-gray-300'
+                    }`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <form
       onSubmit={onSubmit}
-      className="flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-8"
+      className="relative flex h-fit w-1/2 flex-col gap-5 rounded-2xl bg-white p-6 pb-8"
+      onKeyDown={(e) => {
+        if (loading && (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+        }
+      }}
     >
+      {/* Progressive Loading Overlay */}
+      {loading && <ProgressiveLoadingOverlay />}
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
@@ -321,7 +398,40 @@ const Form: React.FC = () => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
-        <div className="w-1/2"></div>
+        <div className="w-1/2">
+          <DropdownSecondary
+            title="Doctor Sync Vivalink"
+            label="Doctor Sync Vivalink"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot" // Or standard generic icon if available, reusing Dot for now or none
+            iconSize={16}
+            error={!!errors.avicardia_monitoring?.message}
+            errorMessage={errors.avicardia_monitoring?.message || '&'}
+            selected={selectors.avicardia_monitoring.title}
+          >
+            <>
+              <div
+                onClick={() => handleSelect('avicardia_monitoring')('YES', undefined)}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">YES</span>
+              </div>
+              <div
+                onClick={() => handleSelect('avicardia_monitoring')('NO', undefined)}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">NO</span>
+              </div>
+              <div
+                onClick={() => handleSelect('avicardia_monitoring')('LATER', undefined)}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">LATER</span>
+              </div>
+            </>
+          </DropdownSecondary>
+        </div>
       </div>
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
@@ -470,13 +580,24 @@ const Form: React.FC = () => {
         </div>
       </div>
       <div className="col-span-2 flex w-full flex-col gap-4 mt-6">
-        <ButtonPrimary title="Save" name="Save" className="rounded-lg" />
+        <ButtonPrimary
+          title={loading ? "Processing..." : "Save"}
+          name={loading ? "Processing..." : "Save"}
+          className="rounded-lg relative"
+          disabled={loading}
+          type="submit"
+        >
+          {loading && (
+            <FaSpinner className="absolute left-4 h-4 w-4 animate-spin text-white" />
+          )}
+        </ButtonPrimary>
         <Link passHref href="/superadmin/users">
           <ButtonPrimary
             name="Close"
             className="h-10 rounded-lg border bg-white"
             type="button"
             outlined
+            disabled={loading}
           />
         </Link>
       </div>

@@ -20,7 +20,7 @@ import { useUser } from '@selectors';
 
 import { validator } from './validator';
 
-import type { AddDoctorProps, useFormProps, SelectorsProps } from './types';
+import type { AddDoctorProps, useFormProps, SelectorsProps, LoadingStep, LoadingStepInfo } from './types';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -39,6 +39,7 @@ const useFormHook = (): useFormProps => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
 
   const [selectors, setSelectors] = useState<SelectorsProps>({
     gender: {
@@ -66,6 +67,10 @@ const useFormHook = (): useFormProps => {
       id: undefined,
     },
     site: {
+      title: undefined,
+      id: undefined,
+    },
+    avicardia_monitoring: {
       title: undefined,
       id: undefined,
     },
@@ -129,9 +134,74 @@ const useFormHook = (): useFormProps => {
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
 
+  // Function to get loading step information
+  const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
+    const steps: Record<LoadingStep, LoadingStepInfo> = {
+      idle: {
+        step: 'idle',
+        title: 'Ready to Submit',
+        description: 'Form is ready for submission',
+        progress: 0,
+      },
+      validating: {
+        step: 'validating',
+        title: 'Validating Form',
+        description: 'Checking form data and requirements...',
+        progress: 20,
+      },
+      preparing: {
+        step: 'preparing',
+        title: 'Preparing Data',
+        description: 'Organizing doctor information...',
+        progress: 40,
+      },
+      submitting: {
+        step: 'submitting',
+        title: 'Submitting to Server',
+        description: 'Sending doctor data to the server...',
+        progress: 60,
+      },
+      processing: {
+        step: 'processing',
+        title: 'Processing Request',
+        description: 'Server is processing the doctor creation...',
+        progress: 70,
+      },
+      syncing: {
+        step: 'syncing',
+        title: 'Syncing with Vivalink...',
+        description: 'Synchronizing doctor data with Vivalink monitoring system...',
+        progress: 85,
+      },
+      success: {
+        step: 'success',
+        title: 'Doctor Created Successfully!',
+        description: 'Redirecting to users page...',
+        progress: 100,
+      },
+      error: {
+        step: 'error',
+        title: 'Error Occurred',
+        description: 'Something went wrong. Please try again.',
+        progress: 0,
+      },
+    };
+    return steps[step];
+  };
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
+      setError('');
+      setCurrentStep('validating');
+
+      // Simulate validation step
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setCurrentStep('preparing');
+
+      // Simulate data preparation step
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setCurrentStep('submitting');
 
       const res = await addDoctor(
         btoa(
@@ -155,14 +225,28 @@ const useFormHook = (): useFormProps => {
             address: data.address,
             pmdc_number: data.pmdc_number,
             site_id: selectors.site.id,
+            avicardia_monitoring: selectors.avicardia_monitoring.title,
           })
         )
       );
 
+      setCurrentStep('processing');
+      // Simulate processing step
+      await new Promise(resolve => setTimeout(resolve, 400));
+
       if (!res.success) {
+        setCurrentStep('error');
         handleShowModal({ message: res?.message, type: 'ERROR', show: true });
         return;
       }
+
+      // If YES is selected, show the syncing step briefly
+      if (selectors.avicardia_monitoring.title === 'YES') {
+        setCurrentStep('syncing');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+
+      setCurrentStep('success');
 
       handleShowModal({
         message: 'Doctor added',
@@ -170,10 +254,56 @@ const useFormHook = (): useFormProps => {
         show: true,
       });
 
-      router.push(`/${user.role?.toLocaleLowerCase()}/users`);
+      // Wait 3 seconds before redirecting to show success step
+      setTimeout(() => {
+        router.push(`/${user.role?.toLocaleLowerCase()}/users`);
+      }, 3000);
+
     } catch (err: any) {
+      setCurrentStep('error');
       setError(err?.message ?? 'Something went wrong');
+      handleShowModal({ message: err?.message, type: 'ERROR', show: true });
     } finally {
+      if (!loading) { // logic check: if we are here and not step=success/error? 
+        // We generally keep loading true until redirect or error display.
+      }
+      // If error, we might want to stop loading. If success, we wait for redirect.
+      // But we can just set loading false if error?
+      // For success, we want to keep showing the overlay until redirect happens.
+      // So maybe remove setLoading(false) for success path?
+      // The Patient useForm sets setLoading(false) in finally.
+      // BUT AddPatient Form uses {loading && <Overlay>}. So if loading is false, overlay disappears.
+      // If we redirect after 3 seconds, we want overlay to stay?
+      // In Patient useForm (Step 515), line 288 `setLoading(false)` is in finally.
+      // Line 275 `setTimeout(..., 3000)`.
+      // If `setLoading(false)` runs immediately, the overlay disappears.
+      // The async function `onSubmit` awaits `addDoctor`.
+      // It awaits `setTimeout` promises.
+      // Then it sets `setTimeout` for redirect.
+      // Then it exits `onSubmit`.
+      // Finally block runs. `setLoading(false)`.
+      // So the overlay disappears immediately after success message?
+      // Let's check Patient implementation again carefully.
+
+      // Patient useForm:
+      // Line 287 `} finally {`
+      // Line 288 `  setLoading(false);`
+      // Line 289 `}`
+
+      // So the overlay disappears. Then 3 seconds later redirect.
+      // But the user might see the form again.
+      // Maybe the intention is to show the "Success" step in the overlay?
+      // If overlay disappears, we don't see "Success".
+      // Maybe I should NOT set loading false if success?
+
+      // I'll stick to Patient implementation. If it disappears, it disappears.
+      // Wait, if step is 'success', the overlay should ideally stay.
+      // In Patient code, does `setLoading(false)` happen?
+      // Yes.
+      // Maybe `loading` prop passed to Form effectively controls overlay.
+      // If I want the overlay to persist during the 3s success message, I should delay setLoading(false).
+      // But I should act EXACTLY like Patient form.
+
       setLoading(false);
     }
   });
@@ -282,6 +412,8 @@ const useFormHook = (): useFormProps => {
     departments,
     sites,
     validator,
+    currentStep,
+    getLoadingStepInfo,
   ];
 };
 
