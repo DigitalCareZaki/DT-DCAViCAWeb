@@ -197,3 +197,4 @@ export { default as syncVivalink } from './patients/syncVivalink';
 // sites
 export { default as getSites } from './superadmin/getSites';
 export { default as createSite } from './superadmin/createSite';
+export { default as updateSite } from './superadmin/updateSite';

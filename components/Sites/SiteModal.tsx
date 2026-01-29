@@ -3,13 +3,16 @@ import { InputBasic, ButtonPrimary } from '@common';
 import { countries } from './countries';
 import { IoClose, IoChevronDown } from 'react-icons/io5';
 
+import type { SiteProps } from '@types';
+
 interface SiteModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (data: any) => Promise<void>;
+    onSubmit: (data: any) => Promise<void>;
+    initialData?: SiteProps | null;
 }
 
-const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onAdd }) => {
+const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initialData }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [countryCode, setCountryCode] = useState('');
@@ -32,18 +35,36 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onAdd }) => {
         };
     }, [wrapperRef]);
 
-    // Reset when modal opens
+    // Reset or Populate when modal opens
     useEffect(() => {
         if (isOpen) {
-            setName('');
-            setDescription('');
-            setCountryCode('');
-            setAddress('');
+            if (initialData) {
+                setName(initialData.name || '');
+                setDescription(initialData.description || '');
+                setCountryCode(initialData.countryCode || '');
+                setAddress(initialData.address || '');
+                // Initial search term for country
+                if (initialData.countryCode) {
+                    const found = countries.find(c => c.code === initialData.countryCode);
+                    if (found) {
+                        setSearchTerm(`${found.code} (${found.name})`);
+                    } else {
+                        setSearchTerm(initialData.countryCode);
+                    }
+                } else {
+                    setSearchTerm('');
+                }
+            } else {
+                setName('');
+                setDescription('');
+                setCountryCode('');
+                setAddress('');
+                setSearchTerm('');
+            }
             setError('');
-            setSearchTerm('');
             setDropdownOpen(false);
         }
-    }, [isOpen]);
+    }, [isOpen, initialData]);
 
     if (!isOpen) return null;
 
@@ -59,10 +80,10 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onAdd }) => {
         }
 
         try {
-            await onAdd({ name, description, countryCode, address });
+            await onSubmit({ name, description, countryCode, address });
             onClose();
         } catch (err: any) {
-            setError(err?.message || 'Failed to create site');
+            setError(err?.message || 'Failed to submit');
         }
     };
 
@@ -76,7 +97,7 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onAdd }) => {
             <div className="w-full max-w-2xl rounded-lg bg-white shadow-lg relative flex flex-col">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-2">
-                    <h2 className="text-xl font-bold text-gray-800">New Site</h2>
+                    <h2 className="text-xl font-bold text-gray-800">{initialData ? 'Edit Site' : 'New Site'}</h2>
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-600 transition-colors"

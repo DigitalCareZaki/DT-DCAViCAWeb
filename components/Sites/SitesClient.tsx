@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import getSites from "../../service/superadmin/getSites";
 import createSite from "../../service/superadmin/createSite";
+import updateSite from "../../service/superadmin/updateSite";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { MdEdit } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 import type { SiteProps } from '@types';
 import { ButtonPrimary } from '@common';
@@ -23,6 +25,7 @@ const SitesClient = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedSite, setSelectedSite] = useState<SiteProps | null>(null);
 
     const fetchSites = async () => {
         setLoading(true);
@@ -43,8 +46,14 @@ const SitesClient = () => {
         fetchSites();
     }, [page]);
 
-    const handleCreateSite = async (data: any) => {
-        const res = await createSite(JSON.stringify(data));
+    const handleSiteSubmit = async (data: any) => {
+        let res;
+        if (selectedSite) {
+            res = await updateSite(selectedSite.id, JSON.stringify(data));
+        } else {
+            res = await createSite(JSON.stringify(data));
+        }
+
         if (res.success) {
             toast.success(res.message);
             fetchSites();
@@ -59,13 +68,20 @@ const SitesClient = () => {
             <SiteModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onAdd={handleCreateSite}
+                onSubmit={handleSiteSubmit}
+                initialData={selectedSite}
             />
             <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-semibold text-gray-800">Sites</h1>
                     <div className="w-40">
-                        <ButtonPrimary name="New Site" onClick={() => setIsModalOpen(true)} />
+                        <ButtonPrimary
+                            name="New Site"
+                            onClick={() => {
+                                setSelectedSite(null);
+                                setIsModalOpen(true);
+                            }}
+                        />
                     </div>
                 </div>
 
@@ -94,6 +110,7 @@ const SitesClient = () => {
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Description</th>
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Country Code</th>
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Address</th>
+                                    <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
@@ -105,6 +122,17 @@ const SitesClient = () => {
                                         <td className="px-6 py-4">{site.description}</td>
                                         <td className="px-6 py-4">{site.countryCode}</td>
                                         <td className="px-6 py-4">{site.address}</td>
+                                        <td className="px-6 py-4">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedSite(site);
+                                                    setIsModalOpen(true);
+                                                }}
+                                                className="text-gray-500 hover:text-blue-600 transition-colors"
+                                            >
+                                                <MdEdit size={20} />
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
