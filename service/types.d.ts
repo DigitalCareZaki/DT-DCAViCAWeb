@@ -679,3 +679,9 @@ export type SitesResponse = {
     };
   };
 };
+
+
+export type CreateSiteProps = {
+  success: boolean;
+  message: string;
+};

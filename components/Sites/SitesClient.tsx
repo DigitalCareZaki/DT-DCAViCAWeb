@@ -1,9 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import getSites from "../../service/superadmin/getSites";
+import createSite from "../../service/superadmin/createSite";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 import type { SiteProps } from '@types';
+import { ButtonPrimary } from '@common';
+import SiteModal from './SiteModal';
+import { toast } from 'react-hot-toast';
 
 const mainStyle = {
     transform: 'scale(0.67)',
@@ -18,31 +22,51 @@ const SitesClient = () => {
     const [pagination, setPagination] = useState<any>(null);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const fetchSites = async () => {
+        setLoading(true);
+        try {
+            const res = await getSites(page, 10);
+            if (res.success && res.data) {
+                setSites(res.data.data);
+                setPagination(res.data.pagination);
+            }
+        } catch (error) {
+            console.error('Failed to fetch sites:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchSites = async () => {
-            setLoading(true);
-            try {
-                const res = await getSites(page, 10);
-                if (res.success && res.data) {
-                    setSites(res.data.data);
-                    setPagination(res.data.pagination);
-                }
-            } catch (error) {
-                console.error('Failed to fetch sites:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchSites();
     }, [page]);
 
+    const handleCreateSite = async (data: any) => {
+        const res = await createSite(JSON.stringify(data));
+        if (res.success) {
+            toast.success(res.message);
+            fetchSites();
+        } else {
+            toast.error(res.message);
+            throw new Error(res.message);
+        }
+    };
+
     return (
         <div className="min-h-screen pb-24 md:pb-96 font-poppins">
+            <SiteModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAdd={handleCreateSite}
+            />
             <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-semibold text-gray-800">Sites</h1>
+                    <div className="w-40">
+                        <ButtonPrimary name="New Site" onClick={() => setIsModalOpen(true)} />
+                    </div>
                 </div>
 
                 {loading ? (

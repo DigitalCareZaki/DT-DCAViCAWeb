@@ -320,6 +320,8 @@ export type SelectOrganizationBranches = {
 export type CountriesProps = {
   id: string;
   name: string;
+  code?: string;
+  country_code?: string;
 };
 
 export type CitiesProps = {
