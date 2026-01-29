@@ -97,7 +97,7 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
             <div className="w-full max-w-2xl rounded-lg bg-white shadow-lg relative flex flex-col">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 pb-2">
-                    <h2 className="text-xl font-bold text-gray-800">{initialData ? 'Edit Site' : 'New Site'}</h2>
+                    <h2 className="text-xl font-bold text-gray-800">{initialData ? 'Edit Site' : 'Add New Site'}</h2>
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-600 transition-colors"

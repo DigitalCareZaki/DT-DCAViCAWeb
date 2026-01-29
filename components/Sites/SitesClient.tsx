@@ -76,7 +76,7 @@ const SitesClient = () => {
                     <h1 className="text-2xl font-semibold text-gray-800">Sites</h1>
                     <div className="w-40">
                         <ButtonPrimary
-                            name="New Site"
+                            name="Add New Site"
                             onClick={() => {
                                 setSelectedSite(null);
                                 setIsModalOpen(true);
