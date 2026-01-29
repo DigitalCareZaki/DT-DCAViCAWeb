@@ -1060,3 +1060,13 @@ export interface AppointmentStats {
     pending: number;
   };
 }
+
+export interface SiteProps {
+  id: string;
+  vivalinkSiteId: string;
+  name: string;
+  description: string;
+  countryCode: string;
+  address: string;
+  created_at: Date;
+}

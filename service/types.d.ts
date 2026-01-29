@@ -54,6 +54,7 @@ import type {
   TabletProps,
   VideoProps,
   AppointmentStats,
+  SiteProps,
 } from '@types';
 
 export type GetPatientRes = {
@@ -660,4 +661,21 @@ export type AddTechnicalSupportQueryProps = {
 export type GetAppointmentStats = {
   success: boolean;
   data: AppointmentStats;
+};
+
+export type SitesResponse = {
+  success: boolean;
+  data: {
+    data: SiteProps[];
+    pagination: {
+      totalItems: number;
+      perPage: number;
+      currentPage: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+      nextPage: number | null;
+      prevPage: number | null;
+    };
+  };
 };

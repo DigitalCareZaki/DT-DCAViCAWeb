@@ -6,6 +6,7 @@ import { MdEmail } from '@react-icons/all-files/md/MdEmail';
 import { MdTimelapse } from '@react-icons/all-files/md/MdTimelapse';
 import { IoNotifications } from '@react-icons/all-files/io5/IoNotifications';
 import { RiMedicineBottleFill } from '@react-icons/all-files/ri/RiMedicineBottleFill';
+import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn';
 
 const data = {
   users: [
@@ -58,6 +59,12 @@ const data = {
       id: 'medications',
       path: '/settings/medications',
       Icon: RiMedicineBottleFill,
+    },
+    {
+      title: 'Sites',
+      id: 'sites',
+      path: '/settings/sites',
+      Icon: MdLocationOn,
     },
   ],
 };

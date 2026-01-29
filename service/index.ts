@@ -193,3 +193,6 @@ export { default as getThreadMessages } from './messages/getThreadMessages';
 
 export { default as createTheToken } from './agro/agro';
 export { default as syncVivalink } from './patients/syncVivalink';
+
+// sites
+export { default as getSites } from './superadmin/getSites';
