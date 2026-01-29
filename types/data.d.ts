@@ -959,7 +959,7 @@ export interface DeviceProps {
     issued_at: Date;
   }[];
   assigned: boolean;
-  cardiac_monitoring: 'Yes' | 'No' | 'Later' | null;
+  cardiac_monitoring: 'YES' | 'NO' | 'LATER' | null;
   created_at: Date;
   updated_at: Date | null;
 }

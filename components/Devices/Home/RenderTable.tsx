@@ -55,7 +55,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
                 className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary cursor-pointer"
               />
             </Link>
-            {(el.cardiac_monitoring === 'No' || el.cardiac_monitoring === 'Later') && (
+            {(el.cardiac_monitoring === 'NO' || el.cardiac_monitoring === 'LATER') && (
               <button
                 onClick={async () => {
                   try {
@@ -63,7 +63,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
                       btoa(
                         JSON.stringify({
                           ...el,
-                          cardiac_monitoring: 'Yes',
+                          cardiac_monitoring: 'YES',
                         })
                       ),
                       el.id
