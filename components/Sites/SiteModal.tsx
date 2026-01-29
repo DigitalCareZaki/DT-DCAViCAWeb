@@ -205,19 +205,17 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
                     {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
                     <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
-                        <button
-                            type="button"
+
+                        <ButtonPrimary
+                            name="Cancel"
                             onClick={onClose}
-                            className="px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-6 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors font-medium"
-                        >
-                            OK
-                        </button>
+                            className="w-32 h-11 text-base font-bold rounded"
+                        />
+                        <ButtonPrimary
+                            name="OK"
+                            onClick={handleSubmit}
+                            className="w-32 h-11 text-base font-bold rounded"
+                        />
                     </div>
                 </form>
             </div>
