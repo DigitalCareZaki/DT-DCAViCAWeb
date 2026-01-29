@@ -137,13 +137,21 @@ const Form: ClientComponent = () => {
   const dispatch = useDispatch();
   const handleHideForm = () => dispatch(toggleAddMeasurementFormReducer());
 
-  const [register, onSubmit, errors, loading, error, handleSelect, selectors] =
-    useForm(
-      user.type === 'PATIENT'
-        ? user.id || ''
-        : params?.get('patient')?.toString() || '',
-      handleHideForm
-    );
+  const [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    error,
+    handleSelect,
+    selectors,
+    handleReset,
+  ] = useForm(
+    user.type === 'PATIENT'
+      ? user.id || ''
+      : params?.get('patient')?.toString() || '',
+    handleHideForm
+  );
 
   return (
     <AnimatePresence>
@@ -248,7 +256,10 @@ const Form: ClientComponent = () => {
                 <ButtonPrimary
                   name="Close"
                   className="h-10 rounded-lg border bg-transparent text-gray-600"
-                  onClick={handleHideForm}
+                  onClick={() => {
+                    handleReset();
+                    handleHideForm();
+                  }}
                   type="button"
                   outlined
                 />

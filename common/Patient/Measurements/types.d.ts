@@ -65,6 +65,7 @@ export type useFormProps = [
   error: undefined | string,
   handleSelect: (type: string) => (val: string) => void,
   selectors: SelectorsProps,
+  reset: () => void,
 ];
 
 export type RenderUnitAndValueProps = {

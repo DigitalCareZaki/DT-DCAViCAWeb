@@ -46,10 +46,21 @@ const useFormHook = (
     formState: { errors },
     setValue,
     clearErrors,
+    reset,
   } = useForm<CreateMeasurementProps>({
     resolver: vestResolver(validator),
     mode: 'all',
   });
+
+  const handleReset = () => {
+    reset();
+    setSelectors({
+      type: undefined,
+      mode: 'METRIC',
+      unit: undefined,
+    });
+    setResError(undefined);
+  };
 
   const handleShowModal = (payload: ModalState) => {
     dispatch(showModalReducer(payload));
@@ -94,6 +105,7 @@ const useFormHook = (
         dispatch(setPatientMeasurementListingReducer({ measurements: updatedMeasurements.data, pagination: updatedMeasurements.data.pagination }));
       }
 
+      handleReset();
       handleHideForm.call(this);
 
       handleShowModal({
@@ -109,12 +121,40 @@ const useFormHook = (
   });
 
   const handleSelect = (type: string) => (val: string) => {
-    setSelectors((prev) => ({ ...prev, [type]: val }));
-    setValue(type as any, val);
-    clearErrors(type as any);
+    if (type === 'type') {
+      setSelectors({
+        ...selectors,
+        type: val as any,
+        unit: undefined,
+      });
+      setValue('type', val as any);
+      setValue('unit', undefined as any);
+      setValue('value1', '');
+      setValue('value2', '');
+      clearErrors(['type', 'unit', 'value1', 'value2'] as any);
+    } else if (type === 'unit') {
+      setSelectors((prev) => ({ ...prev, unit: val as any }));
+      setValue('unit', val as any);
+      setValue('value1', '');
+      setValue('value2', '');
+      clearErrors(['unit', 'value1', 'value2'] as any);
+    } else {
+      setSelectors((prev) => ({ ...prev, [type]: val }));
+      setValue(type as any, val);
+      clearErrors(type as any);
+    }
   };
 
-  return [register, onSubmit, errors, loading, error, handleSelect, selectors];
+  return [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    error,
+    handleSelect,
+    selectors,
+    handleReset,
+  ];
 };
 
 export default useFormHook;

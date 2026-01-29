@@ -113,7 +113,7 @@ const InputBasic: ClientComponentProps<any> = ({
           {...hookProps}
           type={inputType}
           className={twMerge(
-            'h-full w-full select-none rounded-lg py-4 text-[12px] sm:text-sm md:text-base font-semibold text-gray-600 outline-none placeholder:font-normal placeholder:text-gray-400 disabled:bg-gray-200/10', // Adjusted placeholder color
+            'h-full w-full rounded-lg py-4 text-sm md:text-base font-semibold text-gray-600 outline-none placeholder:font-normal placeholder:text-gray-400 disabled:bg-gray-200/10', // Adjusted placeholder color
             icon ? 'px-4' : 'px-0',
             props?.disabled && 'cursor-not-allowed',
             inputClassName
