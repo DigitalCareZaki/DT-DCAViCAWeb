@@ -225,7 +225,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
               <div className="flex flex-col items-center justify-center p-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 w-full">
                 <FaExclamationTriangle size={48} className="text-yellow-500 mb-4" />
                 <p className="text-xl font-semibold text-gray-700">No Patients in Vivalink</p>
-                <p className="text-gray-500 mb-6">You haven't synced any patients with AViCardia monitoring yet.</p>
+                <p className="text-gray-500 mb-6">You haven&apos;t synced any patients with AViCardia monitoring yet.</p>
                 <button
                   onClick={() => setActiveTab('management')}
                   className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
