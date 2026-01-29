@@ -14,7 +14,7 @@ import {
 } from '@common';
 
 import useForm from './useForm';
-import { Branch, City, Country, Department } from './Elements';
+import { Branch, City, Country, Department, Site } from './Elements';
 import Link from 'next/link';
 
 const Form: React.FC = () => {
@@ -30,6 +30,7 @@ const Form: React.FC = () => {
     cities,
     countries,
     departments,
+    sites,
     validator,
   ] = useForm();
 
@@ -301,6 +302,26 @@ const Form: React.FC = () => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
+        <div className="w-1/2">
+          <DropdownSecondary
+            title="Select Site"
+            label="Select Site"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot"
+            iconSize={16}
+            error={!!errors.site?.message}
+            errorMessage={errors.site?.message || '&'}
+            selected={selectors.site.title}
+          >
+            <ClientGenerator data={sites.data} handleSelect={handleSelect}>
+              <Site />
+            </ClientGenerator>
+          </DropdownSecondary>
+        </div>
+        <div className="w-1/2"></div>
       </div>
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">

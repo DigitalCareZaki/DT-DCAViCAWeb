@@ -12,6 +12,7 @@ import {
   getCities,
   addDoctor,
   getOrganizationDepartments,
+  getSites,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -25,6 +26,7 @@ import type {
   CountriesProps,
   CitiesProps,
   SelectOrganizationDepartments,
+  SiteProps,
 } from '@types';
 
 import { ModalState } from '@store-types';
@@ -63,6 +65,18 @@ const useFormHook = (): useFormProps => {
       title: undefined,
       id: undefined,
     },
+    site: {
+      title: undefined,
+      id: undefined,
+    },
+  });
+
+  const [sites, setSites] = useState<{
+    loading: boolean;
+    data: SiteProps[];
+  }>({
+    loading: false,
+    data: [],
   });
 
   const [branches, setBranches] = useState<{
@@ -140,6 +154,7 @@ const useFormHook = (): useFormProps => {
             dob: new Date(data.dob).toISOString(),
             address: data.address,
             pmdc_number: data.pmdc_number,
+            site_id: selectors.site.id,
           })
         )
       );
@@ -210,6 +225,27 @@ const useFormHook = (): useFormProps => {
         data: res.data,
       });
     })();
+
+    (async () => {
+      setSites({
+        loading: true,
+        data: [],
+      });
+
+      const res = await getSites(1, 1000);
+
+      if (res.success && res.data) {
+        setSites({
+          loading: false,
+          data: res.data.data,
+        });
+      } else {
+        setSites({
+          loading: false,
+          data: [],
+        });
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -244,6 +280,7 @@ const useFormHook = (): useFormProps => {
     cities,
     countries,
     departments,
+    sites,
     validator,
   ];
 };

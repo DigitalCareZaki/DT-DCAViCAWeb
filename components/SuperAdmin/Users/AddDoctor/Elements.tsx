@@ -11,6 +11,16 @@ export const Branch = ({ name, id, handleSelect }: { [key: string]: any }) => (
   </div>
 );
 
+export const Site = ({ name, id, handleSelect }: { [key: string]: any }) => (
+  <div
+    onClick={() => handleSelect('site')(name, id)}
+    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+  >
+    <span className="font-medium">{name}</span>
+    <FaRegHospital size={18} />
+  </div>
+);
+
 export const Department = ({
   title,
   id,
