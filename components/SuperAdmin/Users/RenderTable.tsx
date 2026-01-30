@@ -385,21 +385,27 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
             />
           </td>
           <td className="px-6 py-4 text-center">
-            {(el.role === 'DOCTOR' || el.role === 'PATIENT') && (() => {
+            {(() => {
+              if (el.role !== 'DOCTOR' && el.role !== 'PATIENT') {
+                return <span className="text-gray-400">-</span>;
+              }
+
               const status = el.role === 'DOCTOR'
                 ? (el.doctor?.vivalink_synced ? 'YES' : el.doctor?.avicardia_monitoring)
                 : (el.patient?.vivalink_synced ? 'YES' : el.patient?.cardiac_monitoring);
 
-              if (status !== 'NO' && status !== 'LATER') return null;
+              if (status !== 'NO' && status !== 'LATER') {
+                return <span className="text-gray-400">-</span>;
+              }
 
               return syncingId === el.id ? (
                 <div className="flex justify-center">
-                  <CircleSpinner size={15} color="#3b82f6" />
+                  <CircleSpinner size={20} color="#3b82f6" />
                 </div>
               ) : (
                 <FaSync
                   title="Sync to Vivalink"
-                  className="text-blue-500 hover:text-blue-700 cursor-pointer text-sm transition-all hover:rotate-180 duration-500 mx-auto"
+                  className="text-blue-500 hover:text-blue-700 cursor-pointer text-xl transition-all hover:rotate-180 duration-500 mx-auto"
                   onClick={() => handleSync(el)}
                 />
               );
