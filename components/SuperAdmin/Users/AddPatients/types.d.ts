@@ -5,6 +5,7 @@ import type {
   CountriesProps,
   SelectOrganizationBranches,
   SelectUserProps,
+  SiteProps,
 } from '@types';
 
 export interface AddPatientProps {
@@ -26,6 +27,7 @@ export interface AddPatientProps {
   address: string;
   Nextofkin: string;
   nurse: string;
+  site: string;
   doctor: string;
   cardiac_monitoring: string;
 }
@@ -56,6 +58,10 @@ export interface SelectorsProps {
     id: string | undefined;
   };
   nurse: {
+    title: string | undefined;
+    id: string | undefined;
+  };
+  site: {
     title: string | undefined;
     id: string | undefined;
   };
@@ -99,6 +105,7 @@ export type useFormProps = [
   cities: { loading: boolean; data: CitiesProps[] },
   countries: { loading: boolean; data: CountriesProps[] },
   nurses: { loading: boolean; data: SelectUserProps[] },
+  sites: { loading: boolean; data: SiteProps[] },
   doctors: { loading: boolean; data: SelectUserProps[] },
   validator: any, // Using any for now since the exact vest type is complex
   currentStep: LoadingStep,

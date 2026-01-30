@@ -19,7 +19,7 @@ import {
 } from '@common';
 
 import useForm from './useForm';
-import { Branch, City, Country, Doctor, Nurse } from './Elements';
+import { Branch, City, Country, Doctor, Nurse, Site } from './Elements';
 import type { LoadingStep, LoadingStepInfo } from './types';
 
 import type { ClientComponent } from '@types';
@@ -36,8 +36,9 @@ const Form: ClientComponent = () => {
     branches,
     cities,
     countries,
-    doctors,
     nurses,
+    sites,
+    doctors,
     validator,
     currentStep,
     getLoadingStepInfo,
@@ -445,6 +446,24 @@ const Form: ClientComponent = () => {
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
+            title="Select Site"
+            label="Select Site"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot"
+            iconSize={16}
+            error={!!errors.site?.message}
+            errorMessage={errors.site?.message || '&'}
+            selected={selectors.site.title}
+            disabled={loading}
+          >
+            <ClientGenerator data={sites.data} handleSelect={handleSelect}>
+              <Site />
+            </ClientGenerator>
+          </DropdownSecondary>
+        </div>
+        <div className="w-1/2">
+          <DropdownSecondary
             title="Assign Doctor"
             label="Select Doctor"
             borderTheme
@@ -454,13 +473,16 @@ const Form: ClientComponent = () => {
             error={!!errors.doctor?.message}
             errorMessage={errors.doctor?.message || '&'}
             selected={selectors.doctor.title}
-            disabled={loading}
+            disabled={loading || !selectors.site.id}
+            disableMessage="Please select a site first"
           >
             <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
               <Doctor />
             </ClientGenerator>
           </DropdownSecondary>
         </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
             title="Assign Nurse"
@@ -479,8 +501,6 @@ const Form: ClientComponent = () => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
-      </div>
-      <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
             title="Enter patient Date of birth"
@@ -497,6 +517,8 @@ const Form: ClientComponent = () => {
             disabled={loading}
           />
         </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
             title="Patient Current Address"
@@ -513,8 +535,6 @@ const Form: ClientComponent = () => {
             disabled={loading}
           />
         </div>
-      </div>
-      <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
             title="AViCardia Monitoring"
@@ -534,7 +554,6 @@ const Form: ClientComponent = () => {
                   }`}
               >
                 <span className="font-medium">YES</span>
-                {/* <FaCheckCircle size={18} className="text-green-500" /> */}
               </div>
               <div
                 onClick={() => !loading && handleSelect('cardiac_monitoring')('NO', undefined)}
@@ -542,7 +561,6 @@ const Form: ClientComponent = () => {
                   }`}
               >
                 <span className="font-medium">NO</span>
-                {/* <FaExclamationTriangle size={18} className="text-red-500" /> */}
               </div>
               <div
                 onClick={() => !loading && handleSelect('cardiac_monitoring')('LATER', undefined)}
@@ -550,12 +568,10 @@ const Form: ClientComponent = () => {
                   }`}
               >
                 <span className="font-medium">LATER</span>
-                {/* <FaQuestion size={18} className="text-blue-500" /> */}
               </div>
             </>
           </DropdownSecondary>
         </div>
-        <div className="w-1/2"></div>
       </div>
       <div className="mt-5">
         <h3 className="mb-3 text-lg font-medium">Location</h3>
@@ -593,7 +609,7 @@ const Form: ClientComponent = () => {
           />
         </Link>
       </div>
-    </form>
+    </form >
   );
 };
 

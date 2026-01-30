@@ -13,6 +13,8 @@ import {
   addPatient,
   getOrganizationDoctors,
   getOrganizationNurses,
+  getSites,
+  getSiteDoctors,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -26,6 +28,7 @@ import type {
   CountriesProps,
   CitiesProps,
   SelectUserProps,
+  SiteProps,
 } from '@types';
 
 import { ModalState } from '@store-types';
@@ -83,6 +86,10 @@ const useFormHook = (): useFormProps => {
       title: undefined,
       id: undefined,
     },
+    site: {
+      title: undefined,
+      id: undefined,
+    },
     doctor: {
       title: undefined,
       id: undefined,
@@ -112,6 +119,14 @@ const useFormHook = (): useFormProps => {
   const [cities, setCities] = useState<{
     loading: boolean;
     data: CitiesProps[];
+  }>({
+    loading: false,
+    data: [],
+  });
+
+  const [sites, setSites] = useState<{
+    loading: boolean;
+    data: SiteProps[];
   }>({
     loading: false,
     data: [],
@@ -234,6 +249,7 @@ const useFormHook = (): useFormProps => {
         height: currentValues.height ? parseFloat(currentValues.height) : null,
         dob: new Date(currentValues.dob).toISOString(),
         address: currentValues.address,
+        // site_id: selectors.site.id, // Use selector id for proper mapping
         doctor_id: selectors.doctor.id, // Use selector id for proper mapping
         nurse_id: selectors.nurse.id, // Use selector id for proper mapping
         cardiac_monitoring: selectors.cardiac_monitoring.title,
@@ -291,7 +307,15 @@ const useFormHook = (): useFormProps => {
 
   const handleSelect =
     (type: string) => (title: string | undefined, id: string | undefined) => {
-      setSelectors((prev) => ({ ...prev, [type]: { title, id } }));
+      setSelectors((prev) => {
+        const updated = { ...prev, [type]: { title, id } };
+        // If site changes, reset doctor
+        if (type === 'site') {
+          updated.doctor = { title: undefined, id: undefined };
+          setValue('doctor', '');
+        }
+        return updated;
+      });
       setValue(type as any, id || title);
       clearErrors(type as any);
     };
@@ -355,25 +379,6 @@ const useFormHook = (): useFormProps => {
     })();
 
     (async () => {
-      setDoctors({
-        loading: true,
-        data: [],
-      });
-      try {
-        const res = await getOrganizationDoctors();
-        setDoctors({
-          loading: false,
-          data: res.data,
-        });
-      } catch (error) {
-        setDoctors({
-          loading: false,
-          data: [],
-        });
-      }
-    })();
-
-    (async () => {
       setNurses({
         loading: true,
         data: [],
@@ -391,7 +396,51 @@ const useFormHook = (): useFormProps => {
         });
       }
     })();
+
+    (async () => {
+      setSites({
+        loading: true,
+        data: [],
+      });
+      try {
+        const res = await getSites(1, 1000);
+        if (res.success && res.data) {
+          setSites({
+            loading: false,
+            data: res.data.data,
+          });
+        }
+      } catch (error) {
+        setSites({
+          loading: false,
+          data: [],
+        });
+      }
+    })();
   }, []);
+
+  useEffect(() => {
+    if (!selectors.site.id) return;
+
+    (async () => {
+      setDoctors({
+        loading: true,
+        data: [],
+      });
+      try {
+        const res = await getSiteDoctors(selectors.site.id as string);
+        setDoctors({
+          loading: false,
+          data: res.data,
+        });
+      } catch (error) {
+        setDoctors({
+          loading: false,
+          data: [],
+        });
+      }
+    })();
+  }, [selectors.site.id]);
 
   return [
     register,
@@ -404,8 +453,9 @@ const useFormHook = (): useFormProps => {
     branches,
     cities,
     countries,
-    doctors,
     nurses,
+    sites,
+    doctors,
     validator,
     currentStep,
     getLoadingStepInfo,
