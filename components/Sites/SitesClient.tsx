@@ -116,8 +116,8 @@ const SitesClient = () => {
                             <tbody className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
                                 {sites?.map((site: SiteProps) => (
                                     <tr key={site.id} className="border-b odd:bg-white even:bg-gray-50">
-                                        <td className="px-6 py-4">{site.id}</td>
-                                        <td className="px-6 py-4">{site.vivalinkSiteId}</td>
+                                        {/* <td className="px-6 py-4">{site.id}</td>
+                                        <td className="px-6 py-4">{site.vivalinkSiteId}</td> */}
                                         <td className="px-6 py-4">{site.name}</td>
                                         <td className="px-6 py-4">{site.description}</td>
                                         <td className="px-6 py-4">{site.countryCode}</td>
