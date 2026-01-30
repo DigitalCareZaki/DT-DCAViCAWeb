@@ -205,7 +205,16 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('serial_number')}
+            hookProps={{
+              ...register('serial_number'),
+              onChange: (e: any) => {
+                const prefix = 'ECGRec_';
+                if (!e.target.value.startsWith(prefix)) {
+                  e.target.value = prefix;
+                  setValue('serial_number', prefix);
+                }
+              },
+            }}
             error={!!errors.serial_number?.message?.length}
             errorMessage={errors.serial_number?.message || '&'}
           />

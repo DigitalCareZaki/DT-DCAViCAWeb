@@ -58,6 +58,9 @@ const useFormHook = (
     reset,
   } = useForm<DeviceProps>({
     resolver: vestResolver(validator),
+    defaultValues: {
+      serial_number: 'ECGRec_',
+    },
   });
 
   const handleSelectByAbd = useCallback(
@@ -328,8 +331,13 @@ const useFormHook = (
   // for edit case
   useEffect(() => {
     if (prevData) {
+      const serialNumber = prevData.serial_number?.startsWith('ECGRec_')
+        ? prevData.serial_number
+        : `ECGRec_${prevData.serial_number || ''}`;
+
       reset({
         ...prevData,
+        serial_number: serialNumber,
         cardiac_monitoring: prevData.cardiac_monitoring?.toUpperCase() as any,
       });
       setSelectors((prev: any) => ({ ...prev, site_id: prevData.site_id }));
