@@ -5,10 +5,11 @@ import '@init-globals';
 import { headers } from 'next/headers';
 import type { AddDataProps } from '../types';
 
-async function syncVivalink(id: string): Promise<AddDataProps> {
+async function syncVivalink(id: string, role: string = 'PATIENT'): Promise<AddDataProps> {
     try {
         const userType = headers().get('user-type') || 'organization';
-        const res = await fetch(`/api/v1/web/${userType}/patient/sync/${id}`, {
+        const path = role === 'DOCTOR' ? 'doctor' : 'patient';
+        const res = await fetch(`/api/v1/web/${userType}/${path}/sync/${id}`, {
             method: 'POST',
             cache: 'no-cache',
         });

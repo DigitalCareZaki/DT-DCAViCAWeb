@@ -307,7 +307,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
       await new Promise(resolve => setTimeout(resolve, 500));
       setCurrentStep('submitting');
 
-      const res = await syncVivalink(id);
+      const res = await syncVivalink(id, user.role);
 
       if (res.success) {
         setCurrentStep('processing');
