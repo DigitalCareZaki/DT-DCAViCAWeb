@@ -7,8 +7,12 @@ import { FaUser } from '@react-icons/all-files/fa/FaUser';
 
 import { FaUserNurse } from '@react-icons/all-files/fa/FaUserNurse';
 import { FaShieldAlt } from '@react-icons/all-files/fa/FaShieldAlt';
+import { FaSync } from 'react-icons/fa';
+import { FaCheckCircle } from '@react-icons/all-files/fa/FaCheckCircle';
+import { FaExclamationTriangle } from '@react-icons/all-files/fa/FaExclamationTriangle';
+import { FaSpinner } from '@react-icons/all-files/fa/FaSpinner';
 
-import { disableUser } from '@service';
+import { disableUser, syncVivalink } from '@service';
 import { showModalReducer, updateUserStatusReducer } from '@slice';
 
 import { getName } from '@init-globals';
@@ -21,9 +25,29 @@ import { useState } from 'react';
 import { CircleSpinner } from 'react-spinners-kit';
 import UserProfileModal from './UserProfileModal';
 
+type LoadingStep =
+  | 'idle'
+  | 'validating'
+  | 'preparing'
+  | 'submitting'
+  | 'processing'
+  | 'syncing'
+  | 'success'
+  | 'error';
+
+interface LoadingStepInfo {
+  step: LoadingStep;
+  title: string;
+  description: string;
+  progress: number;
+}
+
 const RenderTable: ClientComponentProps<RenderTableProps> = () => {
   const dispatch = useDispatch();
   const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
+  const [syncRole, setSyncRole] = useState<'DOCTOR' | 'PATIENT' | null>(null);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [showProfile, setShowProfile] = useState(false);
@@ -99,6 +123,181 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
     setShowProfile(true);
   };
 
+  const getLoadingStepInfo = (step: LoadingStep, role: string): LoadingStepInfo => {
+    const steps: Record<LoadingStep, LoadingStepInfo> = {
+      idle: {
+        step: 'idle',
+        title: 'Ready to Sync',
+        description: 'Sync process is ready to begin',
+        progress: 0,
+      },
+      validating: {
+        step: 'validating',
+        title: 'Validating Connection',
+        description: 'Checking connection to Vivalink server...',
+        progress: 20,
+      },
+      preparing: {
+        step: 'preparing',
+        title: 'Preparing Data',
+        description: `Organizing ${role.toLowerCase()} information for sync...`,
+        progress: 40,
+      },
+      submitting: {
+        step: 'submitting',
+        title: 'Sending Sync Request',
+        description: `Initiating ${role.toLowerCase()} sync with Vivalink...`,
+        progress: 60,
+      },
+      processing: {
+        step: 'processing',
+        title: 'Processing Request',
+        description: `Vivalink is processing the ${role.toLowerCase()} synchronization...`,
+        progress: 70,
+      },
+      syncing: {
+        step: 'syncing',
+        title: 'Syncing with Vivalink...',
+        description: `Synchronizing ${role.toLowerCase()} data with Vivalink monitoring system...`,
+        progress: 85,
+      },
+      success: {
+        step: 'success',
+        title: `${role.charAt(0) + role.slice(1).toLowerCase()} Synced Successfully!`,
+        description: 'All data has been updated and synchronized.',
+        progress: 100,
+      },
+      error: {
+        step: 'error',
+        title: 'Sync Error Occurred',
+        description: 'Something went wrong during the sync. Please try again.',
+        progress: 0,
+      },
+    };
+    return steps[step];
+  };
+
+  // Progressive loading overlay component
+  const ProgressiveLoadingOverlay = ({ role }: { role: string }) => {
+    const stepInfo = getLoadingStepInfo(currentStep, role);
+
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/90 backdrop-blur-sm">
+        <div className="flex flex-col items-center gap-6 text-center max-w-md">
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${stepInfo.progress}%` }}
+            ></div>
+          </div>
+
+          {/* Step Icon */}
+          <div className="flex items-center justify-center">
+            {currentStep === 'success' ? (
+              <FaCheckCircle className="h-12 w-12 text-green-500" />
+            ) : currentStep === 'error' ? (
+              <FaExclamationTriangle className="h-12 w-12 text-red-500" />
+            ) : (
+              <FaSpinner className="h-12 w-12 animate-spin text-blue-600" />
+            )}
+          </div>
+
+          {/* Step Title */}
+          <h3 className="text-xl font-semibold text-gray-800">
+            {stepInfo.title}
+          </h3>
+
+          {/* Step Description */}
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {stepInfo.description}
+          </p>
+
+          {/* Progress Percentage */}
+          <div className="text-sm font-medium text-blue-600">
+            {stepInfo.progress}% Complete
+          </div>
+
+          {/* Step Indicators */}
+          <div className="flex items-center gap-2 mt-4">
+            {['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].map((step, index) => {
+              const order = ['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'];
+              const isActive = currentStep === step;
+              const isCompleted = order.indexOf(currentStep) > index || currentStep === 'success';
+
+              return (
+                <div
+                  key={step}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${isCompleted
+                    ? 'bg-green-500'
+                    : isActive
+                      ? 'bg-blue-500'
+                      : 'bg-gray-300'
+                    }`}
+                />
+              );
+            })}
+          </div>
+
+          {(currentStep === 'success' || currentStep === 'error') && (
+            <button
+              onClick={() => {
+                setSyncingId(null);
+                setCurrentStep('idle');
+                setSyncRole(null);
+                if (currentStep === 'success') {
+                  setTimeout(() => window.location.reload(), 1000);
+                }
+              }}
+              className="mt-6 px-10 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200"
+            >
+              Close
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const handleSync = async (user: any) => {
+    try {
+      const id = user.role === 'DOCTOR' ? user.doctor?.id : user.role === 'PATIENT' ? user.patient?.id : null;
+      if (!id) return;
+      console.log('id ', id);
+
+      setSyncingId(user.id);
+      setSyncRole(user.role);
+      setCurrentStep('validating');
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setCurrentStep('preparing');
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setCurrentStep('submitting');
+
+      const res = await syncVivalink(id);
+
+      if (res.success) {
+        setCurrentStep('processing');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setCurrentStep('syncing');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setCurrentStep('success');
+      } else {
+        setCurrentStep('error');
+        dispatch(
+          showModalReducer({
+            type: 'ERROR',
+            message: res.message || 'Sync failed',
+            show: true,
+          })
+        );
+      }
+    } catch (err) {
+      setCurrentStep('error');
+    }
+  };
+
   const handleConfirmAction = async () => {
     if (selectedUser) {
       await handleDisable(selectedUser.id);
@@ -115,6 +314,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
 
   return (
     <>
+      {syncingId && syncRole && <ProgressiveLoadingOverlay role={syncRole} />}
       {users.map((el) => (
         <tr
           key={el.id}
@@ -141,6 +341,13 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
           <td className="px-6 py-4">{el.role}</td>
           <td className="px-6 py-4">{el.gender}</td>
           <td className="px-6 py-4">{el.associated_branches[0]?.name}</td>
+          <td className="px-6 py-4">
+            {el.role === 'DOCTOR' ? (
+              el.doctor?.vivalink_synced ? 'DOCTOR SYNC' : el.doctor?.avicardia_monitoring || 'N/A'
+            ) : el.role === 'PATIENT' ? (
+              el.patient?.vivalink_synced ? 'PATIENT SYNC' : el.patient?.cardiac_monitoring || 'N/A'
+            ) : 'N/A'}
+          </td>
           <td className="flex items-center gap-2 px-6 py-4 text-md ">
             {loadingUserId === el.id ? (
               <CircleSpinner size={20} color="#000000" />
@@ -158,6 +365,18 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
               className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary cursor-pointer"
               onClick={() => handleProfileClick(el)}
             />
+
+            {(el.role === 'DOCTOR' || el.role === 'PATIENT') && (
+              syncingId === el.id ? (
+                <CircleSpinner size={15} color="#000000" />
+              ) : (
+                <FaSync
+                  title="Sync to Vivalink"
+                  className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary cursor-pointer text-sm"
+                  onClick={() => handleSync(el)}
+                />
+              )
+            )}
 
 
             {/* {el.role === 'PATIENT' || el.role === 'DOCTOR' || el.role === 'NURSE' && (
