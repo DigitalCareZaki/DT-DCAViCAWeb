@@ -104,6 +104,38 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
     }
   };
 
+  const StatusBadge = ({ status }: { status: string | boolean | undefined | null }) => {
+    const isYes = status === true || status === 'YES';
+    const isNo = status === 'NO';
+    const isLater = status === 'LATER';
+
+    if (isYes) {
+      return (
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-md font-bold bg-green-50 text-green-700 border border-green-200 shadow-sm transition-all hover:scale-105">
+          <span className="w-2 h-2 mr-2 rounded-full bg-green-500 animate-pulse"></span>
+          YES
+        </span>
+      );
+    }
+    if (isNo) {
+      return (
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-md font-bold bg-red-50 text-red-700 border border-red-200 shadow-sm transition-all hover:scale-105">
+          <span className="w-2 h-2 mr-2 rounded-full bg-red-500"></span>
+          NO
+        </span>
+      );
+    }
+    if (isLater) {
+      return (
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-md font-bold bg-amber-50 text-amber-700 border border-amber-200 shadow-sm transition-all hover:scale-105">
+          <span className="w-2 h-2 mr-2 rounded-full bg-amber-500"></span>
+          LATER
+        </span>
+      );
+    }
+    return <span className="text-gray-400 font-medium">-</span>;
+  };
+
   const handleConfirmationClick = (user: any) => {
     setSelectedUser({
       id: user.id,
@@ -334,19 +366,44 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
             {
               el.role === 'DOCTOR' ? el.doctor?.departments?.[0]?.title :
                 el.role === 'NURSE' ? el.nurse?.department?.title :
-                  el.role === 'PATIENT' ? el.patient?.doctors?.[0]?.departments?.[0]?.title : 'N/A'
+                  el.role === 'PATIENT' ? el.patient?.doctors?.[0]?.departments?.[0]?.title : '-'
             }</td>
           <td className="px-6 py-4">{el.phone_number}</td>
           {/* <td className="px-6 py-4">{el.username}</td> */}
           <td className="px-6 py-4">{el.role}</td>
           <td className="px-6 py-4">{el.gender}</td>
           <td className="px-6 py-4">{el.associated_branches[0]?.name}</td>
-          <td className="px-6 py-4">
-            {el.role === 'DOCTOR' ? (
-              el.doctor?.vivalink_synced ? 'DOCTOR SYNC' : el.doctor?.avicardia_monitoring || 'N/A'
-            ) : el.role === 'PATIENT' ? (
-              el.patient?.vivalink_synced ? 'PATIENT SYNC' : el.patient?.cardiac_monitoring || 'N/A'
-            ) : 'N/A'}
+          <td className="px-6 py-4 text-center">
+            <StatusBadge
+              status={
+                el.role === 'DOCTOR'
+                  ? el.doctor?.vivalink_synced ? 'YES' : el.doctor?.avicardia_monitoring
+                  : el.role === 'PATIENT'
+                    ? el.patient?.vivalink_synced ? 'YES' : el.patient?.cardiac_monitoring
+                    : '-'
+              }
+            />
+          </td>
+          <td className="px-6 py-4 text-center">
+            {(el.role === 'DOCTOR' || el.role === 'PATIENT') && (() => {
+              const status = el.role === 'DOCTOR'
+                ? (el.doctor?.vivalink_synced ? 'YES' : el.doctor?.avicardia_monitoring)
+                : (el.patient?.vivalink_synced ? 'YES' : el.patient?.cardiac_monitoring);
+
+              if (status !== 'NO' && status !== 'LATER') return null;
+
+              return syncingId === el.id ? (
+                <div className="flex justify-center">
+                  <CircleSpinner size={15} color="#3b82f6" />
+                </div>
+              ) : (
+                <FaSync
+                  title="Sync to Vivalink"
+                  className="text-blue-500 hover:text-blue-700 cursor-pointer text-sm transition-all hover:rotate-180 duration-500 mx-auto"
+                  onClick={() => handleSync(el)}
+                />
+              );
+            })()}
           </td>
           <td className="flex items-center gap-2 px-6 py-4 text-md ">
             {loadingUserId === el.id ? (
@@ -366,17 +423,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
               onClick={() => handleProfileClick(el)}
             />
 
-            {(el.role === 'DOCTOR' || el.role === 'PATIENT') && (
-              syncingId === el.id ? (
-                <CircleSpinner size={15} color="#000000" />
-              ) : (
-                <FaSync
-                  title="Sync to Vivalink"
-                  className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-doctor-primary cursor-pointer text-sm"
-                  onClick={() => handleSync(el)}
-                />
-              )
-            )}
+
 
 
             {/* {el.role === 'PATIENT' || el.role === 'DOCTOR' || el.role === 'NURSE' && (

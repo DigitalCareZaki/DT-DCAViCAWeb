@@ -57,6 +57,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
             'Gender',
             'Branch',
             'Monitoring',
+            'Sync',
             'Status',
           ]}
         >
