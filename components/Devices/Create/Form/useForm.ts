@@ -8,14 +8,14 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createDevice, updateDevice, getSuperAdminBranches, createDeviceSuperadmin } from '@service';
+import { createDevice, updateDevice, getSuperAdminBranches, createDeviceSuperadmin, getSites } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
 
-import type { UseFormProps, SelectedValuesProps, DeviceProps } from './types';
+import type { UseFormProps, SelectedValuesProps, DeviceProps, LoadingStep, LoadingStepInfo } from './types';
 import type { ModalState } from '@store-types';
 import type { MeasurementType } from '@types';
 
@@ -33,11 +33,14 @@ const useFormHook = (
 
   const [selectedSerial, setSelectedSerial] = useState<string>('');
   const [branches, setBranches] = useState<any[]>([]);
+  const [sites, setSites] = useState<any[]>([]);
   const [selectors, setSelectors] = useState<any>({
     branch_id: undefined,
+    site_id: undefined,
   });
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
   const [serials, setSerials] = useState<string[]>([]);
   const [selectedValues, setSelectedValues] = useState<SelectedValuesProps>({
     category: {
@@ -109,6 +112,61 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  // Function to get loading step information
+  const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
+    const steps: Record<LoadingStep, LoadingStepInfo> = {
+      idle: {
+        step: 'idle',
+        title: 'Ready',
+        description: 'Device form is ready',
+        progress: 0,
+      },
+      validating: {
+        step: 'validating',
+        title: 'Validating',
+        description: 'Checking device information...',
+        progress: 20,
+      },
+      preparing: {
+        step: 'preparing',
+        title: 'Preparing',
+        description: 'Setting up device data...',
+        progress: 40,
+      },
+      submitting: {
+        step: 'submitting',
+        title: 'Saving',
+        description: 'Sending device data to server...',
+        progress: 60,
+      },
+      processing: {
+        step: 'processing',
+        title: 'Processing',
+        description: 'Finalizing device creation...',
+        progress: 80,
+      },
+      syncing: {
+        step: 'syncing',
+        title: 'Syncing',
+        description: 'Syncing with Vivalink system...',
+        progress: 90,
+      },
+      success: {
+        step: 'success',
+        title: 'Success!',
+        description: prevData ? 'Device updated successfully' : 'Device created successfully',
+        progress: 100,
+      },
+      error: {
+        step: 'error',
+        title: 'Error',
+        description: 'An error occurred during the process',
+        progress: 0,
+      },
+    };
+    return steps[step];
+  };
+
   // Fetch branches for superadmin
   useEffect(() => {
     const fetchBranches = async () => {
@@ -122,6 +180,22 @@ const useFormHook = (
     fetchBranches();
   }, [user]);
 
+  // Fetch sites
+  useEffect(() => {
+    const fetchSites = async () => {
+      const res = await getSites(1, 1000);
+      if (res?.success && res.data?.data) {
+        setSites(res.data.data);
+      }
+    };
+    fetchSites();
+  }, []);
+
+  const handleSelectSite = useCallback((siteId: string) => {
+    setSelectors((prev: any) => ({ ...prev, site_id: siteId }));
+    setValue('site_id' as any, siteId as any);
+  }, [setValue]);
+
   const handleSelectBranch = useCallback((branchId: string) => {
     setSelectors((prev: any) => ({ ...prev, branch_id: branchId }));
     try {
@@ -133,6 +207,12 @@ const useFormHook = (
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
+      setCurrentStep('validating');
+
+      // Simulate validation
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setCurrentStep('preparing');
+
       // create case
       if (!prevData) {
         const payload: any = {
@@ -141,18 +221,22 @@ const useFormHook = (
           category: data.category,
           serial_number: data.serial_number,
           cardiac_monitoring: data.cardiac_monitoring,
+          site_id: selectors.site_id,
         };
 
         if ((user?.role as any) === 'SUPERADMIN') {
           payload.branch_id = selectors.branch_id;
         }
 
+        setCurrentStep('submitting');
         const encoded = btoa(JSON.stringify(payload));
         const res = (user?.role as any) === 'SUPERADMIN'
           ? await createDeviceSuperadmin(encoded)
           : await createDevice(encoded);
 
+        setCurrentStep('processing');
         if (!res.success) {
+          setCurrentStep('error');
           handleShowModal({
             type: 'ERROR',
             message: data.cardiac_monitoring === 'YES'
@@ -162,6 +246,11 @@ const useFormHook = (
           });
           return;
         } else {
+          if (data.cardiac_monitoring === 'YES') {
+            setCurrentStep('syncing');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+          setCurrentStep('success');
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
@@ -170,11 +259,14 @@ const useFormHook = (
               : 'Device created successfully',
             show: true,
           });
-          router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+          setTimeout(() => {
+            router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+          }, 2000);
           return;
 
         }
       } else {
+        setCurrentStep('submitting');
         // update case
         const res = await updateDevice(
           btoa(
@@ -184,12 +276,15 @@ const useFormHook = (
               category: data.category,
               serial_number: data.serial_number,
               cardiac_monitoring: data.cardiac_monitoring,
+              site_id: selectors.site_id,
             })
           ),
           prevData.id
         );
 
+        setCurrentStep('processing');
         if (!res.success) {
+          setCurrentStep('error');
           handleShowModal({
             type: 'ERROR',
             message: data.cardiac_monitoring === 'YES'
@@ -199,6 +294,11 @@ const useFormHook = (
           });
           return;
         } else {
+          if (data.cardiac_monitoring === 'YES') {
+            setCurrentStep('syncing');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+          setCurrentStep('success');
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
@@ -207,21 +307,21 @@ const useFormHook = (
               : 'Device updated successfully',
             show: true,
           });
-          router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+          setTimeout(() => {
+            router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+          }, 2000);
           return;
 
         }
       }
-
-      // handleShowModal({
-      //   type: 'SUCCESS',
-      //   message: `Device ${prevData ? 'updated' : 'added'} successfully`,
-      //   show: true,
-      // });
-      // router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
     } catch (err) {
+      setCurrentStep('error');
     } finally {
-      setLoading(false);
+      // We don't necessarily want to set loading false immediately if we are redirecting
+      // but if error, we should.
+      if (currentStep === 'error') {
+        setLoading(false);
+      }
     }
   });
 
@@ -232,6 +332,7 @@ const useFormHook = (
         ...prevData,
         cardiac_monitoring: prevData.cardiac_monitoring?.toUpperCase() as any,
       });
+      setSelectors((prev: any) => ({ ...prev, site_id: prevData.site_id }));
       setSelectedValues({
         category: {
           name:
@@ -249,7 +350,7 @@ const useFormHook = (
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo];
 };
 
 export default useFormHook;

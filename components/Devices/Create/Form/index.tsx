@@ -15,8 +15,10 @@ import useForm from './useForm';
 import { useRouter } from 'next/navigation';
 import type { ClientComponentProps } from '@types';
 import type { CreateDeviceProps } from './types';
-import fetch from '@fetch';
-import fetchWrapper from '@fetch';
+import { FaCalendarAlt, FaSpinner, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
+import { FaLocationDot } from 'react-icons/fa6';
+import type { LoadingStep, LoadingStepInfo } from './types';
+
 const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
   const router = useRouter();
@@ -48,7 +50,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     []
   );
 
-  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues] =
+  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo] =
     useForm(data, categories);
 
   const handleSelectField = (field: string, value: any) => {
@@ -65,11 +67,85 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     }
   };
 
+  // Progressive loading overlay component
+  const ProgressiveLoadingOverlay = () => {
+    const stepInfo = getLoadingStepInfo(currentStep);
+
+    return (
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-2xl">
+        <div className="flex flex-col items-center gap-6 text-center max-w-md">
+          {/* Progress Bar */}
+          <div className="w-64 bg-gray-200 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${stepInfo?.progress || 0}%` }}
+            ></div>
+          </div>
+
+          {/* Step Icon */}
+          <div className="flex items-center justify-center">
+            {currentStep === 'success' ? (
+              <FaCheckCircle className="h-12 w-12 text-green-500" />
+            ) : currentStep === 'error' ? (
+              <FaExclamationTriangle className="h-12 w-12 text-red-500" />
+            ) : (
+              <FaSpinner className="h-12 w-12 animate-spin text-blue-600" />
+            )}
+          </div>
+
+          {/* Step Title */}
+          <h3 className="text-xl font-semibold text-gray-800">
+            {stepInfo?.title}
+          </h3>
+
+          {/* Step Description */}
+          <p className="text-sm text-gray-600 leading-relaxed px-4">
+            {stepInfo?.description}
+          </p>
+
+          {/* Progress Percentage */}
+          <div className="text-sm font-medium text-blue-600">
+            {stepInfo?.progress || 0}% Complete
+          </div>
+
+          {/* Step Indicators */}
+          <div className="flex items-center gap-2 mt-4">
+            {['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].map((step, index) => {
+              const isActive = currentStep === step;
+              const isCompleted = ['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].indexOf(currentStep) > index || (currentStep === 'success');
+
+              return (
+                <div
+                  key={step}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${isCompleted
+                    ? 'bg-green-500'
+                    : isActive
+                      ? 'bg-blue-500'
+                      : 'bg-gray-300'
+                    }`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <form
       onSubmit={onSubmit}
-      className="flex w-full max-w-3xl flex-col gap-5 rounded-2xl bg-white p-6 mx-auto"
+      className="relative flex w-full max-w-3xl flex-col gap-5 rounded-2xl bg-white p-6 mx-auto"
+      // Disable keyboard navigation during loading
+      onKeyDown={(e) => {
+        if (loading && (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+        }
+      }}
     >
+      {/* Progressive Loading Overlay */}
+      {loading && <ProgressiveLoadingOverlay />}
+
       {/* First row: Device title and description */}
       <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
         <div className="w-full sm:w-1/2">
@@ -142,8 +218,34 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
       <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
         <div className="w-full sm:w-1/2">
           <DropdownSecondary
-            title="Cardiac remote monitoring"
-            label="Cardiac remote monitoring"
+            title="Select Site"
+            label="Select Site"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot"
+            error={!!errors.site_id?.message?.length}
+            errorMessage={(errors as any).site_id?.message || '&'}
+            selected={sites?.find((s: any) => s.id === selectors.site_id)?.name || ''}
+          >
+            {Array.isArray(sites) && sites.length > 0 ? (
+              sites.map((site: any) => (
+                <div
+                  key={site.id}
+                  onClick={() => handleSelectSite(site.id)}
+                  className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                >
+                  <span className="font-medium">{site.name}</span>
+                </div>
+              ))
+            ) : (
+              <div className="p-2 text-gray-400">No sites found</div>
+            )}
+          </DropdownSecondary>
+        </div>
+        <div className="w-full sm:w-1/2">
+          <DropdownSecondary
+            title="AViCardia Monitoring"
+            label="AViCardia Monitoring"
             borderTheme
             inputWrapperClassName="bg-background"
             icon="MdMonitorHeart"
@@ -200,14 +302,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           {/* Branch Code End  */}
         </div>
       )}
-      {loading && selectedValues?.cardiac_monitoring?.value === 'YES' && (
-        <div className="flex flex-col gap-2">
-          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-            <div className="h-full bg-blue-500 animate-pulse" style={{ width: '60%' }}></div>
-          </div>
-          <p className="text-sm font-medium text-blue-600">Syncing with Vivalink...</p>
-        </div>
-      )}
+
       {/* Submit Button */}
       <ButtonPrimary
         title={data ? 'Update' : 'Save'}
