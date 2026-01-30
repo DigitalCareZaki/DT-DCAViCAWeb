@@ -71,6 +71,8 @@ const Table = ({ userRole, patient }: TableProps) => {
             'Category',
             'Added By',
             'Branch',
+            'Monitoring',
+            'Sync',
             'Status',
             'Added On',
             'Action',
