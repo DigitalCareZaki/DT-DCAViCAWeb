@@ -400,8 +400,8 @@ const Form: React.FC = () => {
         </div>
         <div className="w-1/2">
           <DropdownSecondary
-            title="Doctor Sync Vivalink"
-            label="Doctor Sync Vivalink"
+            title="AViCardia Monitoring"
+            label="AViCardia Monitoring"
             borderTheme
             inputWrapperClassName="bg-background"
             icon="FaLocationDot" // Or standard generic icon if available, reusing Dot for now or none

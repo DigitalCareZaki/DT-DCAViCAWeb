@@ -517,8 +517,8 @@ const Form: ClientComponent = () => {
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
-            title="Patient Sync Vivalink"
-            label="Patient Sync Vivalink"
+            title="AViCardia Monitoring"
+            label="AViCardia Monitoring"
             borderTheme
             inputWrapperClassName="bg-background"
             icon="FaHeartbeat"
