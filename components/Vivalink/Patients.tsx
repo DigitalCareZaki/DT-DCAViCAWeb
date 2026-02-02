@@ -5,7 +5,7 @@ import { useState, useCallback, useMemo, useTransition } from 'react';
 import '@init-globals';
 
 import RenderPatients from './RenderPatients';
-import { getDoctorSinglePatientFromVl, getECGReportByDate, syncVivalink } from '@service';
+import { getDoctorSinglePatientFromVl, getECGReportByDate, syncVivalink, getPatchHistory } from '@service';
 import { InputPrimary, ButtonPrimary } from '@common';
 import { useDispatch } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -27,6 +27,9 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
     timePerPoint: "",
     samplingFrequency: "",
     otherAttributes: {},
+    selectedPatch: "",
+    history: [],
+    historyLoading: false,
   });
   const [selectedDuration, setSelectedDuration] = useState("1 minute");
   const [syncingId, setSyncingId] = useState<string | null>(null);
@@ -89,7 +92,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
 
     let reportWindow: Window | null = null;
     try {
-      const ecgRecordId = data[selectedPatient.name]?.[0]?.replace('/', '_');
+      const ecgRecordId = selectedPatient.selectedPatch?.replace('/', '_');
       if (!ecgRecordId) throw new Error("ECG Record ID not found!");
 
       reportWindow = typeof window !== 'undefined' ? window.open('', '_blank') : null;
@@ -127,40 +130,61 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
   };
 
   const handleSetSelectedPatient = useCallback(
-    async (name: string) => {
-      if (name === selectedPatient.name) return;
+    async (name: string, patchSn?: string) => {
+      // If same patient and same patch, do nothing
+      if (name === selectedPatient.name && (patchSn ? patchSn === selectedPatient.selectedPatch : true)) return;
 
-      setSelectedPatient({
-        name: undefined,
+      setSelectedPatient((prev: any) => ({
+        ...prev,
+        name: name,
+        selectedPatch: patchSn || (data[name] && data[name][0]),
         ecg: [],
         timePerPoint: "",
         samplingFrequency: "",
-        otherAttributes: {}
-      });
+        otherAttributes: {},
+        history: [],
+        historyLoading: true,
+      }));
 
       setSyncingId('FETCHING_PATIENT');
       setShowDatePicker(true);
 
-      const patchSn = data[name][0]?.replace('/', '%2F');
+      const finalPatchSn = (patchSn || data[name][0])?.replace('/', '%2F');
 
-      if (!patchSn) return;
-      const res = await getDoctorSinglePatientFromVl(patchSn, '1 minute');
-
-      if (!res.success) {
+      if (!finalPatchSn) {
         setSyncingId(null);
         return;
       }
 
+      // Fetch ECG data and History in parallel
+      const [res, historyRes] = await Promise.all([
+        getDoctorSinglePatientFromVl(finalPatchSn, '1 minute'),
+        getPatchHistory(finalPatchSn.replace('%2F', '/'))
+      ]);
+
       setSyncingId(null);
-      setSelectedPatient({
-        name,
-        ecg: res.data.ecg,
-        samplingFrequency: res.data.samplingFrequency,
-        timePerPoint: res.data.timePerPoint,
-        otherAttributes: res.data.otherAttributes
-      });
+
+      if (res.success) {
+        setSelectedPatient((prev: any) => ({
+          ...prev,
+          name,
+          selectedPatch: patchSn || data[name][0],
+          ecg: res.data.ecg,
+          samplingFrequency: res.data.samplingFrequency,
+          timePerPoint: res.data.timePerPoint,
+          otherAttributes: res.data.otherAttributes,
+          history: historyRes.success ? historyRes.data : [],
+          historyLoading: false,
+        }));
+      } else {
+        setSelectedPatient((prev: any) => ({
+          ...prev,
+          history: historyRes.success ? historyRes.data : [],
+          historyLoading: false,
+        }));
+      }
     },
-    [data, selectedPatient.name]
+    [data, selectedPatient.name, selectedPatient.selectedPatch]
   );
 
   const handleSyncPatient = async (item: any) => {
@@ -255,14 +279,42 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
           )}
           <div className="flex items-center justify-center">
             <div style={{ width: '90vw' }}>
-              <div style={{ minWidth: '200px', padding: '1rem', borderRight: '1px solid #ccc' }}>
+              <div className="w-full p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
                 {selectedPatient.name && (
                   <>
-                    <p><strong>Sampling Frequency:</strong> {selectedPatient?.samplingFrequency}</p>
-                    <p><strong>Time Per Point:</strong> {selectedPatient?.timePerPoint}</p>
-                    <p><strong>Respiratory Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.rr}</p>
-                    <p><strong>Heart Rate:</strong> {selectedPatient?.otherAttributes?.vitals?.hr}</p>
-                    <p><strong>Record Time:</strong> {new Date(selectedPatient?.otherAttributes?.recordTime).toLocaleString()}</p>
+                    <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                      <h3 className="text-2xl font-bold text-gray-900 font-poppins">{selectedPatient.name}</h3>
+                      <div className="flex flex-col items-end">
+                        <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Current Patch</span>
+                        <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">{selectedPatient.selectedPatch}</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                        <p className="text-xs text-gray-400 uppercase font-bold mb-1">Sampling Frequency</p>
+                        <p className="text-lg font-semibold text-gray-800">{selectedPatient?.samplingFrequency} <span className="text-xs font-normal">Hz</span></p>
+                      </div>
+                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                        <p className="text-xs text-gray-400 uppercase font-bold mb-1">Time Per Point</p>
+                        <p className="text-lg font-semibold text-gray-800">{selectedPatient?.timePerPoint}</p>
+                      </div>
+                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                        <p className="text-xs text-gray-400 uppercase font-bold mb-1">Heart Rate</p>
+                        <p className="text-lg font-bold text-red-600 flex items-center gap-1">
+                          {selectedPatient?.otherAttributes?.vitals?.hr || 'N/A'}
+                          <span className="text-xs font-normal text-gray-500">BPM</span>
+                        </p>
+                      </div>
+                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                        <p className="text-xs text-gray-400 uppercase font-bold mb-1">Respiratory Rate</p>
+                        <p className="text-lg font-semibold text-gray-800">{selectedPatient?.otherAttributes?.vitals?.rr || 'N/A'} <span className="text-xs font-normal">BR/M</span></p>
+                      </div>
+                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100 md:col-span-2">
+                        <p className="text-xs text-gray-400 uppercase font-bold mb-1">Record Time</p>
+                        <p className="text-sm font-medium text-gray-700">{selectedPatient?.otherAttributes?.recordTime ? new Date(selectedPatient?.otherAttributes?.recordTime).toLocaleString() : 'N/A'}</p>
+                      </div>
+                    </div>
                     {showDatePicker && (
                       <div className="mt-4 flex items-center gap-3 text-base">
                         <label className="font-semibold text-gray-700">
@@ -290,6 +342,48 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
                         </div>
                       </div>
                     )}
+
+                    {/* Patch History Section */}
+                    <div className="mt-8 border-t border-gray-100 pt-6">
+                      <h4 className="mb-4 text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <FaSync size={16} className="text-blue-500" />
+                        Device Usage History
+                        <span className="text-xs font-normal text-gray-400 font-poppins ml-2">({selectedPatient.selectedPatch})</span>
+                      </h4>
+                      {selectedPatient.historyLoading ? (
+                        <div className="flex items-center gap-2 text-gray-400 py-4 italic">
+                          <div className="h-4 w-4 animate-spin border-2 border-gray-300 border-t-blue-500 rounded-full" />
+                          Fetching history...
+                        </div>
+                      ) : selectedPatient.history && selectedPatient.history.length > 0 ? (
+                        <div className="overflow-hidden rounded-xl border border-gray-100 shadow-sm bg-gray-50/30">
+                          <table className="w-full text-left text-sm">
+                            <thead className="bg-gray-100/50 text-gray-600">
+                              <tr>
+                                <th className="px-4 py-3 font-semibold">Device ID</th>
+                                <th className="px-4 py-3 font-semibold">Time Assigned</th>
+                                <th className="px-4 py-3 font-semibold">Time Removed</th>
+                                <th className="px-4 py-3 font-semibold text-center">Duration</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                              {selectedPatient.history.map((h: any, idx: number) => (
+                                <tr key={idx} className="hover:bg-white transition duration-150">
+                                  <td className="px-4 py-3 font-medium text-blue-700">{h.deviceId}</td>
+                                  <td className="px-4 py-3 text-gray-600">{new Date(h.timeAssigned).toLocaleString()}</td>
+                                  <td className="px-4 py-3 text-gray-600">{h.timeRemoved ? new Date(h.timeRemoved).toLocaleString() : <span className="text-green-500 font-medium">Active</span>}</td>
+                                  <td className="px-4 py-3 text-center font-semibold text-gray-800 bg-gray-100/30">{h.duration}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-gray-400 italic py-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-center">
+                          No assignment history found for this device.
+                        </div>
+                      )}
+                    </div>
                   </>
                 )}
               </div>

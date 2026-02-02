@@ -17,10 +17,11 @@ export type Props = {
 
 export type SelectedPatient = {
   name: string | undefined;
+  selectedPatch?: string;
 } & VLSinglePatientECG;
 
 export type RenderPatientsProps = {
   patients: VLAllPatients;
   selectedPatient: SelectedPatient;
-  handleSetSelectedPatient: (name: string) => void;
+  handleSetSelectedPatient: (name: string, patchSn?: string) => void;
 };
