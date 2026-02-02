@@ -43,4 +43,8 @@ export const validator = create((data: DeviceProps) => {
   test('cardiac_monitoring', 'Invalid cardiac monitoring option', () => {
     enforce(data.cardiac_monitoring).inside(['YES', 'NO', 'LATER']);
   });
+
+  test('site_id', 'Site is required', () => {
+    enforce(data.site_id).isNotEmpty();
+  });
 });

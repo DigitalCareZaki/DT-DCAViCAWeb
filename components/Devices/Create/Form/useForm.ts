@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createDevice, updateDevice, getSuperAdminBranches, createDeviceSuperadmin, getSites } from '@service';
+import { createDevice, updateDevice, getSuperAdminBranches, createDeviceSuperadmin, getSites, getDoctorSites } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
@@ -183,21 +183,34 @@ const useFormHook = (
     fetchBranches();
   }, [user]);
 
-  // Fetch sites
-  useEffect(() => {
-    const fetchSites = async () => {
-      const res = await getSites(1, 1000);
-      if (res?.success && res.data?.data) {
-        setSites(res.data.data);
-      }
-    };
-    fetchSites();
-  }, []);
-
   const handleSelectSite = useCallback((siteId: string) => {
     setSelectors((prev: any) => ({ ...prev, site_id: siteId }));
     setValue('site_id' as any, siteId as any);
   }, [setValue]);
+
+  // Fetch sites
+  useEffect(() => {
+    const fetchSites = async () => {
+      if (user?.role === 'DOCTOR') {
+        const res = await getDoctorSites();
+        if (res?.success && res.data) {
+          const sitesArray = Array.isArray(res.data) ? res.data : [res.data];
+          setSites(sitesArray);
+
+          // Pre-select if there's only one site and no site is selected yet
+          if (sitesArray.length === 1 && !selectors.site_id && !prevData) {
+            handleSelectSite(sitesArray[0].id);
+          }
+        }
+      } else {
+        const res = await getSites(1, 1000);
+        if (res?.success && res.data?.data) {
+          setSites(res.data.data);
+        }
+      }
+    };
+    fetchSites();
+  }, [user?.role, handleSelectSite, selectors.site_id, prevData]);
 
   const handleSelectBranch = useCallback((branchId: string) => {
     setSelectors((prev: any) => ({ ...prev, branch_id: branchId }));
