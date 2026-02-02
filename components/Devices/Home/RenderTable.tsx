@@ -7,7 +7,7 @@ import { FaEdit, FaSync, FaCheckCircle, FaExclamationTriangle, FaSpinner } from 
 import { CircleSpinner } from 'react-spinners-kit';
 
 import { getName } from '@init-globals';
-import { updateDevice } from '@service';
+import { updateDevice, syncDevice } from '@service';
 import { showModalReducer } from '@slice';
 
 import type { ClientComponentProps } from '@types';
@@ -214,15 +214,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
       await new Promise(resolve => setTimeout(resolve, 500));
       setCurrentStep('submitting');
 
-      const res = await updateDevice(
-        btoa(
-          JSON.stringify({
-            ...el,
-            cardiac_monitoring: 'YES',
-          })
-        ),
-        el.id
-      );
+      const res = await syncDevice(el.id);
 
       if (res.success) {
         setCurrentStep('processing');
