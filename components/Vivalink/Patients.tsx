@@ -77,7 +77,11 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
   const generateECGReport = async () => {
     if (reportLoading) return;
     if (!selectedPatient.name || !selectedDate) {
-      alert("Please select a patient and date first!");
+      dispatch(showModalReducer({
+        message: 'Please select a patient and date first!',
+        type: 'ERROR',
+        show: true,
+      }));
       return;
     }
 
@@ -103,12 +107,20 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
         if (reportWindow) reportWindow.location.href = res.data.pdfUrl;
       } else {
         if (reportWindow) reportWindow.close();
-        alert("ECG Report not available for the selected date.");
+        dispatch(showModalReducer({
+          message: 'ECG Report not available for the selected date.',
+          type: 'ERROR',
+          show: true,
+        }));
       }
     } catch (error) {
       console.error("Error generating ECG report:", error);
       if (reportWindow && !reportWindow.closed) reportWindow.close();
-      alert("ECG Report not available for the selected date.");
+      dispatch(showModalReducer({
+        message: 'ECG Report not available for the selected date.',
+        type: 'ERROR',
+        show: true,
+      }));
     } finally {
       setReportLoading(false);
     }
