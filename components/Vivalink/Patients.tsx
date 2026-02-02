@@ -389,28 +389,34 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
               </div>
               {selectedPatient?.ecg && selectedPatient?.ecg?.length > 0 && (
                 <>
-                  <div className="mt-5 mb-5 flex items-center gap-3">
-                    <label htmlFor="duration" className="font-semibold text-gray-700">
-                      Select Duration:
-                    </label>
-                    <select
-                      id="duration"
-                      className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                      value={selectedDuration}
-                      onChange={getDuration}
-                    >
-                      <option value="" disabled>
-                        Select a duration
-                      </option>
-                      {durations?.duration?.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
+                  <div className="mt-8 mb-5 flex flex-col gap-4">
+                    <div className="flex items-center gap-3">
+                      <label htmlFor="duration" className="font-semibold text-gray-700">
+                        Select Duration:
+                      </label>
+                      <select
+                        id="duration"
+                        className="border w-[220px] border-gray-300 p-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                        value={selectedDuration}
+                        onChange={getDuration}
+                      >
+                        <option value="" disabled>
+                          Select a duration
                         </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div style={{ overflowX: 'auto', width: '100%' }}>
-                    <ECGPlot data={flattenedEcgData}></ECGPlot>
+                        {durations?.duration?.map((time, index) => (
+                          <option key={index} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div
+                      id="ecg-bottom-scroll"
+                      style={{ overflowX: 'auto', width: '100%', scrollBehavior: 'smooth' }}
+                    >
+                      <ECGPlot data={flattenedEcgData}></ECGPlot>
+                    </div>
                   </div>
                 </>
               )}

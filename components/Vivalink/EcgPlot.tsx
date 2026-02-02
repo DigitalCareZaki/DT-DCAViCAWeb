@@ -5,202 +5,104 @@ import React, { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 const ECGPlot = ({ data }: { data: { time: number; mv: number }[] }) => {
+  const [initialYRange] = useState([-2, 2]);
 
+  const { plotData, layout } = React.useMemo(() => {
+    const xAxis = data?.map((point) => point.time) || [];
+    const yAxis = data?.map((point) => point.mv) || [];
+    const xMax = xAxis[xAxis.length - 1] || 0;
+    const xMin = 0;
 
-  const xAxis = data.map((point) => point.time);
-  const yAxis = data.map((point) => point.mv); // ECG-like data
-
-  const xMin = 0;
-  const xMax = xAxis[xAxis.length - 1]; // Full range of data (5 seconds)
-
-  const plotData: Plotly.Data[] = [
-    {
-      x: xAxis,
-      y: yAxis,
-      type: 'scatter',
-      mode: 'lines',
-      line: { color: 'black', width: 2 }, // Line color set to black and width increased
-    },
-  ];
-
-  var maxY = Math.max(...yAxis);
-  var minY = Math.min(...yAxis) * -1;
-
-  var m = Math.max(maxY, minY);
-
-  m = Math.ceil(m);
-
-  const [initialYRange, setInitialYRange] = useState([-2, 2]);
-
-  // Handle the layout changes when zooming or panning
-  // const handleRelayout = (eventData: any) => {
-  //   // Extract x-axis range from the relayout event data
-  //   const newXRange = [eventData['xaxis.range[0]'], eventData['xaxis.range[1]']];
-  //   setInitialXRange(newXRange);
-
-  //   // Recalculate the y-axis range based on the new x-axis range
-  //   const newYRange = calculateYRange(newXRange);
-  //   setInitialYRange(newYRange);
-  // };
-
-  // Define vertical and horizontal grid lines
-  const smallTimeIncrement = 0.04;
-  const largeTimeIncrement = smallTimeIncrement * 5;
-  const smallYIncrement = 0.1;
-  const largeYIncrement = smallYIncrement * 5;
-
-  var verticalSmallLines = Array.from(
-    { length: Math.floor((xMax - xMin) / smallTimeIncrement) + 1 },
-    (_, i) => ({
-      type: 'line' as const,
-      x0: xMin + i * smallTimeIncrement,
-      x1: xMin + i * smallTimeIncrement,
-      y0: -10,
-      y1: 10,
-      line: {
-        color: 'rgba(255, 0, 0, 0.1)',
-        width: 1,
+    const pData: Plotly.Data[] = [
+      {
+        x: xAxis,
+        y: yAxis,
+        type: 'scatter',
+        mode: 'lines',
+        line: { color: 'black', width: 1.5 },
       },
-    })
-  );
+    ];
 
+    const smallTimeIncrement = 0.04;
+    const largeTimeIncrement = 0.2;
+    const smallYIncrement = 0.1;
+    const largeYIncrement = 0.5;
 
-  var verticalLargeLines = Array.from(
-    { length: Math.floor((xMax - xMin) / largeTimeIncrement) + 1 },
-    (_, i) => ({
-      type: 'line' as const,
-      x0: xMin + i * largeTimeIncrement,
-      x1: xMin + i * largeTimeIncrement,
-      y0: -10,
-      y1: 10,
-      line: {
-        color: 'rgba(255, 0, 0, 0.6)',
-        width: 1.5,
+    const shapes: Partial<Plotly.Shape>[] = [];
+
+    // Optimize grid generation: Use a single loop for axes
+    for (let x = xMin; x <= xMax; x += smallTimeIncrement) {
+      const isLarge = Math.abs(x % largeTimeIncrement) < 0.001 || Math.abs(x % largeTimeIncrement - largeTimeIncrement) < 0.001;
+      shapes.push({
+        type: 'line',
+        x0: x, x1: x, y0: -10, y1: 10,
+        line: {
+          color: isLarge ? 'rgba(255, 0, 0, 0.4)' : 'rgba(255, 0, 0, 0.1)',
+          width: isLarge ? 1.2 : 0.8,
+        },
+      });
+    }
+
+    for (let y = -10; y <= 10; y += smallYIncrement) {
+      if (y === 0) continue;
+      const isLarge = Math.abs(y % largeYIncrement) < 0.001 || Math.abs(y % largeYIncrement - largeYIncrement) < 0.001;
+      shapes.push({
+        type: 'line',
+        x0: xMin, x1: xMax, y0: y, y1: y,
+        line: {
+          color: isLarge ? 'rgba(255, 0, 0, 0.4)' : 'rgba(255, 0, 0, 0.1)',
+          width: isLarge ? 1.2 : 0.8,
+        },
+      });
+    }
+
+    const singleUnit = 400 / (2 * initialYRange[1] * 10);
+    const secondsEcg = data?.length ? data.length / 128 : 0;
+    const width = Math.max(1200, singleUnit * secondsEcg * 25);
+
+    const lout: Partial<Plotly.Layout> = {
+      title: 'ECG Signal',
+      width: width,
+      height: 450,
+      margin: { t: 40, b: 40, l: 40, r: 40 },
+      xaxis: {
+        title: 'Time (s)',
+        range: [0, xMax],
+        showline: true,
+        tickmode: 'linear',
+        dtick: 0.2,
+        fixedrange: true,
       },
-    })
+      yaxis: {
+        title: 'mV',
+        range: initialYRange,
+        showline: true,
+        tickmode: 'linear',
+        dtick: 0.5,
+        fixedrange: true,
+      },
+      showlegend: false,
+      shapes: shapes,
+      dragmode: false,
+      autosize: false,
+    };
+
+    return { plotData: pData, layout: lout };
+  }, [data, initialYRange]);
+
+  return (
+    <div className="ecg-plot-container bg-white rounded-lg p-2 shadow-inner">
+      <Plot
+        data={plotData}
+        layout={layout}
+        config={{
+          responsive: false,
+          displayModeBar: false,
+          staticPlot: true
+        }}
+      />
+    </div>
   );
-
-  var horizontalSmallLines = Array.from(
-    { length: Math.floor((10 - 0) / smallYIncrement) + 1 },
-    (_, i) => {
-      const yValue = i * smallYIncrement;
-      return {
-        type: 'line' as const,
-        x0: xMin,
-        x1: xMax,
-        y0: yValue,
-        y1: yValue,
-        line: {
-          color: 'rgba(255, 0, 0, 0.1)',
-          width: 1,
-        },
-      };
-    }
-  );
-
-  var horizontalSmallLinesBelow = Array.from(
-    { length: Math.floor((10 - 0) / smallYIncrement) + 1 },
-    (_, i) => {
-      const yValue = i * smallYIncrement;
-      return {
-        type: 'line' as const,
-        x0: xMin,
-        x1: xMax,
-        y0: -1 * yValue,
-        y1: -1 * yValue,
-        line: {
-          color: 'rgba(255, 0, 0, 0.1)',
-          width: 1,
-        },
-      };
-    }
-  );
-
-  // remove main axis
-
-  var horizontalLargeLines = Array.from(
-    { length: Math.floor((10 - 0) / largeYIncrement) + 1 },
-    (_, i) => {
-      const yValue = i * largeYIncrement;
-      return {
-        type: 'line' as const,
-        x0: xMin,
-        x1: xMax,
-        y0: yValue,
-        y1: yValue,
-        line: {
-          color: 'rgba(255, 0, 0, 0.6)',
-          width: 1.5,
-        },
-      };
-    }
-  );
-
-  var horizontalLargeLinesBelow = Array.from(
-    { length: Math.floor((10 - 0) / largeYIncrement) + 1 },
-    (_, i) => {
-      const yValue = i * largeYIncrement;
-      return {
-        type: 'line' as const,
-        x0: xMin,
-        x1: xMax,
-        y0: -1 * yValue,
-        y1: -1 * yValue,
-        line: {
-          color: 'rgba(255, 0, 0, 0.6)',
-          width: 1.5,
-        },
-      };
-    }
-  );
-
-  // remove the axis lines
-
-  horizontalLargeLines = horizontalLargeLines.filter((line) => line.y0 !== 0);
-  horizontalLargeLinesBelow = horizontalLargeLinesBelow.filter((line) => line.y0 !== 0);
-
-  const shapes = [
-    ...verticalSmallLines,
-    ...verticalLargeLines,
-    ...horizontalSmallLines,
-    ...horizontalLargeLines,
-    ...horizontalLargeLinesBelow,
-    ...horizontalSmallLinesBelow,
-  ];
-
-  var singleUnit = 400 / (2 * initialYRange[1] * 10)
-  var secondsEcg = data.length / 128;
-  var width = singleUnit * secondsEcg * 25;
-
-  const layout: Partial<Plotly.Layout> = {
-    title: 'ECG Signal',
-    width: width, // Set width to dynamic 50% of the viewport width
-    height: 580,
-    xaxis: {
-      title: 'Time (s)',
-      range: [0, xMax],
-      showline: true,
-      tickmode: 'linear',
-      constrain: 'range',
-      dtick: 0.2,
-      scaleratio: 1,
-      fixedrange: true,
-    },
-    yaxis: {
-      title: 'mV',
-      range: initialYRange,
-      showline: true,
-      tickmode: 'linear',
-      dtick: 0.5,
-      fixedrange: true,
-    },
-    autosize: true,
-    showlegend: false,
-    shapes: shapes,
-    dragmode: false,
-  };
-
-  return <Plot data={plotData} layout={layout} />;
 };
 
 export default ECGPlot;
