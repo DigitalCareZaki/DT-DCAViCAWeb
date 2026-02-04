@@ -41,7 +41,7 @@ const Export: ClientComponentProps<ExportProps<Record<string, any>>> = (
         onMouseLeave={onBlur}
         title="Export"
         name="Export"
-        className="h-12 rounded-lg text-lg lg:text-xl xl:text-2xl"
+        className="h-12 rounded-lg text-lg lg:text-xl xl:text-2xl whitespace-nowrap"
       />
 
       <AnimatePresence>

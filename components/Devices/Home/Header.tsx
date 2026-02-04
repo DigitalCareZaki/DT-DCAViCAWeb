@@ -48,7 +48,7 @@ const Header = ({ userRole, data }: HeaderProps) => {
   };
 
   return (
-    <div className="relative z-20 flex w-full justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <div className="relative z-20 flex w-full items-center justify-between py-4">
       {/* <span className="screen-title text-xl font-semibold text-gray-800 sm:text-2xl lg:text-3xl">
         Devices
       </span> */}
@@ -64,13 +64,13 @@ const Header = ({ userRole, data }: HeaderProps) => {
           className="text-base sm:text-lg md:text-xl px-4 py-2"
         />
       </form>
-      <div className="flex w-fit flex-row gap-4">
-        <div className="w-36 sm:w-48">
+      <div className="flex w-fit flex-row items-center gap-4">
+        <div className="w-48 sm:w-60">
           <Link passHref href={`/${userRole}/devices/add`}>
             <ButtonPrimary
               title="Add Device"
               name="Add device"
-              className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
+              className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-2xl whitespace-nowrap"
             />
           </Link>
         </div>
