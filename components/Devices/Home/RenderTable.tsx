@@ -42,7 +42,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
 
     if (isYes) {
       return (
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-md font-bold bg-green-50 text-green-700 border border-green-200 shadow-sm transition-all hover:scale-105">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sx font-bold bg-green-50 text-green-700 border border-green-200 shadow-sm transition-all hover:scale-105">
           <span className="w-2 h-2 mr-2 rounded-full bg-green-500 animate-pulse"></span>
           YES
         </span>
@@ -50,7 +50,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
     }
     if (isNo) {
       return (
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-md font-bold bg-red-50 text-red-700 border border-red-200 shadow-sm transition-all hover:scale-105">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sx font-bold bg-red-50 text-red-700 border border-red-200 shadow-sm transition-all hover:scale-105">
           <span className="w-2 h-2 mr-2 rounded-full bg-red-500"></span>
           NO
         </span>
@@ -58,7 +58,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
     }
     if (isLater) {
       return (
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-md font-bold bg-amber-50 text-amber-700 border border-amber-200 shadow-sm transition-all hover:scale-105">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sx font-bold bg-amber-50 text-amber-700 border border-amber-200 shadow-sm transition-all hover:scale-105">
           <span className="w-2 h-2 mr-2 rounded-full bg-amber-500"></span>
           LATER
         </span>
@@ -250,31 +250,31 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
         >
           <th
             scope="row"
-            className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
+            className="whitespace-nowrap px-4 py-4 font-medium text-gray-900 font-poppins"
           >
             <Link
               passHref
               href={`/${userRole}/devices/edit?id=${el.id}`}
-              className="hover:underline hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"
+              className="hover:underline hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary text-primary"
             >
               {el.title}
             </Link>
           </th>
-          <td className="px-6 py-4">{el.serial_number}</td>
-          <td className="px-6 py-4">{el.description}</td>
-          <td className="px-6 py-4">{el.category}</td>
-          <td className="px-6 py-4">
+          <td className="px-4 py-4">{el.serial_number}</td>
+          <td className="px-4 py-4">{el.description}</td>
+          <td className="px-4 py-4">{el.category}</td>
+          <td className="px-4 py-4">
             {getName({
               ...el.created_by,
             })}
           </td>
-          <td className="px-6 py-4">{el.branch.name}</td>
-          <td className="px-6 py-4 text-center">
+          <td className="px-4 py-4">{el.branch.name}</td>
+          <td className="px-4 py-4 text-center">
             <StatusBadge
               status={el.vivalink_synced ? 'YES' : el.cardiac_monitoring}
             />
           </td>
-          <td className="px-6 py-4 text-center">
+          <td className="px-4 py-4 text-center">
             {(() => {
               const status = el.vivalink_synced ? 'YES' : el.cardiac_monitoring;
               const showSync = status !== 'YES';
@@ -298,11 +298,11 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
               );
             })()}
           </td>
-          <td className="px-6 py-4">{el.assigned ? 'Assigned' : 'Not Assigned'}</td>
-          <td className="px-6 py-4">
+          <td className="px-4 py-4">{el.assigned ? 'Assigned' : 'Not Assigned'}</td>
+          <td className="px-4 py-4">
             {new Date(el.created_at).toLocaleString()}
           </td>
-          <td className="px-6 py-4 flex items-center gap-3">
+          <td className="px-4 py-4 flex items-center gap-3">
             <Link passHref href={`/${userRole}/devices/assign/?id=${el.id}`}>
               <FaEdit
                 title="Manage Patients"

@@ -12,22 +12,31 @@ const Client: ClientComponentProps<TableProps> = ({
   className,
 }) => {
   return (
-    <table
-      className={twMerge('min-w-full w-full text-left text-xs text-gray-500', className)}
-    >
-      <thead className={twMerge('theme-bg-color text-xs uppercase text-white')}>
-        <tr>
-          {heads.map((el, i) => (
-            <th key={i} scope="col" className="px-6 py-3 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl">
-              {el}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl">
-        {children}
-      </tbody>
-    </table>
+    <div className="w-full overflow-x-auto rounded-lg shadow-sm border border-gray-100">
+      <table
+        className={twMerge(
+          'min-w-full w-full text-left text-sx text-gray-600 border-collapse',
+          className
+        )}
+      >
+        <thead className="bg-[#0070FA] text-xs uppercase text-white font-bold sticky top-0 z-10">
+          <tr>
+            {heads.map((el, i) => (
+              <th
+                key={i}
+                scope="col"
+                className="px-6 py-4 whitespace-nowrap tracking-wider font-semibold"
+              >
+                {el}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-100">
+          {children}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

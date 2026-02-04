@@ -40,7 +40,7 @@ const Devices = ({ patient }: DevicesProps) => {
   if (!user?.role) return null;
 
   return (
-    <div className="flex h-screen w-full flex-col gap-2 px-10 pr-0 pt-4">
+    <div className="flex h-screen w-full flex-col gap-2 px-6 pt-4">
       <Header userRole={user.role?.toLowerCase()} data={devices} />
       <div className="flex-1 min-h-0 overflow-y-auto">
         <Table userRole={user.role?.toLowerCase()} patient={patient} />
