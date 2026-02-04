@@ -135,7 +135,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative flex w-full max-w-3xl flex-col gap-5 rounded-2xl bg-white p-6 mx-auto"
+      className="relative flex w-full max-w-3xl flex-col gap-5 rounded-2xl bg-white p-4 sm:p-6 mx-auto"
       // Disable keyboard navigation during loading
       onKeyDown={(e) => {
         if (loading && (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ')) {
