@@ -19,7 +19,7 @@ const Client: ClientComponentProps<TableProps> = ({
           className
         )}
       >
-        <thead className="bg-[#0070FA] text-xs uppercase text-white font-bold sticky top-0 z-10">
+        <thead className="theme-bg-color text-xs uppercase text-white font-bold sticky top-0 z-10">
           <tr>
             {heads.map((el, i) => (
               <th
