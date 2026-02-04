@@ -48,7 +48,7 @@ const Header = ({ userRole, data }: HeaderProps) => {
   };
 
   return (
-    <div className="flex w-full justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <div className="relative z-20 flex w-full justify-between px-4 py-4 sm:px-6 lg:px-8">
       {/* <span className="screen-title text-xl font-semibold text-gray-800 sm:text-2xl lg:text-3xl">
         Devices
       </span> */}

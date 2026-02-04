@@ -35,7 +35,7 @@ const Export: ClientComponentProps<ExportProps<Record<string, any>>> = (
   };
 
   return (
-    <div className="relative w-40">
+    <div className="relative w-40 z-50">
       <ButtonPrimary
         onMouseEnter={onFocus}
         onMouseLeave={onBlur}
@@ -61,7 +61,7 @@ const Export: ClientComponentProps<ExportProps<Record<string, any>>> = (
             }}
             onMouseEnter={onFocus}
             onMouseLeave={onBlur}
-            className="absolute top-16 z-10 flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
+            className="absolute top-16 z-50 flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
           >
             <CsvLink {...props} />
             <PdfLink {...props} />

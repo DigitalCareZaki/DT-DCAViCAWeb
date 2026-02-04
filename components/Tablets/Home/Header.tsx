@@ -42,6 +42,13 @@ const Header = ({ userRole, searchTerm, setSearchTerm }: HeaderProps) => {
         />
       </form>
       <div className="flex w-fit flex-row gap-4">
+        <Link passHref href={`/${userRole}/tablets/add`}>
+          <ButtonPrimary
+            title="Add Accessories"
+            name="Add Accessories"
+            className="font-bold text-xl h-12 w-56 p-4"
+          />
+        </Link>
         <ExportButton
           data={tablets.map((el: TabletProps) => ({
             ...el,
@@ -78,13 +85,7 @@ const Header = ({ userRole, searchTerm, setSearchTerm }: HeaderProps) => {
           ]}
           filename="Accessories List"
         />
-        <Link passHref href={`/${userRole}/tablets/add`}>
-          <ButtonPrimary
-            title="Add Accessories"
-            name="Add Accessories"
-            className="font-bold text-xl h-12 w-56 p-4"
-          />
-        </Link>
+
       </div>
     </div>
   );
