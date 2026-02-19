@@ -685,3 +685,15 @@ export type CreateSiteProps = {
   success: boolean;
   message: string;
 };
+
+export type PatchHistoryItem = {
+  deviceId: string;
+  timeAssigned: string;
+  timeRemoved: string | null;
+  duration: string;
+};
+
+export type GetPatchHistoryResponse = {
+  success: boolean;
+  data: PatchHistoryItem[];
+};
