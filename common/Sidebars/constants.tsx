@@ -61,7 +61,7 @@ const data = {
       Icon: RiMedicineBottleFill,
     },
     {
-      title: 'Sites',
+      title: 'Cardiac Monitoring Site',
       id: 'sites',
       path: '/settings/sites',
       Icon: MdLocationOn,

@@ -73,8 +73,8 @@ const SitesClient = () => {
             />
             <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-semibold text-gray-800">Sites</h1>
-                    <div className="w-40">
+                    <h1 className="text-2xl font-semibold text-gray-800">Cardiac Monitoring Sites</h1>
+                    <div className="w-52">
                         <ButtonPrimary
                             name="Add New Site"
                             onClick={() => {

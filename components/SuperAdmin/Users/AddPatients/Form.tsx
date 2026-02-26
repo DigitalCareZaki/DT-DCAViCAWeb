@@ -446,97 +446,6 @@ const Form: ClientComponent = () => {
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
-            title="Select Site"
-            label="Select Site"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="FaLocationDot"
-            iconSize={16}
-            error={!!errors.site?.message}
-            errorMessage={errors.site?.message || '&'}
-            selected={selectors.site.title}
-            disabled={loading}
-          >
-            <ClientGenerator data={sites.data} handleSelect={handleSelect}>
-              <Site />
-            </ClientGenerator>
-          </DropdownSecondary>
-        </div>
-        <div className="w-1/2">
-          <DropdownSecondary
-            title="Assign Doctor"
-            label="Select Doctor"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="FaUserDoctor"
-            iconSize={16}
-            error={!!errors.doctor?.message}
-            errorMessage={errors.doctor?.message || '&'}
-            selected={selectors.doctor.title}
-            disabled={loading || !selectors.site.id}
-            disableMessage="Please select a site first"
-          >
-            <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
-              <Doctor />
-            </ClientGenerator>
-          </DropdownSecondary>
-        </div>
-      </div>
-      <div className="flex w-full items-center justify-between gap-10">
-        <div className="w-1/2">
-          <DropdownSecondary
-            title="Assign Nurse"
-            label="Select Nurse"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="RiNurseFill"
-            iconSize={16}
-            error={!!errors.nurse?.message}
-            errorMessage={errors.nurse?.message || '&'}
-            selected={selectors.nurse.title}
-            disabled={loading}
-          >
-            <ClientGenerator data={nurses.data} handleSelect={handleSelect}>
-              <Nurse />
-            </ClientGenerator>
-          </DropdownSecondary>
-        </div>
-        <div className="w-1/2">
-          <InputBasic
-            title="Enter patient Date of birth"
-            label="Date of birth"
-            placeholder="Enter patient DOB"
-            type="date"
-            icon="FaCalendarAlt"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            inputClassName="bg-background"
-            hookProps={register('dob')}
-            error={!!errors.dob?.message}
-            errorMessage={errors.dob?.message || '&'}
-            disabled={loading}
-          />
-        </div>
-      </div>
-      <div className="flex w-full items-center justify-between gap-10">
-        <div className="w-1/2">
-          <InputBasic
-            title="Patient Current Address"
-            label="Address"
-            placeholder="Enter patient address"
-            type="string"
-            icon="FaLocationDot"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            inputClassName="bg-background"
-            hookProps={register('address')}
-            error={!!errors.address?.message}
-            errorMessage={errors.address?.message || '&'}
-            disabled={loading}
-          />
-        </div>
-        <div className="w-1/2">
-          <DropdownSecondary
             title="AViCardia Monitoring"
             label="AViCardia Monitoring"
             borderTheme
@@ -571,6 +480,125 @@ const Form: ClientComponent = () => {
               </div>
             </>
           </DropdownSecondary>
+        </div>
+        <div className="w-1/2">
+          {selectors.cardiac_monitoring.title === 'YES' ? (
+            <DropdownSecondary
+              title="Select Cardiac Monitoring Site"
+              label="Select Cardiac Monitoring Site"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              icon="FaLocationDot"
+              iconSize={16}
+              error={!!errors.site?.message}
+              errorMessage={errors.site?.message || '&'}
+              selected={selectors.site.title}
+              disabled={loading}
+            >
+              <ClientGenerator data={sites.data} handleSelect={handleSelect}>
+                <Site />
+              </ClientGenerator>
+            </DropdownSecondary>
+          ) : selectors.cardiac_monitoring.title === 'NO' || selectors.cardiac_monitoring.title === 'LATER' ? (
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Cardiac Monitoring Site</label>
+              <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Sync option available for late connection</span>
+              </div>
+            </div>
+          ) : (
+            <DropdownSecondary
+              title="Select Cardiac Monitoring Site"
+              label="Select Cardiac Monitoring Site"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              icon="FaLocationDot"
+              iconSize={16}
+              error={!!errors.site?.message}
+              errorMessage={errors.site?.message || '&'}
+              selected={selectors.site.title}
+              disabled
+              disableMessage="Please select AViCardia Monitoring option first"
+            >
+              <ClientGenerator data={sites.data} handleSelect={handleSelect}>
+                <Site />
+              </ClientGenerator>
+            </DropdownSecondary>
+          )}
+        </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
+        <div className="w-1/2">
+          <DropdownSecondary
+            title="Assign Doctor"
+            label="Select Doctor"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaUserDoctor"
+            iconSize={16}
+            error={!!errors.doctor?.message}
+            errorMessage={errors.doctor?.message || '&'}
+            selected={selectors.doctor.title}
+            disabled={loading || selectors.cardiac_monitoring.title !== 'YES'}
+            disableMessage={selectors.cardiac_monitoring.title !== 'YES' ? 'Available when AViCardia Monitoring is YES' : 'Please select a site first'}
+          >
+            <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
+              <Doctor />
+            </ClientGenerator>
+          </DropdownSecondary>
+        </div>
+        <div className="w-1/2">
+          <DropdownSecondary
+            title="Assign Nurse"
+            label="Select Nurse"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="RiNurseFill"
+            iconSize={16}
+            error={!!errors.nurse?.message}
+            errorMessage={errors.nurse?.message || '&'}
+            selected={selectors.nurse.title}
+            disabled={loading}
+          >
+            <ClientGenerator data={nurses.data} handleSelect={handleSelect}>
+              <Nurse />
+            </ClientGenerator>
+          </DropdownSecondary>
+        </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
+        <div className="w-1/2">
+          <InputBasic
+            title="Patient Current Address"
+            label="Address"
+            placeholder="Enter patient address"
+            type="string"
+            icon="FaLocationDot"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            inputClassName="bg-background"
+            hookProps={register('address')}
+            error={!!errors.address?.message}
+            errorMessage={errors.address?.message || '&'}
+            disabled={loading}
+          />
+        </div>
+        <div className="w-1/2">
+          <InputBasic
+            title="Enter patient Date of birth"
+            label="Date of birth"
+            placeholder="Enter patient DOB"
+            type="date"
+            icon="FaCalendarAlt"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            inputClassName="bg-background"
+            hookProps={register('dob')}
+            error={!!errors.dob?.message}
+            errorMessage={errors.dob?.message || '&'}
+            disabled={loading}
+          />
         </div>
       </div>
       <div className="mt-5">

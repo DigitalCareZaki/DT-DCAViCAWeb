@@ -54,10 +54,24 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     useForm(data, categories);
 
   const handleSelectField = (field: string, value: any) => {
-    setSelectedValues((prev: any) => ({
-      ...prev,
-      [field]: value
-    }));
+    setSelectedValues((prev: any) => {
+      const updated = {
+        ...prev,
+        [field]: value,
+      };
+
+      // Auto-set ECG_Rec_ prefix when both cardiac_monitoring=YES and category=ECG
+      const isYes = field === 'cardiac_monitoring' ? value.value === 'YES' : prev.cardiac_monitoring?.value === 'YES';
+      const isEcg = field === 'category' ? value.value === 'ECG' : prev.category?.value === 'ECG';
+
+      if (isYes && isEcg) {
+        setValue('serial_number', 'ECG_Rec_');
+      } else {
+        setValue('serial_number', '');
+      }
+
+      return updated;
+    });
 
     if (field === 'serial_number') {
       setSelectedSerial(value.name || []);
@@ -67,6 +81,18 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     }
   };
 
+  // Sync serial number prefix when category changes via handleSelectByAbd
+  useEffect(() => {
+    if (!data) { // only for create (not edit)
+      const isYes = selectedValues?.cardiac_monitoring?.value === 'YES';
+      const isEcg = selectedValues?.category?.value === 'ECG';
+      if (isYes && isEcg) {
+        setValue('serial_number', 'ECG_Rec_');
+      } else {
+        setValue('serial_number', '');
+      }
+    }
+  }, [selectedValues?.category?.value, selectedValues?.cardiac_monitoring?.value]);
   // Progressive loading overlay component
   const ProgressiveLoadingOverlay = () => {
     const stepInfo = getLoadingStepInfo(currentStep);
@@ -200,7 +226,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           <InputBasic
             title="Serial number"
             label="Serial number"
-            placeholder="Enter device serial number"
+            placeholder={selectedValues?.cardiac_monitoring?.value === 'YES' && selectedValues?.category?.value === 'ECG' ? 'ECG_Rec_...' : 'Enter device serial number'}
             icon="SiNamecheap"
             borderTheme
             inputWrapperClassName="bg-background"
@@ -208,10 +234,13 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             hookProps={{
               ...register('serial_number'),
               onChange: (e: any) => {
-                const prefix = 'ECGRec_';
-                if (!e.target.value.startsWith(prefix)) {
-                  e.target.value = prefix;
-                  setValue('serial_number', prefix);
+                const isEcgWithMonitoring = selectedValues?.cardiac_monitoring?.value === 'YES' && selectedValues?.category?.value === 'ECG';
+                if (isEcgWithMonitoring) {
+                  const prefix = 'ECG_Rec_';
+                  if (!e.target.value.startsWith(prefix)) {
+                    e.target.value = prefix;
+                    setValue('serial_number', prefix);
+                  }
                 }
               },
             }}

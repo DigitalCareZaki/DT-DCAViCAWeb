@@ -59,7 +59,7 @@ const useFormHook = (
   } = useForm<DeviceProps>({
     resolver: vestResolver(validator),
     defaultValues: {
-      serial_number: 'ECGRec_',
+      serial_number: '',
     },
   });
 
@@ -344,9 +344,11 @@ const useFormHook = (
   // for edit case
   useEffect(() => {
     if (prevData) {
-      const serialNumber = prevData.serial_number?.startsWith('ECGRec_')
-        ? prevData.serial_number
-        : `ECGRec_${prevData.serial_number || ''}`;
+      const isEcgWithMonitoring =
+        prevData.cardiac_monitoring?.toUpperCase() === 'YES' && prevData.category === 'ECG';
+      const serialNumber = isEcgWithMonitoring && prevData.serial_number && !prevData.serial_number.startsWith('ECG_Rec_')
+        ? `ECG_Rec_${prevData.serial_number}`
+        : prevData.serial_number || '';
 
       reset({
         ...prevData,
