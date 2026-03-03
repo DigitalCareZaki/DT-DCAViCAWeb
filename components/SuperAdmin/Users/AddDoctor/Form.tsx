@@ -380,7 +380,7 @@ const Form: React.FC = () => {
           </DropdownSecondary>
         </div>
       </div>
-      <div className="flex w-full items-center justify-between gap-10">
+      <div className="flex w-full items-start justify-between gap-10">
         <div className="w-1/2">
           <DropdownSecondary
             title="AViCardia Monitoring"
@@ -433,12 +433,23 @@ const Form: React.FC = () => {
               </ClientGenerator>
             </DropdownSecondary>
           ) : selectors.avicardia_monitoring.title === 'NO' || selectors.avicardia_monitoring.title === 'LATER' ? (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600">Cardiac Monitoring Site</label>
-              <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div className="relative flex w-full flex-col gap-2 text-lg">
+              {/* Label row — mirrors DropdownSecondary label + badge */}
+              <div className="flex items-center gap-2">
+                <span className="text-gray-600 font-medium">Cardiac Monitoring Site</span>
+                <div className="theme-bg-color flex h-3 w-3 items-center justify-center rounded-full text-[10px] font-bold text-white">
+                  <span>!</span>
+                </div>
+              </div>
+              {/* Input-height info box — same h-10 as DropdownSecondary's wrapper */}
+              <div className="flex h-10 w-full items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 text-xs text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <span>Sync option available for late connection</span>
               </div>
+              {/* Invisible spacer — mirrors DropdownSecondary's errorMessage span */}
+              <span className="text-transparent text-ssx font-medium">&amp;</span>
             </div>
           ) : (
             <DropdownSecondary
