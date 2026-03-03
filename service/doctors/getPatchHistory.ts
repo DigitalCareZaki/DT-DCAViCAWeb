@@ -15,8 +15,6 @@ async function getPatchHistory(patchSn: string, userName: string): Promise<GetPa
 
     const data = await res.json();
 
-    console.log("Patch History Response:", { status: res.status, ok: res.ok, data });
-
     let historyList: any[] = [];
     if (Array.isArray(data)) {
         historyList = data;
