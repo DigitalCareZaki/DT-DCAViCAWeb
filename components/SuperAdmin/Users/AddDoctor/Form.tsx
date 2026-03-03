@@ -436,7 +436,7 @@ const Form: React.FC = () => {
             <div className="relative flex w-full flex-col gap-2 text-lg">
               {/* Label row — mirrors DropdownSecondary label + badge */}
               <div className="flex items-center gap-2">
-                <span className="text-gray-600 font-medium">Cardiac Monitoring Site</span>
+                <span className="text-sx font-medium text-gray-600">Cardiac Monitoring Site</span>
                 <div className="theme-bg-color flex h-3 w-3 items-center justify-center rounded-full text-[10px] font-bold text-white">
                   <span>!</span>
                 </div>
