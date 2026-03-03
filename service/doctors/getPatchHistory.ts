@@ -3,10 +3,10 @@
 import fetch from '@fetch';
 import { GetPatchHistoryResponse } from '@types-services';
 
-async function getPatchHistory(patchSn: string): Promise<GetPatchHistoryResponse> {
+async function getPatchHistory(patchSn: string, userName: string): Promise<GetPatchHistoryResponse> {
     const params = new URLSearchParams({
         deviceId: patchSn,
-        userName: 'harisiqbal',
+        userName: userName,
     });
 
     const res = await fetch(`/api/v1/web/devices/history?${params.toString()}`, {

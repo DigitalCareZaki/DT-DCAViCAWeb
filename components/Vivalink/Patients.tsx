@@ -159,7 +159,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
       // Fetch ECG data and History in parallel
       const [res, historyRes] = await Promise.all([
         getDoctorSinglePatientFromVl(finalPatchSn, '1 minute'),
-        getPatchHistory(finalPatchSn.replace('%2F', '/'))
+        getPatchHistory(finalPatchSn.replace('%2F', '/'), name)
       ]);
 
       setSyncingId(null);
