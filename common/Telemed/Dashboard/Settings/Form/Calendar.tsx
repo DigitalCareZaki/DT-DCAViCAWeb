@@ -215,7 +215,7 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                     <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                         Start Date <span className="text-red-500">*</span>
                     </label>
-                    <div className="mt-2">
+                    <div className="mt-2 relative z-40">
                         <Datepicker options={{
                             ...options,
                             inputNameProp: 'start',
@@ -242,7 +242,7 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                     <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                         End Date <span className="text-red-500">*</span>
                     </label>
-                    <div className="mt-2">
+                    <div className="mt-2 relative z-40">
                         <Datepicker options={{ ...options, inputNameProp: 'end', inputIdProp: 'end', defaultDate: opp.endTime ? new Date(opp.endTime) : undefined, }} onChange={(v) => {
                             // When user changes the end date, reset the weekly slots
                             setOpp(prev => ({
@@ -281,141 +281,137 @@ const Form: ClientComponentProps<SlotParentProps> = ({ data }) => {
                 )}
 
 
-                {/* Weekly Day Selection - Only show when both dates are selected */}
-                {(opp.startTime && opp.endTime) && (
-                    <>
-                        <div className="mb-4 px-10">
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">
-                                Weekly Availability
-                                {opp.startTime && opp.endTime && (
-                                    <span className="ml-2 text-sm text-green-600 font-normal">
-                                        ✓ Dates selected - Ready to configure
-                                    </span>
-                                )}
-                            </h3>
-                        </div>
+                {/* Weekly Day Selection */}
+                <>
+                    <div className="mb-4 px-10">
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">
+                            Weekly Availability
+                            {opp.startTime && opp.endTime && (
+                                <span className="ml-2 text-sm text-green-600 font-normal">
+                                    ✓ Dates selected - Ready to configure
+                                </span>
+                            )}
+                        </h3>
+                    </div>
 
-                        <div className="grid gap-x-6 gap-y-8 2xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 px-10 gap-6 align-top text-gray-600">
+                    <div className="grid gap-x-6 gap-y-8 2xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 px-10 gap-6 align-top text-gray-600">
 
-                            {
-                                opp.slots && opp.slots.length > 0 ? (
-                                    opp.slots.map((item, index) => {
-                                        return (
-                                            <SlotManager
-                                                key={item.day}
-                                                onUpdate={onUpdate}
-                                                data={item}
-                                                startDate={opp.startTime}
-                                                endDate={opp.endTime}
-                                            />
-                                        )
-                                    })
-                                ) : (
-                                    <div className="col-span-full text-center py-8 text-gray-500">
-                                        Loading weekly schedule...
-                                    </div>
-                                )
-                            }
-                        </div>
-                    </>
-                )}
+                        {
+                            opp.slots && opp.slots.length > 0 ? (
+                                opp.slots.map((item, index) => {
+                                    return (
+                                        <SlotManager
+                                            key={item.day}
+                                            onUpdate={onUpdate}
+                                            data={item}
+                                            startDate={opp.startTime}
+                                            endDate={opp.endTime}
+                                        />
+                                    )
+                                })
+                            ) : (
+                                <div className="col-span-full text-center py-8 text-gray-500">
+                                    Loading weekly schedule...
+                                </div>
+                            )
+                        }
+                    </div>
+                </>
             </div>
             <div className="mt-6 flex px-10 items-center justify-end gap-x-6">
-                {(opp.startTime && opp.endTime) && (
-                    <>
-                        {loading == false && <button
-                            type="submit"
-                            onClick={async () => {
-                                // Validate dates before submitting
-                                if (!validateDates()) {
-                                    dispatch(showModalReducer({
-                                        type: 'ERROR',
-                                        message: 'Please select both start and end dates',
-                                        show: true,
-                                    }));
-                                    return;
-                                }
+                <>
+                    {loading == false && <button
+                        type="submit"
+                        onClick={async () => {
+                            // Validate dates before submitting
+                            if (!validateDates()) {
+                                dispatch(showModalReducer({
+                                    type: 'ERROR',
+                                    message: 'Please select both start and end dates',
+                                    show: true,
+                                }));
+                                return;
+                            }
 
 
-                                setLoading(true);
-                                // create a copy of opp where slot times and top-level
-                                // start/end dates are normalized so the calendar date
-                                // chosen by the user is preserved when converted to
-                                // a UTC ISO string for backend storage.
-                                const payload = JSON.parse(JSON.stringify(opp));
+                            setLoading(true);
+                            // create a copy of opp where slot times and top-level
+                            // start/end dates are normalized so the calendar date
+                            // chosen by the user is preserved when converted to
+                            // a UTC ISO string for backend storage.
+                            const payload = JSON.parse(JSON.stringify(opp));
 
-                                // normalization helper — takes a Date or date-like value
-                                // and returns an ISO string whose UTC components match
-                                // the local Y/M/D/H/M of the provided value. This keeps
-                                // the numeric date/time the user selected intact.
-                                function normalize(dateLike: any) {
-                                    if (!dateLike) return dateLike;
-                                    const d = new Date(dateLike);
-                                    const y = d.getFullYear();
-                                    const mo = d.getMonth();
-                                    const da = d.getDate();
-                                    const hh = d.getHours();
-                                    const mm = d.getMinutes();
-                                    return new Date(Date.UTC(y, mo, da, hh, mm, 0, 0)).toISOString();
-                                }
+                            // normalization helper — takes a Date or date-like value
+                            // and returns an ISO string whose UTC components match
+                            // the local Y/M/D/H/M of the provided value. This keeps
+                            // the numeric date/time the user selected intact.
+                            function normalize(dateLike: any) {
+                                if (!dateLike) return dateLike;
+                                const d = new Date(dateLike);
+                                const y = d.getFullYear();
+                                const mo = d.getMonth();
+                                const da = d.getDate();
+                                const hh = d.getHours();
+                                const mm = d.getMinutes();
+                                return new Date(Date.UTC(y, mo, da, hh, mm, 0, 0)).toISOString();
+                            }
 
-                                // normalize top-level start/end dates as well
-                                payload.startTime = normalize(payload.startTime);
-                                payload.endTime = normalize(payload.endTime);
+                            // normalize top-level start/end dates as well
+                            payload.startTime = normalize(payload.startTime);
+                            payload.endTime = normalize(payload.endTime);
 
-                                // payload.slots -> array of SlotWrapper
-                                if (payload.slots && Array.isArray(payload.slots)) {
-                                    payload.slots = payload.slots.map((wrapper: any) => {
-                                        if (!wrapper || !wrapper.slots) return wrapper;
-                                        const slots = wrapper.slots.map((s: any) => {
-                                            const out: any = { ...s };
+                            // payload.slots -> array of SlotWrapper
+                            if (payload.slots && Array.isArray(payload.slots)) {
+                                payload.slots = payload.slots.map((wrapper: any) => {
+                                    if (!wrapper || !wrapper.slots) return wrapper;
+                                    const slots = wrapper.slots.map((s: any) => {
+                                        const out: any = { ...s };
 
-                                            out.startTime = normalize(s.startTime);
-                                            out.endTime = normalize(s.endTime);
-                                            return out;
-                                        });
-                                        return { ...wrapper, slots };
+                                        out.startTime = normalize(s.startTime);
+                                        out.endTime = normalize(s.endTime);
+                                        return out;
                                     });
-                                }
+                                    return { ...wrapper, slots };
+                                });
+                            }
 
-                                try {
-                                    const res = await updateCalendar(btoa(JSON.stringify(payload)));
+                            try {
+                                const res = await updateCalendar(btoa(JSON.stringify(payload)));
 
-                                    if (res.success) {
-                                        dispatch(showModalReducer({
-                                            type: 'SUCCESS',
-                                            message: 'Calendar updated successfully',
-                                            show: true,
-                                        }));
-                                    } else {
-                                        dispatch(showModalReducer({
-                                            type: 'ERROR',
-                                            message: res.message || 'Failed to update calendar',
-                                            show: true,
-                                        }));
-                                    }
-                                } catch (error: any) {
-                                    console.error('Calendar update error:', error);
+                                if (res.success) {
                                     dispatch(showModalReducer({
-                                        type: 'ERROR',
-                                        message: error?.message || 'An error occurred while updating the calendar',
+                                        type: 'SUCCESS',
+                                        message: 'Calendar updated successfully',
                                         show: true,
                                     }));
-                                } finally {
-                                    setLoading(false);
+                                } else {
+                                    dispatch(showModalReducer({
+                                        type: 'ERROR',
+                                        message: res.message || 'Failed to update calendar',
+                                        show: true,
+                                    }));
                                 }
-                            }}
-                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                            Update
-                        </button>}
-                        {
-                            loading == true && <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
-                            </div>
-                        }
-                    </>
-                )}
+                            } catch (error: any) {
+                                console.error('Calendar update error:', error);
+                                dispatch(showModalReducer({
+                                    type: 'ERROR',
+                                    message: error?.message || 'An error occurred while updating the calendar',
+                                    show: true,
+                                }));
+                            } finally {
+                                setLoading(false);
+                            }
+                        }}
+                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                        Update
+                    </button>}
+                    {
+                        loading == true && <div className="flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+                        </div>
+                    }
+                </>
 
             </div>
         </>
