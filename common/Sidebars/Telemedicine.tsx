@@ -68,18 +68,28 @@ const Telemedicine: ClientComponentProps<TelemedSidebarProps> = ({
           <MdOutlineNotifications size={20} />
         </div>
       </TooltipBasic> */}
-      {userType?.toLowerCase() !== 'patient' && (
-        <Link passHref href={`/${userType?.toLowerCase()}/telemed/settings`}>
+      {userType?.toLowerCase() !== 'patient' &&
+        (userType?.toLowerCase() === 'nurse' ? (
           <TooltipBasic
             title="Calendar"
             className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
           >
-            <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
+            <div className="cursor-not-allowed rounded-lg bg-background p-4 text-gray-400 opacity-50">
               <LiaCogSolid size={20} />
             </div>
           </TooltipBasic>
-        </Link>
-      )}
+        ) : (
+          <Link passHref href={`/${userType?.toLowerCase()}/telemed/settings`}>
+            <TooltipBasic
+              title="Calendar"
+              className="left-20 top-2 flex items-center justify-center bg-fuchsia-200 text-fuchsia-500"
+            >
+              <div className="cursor-pointer rounded-lg bg-background p-4 transition duration-300 hover:bg-fuchsia-500 hover:text-white">
+                <LiaCogSolid size={20} />
+              </div>
+            </TooltipBasic>
+          </Link>
+        ))}
       <Link passHref href={`/${userType?.toLowerCase()}`}>
         <TooltipBasic
           title="Home"
