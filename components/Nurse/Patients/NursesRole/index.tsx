@@ -6,6 +6,9 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const NursesRoleWrapper: ServerComponentProps<Props> = async ({ patient }) => {
+
+  console.log("patient <>>>>>>>>>>>>>>>", patient);
+
   return <NursesPatient patient={patient} />;
 };
 
