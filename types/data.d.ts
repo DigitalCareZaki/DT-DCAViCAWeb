@@ -54,9 +54,9 @@ export type PatientNursesProps = {
     email: string;
     phone_number: string;
   };
-  department: {
+  departments: {
     title: string;
-  };
+  }[];
 };
 
 export type SearchUserProps = {

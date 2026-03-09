@@ -25,7 +25,9 @@ const RenderTable: ClientComponent = () => {
           >
             {getName(el.user)}
           </th>
-          <td className="px-6 py-4">{el.department.title}</td>
+          <td className="px-6 py-4">
+            {el.departments?.map((d) => d.title).join(', ')}
+          </td>
           <td className="px-6 py-4">{el.user.email}</td>
           <td className="px-6 py-4">{el.user.phone_number}</td>
         </tr>
