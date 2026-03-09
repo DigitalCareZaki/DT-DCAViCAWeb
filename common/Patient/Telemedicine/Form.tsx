@@ -87,9 +87,7 @@ const Form: ClientComponent = () => {
         user: {
           ...(res.user as any),
         },
-        department: {
-          ...(res.department as any),
-        },
+        departments: [...((res.departments as any) ?? [])],
       });
       handleHideForm();
     } catch (err) {
