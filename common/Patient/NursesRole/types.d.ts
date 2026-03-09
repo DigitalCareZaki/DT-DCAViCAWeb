@@ -7,3 +7,7 @@ export type Props = {
 export type TableProps = {
   data: Array<PatientNursesProps>;
 };
+
+export type HeaderProps = {
+  isNurse?: boolean;
+};

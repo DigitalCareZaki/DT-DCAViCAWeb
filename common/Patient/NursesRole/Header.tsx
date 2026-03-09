@@ -2,6 +2,7 @@
 
 import { ChangeEvent } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'next/navigation';
 
 import {
   toggleDoctorPatientNurseReducer,
@@ -12,16 +13,17 @@ import { getPatientNurses } from '@actions';
 import { InputBasic, ButtonPrimary } from '@common';
 import { debounce } from '@init-globals';
 
-import type { ClientComponent, PatientNursesProps } from '@types';
-import { useSearchParams } from 'next/navigation';
+import type { ClientComponentProps, PatientNursesProps } from '@types';
+import type { HeaderProps } from './types';
 
-const DoctorPatientNursesHeader: ClientComponent = () => {
+const DoctorPatientNursesHeader: ClientComponentProps<HeaderProps> = ({ isNurse }) => {
   const dispatch = useDispatch();
   const params = useSearchParams();
 
   const handleAddNurseClick = () => {
     dispatch(toggleDoctorPatientNurseReducer());
   };
+
   const setNurse = (nurses: PatientNursesProps[]) =>
     dispatch(setPatientNurseListingReducer({ nurses }));
 
@@ -32,7 +34,6 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
         params?.get('patient')?.toString() || '',
         value
       );
-
       setNurse(res.data);
     } catch (err) {}
   }, 1000);
@@ -49,16 +50,18 @@ const DoctorPatientNursesHeader: ClientComponent = () => {
             onChange={onChange}
           />
         </div>
-        <div className="w-36">
-          <ButtonPrimary
-            title="Add Nurse"
-            name="Add Nurse"
-            className="h-10 rounded-lg"
-            variant="icon"
-            icon="IoMdAdd"
-            onClick={handleAddNurseClick}
-          />
-        </div>
+        {!isNurse && (
+          <div className="w-36">
+            <ButtonPrimary
+              title="Add Nurse"
+              name="Add Nurse"
+              className="h-10 rounded-lg"
+              variant="icon"
+              icon="IoMdAdd"
+              onClick={handleAddNurseClick}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
