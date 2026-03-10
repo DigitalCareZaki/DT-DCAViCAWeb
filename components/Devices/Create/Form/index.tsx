@@ -60,11 +60,11 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         [field]: value,
       };
 
-      // Auto-set ECG_Rec_ prefix when both cardiac_monitoring=YES and category=ECG
-      const isYes = field === 'cardiac_monitoring' ? value.value === 'YES' : prev.cardiac_monitoring?.value === 'YES';
+      // Auto-set ECG_Rec_ prefix when both cardiac_monitoring=YES or LATER and category=ECG
+      const isYesOrLater = field === 'cardiac_monitoring' ? (value.value === 'YES' || value.value === 'LATER') : (prev.cardiac_monitoring?.value === 'YES' || prev.cardiac_monitoring?.value === 'LATER');
       const isEcg = field === 'category' ? value.value === 'ECG' : prev.category?.value === 'ECG';
 
-      if (isYes && isEcg) {
+      if (isYesOrLater && isEcg) {
         setValue('serial_number', 'ECG_Rec_');
       } else {
         setValue('serial_number', '');
@@ -84,9 +84,9 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
   // Sync serial number prefix when category changes via handleSelectByAbd
   useEffect(() => {
     if (!data) { // only for create (not edit)
-      const isYes = selectedValues?.cardiac_monitoring?.value === 'YES';
+      const isYesOrLater = selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER';
       const isEcg = selectedValues?.category?.value === 'ECG';
-      if (isYes && isEcg) {
+      if (isYesOrLater && isEcg) {
         setValue('serial_number', 'ECG_Rec_');
       } else {
         setValue('serial_number', '');
@@ -221,65 +221,6 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
-
-        <div className="w-full sm:w-1/2">
-          <InputBasic
-            title="Serial number"
-            label="Serial number"
-            placeholder={selectedValues?.cardiac_monitoring?.value === 'YES' && selectedValues?.category?.value === 'ECG' ? 'ECG_Rec_...' : 'Enter device serial number'}
-            icon="SiNamecheap"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            inputClassName="bg-background"
-            hookProps={{
-              ...register('serial_number'),
-              onChange: (e: any) => {
-                const isEcgWithMonitoring = selectedValues?.cardiac_monitoring?.value === 'YES' && selectedValues?.category?.value === 'ECG';
-                if (isEcgWithMonitoring) {
-                  const prefix = 'ECG_Rec_';
-                  if (!e.target.value.startsWith(prefix)) {
-                    e.target.value = prefix;
-                    setValue('serial_number', prefix);
-                  }
-                }
-              },
-            }}
-            error={!!errors.serial_number?.message?.length}
-            errorMessage={errors.serial_number?.message || '&'}
-          />
-        </div>
-
-
-
-
-      </div>
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
-        <div className="w-full sm:w-1/2">
-          <DropdownSecondary
-            title="Select Site"
-            label="Select Site"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="FaLocationDot"
-            error={!!errors.site_id?.message?.length}
-            errorMessage={(errors as any).site_id?.message || '&'}
-            selected={sites?.find((s: any) => s.id === selectors.site_id)?.name || ''}
-          >
-            {Array.isArray(sites) && sites.length > 0 ? (
-              sites.map((site: any) => (
-                <div
-                  key={site.id}
-                  onClick={() => handleSelectSite(site.id)}
-                  className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                >
-                  <span className="font-medium">{site.name}</span>
-                </div>
-              ))
-            ) : (
-              <div className="p-2 text-gray-400">No sites found</div>
-            )}
-          </DropdownSecondary>
-        </div>
         <div className="w-full sm:w-1/2">
           <DropdownSecondary
             title="AViCardia Monitoring"
@@ -304,6 +245,60 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
                 <span className="font-medium">{option.name}</span>
               </div>
             ))}
+          </DropdownSecondary>
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+        <div className="w-full sm:w-1/2">
+          <InputBasic
+            title="Serial number"
+            label="Serial number"
+            placeholder={(selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER') && selectedValues?.category?.value === 'ECG' ? 'ECG_Rec_...' : 'Enter device serial number'}
+            icon="SiNamecheap"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            inputClassName="bg-background"
+            hookProps={{
+              ...register('serial_number'),
+              onChange: (e: any) => {
+                const isEcgWithMonitoring = (selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER') && selectedValues?.category?.value === 'ECG';
+                if (isEcgWithMonitoring) {
+                  const prefix = 'ECG_Rec_';
+                  if (!e.target.value.startsWith(prefix)) {
+                    e.target.value = prefix;
+                    setValue('serial_number', prefix);
+                  }
+                }
+              },
+            }}
+            error={!!errors.serial_number?.message?.length}
+            errorMessage={errors.serial_number?.message || '&'}
+          />
+        </div>
+        <div className="w-full sm:w-1/2">
+          <DropdownSecondary
+            title="Select Site"
+            label="Select Site"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot"
+            error={!!errors.site_id?.message?.length}
+            errorMessage={(errors as any).site_id?.message || '&'}
+            selected={sites?.find((s: any) => s.id === selectors.site_id)?.name || ''}
+          >
+            {Array.isArray(sites) && sites.length > 0 ? (
+              sites.map((site: any) => (
+                <div
+                  key={site.id}
+                  onClick={() => handleSelectSite(site.id)}
+                  className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                >
+                  <span className="font-medium">{site.name}</span>
+                </div>
+              ))
+            ) : (
+              <div className="p-2 text-gray-400">No sites found</div>
+            )}
           </DropdownSecondary>
         </div>
       </div>
