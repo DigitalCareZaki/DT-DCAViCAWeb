@@ -345,7 +345,7 @@ const useFormHook = (
   useEffect(() => {
     if (prevData) {
       const isEcgWithMonitoring =
-        prevData.cardiac_monitoring?.toUpperCase() === 'YES' && prevData.category === 'ECG';
+        (prevData.cardiac_monitoring?.toUpperCase() === 'YES' || prevData.cardiac_monitoring?.toUpperCase() === 'LATER') && prevData.category === 'ECG';
       const serialNumber = isEcgWithMonitoring && prevData.serial_number && !prevData.serial_number.startsWith('ECG_Rec_')
         ? `ECG_Rec_${prevData.serial_number}`
         : prevData.serial_number || '';
