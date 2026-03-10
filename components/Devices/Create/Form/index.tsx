@@ -221,7 +221,34 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
-
+        <div className="w-full sm:w-1/2">
+          <DropdownSecondary
+            title="AViCardia Monitoring"
+            label="AViCardia Monitoring"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="MdMonitorHeart"
+            error={!!errors.cardiac_monitoring?.message?.length}
+            errorMessage={(errors as any).cardiac_monitoring?.message || '&'}
+            selected={selectedValues?.cardiac_monitoring?.name}
+          >
+            {[
+              { name: 'YES', value: 'YES' },
+              { name: 'NO', value: 'NO' },
+              { name: 'LATER', value: 'LATER' },
+            ].map((option) => (
+              <div
+                key={option.value}
+                onClick={() => handleSelectField('cardiac_monitoring', option)}
+                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+              >
+                <span className="font-medium">{option.name}</span>
+              </div>
+            ))}
+          </DropdownSecondary>
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
         <div className="w-full sm:w-1/2">
           <InputBasic
             title="Serial number"
@@ -248,12 +275,6 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             errorMessage={errors.serial_number?.message || '&'}
           />
         </div>
-
-
-
-
-      </div>
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
         <div className="w-full sm:w-1/2">
           <DropdownSecondary
             title="Select Site"
@@ -278,32 +299,6 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             ) : (
               <div className="p-2 text-gray-400">No sites found</div>
             )}
-          </DropdownSecondary>
-        </div>
-        <div className="w-full sm:w-1/2">
-          <DropdownSecondary
-            title="AViCardia Monitoring"
-            label="AViCardia Monitoring"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="MdMonitorHeart"
-            error={!!errors.cardiac_monitoring?.message?.length}
-            errorMessage={(errors as any).cardiac_monitoring?.message || '&'}
-            selected={selectedValues?.cardiac_monitoring?.name}
-          >
-            {[
-              { name: 'YES', value: 'YES' },
-              { name: 'NO', value: 'NO' },
-              { name: 'LATER', value: 'LATER' },
-            ].map((option) => (
-              <div
-                key={option.value}
-                onClick={() => handleSelectField('cardiac_monitoring', option)}
-                className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-              >
-                <span className="font-medium">{option.name}</span>
-              </div>
-            ))}
           </DropdownSecondary>
         </div>
       </div>
