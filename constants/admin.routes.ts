@@ -77,7 +77,7 @@ export const routes = [
   },
   {
     pathname: '/patient/emr',
-    title: 'Electronic Medical Record',
+    title: 'Patient Health Record',
   },
   {
     pathname: '/patient/emr/add',
