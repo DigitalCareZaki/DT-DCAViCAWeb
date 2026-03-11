@@ -8,7 +8,6 @@ import '@init-globals';
 
 async function addSuperadmin(data: any): Promise<AddSuperadminProps> {
   try {
-    console.log('yooo mann creating superamdin is fun');
     const decodedData = await JSON.parse(
       Buffer.from(data, 'base64').toString('utf-8')
     );
