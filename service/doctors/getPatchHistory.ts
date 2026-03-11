@@ -29,8 +29,6 @@ async function getPatchHistory(patchSn: string, userName: string): Promise<GetPa
         duration: item.durationHuman,
     }));
 
-    console.log("Mapped History Data:", mappedData);
-
     return {
         // If we have mapped data, consider it a success regardless of status code, 
         // as the API might be returning data with a non-standard success code or we want to show partial data.

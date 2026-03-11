@@ -295,7 +295,6 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
     try {
       const id = user.role === 'DOCTOR' ? user.doctor?.id : user.role === 'PATIENT' ? user.patient?.id : null;
       if (!id) return;
-      console.log('id ', id);
 
       setSyncingId(user.id);
       setSyncRole(user.role);

@@ -12,8 +12,6 @@ import type { ServerComponent } from '@types';
 const OrganizationMedicine: ServerComponent = async () => {
   const res = await getOrganizationMedicines();
 
-  console.log('res >>>', res.data.data);
-
   if (!res.success) return <></>;
 
   return (

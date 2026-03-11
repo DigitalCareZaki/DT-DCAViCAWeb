@@ -12,7 +12,6 @@ const Vivalink: ServerComponentProps<{ searchParams: { [key: string]: string | s
     getDoctorPatientsFromVl(),
     getAssignedPatientsVl(page)
   ]);
-
   return (
     <div className="flex w-full flex-col gap-4 pt-6 px-10">
       <div className="flex items-center justify-between">
