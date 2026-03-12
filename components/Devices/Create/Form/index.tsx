@@ -60,12 +60,12 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         [field]: value,
       };
 
-      // Auto-set ECG_Rec_ prefix when both cardiac_monitoring=YES or LATER and category=ECG
+      // Auto-set ECGRec_ prefix when both cardiac_monitoring=YES or LATER and category=ECG
       const isYesOrLater = field === 'cardiac_monitoring' ? (value.value === 'YES' || value.value === 'LATER') : (prev.cardiac_monitoring?.value === 'YES' || prev.cardiac_monitoring?.value === 'LATER');
       const isEcg = field === 'category' ? value.value === 'ECG' : prev.category?.value === 'ECG';
 
       if (isYesOrLater && isEcg) {
-        setValue('serial_number', 'ECG_Rec_');
+        setValue('serial_number', 'ECGRec_');
       } else {
         setValue('serial_number', '');
       }
@@ -87,7 +87,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
       const isYesOrLater = selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER';
       const isEcg = selectedValues?.category?.value === 'ECG';
       if (isYesOrLater && isEcg) {
-        setValue('serial_number', 'ECG_Rec_');
+        setValue('serial_number', 'ECGRec_');
       } else {
         setValue('serial_number', '');
       }
@@ -253,7 +253,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           <InputBasic
             title="Serial number"
             label="Serial number"
-            placeholder={(selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER') && selectedValues?.category?.value === 'ECG' ? 'ECG_Rec_...' : 'Enter device serial number'}
+            placeholder={(selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER') && selectedValues?.category?.value === 'ECG' ? 'ECGRec_...' : 'Enter device serial number'}
             icon="SiNamecheap"
             borderTheme
             inputWrapperClassName="bg-background"
@@ -263,7 +263,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
               onChange: (e: any) => {
                 const isEcgWithMonitoring = (selectedValues?.cardiac_monitoring?.value === 'YES' || selectedValues?.cardiac_monitoring?.value === 'LATER') && selectedValues?.category?.value === 'ECG';
                 if (isEcgWithMonitoring) {
-                  const prefix = 'ECG_Rec_';
+                  const prefix = 'ECGRec_';
                   if (!e.target.value.startsWith(prefix)) {
                     e.target.value = prefix;
                     setValue('serial_number', prefix);
