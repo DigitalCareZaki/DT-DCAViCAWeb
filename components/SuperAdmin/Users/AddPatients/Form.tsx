@@ -482,61 +482,23 @@ const Form: ClientComponent = () => {
           </DropdownSecondary>
         </div>
         <div className="w-1/2">
-          {selectors.cardiac_monitoring.title === 'YES' ? (
-            <DropdownSecondary
-              title="Select Cardiac Monitoring Site"
-              label="Select Cardiac Monitoring Site"
-              borderTheme
-              inputWrapperClassName="bg-background"
-              icon="FaLocationDot"
-              iconSize={16}
-              error={!!errors.site?.message}
-              errorMessage={errors.site?.message || '&'}
-              selected={selectors.site.title}
-              disabled={loading}
-            >
-              <ClientGenerator data={sites.data} handleSelect={handleSelect}>
-                <Site />
-              </ClientGenerator>
-            </DropdownSecondary>
-          ) : selectors.cardiac_monitoring.title === 'NO' || selectors.cardiac_monitoring.title === 'LATER' ? (
-            <div className="relative flex w-full flex-col gap-2 text-lg">
-              {/* Label row — mirrors DropdownSecondary label + badge */}
-              <div className="flex items-center gap-2">
-                <span className="text-sx font-medium text-gray-600">Cardiac Monitoring Site</span>
-                <div className="theme-bg-color flex h-3 w-3 items-center justify-center rounded-full text-[10px] font-bold text-white">
-                  <span>!</span>
-                </div>
-              </div>
-              {/* Input-height info box — same h-10 as DropdownSecondary's wrapper */}
-              <div className="flex h-10 w-full items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 text-xs text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Sync option available for late connection</span>
-              </div>
-              {/* Invisible spacer — mirrors DropdownSecondary's errorMessage span */}
-              <span className="text-transparent text-ssx font-medium">&amp;</span>
-            </div>
-          ) : (
-            <DropdownSecondary
-              title="Select Cardiac Monitoring Site"
-              label="Select Cardiac Monitoring Site"
-              borderTheme
-              inputWrapperClassName="bg-background"
-              icon="FaLocationDot"
-              iconSize={16}
-              error={!!errors.site?.message}
-              errorMessage={errors.site?.message || '&'}
-              selected={selectors.site.title}
-              disabled
-              disableMessage="Please select AViCardia Monitoring option first"
-            >
-              <ClientGenerator data={sites.data} handleSelect={handleSelect}>
-                <Site />
-              </ClientGenerator>
-            </DropdownSecondary>
-          )}
+          <DropdownSecondary
+            title="Select Cardiac Monitoring Site"
+            label="Cardiac Monitoring Site"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot"
+            iconSize={16}
+            error={!!errors.site?.message}
+            errorMessage={errors.site?.message || '&'}
+            selected={selectors.site.title}
+            disabled={loading || !selectors.cardiac_monitoring.title}
+            disableMessage={!selectors.cardiac_monitoring.title ? 'Please select AViCardia Monitoring option first' : undefined}
+          >
+            <ClientGenerator data={sites.data} handleSelect={handleSelect}>
+              <Site />
+            </ClientGenerator>
+          </DropdownSecondary>
         </div>
       </div>
       <div className="flex w-full items-center justify-between gap-10">
@@ -551,8 +513,7 @@ const Form: ClientComponent = () => {
             error={!!errors.doctor?.message}
             errorMessage={errors.doctor?.message || '&'}
             selected={selectors.doctor.title}
-            disabled={loading || selectors.cardiac_monitoring.title !== 'YES'}
-            disableMessage={selectors.cardiac_monitoring.title !== 'YES' ? 'Available when AViCardia Monitoring is YES' : 'Please select a site first'}
+            disabled={loading}
           >
             <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
               <Doctor />
