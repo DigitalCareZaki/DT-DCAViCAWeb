@@ -19,20 +19,12 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
 
   // Shared styles for scaling (zoom-out effect)
   const mainStyle = {
-    transform: 'scale(0.67)', // Scales the layout to 67%
-    transformOrigin: 'top left', // Ensures scaling starts at the top-left corner
-    width: '150%', // Compensates for scaling width
-    height: '150%', // Compensates for scaling height
-    overflow: 'hidden', // Prevents overflow due to scaling
-  };
+    zoom: 0.67, // Natively scales the layout, avoiding bounds overlapping and double-scrollbars
+  } as React.CSSProperties;
 
   const mainStyleSettings = {
-    transform: 'scale(0.67)', // Scales the layout to 67%
-    transformOrigin: 'top left', // Ensures scaling starts at the top-left corner
-    width: '150%', // Compensates for scaling width
-    height: '150%', // Compensates for scaling height
-    overflow: 'hidden', // Changed back to hidden for the main container
-  };
+    zoom: 0.67, // Natively scales the layout, avoiding bounds overlapping
+  } as React.CSSProperties;
 
   if (route?.includes('/admin/chat')) {
     return (
@@ -115,12 +107,14 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     <div className="relative h-screen w-screen overflow-hidden">
       <main
         style={mainStyle}
-        className="relative gap-4 bg-background p-6"
+        className="relative flex flex-col h-full w-full gap-4 p-6 overflow-y-auto overflow-x-hidden"
       >
         <div className="sticky top-0 z-50 bg-background pb-4">
           <PrimaryHeader user={user!} />
         </div>
-        {children}
+        <div className="flex-grow">
+          {children}
+        </div>
         <ModalBottom />
       </main>
     </div>
