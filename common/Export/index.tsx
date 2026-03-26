@@ -35,7 +35,7 @@ const Export: ClientComponentProps<ExportProps<Record<string, any>>> = (
   };
 
   return (
-    <div className="relative w-40 z-50">
+    <div className="relative w-40 z-10">
       <ButtonPrimary
         onMouseEnter={onFocus}
         onMouseLeave={onBlur}

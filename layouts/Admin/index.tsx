@@ -87,15 +87,20 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
   if (route?.includes('/admin/users')) {
     return (
       <div className="relative h-screen w-screen overflow-hidden">
-        <main style={mainStyle} className="flex flex-col h-screen w-full bg-background p-6">
+        <main
+          style={mainStyle}
+          className="relative flex flex-col h-full w-full gap-4 p-6 overflow-y-auto overflow-x-hidden"
+        >
           <div className="sticky top-0 z-50 bg-background pb-4">
             <PrimaryHeader user={user!} />
           </div>
-          <div className="flex flex-1 w-full overflow-hidden">
-            <div className="flex-shrink-0">
+          <div className="flex flex-grow w-full">
+            <div className="flex-shrink-0 sticky top-16 self-start">
               <DynamicSidebar renderKey="users" />
             </div>
-            <div className="flex-grow overflow-auto min-w-0">{children}</div>
+            <div className="flex-grow min-w-0">
+              {children}
+            </div>
           </div>
           <ModalBottom />
         </main>
