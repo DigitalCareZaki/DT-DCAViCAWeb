@@ -13,6 +13,7 @@ import type { Props } from './types';
 const Users: ServerComponentProps<Props> = async ({ role }) => {
   const res = await getOrganizationUsers('', role);
 
+
   if (!res.success) return <></>;
 
   return (
