@@ -343,6 +343,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
     setSelectedUser(null);
   };
 
+
   return (
     <>
       {syncingId && syncRole && <ProgressiveLoadingOverlay role={syncRole} />}
@@ -364,7 +365,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
           <td className="px-6 py-4">
             {
               el.role === 'DOCTOR' ? el.doctor?.departments?.[0]?.title :
-                el.role === 'NURSE' ? el.nurse?.department?.title :
+                el.role === 'NURSE' ? el.nurse?.departments?.[0]?.title :
                   el.role === 'PATIENT' ? el.patient?.doctors?.[0]?.departments?.[0]?.title : '-'
             }</td>
           <td className="px-6 py-4">{el.phone_number}</td>
