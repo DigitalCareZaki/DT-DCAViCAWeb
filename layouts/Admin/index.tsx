@@ -50,12 +50,12 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
       <div className="relative h-screen w-screen overflow-hidden">
         <main
           style={mainStyleSettings}
-          className="relative gap-4 bg-background p-6"
+          className="relative flex flex-col h-full w-full bg-background p-6"
         >
           <div className="sticky top-0 z-50 bg-background pb-4">
             <PrimaryHeader user={user!} />
           </div>
-          <div className="flex h-full w-full overflow-hidden">
+          <div className="flex flex-grow w-full overflow-hidden">
             <DynamicSidebar renderKey="settings" />
             <div className="flex-grow pl-4 overflow-auto min-w-0">
               {children}
