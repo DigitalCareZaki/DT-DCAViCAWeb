@@ -31,7 +31,7 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
       <div className="relative h-screen w-screen overflow-hidden">
         <main
           style={mainStyle}
-          className="flex flex-col h-screen w-full bg-background"
+          className="flex flex-col h-full w-full bg-background"
         >
           <div className="px-6 pt-4 sticky top-0 z-50 bg-background">
             <PrimaryHeader user={user!} />
