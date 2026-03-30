@@ -25,12 +25,11 @@ import type { ClientComponentProps } from '@types';
 import type { StoreMeetingState, ReduxProps } from '@store-types';
 import type { AgoraCallProps } from './types';
 
-
-function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClient, token: string | null }) {
+function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClient, token: string | null; uid: string | number }) {
   const { muteCamera, muteMic, screenSharing } = useSelector<ReduxProps, StoreMeetingState>(
     (state) => state.meeting
   );
-  const { AppID, channelName, Client, token } = props;
+  const { AppID, channelName, Client, token, uid } = props;
 
   const [user] = useUser();
 
@@ -75,7 +74,7 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     appid: AppID,
     channel: channelName,
     token: token,
-    uid: user?.id,
+    uid,
   });
 
   // Play remote audio tracks in effect
@@ -125,7 +124,7 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
           remoteUsers.map((user, idx) => (
             <div
               className="w-full h-full flex items-center justify-center transition-all duration-500 bg-black rounded-2xl shadow-2xl border-2 border-gray-700 overflow-hidden"
-              key={idx}
+              key={String(user.uid ?? idx)}
             >
               <RemoteUser user={user} />
             </div>
@@ -167,32 +166,35 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
 const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
   const client = useRTCClient(
-    AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' })
+    // Prefer H.264 to maximize interoperability with native mobile SDKs.
+    AgoraRTC.createClient({ codec: 'h264', mode: 'rtc' })
   );
 
   const [token, setToken] = useState<string | null>(null);
+  const [agoraUid, setAgoraUid] = useState<string | number | null>(null);
+  const [user] = useUser();
 
   useEffect(() => {
-    const generateToken = async () => {
+    const generateToken = async (resolvedUid: string) => {
       console.log('🔄 Generating token for channel:', id);
       // Implement server-side token generation
-      const generatedToken = await fetchAgoraToken(id);
+      const generatedToken = await fetchAgoraToken(id, resolvedUid);
       console.log('✅ Fetched Agora Token:', generatedToken);
-      setToken(generatedToken);
+      setToken(generatedToken?.token ?? null);
+      setAgoraUid(generatedToken?.uid ?? null);
     };
 
-    if (id) {
-      generateToken();
+    if (id && user?.id) {
+      generateToken(user.id);
     }
-  }, [id]);
+  }, [id, user?.id]);
 
   console.log('🔑 Current token state:', token);
 
-  async function fetchAgoraToken(channelName: string) {
+  async function fetchAgoraToken(channelName: string, uid: string | number) {
     try {
-      console.log('📡 Calling createTheToken API with channelName:', channelName);
-      const response = await createTheToken({ channelName });
-
+      console.log('📡 Calling createTheToken API with channelName/uid:', channelName, uid);
+      const response = await createTheToken({ channelName, uid });
 
       if (!response.success) {
         console.error('❌ Token generation failed:', response.message);
@@ -200,7 +202,11 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
       }
 
       console.log('✅ Token generated successfully:', response.token);
-      return response.token;
+      // If backend returns numericUid (common for mobile interoperability), prefer it.
+      const preferredUid =
+        typeof response.numericUid === 'number' ? response.numericUid : uid;
+
+      return { token: response.token as string, uid: preferredUid };
     } catch (error) {
       console.error('❌ Token generation error:', error);
       return null;
@@ -208,11 +214,17 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
   }
 
 
-  if (!id || !token) return <></>;
+  if (!id || !token || agoraUid == null) return <></>;
 
   return (
     <AgoraRTCProvider client={client}>
-      <Call Client={client} channelName={id} AppID={process.env.NEXT_PUBLIC_AGORA_APP_ID || 'b03a1cbf5d3e43ff973a26d84a726f85'} token={token} />
+      <Call
+        Client={client}
+        channelName={id}
+        AppID={process.env.NEXT_PUBLIC_AGORA_APP_ID || 'b03a1cbf5d3e43ff973a26d84a726f85'}
+        token={token}
+        uid={agoraUid}
+      />
     </AgoraRTCProvider>
   );
 };

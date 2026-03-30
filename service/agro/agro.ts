@@ -20,7 +20,7 @@ async function createTheToken(data: any): Promise<any> {
       throw new Error(body?.message?.toString() || 'Something went wrong');
     }
 
-    return { success: true, token: body.agoraToken };
+    return { success: true, token: body.agoraToken, numericUid: body.numericUid };
   } catch (err: any) {
     return {
       success: false,
