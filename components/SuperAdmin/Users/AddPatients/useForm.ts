@@ -249,7 +249,7 @@ const useFormHook = (): useFormProps => {
         height: currentValues.height ? parseFloat(currentValues.height) : null,
         dob: new Date(currentValues.dob).toISOString(),
         address: currentValues.address,
-        // site_id: selectors.site.id, // Use selector id for proper mapping
+        site_id: selectors.site.id, // Use selector id for proper mapping
         doctor_id: selectors.doctor.id, // Use selector id for proper mapping
         nurse_id: selectors.nurse.id, // Use selector id for proper mapping
         cardiac_monitoring: selectors.cardiac_monitoring.title,
