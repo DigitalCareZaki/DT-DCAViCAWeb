@@ -57,7 +57,7 @@ const Form: ClientComponent = () => {
       month: 'long',
       year: 'numeric',
     },
-    datepickerClassNames: 'top-12 !z-[999999]',
+    datepickerClassNames: 'top-12 !z-40',
     theme: {
       background: 'bg-white',
       todayBtn: 'bg-blue-500 text-white',
@@ -373,7 +373,7 @@ const Form: ClientComponent = () => {
               <span className="font-medium text-gray-500">Date of birth</span>
             </div>
 
-            <div className="relative z-[999999]">
+            <div className="relative z-40">
               <Datepicker
                 options={dobOptions}
                 onChange={(v) => setDobValue(v as any)}

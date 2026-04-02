@@ -65,7 +65,7 @@ const Form: ClientComponent = () => {
       month: 'long',
       year: 'numeric',
     },
-    datepickerClassNames: 'top-12 !z-[999999]',
+    datepickerClassNames: 'top-12 !z-40',
     disabledDates: [],
     weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
     theme: {
@@ -603,7 +603,7 @@ const Form: ClientComponent = () => {
             </div>
 
             <div
-              className={`relative z-[999999] ${
+              className={`relative z-40 ${
                 loading ? 'pointer-events-none opacity-50' : ''
               }`}
             >
