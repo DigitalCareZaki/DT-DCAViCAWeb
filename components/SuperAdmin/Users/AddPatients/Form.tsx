@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { IoMdMale } from '@react-icons/all-files/io/IoMdMale';
 import { IoFemale } from '@react-icons/all-files/io5/IoFemale';
 import { FaTransgender } from '@react-icons/all-files/fa/FaTransgender';
@@ -24,6 +26,9 @@ import type { LoadingStep, LoadingStepInfo } from './types';
 
 import type { ClientComponent } from '@types';
 
+import Datepicker from 'tailwind-datepicker-react';
+import type { IOptions } from 'tailwind-datepicker-react/types/Options';
+
 const Form: ClientComponent = () => {
   const [
     register,
@@ -39,10 +44,43 @@ const Form: ClientComponent = () => {
     nurses,
     sites,
     doctors,
+    setDobValue,
     validator,
     currentStep,
     getLoadingStepInfo,
   ] = useForm();
+
+  const [showDob, setShowDob] = useState<boolean>(false);
+
+  const dobOptions: IOptions = {
+    autoHide: true,
+    todayBtn: true,
+    clearBtn: true,
+    language: 'en',
+    inputNameProp: 'dob',
+    inputIdProp: 'dob',
+    inputPlaceholderProp: 'mm/dd/yyyy',
+    inputDateFormatProp: {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    },
+    datepickerClassNames: 'top-12 !z-[999999]',
+    disabledDates: [],
+    weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    theme: {
+      background: 'bg-white',
+      todayBtn: 'bg-blue-500 text-white',
+      clearBtn: 'text-gray-700',
+      icons: 'text-gray-500',
+      text: 'text-gray-700',
+      disabledText: 'text-gray-400',
+      input:
+        'h-12 bg-background border border-transparent rounded-lg py-4 text-gray-600 font-semibold',
+      inputIcon: 'text-gray-500',
+      selected: 'bg-blue-500 text-white',
+    },
+  };
 
   // Progressive loading overlay component
   const ProgressiveLoadingOverlay = () => {
@@ -539,7 +577,7 @@ const Form: ClientComponent = () => {
           </DropdownSecondary>
         </div>
       </div>
-      <div className="flex w-full items-center justify-between gap-10">
+      <div className="flex w-full items-start justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
             title="Patient Current Address"
@@ -557,20 +595,33 @@ const Form: ClientComponent = () => {
           />
         </div>
         <div className="w-1/2">
-          <InputBasic
-            title="Enter patient Date of birth"
-            label="Date of birth"
-            placeholder="Enter patient DOB"
-            type="date"
-            icon="FaCalendarAlt"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            inputClassName="bg-background"
-            hookProps={register('dob')}
-            error={!!errors.dob?.message}
-            errorMessage={errors.dob?.message || '&'}
-            disabled={loading}
-          />
+          <div className="flex w-full flex-col gap-3 text-xs sm:text-base md:text-lg">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-gray-500">
+                Date of birth
+              </span>
+            </div>
+
+            <div
+              className={`relative z-[999999] ${
+                loading ? 'pointer-events-none opacity-50' : ''
+              }`}
+            >
+              <Datepicker
+                options={dobOptions}
+                onChange={(v) => setDobValue(v as any)}
+                show={showDob}
+                setShow={setShowDob}
+              />
+              <input type="hidden" {...register('dob')} />
+            </div>
+
+            {errors.dob?.message && (
+              <span className="font-medium text-rose-500">
+                {errors.dob.message}
+              </span>
+            )}
+          </div>
         </div>
       </div>
       <div className="mt-5">

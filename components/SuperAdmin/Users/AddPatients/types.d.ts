@@ -107,6 +107,7 @@ export type useFormProps = [
   nurses: { loading: boolean; data: SelectUserProps[] },
   sites: { loading: boolean; data: SiteProps[] },
   doctors: { loading: boolean; data: SelectUserProps[] },
+  setDobValue: (value: Date | undefined | null) => void,
   validator: any, // Using any for now since the exact vest type is complex
   currentStep: LoadingStep,
   getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
