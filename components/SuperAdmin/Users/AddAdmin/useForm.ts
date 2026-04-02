@@ -149,6 +149,12 @@ const useFormHook = (): useFormProps => {
       clearErrors(type as any);
     };
 
+  const setDobValue = (value: Date | undefined | null) => {
+    const iso = value ? new Date(value).toISOString() : '';
+    setValue('dob', iso as any, { shouldValidate: true });
+    clearErrors('dob');
+  };
+
   useEffect(() => {
     (async () => {
       setBranches({
@@ -202,6 +208,7 @@ const useFormHook = (): useFormProps => {
     branches,
     cities,
     countries,
+    setDobValue,
     validator,
   ];
 };

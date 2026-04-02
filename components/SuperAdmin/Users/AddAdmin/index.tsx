@@ -7,7 +7,7 @@ import type { ServerComponent } from '@types';
 
 const AddAdmin: ServerComponent = async () => {
   return (
-    <div className="flex h-full w-full flex-col gap-6 overflow-y-auto pl-4 font-poppins">
+    <div className="flex h-full w-full flex-col gap-6 overflow-y-visible pl-4 font-poppins">
 
       <div className="mt-6">
         <PageInfo />
