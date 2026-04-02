@@ -83,5 +83,6 @@ export type useFormProps = [
   countries: { loading: boolean; data: CountriesProps[] },
   departments: { loading: boolean; data: SelectOrganizationDepartments[] },
   sites: { loading: boolean; data: SiteProps[] },
+  setDobValue: (value: Date | undefined | null) => void,
   validator: Suite,
 ];
