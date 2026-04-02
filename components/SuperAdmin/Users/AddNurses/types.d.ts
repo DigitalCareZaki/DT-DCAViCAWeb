@@ -5,6 +5,7 @@ import type {
   CountriesProps,
   SelectOrganizationBranches,
   SelectOrganizationDepartments,
+  SiteProps,
 } from '@types';
 
 export interface AddNurseProps {
@@ -26,6 +27,8 @@ export interface AddNurseProps {
   employee_id: string;
   Contract:string;
   department: string;
+  avicardia_monitoring: string;
+  site: string;
 }
 
 export interface SelectorsProps {
@@ -53,6 +56,14 @@ export interface SelectorsProps {
     title: string | undefined;
     id: string | undefined;
   };
+  avicardia_monitoring: {
+    title: string | undefined;
+    id: string | undefined;
+  };
+  site: {
+    title: string | undefined;
+    id: string | undefined;
+  };
 }
 
 export type useFormProps = [
@@ -71,5 +82,6 @@ export type useFormProps = [
   cities: { loading: boolean; data: CitiesProps[] },
   countries: { loading: boolean; data: CountriesProps[] },
   departments: { loading: boolean; data: SelectOrganizationDepartments[] },
+  sites: { loading: boolean; data: SiteProps[] },
   validator: Suite,
 ];

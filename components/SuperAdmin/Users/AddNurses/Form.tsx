@@ -15,7 +15,7 @@ import {
 } from '@common';
 
 import useForm from './useForm';
-import { Branch, City, Country, Department } from './Elements';
+import { Branch, City, Country, Department, Site } from './Elements';
 
 import type { ClientComponent } from '@types';
 
@@ -32,6 +32,7 @@ const Form: ClientComponent = () => {
     cities,
     countries,
     departments,
+    sites,
     validator,
   ] = useForm();
 
@@ -343,7 +344,27 @@ const Form: ClientComponent = () => {
           />
         </div>
       </div>
+
       <div className="flex w-full items-center justify-between gap-10">
+        <div className="w-1/2">
+          <DropdownSecondary
+            title="Select Cardiac Monitoring Site"
+            label="Cardiac Monitoring Site"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaLocationDot"
+            iconSize={16}
+            error={!!errors.site?.message}
+            errorMessage={errors.site?.message || '&'}
+            selected={selectors.site.title}
+            disabled={loading}
+          >
+            <ClientGenerator data={sites.data} handleSelect={handleSelect}>
+              <Site />
+            </ClientGenerator>
+          </DropdownSecondary>
+        </div>
+
         <div className="w-1/2">
           <InputBasic
             title="Nurse Current Address"
@@ -359,6 +380,9 @@ const Form: ClientComponent = () => {
             errorMessage={errors.address?.message || '&'}
           />
         </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
+
         <div className="w-1/2">
           <InputBasic
             title="Enter unique company ID"
@@ -371,6 +395,21 @@ const Form: ClientComponent = () => {
             hookProps={register('employee_id')}
             error={!!errors.employee_id?.message}
             errorMessage={errors.employee_id?.message || '&'}
+          />
+        </div>
+
+        <div className="w-1/2">
+          <InputBasic
+            title="NPI Number"
+            label="NPI Number"
+            placeholder="Enter nurse NPI number"
+            icon="SiNamecheap"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            inputClassName="bg-background"
+            hookProps={register('npi_number')}
+            error={!!errors.npi_number?.message}
+            errorMessage={errors.npi_number?.message || '&'}
           />
         </div>
         {/* <div className="w-1/2">
@@ -389,20 +428,7 @@ const Form: ClientComponent = () => {
         </div> */}
       </div>
       <div className="flex w-full items-center justify-between gap-10">
-        <div className="w-1/2">
-          <InputBasic
-            title="NPI Number"
-            label="NPI Number"
-            placeholder="Enter nurse NPI number"
-            icon="SiNamecheap"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            inputClassName="bg-background"
-            hookProps={register('npi_number')}
-            error={!!errors.npi_number?.message}
-            errorMessage={errors.npi_number?.message || '&'}
-          />
-        </div>
+
         {/* <div className="w-1/2">
           <InputBasic
             title="Enter unique company ID"

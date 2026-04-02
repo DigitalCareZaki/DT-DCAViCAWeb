@@ -12,6 +12,7 @@ import {
   getCities,
   addNurse,
   getOrganizationDepartments,
+  getSites,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -25,6 +26,7 @@ import type {
   CountriesProps,
   CitiesProps,
   SelectOrganizationDepartments,
+  SiteProps,
 } from '@types';
 
 import { ModalState } from '@store-types';
@@ -63,6 +65,14 @@ const useFormHook = (): useFormProps => {
       title: undefined,
       id: undefined,
     },
+    avicardia_monitoring: {
+      title: undefined,
+      id: undefined,
+    },
+    site: {
+      title: undefined,
+      id: undefined,
+    },
   });
 
   const [branches, setBranches] = useState<{
@@ -97,6 +107,14 @@ const useFormHook = (): useFormProps => {
     data: [],
   });
 
+  const [sites, setSites] = useState<{
+    loading: boolean;
+    data: SiteProps[];
+  }>({
+    loading: false,
+    data: [],
+  });
+
   const {
     register,
     handleSubmit,
@@ -114,7 +132,6 @@ const useFormHook = (): useFormProps => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
-
       const res = await addNurse(
         btoa(
           JSON.stringify({
@@ -133,6 +150,7 @@ const useFormHook = (): useFormProps => {
             npi_number: data.npi_number,
             employee_id: data.employee_id,
             department_id: data.department,
+            site_id: selectors.site.id,
             dob: new Date(data.dob).toISOString(),
             address: data.address,
           })
@@ -207,6 +225,27 @@ const useFormHook = (): useFormProps => {
     })();
 
     (async () => {
+      setSites({
+        loading: true,
+        data: [],
+      });
+
+      const res = await getSites(1, 1000);
+
+      if (res.success && res.data) {
+        setSites({
+          loading: false,
+          data: res.data.data,
+        });
+      } else {
+        setSites({
+          loading: false,
+          data: [],
+        });
+      }
+    })();
+
+    (async () => {
       setDepartments({
         loading: true,
         data: [],
@@ -257,6 +296,7 @@ const useFormHook = (): useFormProps => {
     cities,
     countries,
     departments,
+    sites,
     validator,
   ];
 };
