@@ -22,7 +22,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="flex w-full flex-col items-end gap-4 pb-28">
+    <div className="flex min-h-0 w-full flex-1 flex-col items-end gap-4">
       <div className="w-fit">
         <ExportButton
           data={data?.map((el) => ({
@@ -66,8 +66,9 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           filename="User Data"
         />
       </div>
-      <div className="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative min-h-0 w-full flex-1 overflow-auto shadow-md sm:rounded-lg">
         <ClientTable
+          className="mb-24"
           heads={[
             'Name',
             'Email',

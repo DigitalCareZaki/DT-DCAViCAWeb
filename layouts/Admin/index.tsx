@@ -89,16 +89,16 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
       <div className="relative h-screen w-screen overflow-hidden">
         <main
           style={mainStyle}
-          className="relative flex flex-col h-full w-full gap-4 p-6 overflow-y-auto overflow-x-hidden"
+          className="relative flex h-full w-full flex-col gap-4 overflow-hidden p-6"
         >
           <div className="sticky top-0 z-50 bg-background pb-4">
             <PrimaryHeader user={user!} />
           </div>
-          <div className="flex flex-grow w-full">
+          <div className="flex w-full flex-grow min-h-0 overflow-hidden">
             <div className="flex-shrink-0 sticky top-16 self-start">
               <DynamicSidebar renderKey="users" />
             </div>
-            <div className="flex-grow min-w-0">
+            <div className="flex-grow min-h-0 min-w-0 overflow-hidden">
               {children}
             </div>
           </div>
