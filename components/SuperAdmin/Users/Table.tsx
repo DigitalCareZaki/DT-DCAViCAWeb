@@ -28,8 +28,28 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
           data={data?.map((el) => ({
             full_name: `${el?.first_name} ${el?.last_name}`,
             branch: el?.associated_branches[0]?.name,
-            department: el?.doctor?.departments[0]?.title || el.patient?.doctors[0]?.departments[0]?.title,
-            monitoring: el.role === 'DOCTOR' ? el.doctor?.avicardia_monitoring : el.role === 'PATIENT' ? el.patient?.cardiac_monitoring : 'N/A',
+            site:
+              el?.role === 'DOCTOR'
+                ? el?.doctor?.site?.name ?? el?.doctor?.site?.title
+                : el?.role === 'NURSE'
+                  ? el?.nurse?.site?.name ?? el?.nurse?.site?.title
+                  : el?.role === 'PATIENT'
+                    ? el?.patient?.site?.name ?? el?.patient?.site?.title
+                    : 'N/A',
+            department:
+              el?.role === 'DOCTOR'
+                ? el?.doctor?.departments?.[0]?.title
+                : el?.role === 'NURSE'
+                  ? el?.nurse?.departments?.[0]?.title
+                  : el?.role === 'PATIENT'
+                    ? el?.patient?.doctors?.[0]?.departments?.[0]?.title
+                    : 'N/A',
+            monitoring:
+              el?.role === 'DOCTOR'
+                ? el?.doctor?.avicardia_monitoring
+                : el?.role === 'PATIENT'
+                  ? el?.patient?.cardiac_monitoring
+                  : 'N/A',
             ...el,
           }))}
           headers={[
@@ -40,6 +60,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
             { label: 'Role', key: 'role' },
             { label: 'Gender', key: 'gender' },
             { label: 'Branch', key: 'branch' },
+            { label: 'Site', key: 'site' },
             { label: 'Monitoring', key: 'monitoring' },
           ]}
           filename="User Data"
@@ -56,6 +77,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
             'Role',
             'Gender',
             'Branch',
+            'Site',
             'Monitoring',
             'Sync',
             'Status',

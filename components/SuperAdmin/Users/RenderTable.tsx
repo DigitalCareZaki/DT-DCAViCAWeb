@@ -209,6 +209,19 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
     return steps[step];
   };
 
+  const getSiteLabel = (el: any) => {
+    const site =
+      el?.role === 'DOCTOR'
+        ? el?.doctor?.site
+        : el?.role === 'NURSE'
+          ? el?.nurse?.site
+          : el?.role === 'PATIENT'
+            ? el?.patient?.site
+            : null;
+
+    return site?.name ?? site?.title ?? site?.label ?? '-';
+  };
+
   // Progressive loading overlay component
   const ProgressiveLoadingOverlay = ({ role }: { role: string }) => {
     const stepInfo = getLoadingStepInfo(currentStep, role);
@@ -373,6 +386,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
           <td className="px-6 py-4">{el.role}</td>
           <td className="px-6 py-4">{el.gender}</td>
           <td className="px-6 py-4">{el.associated_branches[0]?.name}</td>
+          <td className="px-6 py-4">{getSiteLabel(el)}</td>
           <td className="px-6 py-4 text-center">
             <StatusBadge
               status={
