@@ -4,7 +4,7 @@ import type { PageProps } from '@types';
 
 export default function Page({ searchParams }: PageProps): JSX.Element {
   return (
-    <main className="h-full min-h-0 w-full overflow-hidden">
+    <main className="w-full">
       <SuperAdminUsers role={searchParams?.role?.toString() ?? ''} />
     </main>
   );
