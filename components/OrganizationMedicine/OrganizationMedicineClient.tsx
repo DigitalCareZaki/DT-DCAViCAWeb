@@ -131,7 +131,7 @@ const OrganizationMedicine = () => {
                                 <tr key={item.id} className="border-b odd:bg-white even:bg-gray-50">
                                     <td className="px-6 py-4">{item?.name}</td>
                                     <td className="px-6 py-4">{new Date(item?.created_at).toLocaleString()}</td>
-                                    <td className="px-6 py-4">{item?.addedBy?.first_name}</td>
+                                    <td className="px-6 py-4">{item?.addedBy ? getName(item.addedBy) : 'N/A'}</td>
                                     <td className="px-6 py-4">{item?.branch?.name}</td>
                                     <td className="px-6 py-4 flex items-center gap-2">
 
