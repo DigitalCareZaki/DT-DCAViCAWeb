@@ -14,6 +14,8 @@ interface EmitProps {
     | 'meeting-chat'
     | 'room-init'
     | 'send_notification'
+    | 'leave-appointment'
+    | 'disconnect-socket'
     | null;
   payload: { [key: string]: any } | null;
 }
