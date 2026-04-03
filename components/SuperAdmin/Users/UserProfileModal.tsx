@@ -14,15 +14,18 @@ const labelClass = 'text-sm font-medium text-gray-500';
 const valueClass = 'text-base font-semibold text-gray-900';
 
 const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) => {
+
+    console.log('user >>>>', user);
+
     if (!user) return null;
 
 
 
     // Helper to render fields
     const renderField = (label: string, value: any) => (
-        <div className="flex flex-col mb-2">
+        <div className="flex flex-col mb-2 overflow-hidden">
             <span className={labelClass}>{label}</span>
-            <span className={valueClass}>{value || 'N/A'}</span>
+            <span className={`${valueClass} break-all`}>{value || 'N/A'}</span>
         </div>
     );
 
@@ -31,29 +34,18 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
     if (user.role === 'DOCTOR') {
         roleDetails = (
             <>
-                {renderField('Department', user.doctor?.departments?.[0]?.title)}
                 {renderField('Speciality', user.doctor?.speciality)}
-                {renderField('License Number', user.doctor?.license_number)}
+                {/* {renderField('License Number', user.doctor?.license_number)} */}
                 {/* Add more doctor fields as needed */}
-            </>
-        );
-    } else if (user.role === 'NURSE') {
-        roleDetails = (
-            <>
-                {renderField('Department', user.nurse?.department?.title)}
-                {/* {renderField('License Number', user.nurse?.license_number)} */}
-                {/* Add more nurse fields as needed */}
             </>
         );
     } else if (user.role === 'PATIENT') {
         roleDetails = (
             <>
                 {renderField('Date of Birth', user.patient?.dob)}
-                {renderField('Gender', user.gender)}
                 {renderField('Assigned Doctor', user.patient?.doctors?.[0]?.full_name)}
-                {renderField('Medical Record No.', user.patient?.medical_record_number)}
+                {/* {renderField('Medical Record No.', user.patient?.medical_record_number)} */}
                 {renderField('Address', user.patient?.address)}
-                {renderField('Phone', user.phone_number)}
                 {/* Add all fields from AddPatients form here */}
             </>
         );
@@ -100,15 +92,35 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
                 <div className="px-8 py-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-4">
                         {renderField('Email', user.email)}
+                        {renderField('Phone Number', user.phone_number)}
+                        {renderField('Department',
+                            user.role === 'DOCTOR' ? user.doctor?.departments?.[0]?.title :
+                                user.role === 'NURSE' ? user.nurse?.departments?.[0]?.title :
+                                    user.role === 'PATIENT' ? user.patient?.doctors?.[0]?.departments?.[0]?.title : null
+                        )}
+                        {renderField('Gender', user.gender)}
                         {renderField('Branch', user.associated_branches?.[0]?.name)}
+                        {renderField('Site',
+                            user.role === 'DOCTOR' ? (user.doctor?.site?.name ?? user.doctor?.site?.title ?? user.doctor?.site?.label) :
+                                user.role === 'NURSE' ? (user.nurse?.site?.name ?? user.nurse?.site?.title ?? user.nurse?.site?.label) :
+                                    user.role === 'PATIENT' ? (user.patient?.site?.name ?? user.patient?.site?.title ?? user.patient?.site?.label) : null
+                        )}
+                        {renderField('Monitoring',
+                            user.role === 'DOCTOR' ? (user.doctor?.vivalink_synced ? 'YES' : user.doctor?.avicardia_monitoring) :
+                                user.role === 'PATIENT' ? (user.patient?.vivalink_synced ? 'YES' : user.patient?.cardiac_monitoring) : null
+                        )}
                     </div>
-                    <hr className="my-4 border-gray-200" />
-                    <div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">Role Details</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                            {roleDetails}
-                        </div>
-                    </div>
+                    {roleDetails && (
+                        <>
+                            <hr className="my-4 border-gray-200" />
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Role Details</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                                    {roleDetails}
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
             <style jsx>{`
