@@ -32,20 +32,31 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
     // Role-specific details
     let roleDetails = null;
     if (user.role === 'DOCTOR') {
+        const specialitiesStr = user.doctor?.specialities?.length > 0 
+            ? user.doctor.specialities.map((s: any) => s.title).join(', ') 
+            : null;
         roleDetails = (
             <>
-                {renderField('Speciality', user.doctor?.speciality)}
+                {renderField('Specialities', specialitiesStr)}
                 {/* {renderField('License Number', user.doctor?.license_number)} */}
                 {/* Add more doctor fields as needed */}
             </>
         );
     } else if (user.role === 'PATIENT') {
+        const primaryDoctorUser = user.patient?.doctors?.[0]?.user;
+        const assignedDoctorName = primaryDoctorUser 
+            ? getName({
+                first_name: primaryDoctorUser.first_name,
+                last_name: primaryDoctorUser.last_name,
+                middle_name: primaryDoctorUser.middle_name,
+            })
+            : null;
         roleDetails = (
             <>
-                {renderField('Date of Birth', user.patient?.dob)}
-                {renderField('Assigned Doctor', user.patient?.doctors?.[0]?.full_name)}
+                {renderField('Date of Birth', user.dob ? user.dob.split('T')[0] : null)}
+                {renderField('Assigned Doctor', assignedDoctorName)}
                 {/* {renderField('Medical Record No.', user.patient?.medical_record_number)} */}
-                {renderField('Address', user.patient?.address)}
+                {renderField('Address', user.location?.address)}
                 {/* Add all fields from AddPatients form here */}
             </>
         );
@@ -105,7 +116,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
                                 user.role === 'NURSE' ? (user.nurse?.site?.name ?? user.nurse?.site?.title ?? user.nurse?.site?.label) :
                                     user.role === 'PATIENT' ? (user.patient?.site?.name ?? user.patient?.site?.title ?? user.patient?.site?.label) : null
                         )}
-                        {renderField('Monitoring',
+                        {user.role !== 'NURSE' && renderField('Monitoring',
                             user.role === 'DOCTOR' ? (user.doctor?.vivalink_synced ? 'YES' : user.doctor?.avicardia_monitoring) :
                                 user.role === 'PATIENT' ? (user.patient?.vivalink_synced ? 'YES' : user.patient?.cardiac_monitoring) : null
                         )}
