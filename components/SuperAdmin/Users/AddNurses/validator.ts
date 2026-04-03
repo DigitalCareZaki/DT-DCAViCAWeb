@@ -63,44 +63,6 @@ export const validator = create((data: AddNurseProps) => {
     enforce(data.employee_id).isNotEmpty();
   });
 
-  test('firstName', 'First name is too short', () => {
-    if (data.firstName.length < 3) throw new Error('First name is too short');
-
-    return true;
-  });
-
-  test('firstName', 'First name is too long', () => {
-    if (data.firstName.length >= 15) throw new Error('First name is too long');
-
-    return true;
-  });
-
-  test('middleName', 'Middle name is too short', () => {
-    if (!data.middleName.length) return true;
-    if (data.middleName.length < 3) throw new Error('Middle name is too short');
-
-    return true;
-  });
-
-  test('middlenName', 'Middle name is too long', () => {
-    if (data.middleName.length >= 15)
-      throw new Error('Middle name is too long');
-
-    return true;
-  });
-
-  test('lastName', 'Last name is too short', () => {
-    if (data.lastName.length < 3) throw new Error('Last name is too short');
-
-    return true;
-  });
-
-  test('lastName', 'Last name is too long', () => {
-    if (data.lastName.length >= 15) throw new Error('Last name is too long');
-
-    return true;
-  });
-
   test('phoneNumber', 'Invalid phone number', () => {
     const phoneRegex = /^\+[0-9]{1,3}[0-9]{10}$/;
     if (!phoneRegex.test(data.phoneNumber)) {

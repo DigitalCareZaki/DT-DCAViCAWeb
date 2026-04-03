@@ -19,30 +19,6 @@ export const validator = create((data: Props) => {
     enforce(data.firstName).isNotEmpty();
   });
 
-  test('firstName', 'First name is too short', () => {
-    if (data.firstName && data.firstName.length < 2) throw new Error();
-
-    return true;
-  });
-
-  test('firstName', 'First name is too long', () => {
-    if (data.firstName && data.firstName.length > 12) throw new Error();
-
-    return true;
-  });
-
-  test('middleName', 'Middle name is too long', () => {
-    if (data.middleName && data.middleName.length > 12) throw new Error();
-
-    return true;
-  });
-
-  test('middleName', 'Middle name is too short', () => {
-    if (data.middleName && data.middleName.length < 2) throw new Error();
-
-    return true;
-  });
-
   test('address', 'Address is required', () => {
     enforce(data.address).isNotEmpty();
   });

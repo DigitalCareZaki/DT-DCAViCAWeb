@@ -31,30 +31,6 @@ export const validator = create((data: PatientProps) => {
     enforce(data.title).isNotEmpty();
   });
 
-  test('first_name', 'First name is too short', () => {
-    if (data.first_name.length < 3) throw new Error('First name is too short');
-
-    return true;
-  });
-
-  test('first_name', 'First name is too long', () => {
-    if (data.first_name.length >= 15) throw new Error('First name is too long');
-
-    return true;
-  });
-
-  test('last_name', 'Last name is too short', () => {
-    if (data.last_name.length < 3) throw new Error('Last name is too short');
-
-    return true;
-  });
-
-  test('last_name', 'Last name is too long', () => {
-    if (data.last_name.length >= 15) throw new Error('Last name is too long');
-
-    return true;
-  });
-
   test('phone_number', 'Invalid phone number', () => {
     const phoneRegex = /^\+[0-9]{1,3}[0-9]{10}$/;
     if (!phoneRegex.test(data.phone_number)) {
