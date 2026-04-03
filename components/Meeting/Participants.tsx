@@ -35,6 +35,28 @@ const Discussion: ClientComponentProps<ParticipantsProps> = ({ id }) => {
         event: 'appointment',
       })
     );
+    return () => {
+      dispatch(
+        handleEventReducer({
+          payload: {
+            appointment_id: id,
+            user_id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            middle_name: user.middle_name,
+            role: user.role,
+            uri: user.uri,
+          },
+          event: 'leave-appointment',
+        })
+      );
+      dispatch(
+        handleEventReducer({
+          payload: null,
+          event: 'disconnect-socket',
+        })
+      );
+    };
   }, [user]);
 
   return (

@@ -127,9 +127,16 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
     if (!socket.current) return;
     if (!emitters?.event?.length) return;
 
-    if (['appointment', 'message'].includes(emitters.event)) {
+    if (['appointment', 'leave-appointment', 'message'].includes(emitters.event)) {
       // console.log('[WebSocketProvider] Emitting event:', emitters.event, emitters.payload); // DEBUG LOG
       socket.current.emit(emitters.event, emitters.payload);
+    }
+
+    if (emitters.event === 'disconnect-socket') {
+      socket.current.disconnect();
+      setTimeout(() => {
+        socket.current?.connect();
+      }, 500);
     }
 
     if (
