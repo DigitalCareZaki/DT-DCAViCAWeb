@@ -2,6 +2,7 @@
 
 import { getName } from '@init-globals';
 import Link from 'next/link';
+import { Icon } from '@common';
 import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
 
@@ -26,8 +27,8 @@ const RenderTable: ClientComponentProps<Props> = ({ data }) => {
           className="cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200"
         >
           <th
-            scope="row"
-            className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
+             scope="row"
+             className="whitespace-nowrap px-6 py-4 font-medium text-gray-900"
           >
             {el?.title}
           </th>
@@ -35,9 +36,18 @@ const RenderTable: ClientComponentProps<Props> = ({ data }) => {
           <td className="px-6 py-4">{el?.category}</td>
           <td className="px-6 py-4">{el?.priority}</td>
           <td className="px-6 py-4">
-            <Link href={el?.uri} target="_blank">
-              {el?.uri}
-            </Link>
+             <Link
+               href={el?.uri}
+               target="_blank"
+               className="theme-bg-color group flex h-9 w-fit items-center gap-2 rounded-lg px-4 text-xs font-semibold text-white shadow-sm transition-all hover:scale-105 hover:shadow-lg active:scale-95"
+             >
+               <Icon
+                 name="FaPlay"
+                 size={10}
+                 className="text-white"
+               />
+               <span>Watch Video</span>
+             </Link>
           </td>
           <td className="px-6 py-4">{el?.branch?.name}</td>
           <td className="px-6 py-4">

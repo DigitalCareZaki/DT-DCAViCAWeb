@@ -9,6 +9,7 @@ import { FaLock } from '@react-icons/all-files/fa/FaLock';
 import { FaPercentage } from '@react-icons/all-files/fa/FaPercentage';
 import { FaApple } from '@react-icons/all-files/fa/FaApple';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
+import { FaPlay } from '@react-icons/all-files/fa/FaPlay';
 import { FaCalendarAlt } from '@react-icons/all-files/fa/FaCalendarAlt';
 import { FaGenderless } from '@react-icons/all-files/fa/FaGenderless';
 import { FaBold } from '@react-icons/all-files/fa/FaBold';
@@ -291,6 +292,13 @@ export default function Icon({
   if (name === 'MdMonitorHeart')
     return (
       <MdSync
+        {...props}
+        className={twMerge('text-gray-500', className)}
+      />
+    );
+  if (name === 'FaPlay')
+    return (
+      <FaPlay
         {...props}
         className={twMerge('text-gray-500', className)}
       />

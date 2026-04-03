@@ -40,4 +40,6 @@ export type icon =
   | 'LuHeading1'
   | 'LuHeading2'
   | 'FaLink'
-  | 'IoClose';
+  | 'IoClose'
+  | 'FaPlay'
+  | 'MdMonitorHeart';
