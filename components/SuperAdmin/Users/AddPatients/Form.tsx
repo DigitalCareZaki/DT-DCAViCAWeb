@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { IoMdMale } from '@react-icons/all-files/io/IoMdMale';
 import { IoFemale } from '@react-icons/all-files/io5/IoFemale';
@@ -48,6 +48,8 @@ const Form: ClientComponent = () => {
     validator,
     currentStep,
     getLoadingStepInfo,
+    usernameStatus,
+    handleUsernameChange,
   ] = useForm();
 
   const [showDob, setShowDob] = useState<boolean>(false);
@@ -383,11 +385,36 @@ const Form: ClientComponent = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('username')}
-            error={!!errors.username?.message}
+            hookProps={{
+              ...register('username'),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                register('username').onChange(e);
+                handleUsernameChange(e.target.value);
+              },
+            }}
+            error={!!errors.username?.message || usernameStatus === 'exists'}
             errorMessage={errors.username?.message || '&'}
             disabled={loading}
           />
+          {/* Username availability status indicator */}
+          {usernameStatus === 'checking' && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs text-blue-500">
+              <FaSpinner className="h-3 w-3 animate-spin" />
+              <span>Checking availability...</span>
+            </div>
+          )}
+          {usernameStatus === 'exists' && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs font-medium text-rose-500">
+              <FaExclamationTriangle className="h-3 w-3" />
+              <span>Username already exists. Please choose a different one.</span>
+            </div>
+          )}
+          {usernameStatus === 'available' && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs font-medium text-emerald-500">
+              <FaCheckCircle className="h-3 w-3" />
+              <span>Username is available!</span>
+            </div>
+          )}
         </div>
         <div className="w-1/2">
           <DropdownSecondary

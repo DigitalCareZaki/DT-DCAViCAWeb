@@ -89,6 +89,8 @@ export interface LoadingStepInfo {
   progress: number;
 }
 
+export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';
+
 export type useFormProps = [
   register: UseFormRegister<AddPatientProps>,
   onSubmit: (
@@ -108,7 +110,9 @@ export type useFormProps = [
   sites: { loading: boolean; data: SiteProps[] },
   doctors: { loading: boolean; data: SelectUserProps[] },
   setDobValue: (value: Date | undefined | null) => void,
-  validator: any, // Using any for now since the exact vest type is complex
+  validator: any,
   currentStep: LoadingStep,
   getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
+  usernameStatus: UsernameStatus,
+  handleUsernameChange: (username: string) => void,
 ];

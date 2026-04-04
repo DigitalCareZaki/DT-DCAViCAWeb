@@ -382,7 +382,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
                   el.role === 'PATIENT' ? el.patient?.doctors?.[0]?.departments?.[0]?.title : '-'
             }</td>
           <td className="px-6 py-4">{el.phone_number}</td>
-          {/* <td className="px-6 py-4">{el.username}</td> */}
+          <td className="px-6 py-4">{el.username}</td>
           <td className="px-6 py-4">{el.role}</td>
           <td className="px-6 py-4">{el.gender}</td>
           <td className="px-6 py-4">{el.associated_branches[0]?.name}</td>
