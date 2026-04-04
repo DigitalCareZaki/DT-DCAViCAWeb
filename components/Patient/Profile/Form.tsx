@@ -335,6 +335,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
           />
         </div>
       </div>
+
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
@@ -362,6 +363,23 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
             hookProps={register('height')}
             error={!!errors.height?.message}
             errorMessage={errors.height?.message || '&'}
+          />
+        </div>
+      </div>
+      <div className="flex w-full items-center justify-between gap-10">
+        <div className="w-1/2">
+          <InputBasic
+            title="Site"
+            label="Site"
+            placeholder="Assigned site"
+            icon="SiNamecheap"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            inputClassName="bg-background"
+            disabled
+            hookProps={register('site_name')}
+            error={!!errors.site_name?.message}
+            errorMessage={errors.site_name?.message || '&'}
           />
         </div>
       </div>

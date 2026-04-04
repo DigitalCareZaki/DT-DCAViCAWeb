@@ -404,6 +404,7 @@ export type PatientProfileData = {
     emr: string;
     height: number;
     weight: number;
+    site?: DoctorSiteProps;
   };
 };
 

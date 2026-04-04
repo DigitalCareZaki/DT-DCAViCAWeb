@@ -18,6 +18,7 @@ export interface PatientProps {
   emr: string;
   height: number;
   weight: number;
+  site_name: string;
 }
 
 export interface SelectorProps {
