@@ -142,6 +142,8 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
           </div>
         </div>
 
+
+
         <div className="flex w-full items-center gap-4">
           <div className="w-1/2">
             <InputBasic
@@ -233,6 +235,20 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
             </div>
           </div>
         )}
+        <div className="flex w-full items-center gap-4">
+          <div className="w-1/2">
+            <InputBasic
+              label="Site"
+              placeholder="Enter Site Name"
+              borderTheme
+              defaultBorder
+              hookProps={register('siteName')}
+              error={!!errors.siteName?.message?.length}
+              errorMessage={errors.siteName?.message || '&'}
+              disabled
+            />
+          </div>
+        </div>
 
         <div className="mt-10 w-full">
           <h3 className="text-lg font-semibold mb-4">Location</h3>

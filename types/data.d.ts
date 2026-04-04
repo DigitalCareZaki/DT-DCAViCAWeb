@@ -210,6 +210,14 @@ export type BasicDepartmentProps = {
   updated_at: string;
 };
 
+export type DoctorSiteProps = {
+  id: string;
+  name: string;
+  description: string;
+  address: string;
+  countryCode: string;
+};
+
 export type BasicDoctorProps = {
   id: string;
   user_id: string;
@@ -221,6 +229,7 @@ export type BasicDoctorProps = {
   updated_at: string;
   specialities: BasicSpecilityProps[];
   departments: BasicDepartmentProps[];
+  site?: DoctorSiteProps;
 };
 
 export type DoctorProfileProps = {

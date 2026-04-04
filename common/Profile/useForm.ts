@@ -51,6 +51,7 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
 
     // guard against associated_branches being undefined or empty
     setValue('branch', data?.associated_branches?.[0]?.name ?? '');
+    setValue('siteName', data?.doctor?.site?.name ?? '');
 
     setValue('email', data?.email);
     // setValue('npiNumber', data?.doctor?.npi_number);

@@ -31,6 +31,7 @@ export type Props = {
   pmdcNumber: string;
   contractType: string;
   branch: string;
+  siteName: string;
   // department: string;
 };
 
