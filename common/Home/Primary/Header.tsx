@@ -19,7 +19,7 @@ const Header: ClientComponentProps<any> = ({ data, searchTerm, setSearchTerm }) 
       <div className="w-full md:w-auto">
         <div className="flex flex-row items-center gap-4">
           <InputBasic
-            placeholder="Name, email or ID"
+            placeholder="Name, email"
             icon="IoSearch"
             borderTheme
             value={searchTerm}
