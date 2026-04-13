@@ -32,39 +32,82 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
     // Role-specific details
     let roleDetails = null;
     if (user.role === 'DOCTOR') {
-        const specialitiesStr = user.doctor?.specialities?.length > 0 
-            ? user.doctor.specialities.map((s: any) => s.title).join(', ') 
+        const specialitiesStr = user.doctor?.specialities?.length > 0
+            ? user.doctor.specialities.map((s: any) => s.title).join(', ')
             : null;
         roleDetails = (
             <>
+                {renderField('Title', user.title)}
+                {renderField('Username', user.username)}
+                {renderField('Date of Birth', user.dob ? user.dob.split('T')[0] : null)}
+                {renderField('Country', user.location?.country?.name ?? user.location?.country?.title)}
+                {renderField('City', user.location?.city?.name ?? user.location?.city?.title)}
+                {renderField('Department', user.doctor?.departments?.[0]?.title)}
                 {renderField('Specialities', specialitiesStr)}
-                {/* {renderField('License Number', user.doctor?.license_number)} */}
-                {/* Add more doctor fields as needed */}
+                {renderField('Employee ID', user.doctor?.employee_id)}
+                {renderField('Institute', user.doctor?.institute)}
+                {renderField('Contract', user.doctor?.contract)}
+                {renderField('NPI Number', user.doctor?.npi_number)}
+                {renderField('PMDC Number', user.doctor?.pmdc_number)}
+                {renderField('AViCardia Monitoring', user.doctor?.avicardia_monitoring ?? (user.doctor?.vivalink_synced ? 'YES' : 'NO'))}
+                {renderField('Address', user.location?.address)}
+            </>
+        );
+    } else if (user.role === 'NURSE') {
+        const nurseNamesStr = user.nurse?.specialities?.length > 0
+            ? user.nurse.specialities.map((s: any) => s.title).join(', ')
+            : null;
+        roleDetails = (
+            <>
+                {renderField('Title', user.title)}
+                {renderField('Username', user.username)}
+                {renderField('Date of Birth', user.dob ? user.dob.split('T')[0] : null)}
+                {renderField('Country', user.location?.country?.name ?? user.location?.country?.title)}
+                {renderField('City', user.location?.city?.name ?? user.location?.city?.title)}
+                {renderField('Department', user.nurse?.departments?.[0]?.title)}
+                {renderField('Specialisation', nurseNamesStr)}
+                {renderField('Employee ID', user.nurse?.employee_id)}
+                {renderField('NPI Number', user.nurse?.npi_number)}
+                {renderField('Address', user.location?.address)}
             </>
         );
     } else if (user.role === 'PATIENT') {
         const primaryDoctorUser = user.patient?.doctors?.[0]?.user;
-        const assignedDoctorName = primaryDoctorUser 
+        const primaryNurseUser = user.patient?.nurses?.[0]?.user;
+        const assignedDoctorName = primaryDoctorUser
             ? getName({
                 first_name: primaryDoctorUser.first_name,
                 last_name: primaryDoctorUser.last_name,
                 middle_name: primaryDoctorUser.middle_name,
             })
             : null;
+        const assignedNurseName = primaryNurseUser
+            ? getName({
+                first_name: primaryNurseUser.first_name,
+                last_name: primaryNurseUser.last_name,
+                middle_name: primaryNurseUser.middle_name,
+            })
+            : null;
         roleDetails = (
             <>
+                {renderField('Title', user.title)}
+                {renderField('Username', user.username)}
                 {renderField('Date of Birth', user.dob ? user.dob.split('T')[0] : null)}
+                {renderField('Country', user.location?.country?.name ?? user.location?.country?.title)}
+                {renderField('City', user.location?.city?.name ?? user.location?.city?.title)}
+                {renderField('Weight (KG)', user.patient?.weight)}
+                {renderField('Height (M)', user.patient?.height)}
                 {renderField('Assigned Doctor', assignedDoctorName)}
-                {/* {renderField('Medical Record No.', user.patient?.medical_record_number)} */}
+                {renderField('Assigned Nurse', assignedNurseName)}
                 {renderField('Address', user.location?.address)}
-                {/* Add all fields from AddPatients form here */}
+                {/* {renderField('Cardiac Monitoring Site', user.patient?.site?.name ?? user.patient?.site?.title ?? user.patient?.site?.label)} */}
             </>
         );
     }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-all duration-300">
-            <div className="bg-white rounded-2xl p-0 max-w-xl w-full mx-4 shadow-2xl relative animate-fadeInUp">
+            <div className="bg-white rounded-2xl p-0 max-w-2xl w-full mx-4 shadow-2xl relative animate-fadeInUp">
                 <button
                     className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-full p-1 transition"
                     onClick={onClose}
@@ -100,16 +143,18 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
                     <span className="text-sm text-gray-500 mb-2 capitalize">{user.role?.toLowerCase()}</span>
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-2 ${user.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{user.active ? 'Active' : 'Inactive'}</span>
                 </div>
-                <div className="px-8 py-6">
+                <div className="px-8 py-6 max-h-[600px] overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-4">
                         {renderField('Email', user.email)}
                         {renderField('Phone Number', user.phone_number)}
+                        {renderField('Username', user.username)}
+                        {renderField('Title', user.title)}
+                        {renderField('Gender', user.gender)}
                         {renderField('Department',
                             user.role === 'DOCTOR' ? user.doctor?.departments?.[0]?.title :
                                 user.role === 'NURSE' ? user.nurse?.departments?.[0]?.title :
                                     user.role === 'PATIENT' ? user.patient?.doctors?.[0]?.departments?.[0]?.title : null
                         )}
-                        {renderField('Gender', user.gender)}
                         {renderField('Branch', user.associated_branches?.[0]?.name)}
                         {renderField('Site',
                             user.role === 'DOCTOR' ? (user.doctor?.site?.name ?? user.doctor?.site?.title ?? user.doctor?.site?.label) :
