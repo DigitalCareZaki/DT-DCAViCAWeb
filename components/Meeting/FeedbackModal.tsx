@@ -10,81 +10,100 @@ interface FeedbackModalProps {
   appointmentId: string;
 }
 
-const StarIcon = ({ filled, hovered, onClick, onMouseEnter, onMouseLeave, index }: any) => {
-  const isActive = filled || hovered;
-  return (
-    <button
-      type="button"
-      onClick={() => onClick(index)}
-      onMouseEnter={() => onMouseEnter(index)}
-      onMouseLeave={onMouseLeave}
-      className="focus:outline-none transform transition-all duration-150 hover:scale-125 active:scale-95"
-      aria-label={`Rate ${index} star${index !== 1 ? 's' : ''}`}
+// ─── Theme constants (project palette) ───────────────────────────
+const DARK_MAIN      = '#161B20';   // bg-dark-main
+const DARK_SECONDARY = '#242E3D';   // bg-dark-secondary
+const PATIENT_RED    = '#ef233c';   // theme-patient-primary
+const SUCCESS_TEAL   = '#00B278';   // theme-superadmin-primary / secondary
+const BORDER_COLOR   = 'rgba(255,255,255,0.07)';
+const TEXT_MUTED     = 'rgba(255,255,255,0.45)';
+const TEXT_SUB       = 'rgba(255,255,255,0.65)';
+
+// ─── Rating label map ─────────────────────────────────────────────
+const LABELS: Record<number, { text: string; color: string }> = {
+  1: { text: 'Bad',       color: '#ef4444' },
+  2: { text: 'Average',   color: '#f97316' },
+  3: { text: 'Good',      color: '#eab308' },
+  4: { text: 'Very Good', color: '#84cc16' },
+  5: { text: 'Excellent', color: SUCCESS_TEAL },
+};
+
+// ─── Single Star ──────────────────────────────────────────────────
+const Star = ({
+  index,
+  filled,
+  onClick,
+  onEnter,
+  onLeave,
+}: {
+  index: number;
+  filled: boolean;
+  onClick: (n: number) => void;
+  onEnter: (n: number) => void;
+  onLeave: () => void;
+}) => (
+  <button
+    type="button"
+    onClick={() => onClick(index)}
+    onMouseEnter={() => onEnter(index)}
+    onMouseLeave={onLeave}
+    className="focus:outline-none"
+    style={{
+      transform: filled ? 'scale(1.18)' : 'scale(1)',
+      transition: 'transform 0.15s ease',
+    }}
+    aria-label={`Rate ${index} star${index !== 1 ? 's' : ''}`}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      style={{
+        width: 42,
+        height: 42,
+        fill: filled ? PATIENT_RED : 'transparent',
+        stroke: filled ? PATIENT_RED : 'rgba(255,255,255,0.25)',
+        strokeWidth: 1.4,
+        filter: filled ? `drop-shadow(0 0 8px rgba(239,35,60,0.55))` : 'none',
+        transition: 'all 0.15s ease',
+      }}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        className="w-10 h-10 transition-all duration-200"
-        fill={isActive ? 'url(#starGradient)' : 'none'}
-        stroke={isActive ? 'none' : '#4B5563'}
-        strokeWidth={1.5}
-        style={{
-          filter: isActive ? 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' : 'none',
-        }}
-      >
-        <defs>
-          <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FBBF24" />
-            <stop offset="100%" stopColor="#F59E0B" />
-          </linearGradient>
-        </defs>
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-        />
-      </svg>
-    </button>
-  );
-};
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+      />
+    </svg>
+  </button>
+);
 
-const ratingLabels: Record<number, string> = {
-  1: 'Poor',
-  2: 'Fair',
-  3: 'Good',
-  4: 'Very Good',
-  5: 'Excellent',
-};
-
+// ─── Main Modal ───────────────────────────────────────────────────
 const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) => {
-  const [rating, setRating] = useState(0);
-  const [hovered, setHovered] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [rating, setRating]     = useState(0);
+  const [hovered, setHovered]   = useState(0);
+  const [loading, setLoading]   = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [mounted, setMounted]   = useState(false);
   const [user] = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => setVisible(true), 10);
-    } else {
-      setVisible(false);
-    }
+    if (isOpen) setTimeout(() => setMounted(true), 10);
+    else         setMounted(false);
   }, [isOpen]);
 
-  const navigateAway = () => {
-    const userType = user?.type?.toLowerCase() ?? 'patient';
-    router.push(`/${userType}/telemed`);
+  if (!isOpen) return null;
+
+  const navigate = () => {
+    const type = user?.type?.toLowerCase() ?? 'patient';
+    router.push(`/${type}/telemed`);
   };
 
   const handleSubmit = async () => {
-    if (!rating) return;
+    if (!rating || loading) return;
     setLoading(true);
     try {
-      console.log('rating >>>', rating)
-      console.log('appointmentId >>>', appointmentId)
-
+      console.log('rating >>>', rating);
+      console.log('appointmentId >>>', appointmentId);
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/telemed/feedback`, {
         method: 'POST',
         headers: {
@@ -93,170 +112,252 @@ const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) =
         },
         body: JSON.stringify({ appointmentId, rating }),
       });
-      setSubmitted(true);
-      setTimeout(() => {
-        navigateAway();
-      }, 2200);
-    } catch {
-      setSubmitted(true);
-      setTimeout(() => {
-        navigateAway();
-      }, 2200);
+    } catch (_) {
+      // still show success UX
     } finally {
       setLoading(false);
+      setSubmitted(true);
+      setTimeout(navigate, 2400);
     }
   };
 
-  const handleSkip = () => {
-    navigateAway();
-  };
-
-  if (!isOpen) return null;
+  const activeIndex   = hovered || rating;
+  const labelInfo     = activeIndex ? LABELS[activeIndex] : null;
 
   return (
     <div
-      className="fixed inset-0 z-[999] flex items-center justify-center"
       style={{
-        background: 'rgba(0,0,0,0.65)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(10,14,18,0.80)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        fontFamily: "'Poppins', sans-serif",
       }}
     >
-      {/* Animated card */}
+      {/* Card */}
       <div
-        className="relative w-full max-w-md mx-4 rounded-3xl overflow-hidden shadow-2xl"
         style={{
-          background: 'linear-gradient(145deg, #1e2a3a, #16202e)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          transform: visible ? 'scale(1) translateY(0)' : 'scale(0.85) translateY(40px)',
-          opacity: visible ? 1 : 0,
-          transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease',
+          width: '100%',
+          maxWidth: 420,
+          margin: '0 16px',
+          borderRadius: 20,
+          background: DARK_SECONDARY,
+          border: `1px solid ${BORDER_COLOR}`,
+          boxShadow: '0 32px 80px rgba(0,0,0,0.55)',
+          overflow: 'hidden',
+          transform: mounted ? 'scale(1) translateY(0)' : 'scale(0.88) translateY(30px)',
+          opacity: mounted ? 1 : 0,
+          transition: 'transform 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s ease',
         }}
       >
-        {/* Top gradient accent */}
-        <div
-          className="h-1 w-full"
-          style={{ background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899)' }}
-        />
+        {/* Red top accent bar */}
+        <div style={{ height: 3, background: `linear-gradient(90deg, ${PATIENT_RED}, #ff6b6b, ${PATIENT_RED})` }} />
 
         {!submitted ? (
-          <div className="px-8 py-8">
+          <div style={{ padding: '28px 32px 32px' }}>
+
             {/* Header */}
-            <div className="text-center mb-6">
+            <div style={{ textAlign: 'center', marginBottom: 24 }}>
+              {/* Icon ring */}
               <div
-                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 64,
+                  height: 64,
+                  borderRadius: '50%',
+                  background: DARK_MAIN,
+                  border: `2px solid ${PATIENT_RED}`,
+                  marginBottom: 14,
+                  boxShadow: `0 0 20px rgba(239,35,60,0.25)`,
+                }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-8 h-8">
-                  <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                {/* Phone icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={PATIENT_RED} style={{ width: 28, height: 28 }}>
+                  <path
+                    fillRule="evenodd"
+                    d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-white mb-1">Session Feedback</h2>
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
+
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: '#ffffff',
+                  letterSpacing: '-0.2px',
+                }}
+              >
+                Rate Your Session
+              </h2>
+              <p style={{ margin: '6px 0 0', fontSize: 13, color: TEXT_SUB, lineHeight: 1.5 }}>
                 How was your teleconsultation experience?
               </p>
             </div>
 
+            {/* Divider */}
+            <div style={{ height: 1, background: BORDER_COLOR, marginBottom: 24 }} />
+
             {/* Stars */}
-            <div className="flex justify-center gap-2 mb-3">
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 8 }}>
               {[1, 2, 3, 4, 5].map((i) => (
-                <StarIcon
+                <Star
                   key={i}
                   index={i}
-                  filled={i <= rating}
-                  hovered={i <= hovered && i > rating}
-                  onClick={(v: number) => setRating(v)}
-                  onMouseEnter={(v: number) => setHovered(v)}
-                  onMouseLeave={() => setHovered(0)}
+                  filled={i <= (hovered || rating)}
+                  onClick={setRating}
+                  onEnter={setHovered}
+                  onLeave={() => setHovered(0)}
                 />
               ))}
             </div>
 
             {/* Rating label */}
-            <div className="text-center h-6 mb-6">
-              {(hovered || rating) ? (
+            <div style={{ textAlign: 'center', height: 24, marginBottom: 24 }}>
+              {labelInfo ? (
                 <span
-                  className="text-sm font-semibold tracking-wide"
                   style={{
-                    background: 'linear-gradient(90deg, #FBBF24, #F59E0B)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    letterSpacing: '0.5px',
+                    color: labelInfo.color,
+                    transition: 'color 0.2s ease',
+                    textTransform: 'uppercase',
                   }}
                 >
-                  {ratingLabels[hovered || rating]}
+                  {labelInfo.text}
                 </span>
               ) : (
-                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  Tap a star to rate
-                </span>
+                <span style={{ fontSize: 12, color: TEXT_MUTED }}>Tap a star to rate</span>
               )}
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-3">
+            <div style={{ display: 'flex', gap: 12 }}>
+              {/* Skip */}
               <button
-                onClick={handleSkip}
-                className="flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:opacity-80"
+                onClick={navigate}
                 style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  color: 'rgba(255,255,255,0.55)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  flex: 1,
+                  padding: '11px 0',
+                  borderRadius: 10,
+                  border: `1px solid ${BORDER_COLOR}`,
+                  background: DARK_MAIN,
+                  color: TEXT_MUTED,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  fontFamily: 'inherit',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, color 0.2s',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.06)';
+                  (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.75)';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = DARK_MAIN;
+                  (e.currentTarget as HTMLButtonElement).style.color = TEXT_MUTED;
                 }}
               >
                 Skip
               </button>
+
+              {/* Submit */}
               <button
                 onClick={handleSubmit}
                 disabled={!rating || loading}
-                className="flex-2 flex-grow py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-95"
                 style={{
+                  flex: 2,
+                  padding: '11px 0',
+                  borderRadius: 10,
+                  border: 'none',
                   background: !rating || loading
-                    ? 'rgba(99,102,241,0.4)'
-                    : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                  boxShadow: rating && !loading ? '0 4px 20px rgba(99,102,241,0.4)' : 'none',
+                    ? 'rgba(239,35,60,0.25)'
+                    : PATIENT_RED,
+                  color: !rating || loading ? 'rgba(255,255,255,0.35)' : '#ffffff',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                  cursor: !rating || loading ? 'not-allowed' : 'pointer',
+                  boxShadow: rating && !loading ? `0 4px 18px rgba(239,35,60,0.35)` : 'none',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
                 }}
               >
                 {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  <>
+                    <svg
+                      style={{ animation: 'avica-spin 0.8s linear infinite', width: 16, height: 16 }}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
                     Submitting...
-                  </span>
-                ) : 'Submit Feedback'}
+                  </>
+                ) : (
+                  'Submit Feedback'
+                )}
               </button>
             </div>
+
           </div>
         ) : (
-          /* Success State */
-          <div className="px-8 py-12 text-center">
+          /* ── Success State ── */
+          <div style={{ padding: '40px 32px 44px', textAlign: 'center' }}>
+            {/* Checkmark circle */}
             <div
-              className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5"
               style={{
-                background: 'linear-gradient(135deg, #10b981, #059669)',
-                boxShadow: '0 0 30px rgba(16,185,129,0.4)',
-                animation: 'popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 76,
+                height: 76,
+                borderRadius: '50%',
+                background: SUCCESS_TEAL,
+                boxShadow: `0 0 32px rgba(0,178,120,0.4)`,
+                marginBottom: 20,
+                animation: 'avica-popin 0.4s cubic-bezier(0.34,1.56,0.64,1)',
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="white" className="w-10 h-10">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="white" style={{ width: 36, height: 36 }}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Feedback Submitted!</h3>
-            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Thank you for your feedback. Redirecting you now...
+
+            <h3 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#ffffff' }}>
+              Feedback Submitted!
+            </h3>
+            <p style={{ margin: '8px 0 0', fontSize: 13, color: TEXT_SUB, lineHeight: 1.6 }}>
+              Thank you for rating your experience.
+              <br />Returning to your dashboard...
             </p>
-            {/* Animated dots */}
-            <div className="flex justify-center gap-1.5 mt-4">
+
+            {/* Teal progress dots */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 20 }}>
               {[0, 1, 2].map((i) => (
                 <div
                   key={i}
-                  className="w-1.5 h-1.5 rounded-full"
                   style={{
-                    background: '#10b981',
-                    animation: `bounce 1s ease-in-out ${i * 0.15}s infinite`,
+                    width: 7,
+                    height: 7,
+                    borderRadius: '50%',
+                    background: SUCCESS_TEAL,
+                    animation: `avica-bounce 1.1s ease-in-out ${i * 0.18}s infinite`,
                   }}
                 />
               ))}
@@ -265,14 +366,18 @@ const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) =
         )}
       </div>
 
-      <style jsx global>{`
-        @keyframes popIn {
-          0% { transform: scale(0); opacity: 0; }
+      {/* Scoped keyframes */}
+      <style>{`
+        @keyframes avica-spin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes avica-popin {
+          0%   { transform: scale(0); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
         }
-        @keyframes bounce {
-          0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-          40% { transform: translateY(-6px); opacity: 1; }
+        @keyframes avica-bounce {
+          0%, 80%, 100% { transform: translateY(0);   opacity: 0.35; }
+          40%            { transform: translateY(-7px); opacity: 1;    }
         }
       `}</style>
     </div>
