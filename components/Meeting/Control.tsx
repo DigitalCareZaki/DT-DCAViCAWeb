@@ -259,9 +259,10 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
 
 interface ControlPropsWithModal extends ControlProps {
   setIsModalOpen: (open: boolean) => void;
+  setShowFeedbackModal?: (open: boolean) => void;
 }
 
-const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOpen }) => {
+const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOpen, setShowFeedbackModal }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [user] = useUser();
@@ -273,7 +274,13 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
   });
 
   const handleCancelMeeting = () => {
-    router.push('/doctor/telemed');
+    const isPatient = user?.role === 'PATIENT' || user?.type === 'PATIENT';
+    if (isPatient && setShowFeedbackModal) {
+      setShowFeedbackModal(true);
+    } else {
+      const userType = user?.type?.toLowerCase() ?? 'doctor';
+      router.push(`/${userType}/telemed`);
+    }
   };
 
   const handleShowVitals = () =>

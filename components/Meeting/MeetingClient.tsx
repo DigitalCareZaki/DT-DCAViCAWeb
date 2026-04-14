@@ -6,12 +6,15 @@ import Discussion from './Discussion';
 import Topbar from './Topbar';
 import Counter from './Counter';
 import VitalsServerWrapper from './Vitals/ServerWrapper';
+import FeedbackModal from './FeedbackModal';
 import dynamic from 'next/dynamic';
 
 const AgoraCall = dynamic(() => import('./AgoraCall'), { ssr: false });
 
 export default function MeetingClient({ id }: { id: string }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+
     return (
         <div className="grid h-screen grid-cols-4 gap-4 bg-[#f6fcfc]">
             <div className="col-span-3 flex h-full w-full flex-col gap-4 rounded-2xl bg-dark-secondary shadow-xl overflow-hidden">
@@ -24,7 +27,11 @@ export default function MeetingClient({ id }: { id: string }) {
                     </div>
                     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
                         <Counter />
-                        <Control id={id} setIsModalOpen={setIsModalOpen} />
+                        <Control
+                            id={id}
+                            setIsModalOpen={setIsModalOpen}
+                            setShowFeedbackModal={setShowFeedbackModal}
+                        />
                     </div>
                 </div>
             </div>
@@ -38,6 +45,11 @@ export default function MeetingClient({ id }: { id: string }) {
             </div>
             <VitalsServerWrapper id={id} />
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} id={id} />
+            <FeedbackModal
+                isOpen={showFeedbackModal}
+                onClose={() => setShowFeedbackModal(false)}
+                appointmentId={id}
+            />
         </div>
     );
-} 
+}
