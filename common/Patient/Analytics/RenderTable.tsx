@@ -38,8 +38,8 @@ const StarRating = ({ rating }: { rating: number | null | undefined }) => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           className="w-4 h-4"
-          fill={i <= rating ? '#FBBF24' : 'none'}
-          stroke={i <= rating ? '#FBBF24' : '#D1D5DB'}
+          fill={i <= rating ? '#ef233c' : 'none'}
+          stroke={i <= rating ? '#ef233c' : '#D1D5DB'}
           strokeWidth={1.5}
         >
           <path
