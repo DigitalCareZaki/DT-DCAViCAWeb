@@ -13,6 +13,47 @@ import autoTable from 'jspdf-autotable';
 import { FaPhone } from '@react-icons/all-files/fa/FaPhone';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@selectors';
+
+// Inline star rating display for analytics
+const StarRating = ({ rating }: { rating: number | null | undefined }) => {
+  if (!rating) {
+    return (
+      <span
+        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+        style={{
+          background: 'rgba(107,114,128,0.12)',
+          color: '#6B7280',
+          border: '1px solid rgba(107,114,128,0.2)',
+        }}
+      >
+        N/A
+      </span>
+    );
+  }
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <svg
+          key={i}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          className="w-4 h-4"
+          fill={i <= rating ? '#FBBF24' : 'none'}
+          stroke={i <= rating ? '#FBBF24' : '#D1D5DB'}
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+          />
+        </svg>
+      ))}
+      <span className="ml-1 text-xs font-medium text-gray-500">({rating}/5)</span>
+    </div>
+  );
+};
+
 const RenderTable: ClientComponent = () => {
 
   const { setPatientAppointmentsListing } = useSelector<any, any>(
@@ -74,7 +115,8 @@ const RenderTable: ClientComponent = () => {
         const appointment = el?.appointment;
         const organizer = el?.appointment?.organizer;
         const observation = el?.appointment?.appointmentObservation;
-
+        // Support both flat and nested feedback structures
+        const feedbackRating = el?.feedback?.rating ?? el?.appointment?.feedback?.rating ?? null;
 
         return (
           <tr
@@ -94,6 +136,11 @@ const RenderTable: ClientComponent = () => {
             <td className="px-6 py-4">{observation?.diagnosis || 'N/A'}</td>
             <td className="px-6 py-4">
               {organizer?.first_name} {organizer?.last_name}
+            </td>
+
+            {/* Feedback column */}
+            <td className="px-6 py-4">
+              <StarRating rating={feedbackRating} />
             </td>
 
             <td className="px-6 py-4">
