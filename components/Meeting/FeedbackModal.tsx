@@ -11,19 +11,19 @@ interface FeedbackModalProps {
 }
 
 // ─── Theme constants (project palette) ───────────────────────────
-const DARK_MAIN      = '#161B20';   // bg-dark-main
+const DARK_MAIN = '#161B20';   // bg-dark-main
 const DARK_SECONDARY = '#242E3D';   // bg-dark-secondary
-const PATIENT_RED    = '#ef233c';   // theme-patient-primary
-const SUCCESS_TEAL   = '#00B278';   // theme-superadmin-primary / secondary
-const BORDER_COLOR   = 'rgba(255,255,255,0.07)';
-const TEXT_MUTED     = 'rgba(255,255,255,0.45)';
-const TEXT_SUB       = 'rgba(255,255,255,0.65)';
+const PATIENT_RED = '#ef233c';   // theme-patient-primary
+const SUCCESS_TEAL = '#00B278';   // theme-superadmin-primary / secondary
+const BORDER_COLOR = 'rgba(255,255,255,0.07)';
+const TEXT_MUTED = 'rgba(255,255,255,0.45)';
+const TEXT_SUB = 'rgba(255,255,255,0.65)';
 
 // ─── Rating label map ─────────────────────────────────────────────
 const LABELS: Record<number, { text: string; color: string }> = {
-  1: { text: 'Bad',       color: '#ef4444' },
-  2: { text: 'Average',   color: '#f97316' },
-  3: { text: 'Good',      color: '#eab308' },
+  1: { text: 'Bad', color: '#ef4444' },
+  2: { text: 'Average', color: '#f97316' },
+  3: { text: 'Good', color: '#eab308' },
   4: { text: 'Very Good', color: '#84cc16' },
   5: { text: 'Excellent', color: SUCCESS_TEAL },
 };
@@ -78,17 +78,17 @@ const Star = ({
 
 // ─── Main Modal ───────────────────────────────────────────────────
 const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) => {
-  const [rating, setRating]     = useState(0);
-  const [hovered, setHovered]   = useState(0);
-  const [loading, setLoading]   = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hovered, setHovered] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [mounted, setMounted]   = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [user] = useUser();
   const router = useRouter();
 
   useEffect(() => {
     if (isOpen) setTimeout(() => setMounted(true), 10);
-    else         setMounted(false);
+    else setMounted(false);
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -102,15 +102,13 @@ const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) =
     if (!rating || loading) return;
     setLoading(true);
     try {
-      console.log('rating >>>', rating);
-      console.log('appointmentId >>>', appointmentId);
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/telemed/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user?.token}`,
         },
-        body: JSON.stringify({ appointmentId, rating }),
+        body: JSON.stringify({ id: appointmentId, rating }),
       });
     } catch (_) {
       // still show success UX
@@ -121,8 +119,8 @@ const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) =
     }
   };
 
-  const activeIndex   = hovered || rating;
-  const labelInfo     = activeIndex ? LABELS[activeIndex] : null;
+  const activeIndex = hovered || rating;
+  const labelInfo = activeIndex ? LABELS[activeIndex] : null;
 
   return (
     <div
