@@ -116,7 +116,7 @@ const RenderTable: ClientComponent = () => {
         const organizer = el?.appointment?.organizer;
         const observation = el?.appointment?.appointmentObservation;
         // Support both flat and nested feedback structures
-        const feedbackRating = el?.feedback?.rating ?? el?.appointment?.feedback?.rating ?? null;
+        const feedbackRating = el?.appointment?.rating ?? el?.appointment?.rating ?? null;
 
         return (
           <tr
