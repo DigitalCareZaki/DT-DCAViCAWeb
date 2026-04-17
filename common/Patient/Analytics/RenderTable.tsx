@@ -49,7 +49,7 @@ const StarRating = ({ rating }: { rating: number | null | undefined }) => {
           />
         </svg>
       ))}
-      <span className="ml-1 text-xs font-medium text-gray-500">({rating}/5)</span>
+      <span className="ml-1 text-xs font-medium text-gray-500">({rating})</span>
     </div>
   );
 };
