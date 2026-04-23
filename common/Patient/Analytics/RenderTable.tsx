@@ -14,8 +14,17 @@ import { FaPhone } from '@react-icons/all-files/fa/FaPhone';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@selectors';
 
+const normalizeRating = (value: number | string | null | undefined): number | null => {
+  if (value === null || value === undefined || value === '') return null;
+
+  const parsedRating = Number(value);
+  if (!Number.isFinite(parsedRating) || parsedRating <= 0) return null;
+
+  return parsedRating;
+};
+
 // Inline star rating display for analytics
-const StarRating = ({ rating }: { rating: number | null | undefined }) => {
+const StarRating = ({ rating }: { rating: number | null }) => {
   if (!rating) {
     return (
       <span
@@ -116,7 +125,8 @@ const RenderTable: ClientComponent = () => {
         const organizer = el?.appointment?.organizer;
         const observation = el?.appointment?.appointmentObservation;
         // Support both flat and nested feedback structures
-        const feedbackRating = el?.appointment?.rating ?? el?.appointment?.rating ?? null;
+        const rawFeedbackRating = el?.appointment?.rating ?? el?.rating ?? null;
+        const feedbackRating = normalizeRating(rawFeedbackRating);
 
         return (
           <tr
