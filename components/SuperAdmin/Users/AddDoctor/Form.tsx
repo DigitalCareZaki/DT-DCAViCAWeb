@@ -43,6 +43,8 @@ const Form: React.FC = () => {
     validator,
     currentStep,
     getLoadingStepInfo,
+    usernameStatus,
+    handleUsernameChange,
   ] = useForm();
 
   const [showDob, setShowDob] = useState<boolean>(false);
@@ -358,10 +360,34 @@ const Form: React.FC = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('username')}
+            hookProps={{
+              ...register('username'),
+              onChange: (e) => {
+                register('username').onChange(e);
+                handleUsernameChange(e.target.value);
+              },
+            }}
             error={!!errors.username?.message}
             errorMessage={errors.username?.message || '&'}
           />
+          {usernameStatus === 'checking' && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs text-blue-500">
+              <FaSpinner className="h-3 w-3 animate-spin" />
+              <span>Checking availability...</span>
+            </div>
+          )}
+          {usernameStatus === 'exists' && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs font-medium text-rose-500">
+              <FaExclamationTriangle className="h-3 w-3" />
+              <span>Username already exists. Please choose a different one.</span>
+            </div>
+          )}
+          {usernameStatus === 'available' && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs font-medium text-emerald-500">
+              <FaCheckCircle className="h-3 w-3" />
+              <span>Username is available!</span>
+            </div>
+          )}
         </div>
         <div className="w-1/2">
           <DropdownSecondary
@@ -483,9 +509,8 @@ const Form: React.FC = () => {
             </div>
 
             <div
-              className={`relative z-40 ${
-                loading ? 'pointer-events-none opacity-50' : ''
-              }`}
+              className={`relative z-40 ${loading ? 'pointer-events-none opacity-50' : ''
+                }`}
             >
               <Datepicker
                 options={dobOptions}

@@ -89,7 +89,11 @@ export type useFormProps = [
   validator: Suite,
   currentStep: LoadingStep,
   getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
+  usernameStatus: UsernameStatus,
+  handleUsernameChange: (username: string) => void,
 ];
+
+export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';
 
 export type LoadingStep =
   | 'idle'
