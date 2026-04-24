@@ -2,52 +2,8 @@ import { create, test, enforce, mode, Modes, only } from 'vest';
 
 import type { AddDoctorProps } from './types';
 
-const MIN_NAME_LENGTH = 3;
-
 export const validator = create((data: AddDoctorProps) => {
   mode(Modes.ALL);
-
-  test('firstName', 'First name is required', () => {
-    enforce(data.firstName).isNotEmpty();
-  });
-
-  test(
-    'firstName',
-    `First name must be longer than or equal to ${MIN_NAME_LENGTH} characters`,
-    () => {
-      if (data.firstName?.trim()?.length) {
-        enforce(data.firstName.trim()).longerThanOrEquals(MIN_NAME_LENGTH);
-      }
-    }
-  );
-
-  test('middleName', 'Middle name is required', () => {
-    enforce(data.middleName).isNotEmpty();
-  });
-
-  test(
-    'middleName',
-    `Middle name must be longer than or equal to ${MIN_NAME_LENGTH} characters`,
-    () => {
-      if (data.middleName?.trim()?.length) {
-        enforce(data.middleName.trim()).longerThanOrEquals(MIN_NAME_LENGTH);
-      }
-    }
-  );
-
-  test('lastName', 'Last name is required', () => {
-    enforce(data.lastName).isNotEmpty();
-  });
-
-  test(
-    'lastName',
-    `Last name must be longer than or equal to ${MIN_NAME_LENGTH} characters`,
-    () => {
-      if (data.lastName?.trim()?.length) {
-        enforce(data.lastName.trim()).longerThanOrEquals(MIN_NAME_LENGTH);
-      }
-    }
-  );
 
   test('phoneNumber', 'Phone number is required', () => {
     enforce(data.phoneNumber).isNotEmpty();
