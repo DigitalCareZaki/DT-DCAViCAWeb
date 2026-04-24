@@ -5,6 +5,18 @@ import type { AddAdminProps } from './types';
 export const validator = create((data: AddAdminProps) => {
   mode(Modes.ALL);
 
+  test('firstName', 'First name is required', () => {
+    enforce(data.firstName).isNotEmpty();
+  });
+
+  test('middleName', 'Middle name is required', () => {
+    enforce(data.middleName).isNotEmpty();
+  });
+
+  test('lastName', 'Last name is required', () => {
+    enforce(data.lastName).isNotEmpty();
+  });
+
   test('phoneNumber', 'Phone number is required', () => {
     enforce(data.phoneNumber).isNotEmpty();
   });
