@@ -25,7 +25,7 @@ export interface AddNurseProps {
   address: string;
   npi_number: string;
   employee_id: string;
-  Contract:string;
+  Contract: string;
   department: string;
   avicardia_monitoring: string;
   site: string;
@@ -85,4 +85,8 @@ export type useFormProps = [
   sites: { loading: boolean; data: SiteProps[] },
   setDobValue: (value: Date | undefined | null) => void,
   validator: Suite,
+  usernameStatus: UsernameStatus,
+  handleUsernameChange: (username: string) => void,
 ];
+
+export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';

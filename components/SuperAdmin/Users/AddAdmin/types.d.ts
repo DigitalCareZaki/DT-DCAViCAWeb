@@ -64,4 +64,8 @@ export type useFormProps = [
   countries: { loading: boolean; data: CountriesProps[] },
   setDobValue: (value: Date | undefined | null) => void,
   validator: Suite,
+  usernameStatus: UsernameStatus,
+  handleUsernameChange: (username: string) => void,
 ];
+
+export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';

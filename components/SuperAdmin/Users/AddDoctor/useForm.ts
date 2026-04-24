@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
@@ -13,6 +13,7 @@ import {
   addDoctor,
   getOrganizationDepartments,
   getSites,
+  checkUsername,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -20,7 +21,7 @@ import { useUser } from '@selectors';
 
 import { validator } from './validator';
 
-import type { AddDoctorProps, useFormProps, SelectorsProps, LoadingStep, LoadingStepInfo } from './types';
+import type { AddDoctorProps, useFormProps, SelectorsProps, LoadingStep, LoadingStepInfo, UsernameStatus } from './types';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -40,6 +41,8 @@ const useFormHook = (): useFormProps => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
+  const [usernameStatus, setUsernameStatus] = useState<UsernameStatus>('idle');
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [selectors, setSelectors] = useState<SelectorsProps>({
     gender: {
@@ -279,6 +282,31 @@ const useFormHook = (): useFormProps => {
       clearErrors(type as any);
     };
 
+  const handleUsernameChange = useCallback((username: string) => {
+    if (!username || username.trim().length < 3) {
+      setUsernameStatus('idle');
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      return;
+    }
+
+    setUsernameStatus('checking');
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await checkUsername(username.trim());
+        if (res.success) {
+          setUsernameStatus(res.exists ? 'exists' : 'available');
+        } else {
+          setUsernameStatus('idle');
+        }
+      } catch {
+        setUsernameStatus('idle');
+      }
+    }, 600);
+  }, []);
+
   const setDobValue = (value: Date | undefined | null) => {
     const iso = value ? new Date(value).toISOString() : '';
     setValue('dob', iso as any, { shouldValidate: true });
@@ -385,6 +413,8 @@ const useFormHook = (): useFormProps => {
     validator,
     currentStep,
     getLoadingStepInfo,
+    usernameStatus,
+    handleUsernameChange,
   ];
 };
 
