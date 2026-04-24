@@ -115,6 +115,15 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  const getSyncErrorMessage = (res: any) => {
+    const backendMessage = res?.message?.toString()?.trim();
+    return backendMessage || 'Sync failed. Device already exists in system.';
+  };
+
+  const isDeviceSynced = (res: any) => {
+    return res?.data?.vivalink_synced === true;
+  };
+
   // Function to get loading step information
   const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
     const steps: Record<LoadingStep, LoadingStepInfo> = {
@@ -256,13 +265,22 @@ const useFormHook = (
           handleShowModal({
             type: 'ERROR',
             message: data.cardiac_monitoring === 'YES'
-              ? 'Sync failed. Please check the connection.'
+              ? getSyncErrorMessage(res)
               : (res?.message ?? 'Unable to create a new device'),
             show: true,
           });
           return;
         } else {
           if (data.cardiac_monitoring === 'YES') {
+            if (!isDeviceSynced(res)) {
+              setCurrentStep('error');
+              handleShowModal({
+                type: 'ERROR',
+                message: getSyncErrorMessage(res),
+                show: true,
+              });
+              return;
+            }
             setCurrentStep('syncing');
             await new Promise(resolve => setTimeout(resolve, 1000));
           }
@@ -271,7 +289,7 @@ const useFormHook = (
           handleShowModal({
             type: 'SUCCESS',
             message: data.cardiac_monitoring === 'YES'
-              ? 'Sync successful or The device successfully added.'
+              ? 'Device synced successfully.'
               : 'Device created successfully',
             show: true,
           });
@@ -304,13 +322,22 @@ const useFormHook = (
           handleShowModal({
             type: 'ERROR',
             message: data.cardiac_monitoring === 'YES'
-              ? 'Sync failed. Please check the connection.'
+              ? getSyncErrorMessage(res)
               : (res?.message ?? 'Unable to update device'),
             show: true,
           });
           return;
         } else {
           if (data.cardiac_monitoring === 'YES') {
+            if (!isDeviceSynced(res)) {
+              setCurrentStep('error');
+              handleShowModal({
+                type: 'ERROR',
+                message: getSyncErrorMessage(res),
+                show: true,
+              });
+              return;
+            }
             setCurrentStep('syncing');
             await new Promise(resolve => setTimeout(resolve, 1000));
           }
@@ -319,7 +346,7 @@ const useFormHook = (
           handleShowModal({
             type: 'SUCCESS',
             message: data.cardiac_monitoring === 'YES'
-              ? 'Sync successful or The device successfully added.'
+              ? 'Device synced successfully.'
               : 'Device updated successfully',
             show: true,
           });
