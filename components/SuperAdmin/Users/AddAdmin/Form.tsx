@@ -288,7 +288,7 @@ const Form: ClientComponent = () => {
             inputClassName="bg-background"
             hookProps={{
               ...register('username'),
-              onChange: (e) => {
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 register('username').onChange(e);
                 handleUsernameChange(e.target.value);
               },
