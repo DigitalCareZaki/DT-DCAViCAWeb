@@ -104,6 +104,28 @@ export const getName = ({
   return name;
 };
 
+export const formatDateTime = (
+  value: string | number | Date,
+  timeZone: string = 'UTC'
+): string => {
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return '-';
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  }).format(date);
+};
+
 export const getProfilePicture = (uri: string | undefined | null) => {
   if (!uri) {
     return 'https://img.freepik.com/free-photo/portrait-man-laughing_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708387200&semt=ais';
