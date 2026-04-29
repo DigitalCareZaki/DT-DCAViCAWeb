@@ -1,6 +1,7 @@
 'use server';
 
-import { formatDateTime, getName } from '@init-globals';
+import { getName } from '@init-globals';
+import LocalDateTime from '../../DateTime/LocalDateTime';
 
 import { ServerTable } from '@common';
 
@@ -38,7 +39,7 @@ const Render = ({ data }: { data: PatientReadingRange[] }) =>
         })}
       </td>
       <td className="px-6 py-4">
-        {formatDateTime(item.created_at)}
+        <LocalDateTime value={item.created_at} />
       </td>
     </tr>
   ));
