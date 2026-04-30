@@ -64,6 +64,7 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
       // the original numeric date/time components (year, month, day, hour, min)
       // This avoids browser timezone conversion showing +offset hours.
 
+      console.log('getCalendar data >>>>', data);
 
       const incoming = data.data;
       if (incoming) {
@@ -86,12 +87,14 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
 
         setSlotP(processed as SlotParent);
 
+        // Set initial selectedMonth to the first available month
         if (processed?.startTime) {
           const firstMonth = new Date(processed.startTime).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
           setSelectedMonth(firstMonth);
         }
       } else {
         setSlotP(data.data);
+        setSelectedMonth(''); // Reset month if no data
       }
     });
   }, [selectedUserId]);
@@ -123,19 +126,38 @@ const Booking: ClientComponentProps<BookingProps> = ({ handleSelectDate, selecte
   const getAvailableMonths = () => {
     if (!slotP?.startTime || !slotP?.endTime) return [];
 
-    const months: string[] = [];
+    const months: { label: string; year: number; month: number }[] = [];
     const currentDate = new Date(slotP.startTime);
     const endDate = new Date(slotP.endTime);
 
-    while (currentDate <= endDate) {
-      const monthKey = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      if (!months.includes(monthKey)) {
-        months.push(monthKey);
-      }
+    // First, add the starting month
+    let year = currentDate.getFullYear();
+    let month = currentDate.getMonth();
+    let monthLabel = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    months.push({ label: monthLabel, year, month });
+
+    // Then loop through each subsequent month until we reach or pass endDate
+    while (true) {
+      // Move to the first day of the next month
+      currentDate.setDate(1);
       currentDate.setMonth(currentDate.getMonth() + 1);
+
+      // If we've gone past the end date, stop
+      if (currentDate > endDate) {
+        break;
+      }
+
+      year = currentDate.getFullYear();
+      month = currentDate.getMonth();
+      monthLabel = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      // Check if this month is already in the list (shouldn't happen, but just in case)
+      if (!months.some(m => m.year === year && m.month === month)) {
+        months.push({ label: monthLabel, year, month });
+      }
     }
 
-    return months;
+    return months.map(m => m.label);
   };
 
   // Filter days to show only selected month

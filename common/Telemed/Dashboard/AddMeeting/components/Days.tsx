@@ -45,15 +45,13 @@ const Days: ClientComponentProps<DaysProps> = ({ onSelect, selected, startDate, 
         data: processedDays.map((el) => ({ value: el })),
       });
 
-
       setDays(processedDays);
 
       // Group days by month
       const grouped = groupDaysByMonth(processedDays);
-
       setGroupedDays(grouped);
     }
-  }, [selectedMonth, processedDays]); // Simplified dependencies
+  }, [selectedMonth, processedDays, filteredDays]); // Added filteredDays to dependencies
 
   const groupDaysByMonth = (dates: Date[]) => {
     const groups: { month: string; dates: Date[] }[] = [];
@@ -119,20 +117,22 @@ const Days: ClientComponentProps<DaysProps> = ({ onSelect, selected, startDate, 
         ref={scrollRef}
         className="hidescrollbar relative flex w-[90%] gap-6 overflow-y-hidden overflow-x-scroll rounded-full p-2"
       >
-        {selectedMonth && filteredDays ? (
-          // Show filtered days for selected month
-          days.map((el) => (
-            <Day
-              key={el.getTime()}
-              value={el}
-              onSelect={onSelect}
-              selected={selected}
-            />
-          ))
+        {selectedMonth && filteredDays && filteredDays.length > 0 ? (
+          // Show filtered days for selected month in a horizontal layout
+          <div className="flex gap-2">
+            {days.map((el) => (
+              <Day
+                key={el.getTime()}
+                value={el}
+                onSelect={onSelect}
+                selected={selected}
+              />
+            ))}
+          </div>
         ) : (
-          // Show all days grouped by month
+          // Show all days grouped by month in a horizontal layout
           groupedDays.map((group, groupIndex) => (
-            <div key={groupIndex} className="flex flex-col items-center gap-2">
+            <div key={groupIndex} className="flex flex-col items-center gap-2 shrink-0">
               {/* Month Header */}
               <div className="flex gap-1 rounded-full bg-emerald-500 p-2 px-4 text-xs text-fuchsia-50">
                 <span className='text-lg font-semibold'>
