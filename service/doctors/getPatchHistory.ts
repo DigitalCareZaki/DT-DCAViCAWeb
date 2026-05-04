@@ -14,25 +14,38 @@ async function getPatchHistory(patchSn: string, userName: string): Promise<GetPa
     });
 
     const data = await res.json();
+    console.log('Device Usage History API response:', {
+        status: res.status,
+        ok: res.ok,
+        params: Object.fromEntries(params.entries()),
+        data,
+    });
+
+    if (!res.ok) {
+        return {
+            success: false,
+            data: [],
+        };
+    }
 
     let historyList: any[] = [];
     if (Array.isArray(data)) {
         historyList = data;
-    } else if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+    } else if (data?.title && data?.startTime) {
         historyList = [data];
     }
 
-    const mappedData = historyList.map((item: any) => ({
-        deviceId: item.title,
-        timeAssigned: item.startTime,
-        timeRemoved: item.active ? null : item.endTime,
-        duration: item.durationHuman,
-    }));
+    const mappedData = historyList
+        .filter((item: any) => item?.title && item?.startTime)
+        .map((item: any) => ({
+            deviceId: item.title,
+            timeAssigned: item.startTime,
+            timeRemoved: item.active ? null : item.endTime,
+            duration: item.durationHuman,
+        }));
 
     return {
-        // If we have mapped data, consider it a success regardless of status code, 
-        // as the API might be returning data with a non-standard success code or we want to show partial data.
-        success: res.ok || mappedData.length > 0,
+        success: true,
         data: mappedData,
     };
 }
