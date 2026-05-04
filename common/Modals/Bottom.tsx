@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 
 import { BiHappy as BiSolidHappy } from '@react-icons/all-files/bi/BiHappy';
+import { BiErrorCircle as BiSolidErrorCircle } from '@react-icons/all-files/bi/BiErrorCircle';
 import { ImSad2 as TbMoodSadDizzy } from '@react-icons/all-files/im/ImSad2';
 
 import { showModalReducer } from '@slice';
@@ -40,6 +41,7 @@ const ModalBottom: ClientComponent = () => {
   const RenderIcon = {
     SUCCESS: <BiSolidHappy size={20} />,
     ERROR: <TbMoodSadDizzy size={20} />,
+    WARNING: <BiSolidErrorCircle size={20} />,
   };
 
   return (
@@ -63,10 +65,12 @@ const ModalBottom: ClientComponent = () => {
             modal.type === 'ERROR' &&
             'bg-rose-500/50 text-rose-900 shadow-rose-500/30',
             modal.type === 'SUCCESS' &&
-            'bg-emerald-500/50 text-emerald-900 shadow-emerald-500/30'
+            'bg-emerald-500/50 text-emerald-900 shadow-emerald-500/30',
+            modal.type === 'WARNING' &&
+            'bg-amber-400/50 text-amber-950 shadow-amber-500/30'
           )}
         >
-          {RenderIcon[modal.type as 'SUCCESS']}
+          {RenderIcon[modal.type as keyof typeof RenderIcon]}
           <span className="max-w-60 truncate">{modal.message}</span>
         </motion.div>
       )}

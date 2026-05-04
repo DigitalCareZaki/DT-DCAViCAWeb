@@ -117,7 +117,7 @@ const useFormHook = (
 
   const getSyncErrorMessage = (res: any) => {
     const backendMessage = res?.message?.toString()?.trim();
-    return backendMessage || 'Sync failed. Device already exists in system.';
+    return backendMessage;
   };
 
   const isDeviceSynced = (res: any) => {
@@ -273,12 +273,15 @@ const useFormHook = (
         } else {
           if (data.cardiac_monitoring === 'YES') {
             if (!isDeviceSynced(res)) {
-              setCurrentStep('error');
               handleShowModal({
-                type: 'ERROR',
-                message: getSyncErrorMessage(res),
+                type: 'SUCCESS',
+                message: `Device created.`,
                 show: true,
               });
+              setCurrentStep('success');
+              setTimeout(() => {
+                router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+              }, 2000);
               return;
             }
             setCurrentStep('syncing');
@@ -330,12 +333,15 @@ const useFormHook = (
         } else {
           if (data.cardiac_monitoring === 'YES') {
             if (!isDeviceSynced(res)) {
-              setCurrentStep('error');
               handleShowModal({
-                type: 'ERROR',
-                message: getSyncErrorMessage(res),
+                type: 'SUCCESS',
+                message: `Device updated`,
                 show: true,
               });
+              setCurrentStep('success');
+              setTimeout(() => {
+                router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+              }, 2000);
               return;
             }
             setCurrentStep('syncing');
