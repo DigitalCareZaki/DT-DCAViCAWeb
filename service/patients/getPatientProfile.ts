@@ -10,7 +10,10 @@ async function getPatientProfile(
 ): Promise<GetPatientProfile> {
 
   const res = await fetch(
-    `/api/v1/web/${userType}/patients/profile/${id}`
+    `/api/v1/web/${userType}/patients/profile/${id}`,
+    {
+      cache: 'no-store',
+    }
   );
 
   const data = await res.json();

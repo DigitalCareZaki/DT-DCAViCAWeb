@@ -33,7 +33,13 @@ export interface SelectorProps {
 
 export type UseFormProps = [
   register: UseFormRegister<PatientProps>,
-  onSubmit: (e?: BaseSyntheticEvent<object, any, any> | undefined) => void,
+  onSubmit: (e?: BaseSyntheticEvent<object, any, any> | undefined) => Promise<
+    | {
+        success: boolean;
+        updatedData?: PatientProfileData;
+      }
+    | void
+  >,
   FieldErrors<PatientProps>,
   loading: boolean,
   error: string,

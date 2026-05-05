@@ -2,7 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { FaTransgender } from '@react-icons/all-files/fa/FaTransgender';
 import { FaQuestion } from '@react-icons/all-files/fa/FaQuestion';
@@ -13,6 +14,8 @@ import { MdTitle } from '@react-icons/all-files/md/MdTitle';
 import { InputBasic, ButtonPrimary, DropdownSecondary } from '@common';
 import { getProfilePicture } from '@init-globals';
 import { useImagePicker } from '@clienthooks';
+import { getUser } from '@actions';
+import { setUserReducer } from '@slice';
 
 import useForm from './useForm';
 
@@ -20,7 +23,7 @@ import type { ClientComponentProps, PatientProfileData } from '@types';
 
 const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
   const router = useRouter(); // Initialize the router here
-  const [profileData, setProfileData] = useState<PatientProfileData>(data);
+  const dispatch = useDispatch();
   const [
     register,
     onSubmit,
@@ -31,7 +34,19 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     selectors,
     handleFilePicker,
     setSelectors,
-  ] = useForm(profileData);
+  ] = useForm(data);
+
+  useEffect(() => {
+    const loadFreshUser = async () => {
+      const freshUser = await getUser();
+      if (freshUser) {
+        dispatch(setUserReducer({ user: freshUser as any }));
+      }
+    };
+
+    void loadFreshUser();
+  }, [dispatch]);
+
 
   // Define the expected result type from onSubmit
   type SubmitResult = {
@@ -44,12 +59,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     e.preventDefault();
     const result = await (onSubmit(e) as unknown as Promise<SubmitResult | void>);
     if (result && result.success && result.updatedData) {
-      setProfileData(result.updatedData);
-      // Update selectors with new profile picture URI
-      setSelectors((prev) => ({
-        ...prev,
-        profilePicture: result.updatedData?.uri || '',
-      }));
+      router.push('/patient');
     }
   };
 
