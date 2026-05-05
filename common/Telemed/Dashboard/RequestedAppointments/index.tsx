@@ -21,7 +21,7 @@ const RequestedAppointments = async ({ pending }: RequestedAppointmentsProps) =>
   // Transform the data to ensure appointment ID is properly passed
   const transformedData = res.data.map((item: any) => ({
     ...item,
-    id: item.appointment?.id, // Use appointment ID as the main id
+    id: item.appointment?.id || item.id, // Use appointment ID as the main id
   }));
 
   return (
