@@ -62,9 +62,9 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
   const onSubmit = (e?: BaseSyntheticEvent<object, any, any>) =>
     new Promise<
       | {
-          success: boolean;
-          updatedData?: PatientProfileData;
-        }
+        success: boolean;
+        updatedData?: PatientProfileData;
+      }
       | void
     >((resolve) => {
       const onValid = async (data: PatientProps) => {
