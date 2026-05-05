@@ -84,12 +84,12 @@ const Appointment: ClientComponentProps<Appointment> = ({
   const handleAccept = useCallback(
     async (props = 'ACTIVE') => {
       try {
-        if (user.role !== 'DOCTOR') return;
+        if (user.role !== 'DOCTOR' || !appointment || !id) return;
 
         setLoading(true);
 
         const data = {
-          id,
+          id: appointment.id,
           status: props,
         };
 
@@ -112,7 +112,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
         setLoading(false);
       }
     },
-    [handleShowModal, id, user.role]
+    [handleShowModal, appointment, user.role, id]
   );
 
   const handleToggleOptions = () => {
