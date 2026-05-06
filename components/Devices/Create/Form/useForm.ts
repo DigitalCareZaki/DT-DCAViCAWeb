@@ -129,6 +129,11 @@ const useFormHook = (
     return res?.data?.vivalink_synced === true;
   };
 
+  const isEcgMonitoringOption = (value?: string | null) => {
+    const normalizedValue = value?.toUpperCase();
+    return normalizedValue === 'YES' || normalizedValue === 'NO' || normalizedValue === 'LATER';
+  };
+
   // Function to get loading step information
   const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
     const steps: Record<LoadingStep, LoadingStepInfo> = {
@@ -383,7 +388,7 @@ const useFormHook = (
   useEffect(() => {
     if (prevData) {
       const isEcgWithMonitoring =
-        (prevData.cardiac_monitoring?.toUpperCase() === 'YES' || prevData.cardiac_monitoring?.toUpperCase() === 'LATER') && prevData.category === 'ECG';
+        isEcgMonitoringOption(prevData.cardiac_monitoring) && prevData.category === 'ECG';
       const serialNumber = isEcgWithMonitoring && prevData.serial_number && !prevData.serial_number.startsWith('ECGRec_')
         ? `ECGRec_${prevData.serial_number}`
         : prevData.serial_number || '';
