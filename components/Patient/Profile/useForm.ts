@@ -28,12 +28,15 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
+  const initialGender = user?.gender ?? data?.gender;
+  const initialTitle = user?.title ?? data?.title;
+
   const [selectors, setSelectors] = useState<SelectorProps>({
     gender: {
-      title: data?.gender,
+      title: initialGender,
     },
     title: {
-      title: data.title,
+      title: initialTitle,
     },
     profilePicture: data?.uri || '',
   });
@@ -71,14 +74,17 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
         try {
           setLoading(true);
 
+          const selectedGender = selectors.gender.title ?? data.gender;
+          const selectedTitle = selectors.title.title ?? data.title;
+
           const payload = {
             first_name: data.first_name,
             middle_name: data.middle_name,
             last_name: data.last_name,
             uri: data.uri,
             phone_number: data.phone_number,
-            gender: data.gender,
-            title: data.title,
+            gender: selectedGender,
+            title: selectedTitle,
             weight: data.weight,
             height: data.height,
           };
@@ -122,6 +128,9 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
               first_name: data.first_name,
               middle_name: data.middle_name,
               last_name: data.last_name,
+              phone_number: data.phone_number,
+              gender: selectedGender,
+              title: selectedTitle,
               uri: updatedUri,
             };
 
@@ -140,6 +149,8 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
               updatedData: {
                 ...data,
                 uri: updatedUri,
+                gender: selectedGender,
+                title: selectedTitle,
                 patient: {
                   emr: data.emr,
                   height: data.height,
@@ -177,7 +188,10 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
   useEffect(() => {
     if (!data?.created_at) return;
 
-    const hydrationKey = `${data?.updated_at ?? ''}-${data?.uri ?? ''}-${user?.uri ?? ''}-${user?.first_name ?? ''}-${user?.last_name ?? ''}`;
+    const currentGender = user?.gender ?? data.gender;
+    const currentTitle = user?.title ?? data.title;
+
+    const hydrationKey = `${data?.updated_at ?? ''}-${data?.uri ?? ''}-${user?.uri ?? ''}-${user?.first_name ?? ''}-${user?.last_name ?? ''}-${currentGender ?? ''}-${currentTitle ?? ''}`;
     if (lastHydratedRef.current === hydrationKey) return;
     lastHydratedRef.current = hydrationKey;
 
@@ -197,6 +211,8 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
       setValue('middle_name', user.middle_name ?? data.middle_name ?? '');
       setValue('last_name', user.last_name ?? data.last_name ?? '');
       setValue('phone_number', user.phone_number ?? data.phone_number ?? '');
+      setValue('gender', currentGender as any);
+      setValue('title', currentTitle as any);
       setValue('uri', user.uri ?? data.uri ?? '');
     }
 
@@ -207,8 +223,8 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
 
     setSelectors((prev) => ({
       ...prev,
-      gender: { title: data.gender },
-      title: { title: data.title },
+      gender: { title: currentGender },
+      title: { title: currentTitle },
       profilePicture: user?.uri || data.uri || '',
     }));
   }, [data, user, setValue]);

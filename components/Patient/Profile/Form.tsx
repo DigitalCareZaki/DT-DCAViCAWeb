@@ -59,6 +59,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     e.preventDefault();
     const result = await (onSubmit(e) as unknown as Promise<SubmitResult | void>);
     if (result && result.success && result.updatedData) {
+      router.refresh();
       router.push('/patient');
     }
   };
