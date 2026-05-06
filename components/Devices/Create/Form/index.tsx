@@ -50,7 +50,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     []
   );
 
-  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo] =
+  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo, dismissLoadingOverlay] =
     useForm(data, categories);
 
   const handleSelectField = (field: string, value: any) => {
@@ -153,6 +153,16 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
               );
             })}
           </div>
+
+          {currentStep === 'error' && (
+            <button
+              type="button"
+              onClick={dismissLoadingOverlay}
+              className="mt-2 h-12 min-w-36 rounded-lg bg-blue-600 px-8 text-base font-medium text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Close
+            </button>
+          )}
         </div>
       </div>
     );

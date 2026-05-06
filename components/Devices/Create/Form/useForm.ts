@@ -115,6 +115,11 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  const dismissLoadingOverlay = useCallback(() => {
+    setLoading(false);
+    setCurrentStep('idle');
+  }, []);
+
   const getSyncErrorMessage = (res: any) => {
     const backendMessage = res?.message?.toString()?.trim();
     return backendMessage;
@@ -406,7 +411,7 @@ const useFormHook = (
     return () => { };
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo];
+  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo, dismissLoadingOverlay];
 };
 
 export default useFormHook;

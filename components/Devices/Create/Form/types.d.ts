@@ -73,6 +73,7 @@ export type UseFormProps = [
   handleSelectSite: (id: string) => void,
   currentStep: LoadingStep,
   getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
+  dismissLoadingOverlay: () => void,
 ];
 
 export interface CreateDeviceProps {
