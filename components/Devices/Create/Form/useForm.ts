@@ -121,12 +121,25 @@ const useFormHook = (
   }, []);
 
   const getSyncErrorMessage = (res: any) => {
-    const backendMessage = res?.message?.toString()?.trim();
-    return backendMessage;
+    const vivalinkError =
+      res?.data?.vivalinkSync?.error?.toString?.()?.trim?.() ||
+      res?.data?.vivalink_sync?.error?.toString?.()?.trim?.();
+    const backendMessage = res?.message?.toString?.()?.trim?.();
+
+    return vivalinkError || backendMessage || 'Unable to sync device with Vivalink.';
   };
 
   const isDeviceSynced = (res: any) => {
-    return res?.data?.vivalink_synced === true;
+    return (
+      res?.data?.vivalink_synced === true ||
+      res?.data?.vivalinkSync?.success === true ||
+      res?.data?.vivalink_sync?.success === true
+    );
+  };
+
+  const isEcgMonitoringOption = (value?: string | null) => {
+    const normalizedValue = value?.toUpperCase();
+    return normalizedValue === 'YES' || normalizedValue === 'NO' || normalizedValue === 'LATER';
   };
 
   const isEcgMonitoringOption = (value?: string | null) => {
@@ -283,15 +296,12 @@ const useFormHook = (
         } else {
           if (data.cardiac_monitoring === 'YES') {
             if (!isDeviceSynced(res)) {
+              setCurrentStep('error');
               handleShowModal({
-                type: 'SUCCESS',
-                message: `Device created.`,
+                type: 'ERROR',
+                message: getSyncErrorMessage(res),
                 show: true,
               });
-              setCurrentStep('success');
-              setTimeout(() => {
-                router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
-              }, 2000);
               return;
             }
             setCurrentStep('syncing');
@@ -343,15 +353,12 @@ const useFormHook = (
         } else {
           if (data.cardiac_monitoring === 'YES') {
             if (!isDeviceSynced(res)) {
+              setCurrentStep('error');
               handleShowModal({
-                type: 'SUCCESS',
-                message: `Device updated`,
+                type: 'ERROR',
+                message: getSyncErrorMessage(res),
                 show: true,
               });
-              setCurrentStep('success');
-              setTimeout(() => {
-                router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
-              }, 2000);
               return;
             }
             setCurrentStep('syncing');
