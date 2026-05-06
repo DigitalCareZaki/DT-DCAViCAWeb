@@ -19,10 +19,15 @@ const RequestedAppointments = async ({ pending }: RequestedAppointmentsProps) =>
   if (!res.success) return <></>;
 
   // Transform the data to ensure appointment ID is properly passed
-  const transformedData = res.data.map((item: any) => ({
-    ...item,
-    id: item.appointment?.id || item.id, // Use appointment ID as the main id
-  }));
+  const transformedData = res.data
+    .filter((item: any) => {
+      const status = item?.appointment?.status ?? item?.status;
+      return !pending || status?.toString().toUpperCase() === 'PENDING';
+    })
+    .map((item: any) => ({
+      ...item,
+      id: item.appointment?.id || item.id, // Use appointment ID as the main id
+    }));
 
   return (
     <div className="relative flex w-full flex-col gap-4 rounded-lg bg-white px-4 py-8 sm:py-10 sm:px-6 lg:px-8">

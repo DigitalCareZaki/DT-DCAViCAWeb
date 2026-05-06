@@ -8,6 +8,7 @@ import MyAppointments from './MyAppointments';
 import MyAppointmentsSkeleton from './MyAppointments/Sekeleton';
 import RequestedAppointments from './RequestedAppointments';
 import RequestedAppointmentsSkeleton from './RequestedAppointments/Skeleton';
+import RefreshOnRestore from './RefreshOnRestore';
 import { getUser } from '@actions';
 import { getTelemedCardsNo } from '@service';
 import type { ServerComponent } from '@types';
@@ -26,6 +27,7 @@ const Dashboard: ServerComponent = async () => {
 
   return (
     <div className="hidescrollbar flex !h-full w-full flex-col gap-6 !overflow-y-scroll px-4">
+      <RefreshOnRestore />
       {/* Conditionally render PrimaryHeader only if user is defined */}
       {/* {user ? (
         <PrimaryHeader user={user as any} />

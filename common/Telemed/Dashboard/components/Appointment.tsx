@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
@@ -58,6 +59,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
   id,
 }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [user] = useUser();
 
   const [statusState, setStatusState] = useState<string>(status ?? '');
@@ -82,7 +84,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleAccept = useCallback(
-    async (props = 'ACTIVE') => {
+    async (props = 'ACTIVE', redirectToMeetings = false) => {
       try {
         if (user.role !== 'DOCTOR' || !appointment || !id) return;
 
@@ -93,7 +95,8 @@ const Appointment: ClientComponentProps<Appointment> = ({
           status: props,
         };
 
-        await updateTelemedAction(btoa(JSON.stringify(data)));
+        const res = await updateTelemedAction(btoa(JSON.stringify(data)));
+        if (!res.success) throw new Error(res.message ?? 'Something went wrong');
 
         handleShowModal({
           show: true,
@@ -102,6 +105,9 @@ const Appointment: ClientComponentProps<Appointment> = ({
         });
         setStatusState(props);
         setShowOptions(false);
+        if (redirectToMeetings) {
+          router.replace(`/${user.role.toLowerCase()}/telemed/meetings`);
+        }
       } catch (err: any) {
         handleShowModal({
           show: true,
@@ -112,7 +118,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
         setLoading(false);
       }
     },
-    [handleShowModal, appointment, user.role, id]
+    [handleShowModal, appointment, router, user.role, id]
   );
 
   const handleToggleOptions = () => {
@@ -298,7 +304,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
             statusState === 'PENDING' && 'hover:shadow-xl',
             user.role !== 'DOCTOR' && 'opacity-50 cursor-not-allowed'
           )}
-          onClick={() => handleAccept('ACTIVE')}
+          onClick={() => handleAccept('ACTIVE', true)}
           disabled={user.role !== 'DOCTOR'}
         >
           {loading ? (
