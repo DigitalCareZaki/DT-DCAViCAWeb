@@ -490,8 +490,16 @@ const Form: React.FC = () => {
             error={!!errors.site?.message}
             errorMessage={errors.site?.message || '&'}
             selected={selectors.site.title}
-            disabled={!selectors.avicardia_monitoring.title}
-            disableMessage={!selectors.avicardia_monitoring.title ? 'Please select AViCardia Monitoring option first' : undefined}
+            disabled={!selectors.avicardia_monitoring.title || !selectors.branch.id || sites.loading}
+            disableMessage={
+              !selectors.avicardia_monitoring.title
+                ? 'Please select AViCardia Monitoring option first'
+                : !selectors.branch.id
+                  ? 'Please select branch first'
+                  : sites.loading
+                    ? 'Loading cardiac monitoring sites...'
+                    : undefined
+            }
           >
             <ClientGenerator data={sites.data} handleSelect={handleSelect}>
               <Site />
