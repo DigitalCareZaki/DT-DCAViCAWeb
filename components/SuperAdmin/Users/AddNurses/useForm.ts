@@ -181,7 +181,18 @@ const useFormHook = (): useFormProps => {
 
   const handleSelect =
     (type: string) => (title: string | undefined, id: string | undefined) => {
-      setSelectors((prev) => ({ ...prev, [type]: { title, id } }));
+      setSelectors((prev) => {
+        const updated = { ...prev, [type]: { title, id } };
+
+        if (type === 'branch') {
+          updated.department = { title: undefined, id: undefined };
+          updated.site = { title: undefined, id: undefined };
+          setValue('department', '');
+          setValue('site', '');
+        }
+
+        return updated;
+      });
       setValue(type as any, id || title);
       clearErrors(type as any);
     };
@@ -258,43 +269,38 @@ const useFormHook = (): useFormProps => {
       });
     })();
 
+  }, []);
+
+  useEffect(() => {
+    if (!selectors.branch.id) {
+      setSites({
+        loading: false,
+        data: [],
+      });
+      return;
+    }
+
     (async () => {
       setSites({
         loading: true,
         data: [],
       });
 
-      const res = await getSites(1, 1000);
+      try {
+        const res = await getSites(1, 1000, selectors.branch.id);
 
-      if (res.success && res.data) {
         setSites({
           loading: false,
-          data: res.data.data,
+          data: res.success && res.data ? res.data.data : [],
         });
-      } else {
+      } catch (error) {
         setSites({
           loading: false,
           data: [],
         });
       }
     })();
-
-    (async () => {
-      setDepartments({
-        loading: true,
-        data: [],
-      });
-
-      const res = await getOrganizationDepartments(
-        selectors.branch.id as string
-      );
-
-      setDepartments({
-        loading: false,
-        data: res.data,
-      });
-    })();
-  }, []);
+  }, [selectors.branch.id]);
 
   useEffect(() => {
     if (!selectors.branch.id) return;
