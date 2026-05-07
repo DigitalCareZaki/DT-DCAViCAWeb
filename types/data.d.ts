@@ -1080,5 +1080,17 @@ export interface SiteProps {
   description: string;
   countryCode: string;
   address: string;
+  branchId?: string;
+  branch?: {
+    id: string;
+    name: string;
+    email?: string;
+    phone_number?: string;
+    location_id?: string;
+    organization_id?: string;
+    created_by?: string;
+    created_at?: string;
+    updated_at?: string;
+  };
   created_at: Date;
 }
