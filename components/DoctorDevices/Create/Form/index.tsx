@@ -158,6 +158,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         loading={loading}
       />
       <ButtonPrimary
+        type="button"
         title={'Close'}
         name={'Close'}
         onClick={() => router.back()}
