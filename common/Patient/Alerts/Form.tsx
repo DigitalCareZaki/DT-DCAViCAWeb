@@ -97,8 +97,8 @@ const Form: ClientComponent = () => {
                     </>
                   </DropdownSecondary>
                 </div>
-                <div className="flex w-full items-start gap-2">
-                  <div className="w-1/2">
+                <div className="grid w-full grid-cols-2 gap-2">
+                  <div className="min-w-0">
                     <InputBasic
                       label={`Low ${selectors.type === 'BLOODPRESSURE' ? '(Systolic)' : ''}`}
                       placeholder="Enter low value"
@@ -107,12 +107,14 @@ const Form: ClientComponent = () => {
                       title="Low value"
                       icon="FaPercentage"
                       defaultBorder
+                      inputWrapperClassName="px-2"
+                      inputClassName="w-0 flex-1 px-2 text-xs md:text-sm"
                       hookProps={register('range_low_1')}
                       error={!!errors.range_low_1?.message?.length}
                       errorMessage={errors.range_low_1?.message}
                     />
                   </div>
-                  <div className="w-1/2">
+                  <div className="min-w-0">
                     <InputBasic
                       label={`High ${selectors.type === 'BLOODPRESSURE' ? '(Systolic)' : ''}`}
                       placeholder="Enter high value"
@@ -121,6 +123,8 @@ const Form: ClientComponent = () => {
                       title="High value"
                       icon="FaPercentage"
                       defaultBorder
+                      inputWrapperClassName="px-2"
+                      inputClassName="w-0 flex-1 px-2 text-xs md:text-sm"
                       hookProps={register('range_high_1')}
                       error={!!errors.range_high_1?.message?.length}
                       errorMessage={errors.range_high_1?.message}
@@ -128,8 +132,8 @@ const Form: ClientComponent = () => {
                   </div>
                 </div>
                 {selectors.type === 'BLOODPRESSURE' && (
-                  <div className="flex w-full items-start gap-2">
-                    <div className="w-1/2">
+                  <div className="grid w-full grid-cols-2 gap-2">
+                    <div className="min-w-0">
                       <InputBasic
                         label={`Low ${selectors.type === 'BLOODPRESSURE' ? '(Diastolic)' : ''}`}
                         placeholder="Enter low value"
@@ -138,12 +142,14 @@ const Form: ClientComponent = () => {
                         title="Low value"
                         icon="IoTimerSharp"
                         defaultBorder
+                        inputWrapperClassName="px-2"
+                        inputClassName="w-0 flex-1 px-2 text-xs md:text-sm"
                         hookProps={register('range_low_2')}
                         error={!!errors.range_low_2?.message?.length}
                         errorMessage={errors.range_low_2?.message}
                       />
                     </div>
-                    <div className="w-1/2">
+                    <div className="min-w-0">
                       <InputBasic
                         label={`High ${selectors.type === 'BLOODPRESSURE' ? '(Diastolic)' : ''}`}
                         placeholder="Enter high value"
@@ -152,6 +158,8 @@ const Form: ClientComponent = () => {
                         title="High value"
                         icon="IoTimerSharp"
                         defaultBorder
+                        inputWrapperClassName="px-2"
+                        inputClassName="w-0 flex-1 px-2 text-xs md:text-sm"
                         hookProps={register('range_high_2')}
                         error={!!errors.range_high_2?.message?.length}
                         errorMessage={errors.range_high_2?.message}
