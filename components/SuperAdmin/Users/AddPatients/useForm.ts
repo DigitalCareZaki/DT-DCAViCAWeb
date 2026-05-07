@@ -337,6 +337,13 @@ const useFormHook = (): useFormProps => {
     (type: string) => (title: string | undefined, id: string | undefined) => {
       setSelectors((prev) => {
         const updated = { ...prev, [type]: { title, id } };
+        // Branch controls which cardiac monitoring sites are available.
+        if (type === 'branch') {
+          updated.site = { title: undefined, id: undefined };
+          updated.doctor = { title: undefined, id: undefined };
+          setValue('site', '');
+          setValue('doctor', '');
+        }
         // If site changes, reset doctor
         if (type === 'site') {
           updated.doctor = { title: undefined, id: undefined };
@@ -431,19 +438,28 @@ const useFormHook = (): useFormProps => {
       }
     })();
 
+  }, []);
+
+  useEffect(() => {
+    if (!selectors.branch.id) {
+      setSites({
+        loading: false,
+        data: [],
+      });
+      return;
+    }
+
     (async () => {
       setSites({
         loading: true,
         data: [],
       });
       try {
-        const res = await getSites(1, 1000);
-        if (res.success && res.data) {
-          setSites({
-            loading: false,
-            data: res.data.data,
-          });
-        }
+        const res = await getSites(1, 1000, selectors.branch.id);
+        setSites({
+          loading: false,
+          data: res.success && res.data ? res.data.data : [],
+        });
       } catch (error) {
         setSites({
           loading: false,
@@ -451,7 +467,7 @@ const useFormHook = (): useFormProps => {
         });
       }
     })();
-  }, []);
+  }, [selectors.branch.id]);
 
   useEffect(() => {
     if (!selectors.site.id) return;
