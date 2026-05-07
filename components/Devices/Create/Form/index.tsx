@@ -356,6 +356,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-xl"
       />
       <ButtonPrimary
+        type="button"
         title={'Close'}
         name={'Close'}
         onClick={() => router.back()}
