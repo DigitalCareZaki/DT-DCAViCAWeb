@@ -107,6 +107,7 @@ const SitesClient = () => {
                                     {/* <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">ID</th>
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Vivalink Site ID</th> */}
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Name</th>
+                                    <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Branch Name</th>
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Description</th>
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Country Code</th>
                                     <th className="px-3 py-2 sm:px-6 sm:py-4 md:px-6 md:py-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xls">Address</th>
@@ -119,6 +120,7 @@ const SitesClient = () => {
                                         {/* <td className="px-6 py-4">{site.id}</td>
                                         <td className="px-6 py-4">{site.vivalinkSiteId}</td> */}
                                         <td className="px-6 py-4">{site.name}</td>
+                                        <td className="px-6 py-4">{site.branch?.name || '-'}</td>
                                         <td className="px-6 py-4">{site.description}</td>
                                         <td className="px-6 py-4">{site.countryCode}</td>
                                         <td className="px-6 py-4">{site.address}</td>
