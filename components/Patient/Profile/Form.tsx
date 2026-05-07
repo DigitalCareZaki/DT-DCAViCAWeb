@@ -402,12 +402,14 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
         <ButtonPrimary
           title="Save"
           name="Save"
+          type="submit"
           loading={loading}
         // Add onClick or other props if needed
         />
         <ButtonPrimary
           title="Close"
           name="Close"
+          type="button"
           onClick={handleClose} // Navigates to PatientLayout on click
         />
       </div>
