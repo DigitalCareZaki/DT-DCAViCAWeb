@@ -165,14 +165,18 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
           handleShowModal({
             show: true,
             type: 'ERROR',
-            message: 'Cannot update profile right now',
+            message: res?.message || 'Cannot update profile right now',
           });
           resolve({ success: false });
         } catch (err) {
+          const message = err instanceof Error
+            ? err.message
+            : 'OOPS Something went wrong';
+
           handleShowModal({
             show: true,
             type: 'ERROR',
-            message: 'OOPS Something went wrong',
+            message,
           });
           resolve({ success: false });
         } finally {

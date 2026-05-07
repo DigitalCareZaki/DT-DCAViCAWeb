@@ -23,6 +23,8 @@ async function updateDoctorProfile(
 
     const body = await res.json();
 
+    console.log('body >>>>>', body);
+
     if (res.status !== 200) {
       throw new Error(body?.message);
     }
