@@ -31,7 +31,7 @@ const HeaderFilter = () => {
   };
 
   return (
-    <div className="relative w-40">
+    <div className="relative z-50 w-40">
       <ButtonPrimary
         onMouseEnter={onFocus}
         onMouseLeave={onBlur}
@@ -47,19 +47,19 @@ const HeaderFilter = () => {
           <motion.div
             initial={{
               opacity: 0,
-              top: '30px',
+              top: '36px',
             }}
             animate={{
               opacity: 1,
-              top: '64px',
+              top: '48px',
             }}
             exit={{
-              top: '80px',
+              top: '56px',
               opacity: 0,
             }}
             onMouseEnter={onFocus}
             onMouseLeave={onBlur}
-            className="absolute top-16 z-10 flex h-80 w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
+            className="absolute right-0 z-50 flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
           >
             <Link
               passHref
