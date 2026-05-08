@@ -5,6 +5,7 @@ import { getUser } from '@actions';
 
 import UpdateStatus from './UpdateStatus';
 import Counter from './Counter';
+import LocalMeetingTime from './LocalMeetingTime';
 import { getName } from '@init-globals';
 
 import type { ServerComponentProps, TelemedDetailsProps } from '@types';
@@ -30,19 +31,7 @@ const Topbar: ServerComponentProps<
           <FaUsers size={20} />
           <div className="flex items-center gap-1">
             <span>End at</span>
-            <span>
-              {new Date(data?.start_date ?? Date()).toLocaleTimeString(
-                'en-US',
-                {
-                  localeMatcher: 'best fit',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  day: 'numeric',
-                  month: 'short',
-                  // dateStyle: 'short',
-                }
-              )}
-            </span>
+            <span><LocalMeetingTime value={data?.end_date} /></span>
           </div>
         </div>
         <div className="flex h-fit w-fit items-center justify-center gap-2 rounded-full bg-white/20 p-2 px-4 text-xs font-bold text-fuchsia-100">
