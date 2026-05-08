@@ -84,6 +84,7 @@ export const Doctor = ({
   handleSelect,
   user,
   employee_id,
+  vivalink_synced,
 }: {
   [key: string]: any;
 }) => (
@@ -98,19 +99,30 @@ export const Doctor = ({
         user?.id // Passing the USER ID inside the user object
       )
     }
-    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+    className="flex min-h-10 w-full cursor-pointer items-center justify-between gap-3 rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
   >
-    <div className="flex items-center gap-1 truncate font-medium">
-      <span>
+    <div className="flex min-w-0 items-center gap-1 truncate font-medium">
+      <span className="truncate">
         {getName({
           first_name: user?.first_name,
           middle_name: user?.middle_name,
           last_name: user?.last_name,
         })}
       </span>
-      {employee_id && <span className="font-semibold">({employee_id})</span>}
+      {employee_id && (
+        <span className="shrink-0 font-semibold">({employee_id})</span>
+      )}
     </div>
-    <IoMdMale size={18} />
+    <div className="flex shrink-0 items-center gap-2">
+      <span
+        className={`text-[11px] font-semibold ${
+          vivalink_synced ? 'text-emerald-600' : 'text-rose-600'
+        }`}
+      >
+        VL: {vivalink_synced ? 'Yes' : 'No'}
+      </span>
+      <IoMdMale size={18} />
+    </div>
   </div>
 );
 
