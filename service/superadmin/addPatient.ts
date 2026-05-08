@@ -20,6 +20,9 @@ async function addPatient(data: any): Promise<AddDataProps> {
 
     const body = await res.json();
 
+    console.log('body >>>>', body);
+
+
     if (res.status !== 201) {
       throw new Error(body?.message?.toString());
     }

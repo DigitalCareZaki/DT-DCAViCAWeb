@@ -588,9 +588,28 @@ const Form: ClientComponent = () => {
             selected={selectors.doctor.title}
             disabled={loading}
           >
-            <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
-              <Doctor />
-            </ClientGenerator>
+            {doctors.loading ? (
+              <div className="flex h-10 w-full items-center gap-2 rounded-lg bg-white p-2 px-4 text-gray-500">
+                <FaSpinner className="h-3 w-3 animate-spin" />
+                <span className="text-xs font-medium">Loading doctors...</span>
+              </div>
+            ) : selectors.site.id && doctors.data.length === 0 ? (
+              <div className="flex min-h-10 w-full items-center rounded-lg bg-white p-3 px-4 text-gray-500">
+                <span className="text-base font-medium">
+                  No doctors available for the selected site.
+                </span>
+              </div>
+            ) : !selectors.site.id ? (
+              <div className="flex min-h-10 w-full items-center rounded-lg bg-white p-3 px-4 text-gray-500">
+                <span className="text-base font-medium">
+                  Select a cardiac monitoring site first.
+                </span>
+              </div>
+            ) : (
+              <ClientGenerator data={doctors.data} handleSelect={handleSelect}>
+                <Doctor />
+              </ClientGenerator>
+            )}
           </DropdownSecondary>
         </div>
         <div className="w-1/2">
@@ -638,9 +657,8 @@ const Form: ClientComponent = () => {
             </div>
 
             <div
-              className={`relative z-40 ${
-                loading ? 'pointer-events-none opacity-50' : ''
-              }`}
+              className={`relative z-40 ${loading ? 'pointer-events-none opacity-50' : ''
+                }`}
             >
               <Datepicker
                 options={dobOptions}
