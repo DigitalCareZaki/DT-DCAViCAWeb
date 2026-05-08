@@ -48,6 +48,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
   const [syncingId, setSyncingId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
   const [syncRole, setSyncRole] = useState<'DOCTOR' | 'PATIENT' | null>(null);
+  const [syncErrorMessage, setSyncErrorMessage] = useState<string>('');
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [showProfile, setShowProfile] = useState(false);
@@ -225,6 +226,10 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
   // Progressive loading overlay component
   const ProgressiveLoadingOverlay = ({ role }: { role: string }) => {
     const stepInfo = getLoadingStepInfo(currentStep, role);
+    const description =
+      currentStep === 'error' && syncErrorMessage
+        ? syncErrorMessage
+        : stepInfo.description;
 
     return (
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/90 backdrop-blur-sm">
@@ -254,8 +259,13 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
           </h3>
 
           {/* Step Description */}
-          <p className="text-sm text-gray-600 leading-relaxed">
-            {stepInfo.description}
+          <p
+            className={`text-sm leading-relaxed ${currentStep === 'error' && syncErrorMessage
+              ? 'font-semibold text-red-600'
+              : 'text-gray-600'
+              }`}
+          >
+            {description}
           </p>
 
           {/* Progress Percentage */}
@@ -290,6 +300,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
                 setSyncingId(null);
                 setCurrentStep('idle');
                 setSyncRole(null);
+                setSyncErrorMessage('');
                 if (currentStep === 'success') {
                   setTimeout(() => window.location.reload(), 1000);
                 }
@@ -311,6 +322,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
 
       setSyncingId(user.id);
       setSyncRole(user.role);
+      setSyncErrorMessage('');
       setCurrentStep('validating');
 
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -328,16 +340,19 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
         await new Promise(resolve => setTimeout(resolve, 500));
         setCurrentStep('success');
       } else {
+        const message = res.message || 'Sync failed';
+        setSyncErrorMessage(message);
         setCurrentStep('error');
         dispatch(
           showModalReducer({
             type: 'ERROR',
-            message: res.message || 'Sync failed',
+            message,
             show: true,
           })
         );
       }
-    } catch (err) {
+    } catch (err: any) {
+      setSyncErrorMessage(err?.message || 'Sync failed. Please check the connection.');
       setCurrentStep('error');
     }
   };

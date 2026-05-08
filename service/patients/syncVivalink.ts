@@ -16,6 +16,8 @@ async function syncVivalink(id: string, role: string = 'PATIENT'): Promise<AddDa
 
         const body = await res.json();
 
+        console.log('Sync ', body);
+
         if (!res.ok || body?.success === false) {
             throw new Error(body?.message?.toString() || body?.error?.toString() || 'Sync failed');
         }
