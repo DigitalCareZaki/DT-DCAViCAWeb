@@ -343,6 +343,7 @@ const RenderTable: ClientComponentProps<RenderTableProps> = () => {
         const message = res.message || 'Sync failed';
         setSyncErrorMessage(message);
         setCurrentStep('error');
+        
       }
     } catch (err: any) {
       setSyncErrorMessage(err?.message || 'Sync failed. Please check the connection.');

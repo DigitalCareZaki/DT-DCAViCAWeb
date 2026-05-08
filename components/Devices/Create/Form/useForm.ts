@@ -137,6 +137,11 @@ const useFormHook = (
     );
   };
 
+  // const isEcgMonitoringOption = (value?: string | null) => {
+  //   const normalizedValue = value?.toUpperCase();
+  //   return normalizedValue === 'YES' || normalizedValue === 'NO' || normalizedValue === 'LATER';
+  // };
+
   const isEcgMonitoringOption = (value?: string | null) => {
     const normalizedValue = value?.toUpperCase();
     return normalizedValue === 'YES' || normalizedValue === 'NO' || normalizedValue === 'LATER';
