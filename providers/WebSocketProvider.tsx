@@ -94,7 +94,15 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
         );
       };
 
-      socket.current.on(`${user.id}:recieve_notification`, handler);
+      const notificationEvents = [
+        `${user.id}:recieve_notification`,
+        `${user.id}:receive_notification`,
+      ];
+
+      notificationEvents.forEach((event) => {
+        console.log('[WS] Listening for:', event);
+        socket.current?.on(event, handler);
+      });
 
       // Listen for inbox updates to refresh inbox list
       const inboxHandler = async () => {
@@ -114,7 +122,9 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
 
       // CLEANUP: Remove the event listener on unmount or user change
       return () => {
-        socket.current?.off(`${user.id}:recieve_notification`, handler);
+        notificationEvents.forEach((event) => {
+          socket.current?.off(event, handler);
+        });
         socket.current?.off(`${user.id}:inbox_update`, inboxHandler);
       };
     }
