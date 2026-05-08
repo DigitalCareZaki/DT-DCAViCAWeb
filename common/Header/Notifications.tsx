@@ -23,6 +23,8 @@ const Notifications: ClientComponent = () => {
   // console.log('Unread status:', unread);
 
   const timeoutRef = useRef<any | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const previousNotificationCountRef = useRef<number>(notifications.length);
   const [show, setShow] = useState<boolean>(false);
 
   const handleHide = () => setShow(false);
@@ -34,6 +36,14 @@ const Notifications: ClientComponent = () => {
       document.removeEventListener('click', handleHide);
     };
   }, []);
+
+  useEffect(() => {
+    if (notifications.length > previousNotificationCountRef.current) {
+      panelRef.current?.scrollTo({ top: 0 });
+    }
+
+    previousNotificationCountRef.current = notifications.length;
+  }, [notifications.length]);
 
   const handleOnFocus = () => setShow(true);
   const handleOnBlur = () => {
@@ -68,6 +78,7 @@ const Notifications: ClientComponent = () => {
       <AnimatePresence>
         {show && (
           <motion.div
+            ref={panelRef}
             onMouseEnter={handleOnFocus}
             onMouseLeave={handleOnBlur}
             initial={{
