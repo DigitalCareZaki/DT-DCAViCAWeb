@@ -470,7 +470,13 @@ const useFormHook = (): useFormProps => {
   }, [selectors.branch.id]);
 
   useEffect(() => {
-    if (!selectors.site.id) return;
+    if (!selectors.site.id) {
+      setDoctors({
+        loading: false,
+        data: [],
+      });
+      return;
+    }
 
     (async () => {
       setDoctors({
