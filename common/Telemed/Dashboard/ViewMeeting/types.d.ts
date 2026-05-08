@@ -3,7 +3,7 @@ export interface Props {
 }
 
 export interface CounterProps {
-  start_date: Date;
+  start_date: Date | string;
   title: string;
   description: string;
   id: string;

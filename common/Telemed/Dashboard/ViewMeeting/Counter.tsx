@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
@@ -30,22 +30,19 @@ const Counter: ClientComponentProps<CounterProps> = ({
     if (!start_date) return;
 
     const startDate = new Date(start_date);
-    const localStartDate = new Date(
-      startDate.toLocaleString('en-US', { timeZone: 'Asia/Karachi' })
-    );
 
-    const interval = setInterval(() => {
+    if (Number.isNaN(startDate.getTime())) return;
+
+    const updateCounter = () => {
       const now = new Date();
 
-      // Check if current time is greater than start date
-      if (now > localStartDate) {
+      if (now >= startDate) {
         setValue({ day: 0, hour: 0, minute: 0, seconds: 0 });
-        clearInterval(interval);
         setIsActive(true);
         return;
       }
 
-      const diff = localStartDate.getTime() - now.getTime();
+      const diff = startDate.getTime() - now.getTime();
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
@@ -60,7 +57,13 @@ const Counter: ClientComponentProps<CounterProps> = ({
         minute: minutes,
         seconds: seconds,
       });
-    }, 1000);
+
+      setIsActive(false);
+    };
+
+    updateCounter();
+
+    const interval = setInterval(updateCounter, 1000);
 
     return () => clearInterval(interval);
   }, [start_date]);
