@@ -16,7 +16,7 @@ export const setNewNotifications: SetNewNotification = (state, payload) => {
   );
 
   if (!notifications) {
-    state.notifications = [...state.notifications, payload.payload.data];
+    state.notifications = [payload.payload.data, ...state.notifications];
   }
 
   state.unread = true;
