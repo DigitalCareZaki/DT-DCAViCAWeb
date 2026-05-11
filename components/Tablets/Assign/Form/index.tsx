@@ -100,7 +100,7 @@ const Form: ClientComponent = () => {
       </div>
 
       <ButtonPrimary title="Update" name="Update" loading={loading} />
-      <ButtonPrimary title="Close" name="Close" loading={loading} onClick={() => router.back()} />
+      <ButtonPrimary type="button" title="Close" name="Close" loading={loading} onClick={() => router.back()} />
 
     </form>
   );
