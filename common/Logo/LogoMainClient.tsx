@@ -16,10 +16,10 @@ import type { LogoPrimaryProps } from './types';
 export default function LogoAvicaClient({
   variant = 'small',
   svgColor,
-  organizationName,
-  organizationURI,
 }: LogoPrimaryProps): JSX.Element {
   const [{ type: userType }] = useUser();
+  const logoAvicaGreenMask =
+    typeof logoAvicaBlue === 'string' ? logoAvicaBlue : logoAvicaBlue.src;
 
   if (variant === 'xl') {
     return (
@@ -120,17 +120,20 @@ export default function LogoAvicaClient({
 
   if (userType === 'SUPERADMIN') {
     return (
-      <div className="flex items-center gap-4">
-        <div className="relative h-10 w-20">
-          <Image
-            src={organizationURI as string}
-            alt="avica"
-            fill
-            className="h-full w-full object-contain"
-          />
-        </div>
-        <span>{organizationName}</span>
-      </div>
+      <div
+        aria-label="avica"
+        className="h-10 w-20 bg-theme-superadmin-primary"
+        style={{
+          WebkitMaskImage: `url(${logoAvicaGreenMask})`,
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'center',
+          WebkitMaskSize: 'contain',
+          maskImage: `url(${logoAvicaGreenMask})`,
+          maskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          maskSize: 'contain',
+        }}
+      />
     );
   }
 
