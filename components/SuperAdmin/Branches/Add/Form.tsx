@@ -28,7 +28,7 @@ const Form: ClientComponent = () => {
   const router = useRouter();
 
   return (
-    <div className="mt-10 flex h-full w-full justify-center pb-40">
+    <div className="mt-10 flex w-full justify-center pb-12">
       <form
         onSubmit={onSubmit}
         className="flex h-fit w-[40%] flex-col justify-between gap-10 rounded-2xl bg-white p-6"

@@ -7,7 +7,7 @@ import type { ServerComponent } from '@types';
 
 const AddBranch: ServerComponent = async () => {
   return (
-    <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pl-4  font-poppins">
+    <div className="mt-10 flex w-full flex-col gap-6 pl-4 font-poppins">
       <PageInfo />
       <Form />
     </div>
