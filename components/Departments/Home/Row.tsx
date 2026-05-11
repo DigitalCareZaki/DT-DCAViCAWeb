@@ -3,8 +3,12 @@
 import Link from 'next/link';
 import type { ClientComponentProps } from '@types';
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
+import { useUser } from '@selectors';
 
 const Row: ClientComponentProps<any> = ({ ...el }) => {
+  const [user] = useUser();
+  const role = user.role?.toLowerCase() ?? 'admin';
+
   return (
     <tr
       key={el.id}
@@ -25,7 +29,7 @@ const Row: ClientComponentProps<any> = ({ ...el }) => {
       <td className="px-6 py-4">{el.nurse.length}</td>
       <td className="px-6 py-4">{new Date(el.created_at).toDateString()}</td>
       <td className="px-6 py-4">
-        <Link href={`/admin/departments/${el.id}/edit`} className="text-primary-600 hover:text-primary-800" title="Edit">
+        <Link href={`/${role}/departments/${el.id}/edit`} className="text-primary-600 hover:text-primary-800" title="Edit">
           <FaEdit
             title="Edit Department"
             className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary"

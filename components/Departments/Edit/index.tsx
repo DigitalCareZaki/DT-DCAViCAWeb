@@ -8,8 +8,8 @@ interface Props {
 
 const EditDepartment = async ({ id }: Props): Promise<JSX.Element> => {
     return (
-        <div className="mt-10 flex h-full w-full flex-col gap-6 overflow-y-scroll pb-96 font-poppins">
-            <div className="mt-10 flex h-full w-full justify-center pb-40">
+        <div className="mt-10 flex w-full flex-col gap-6 font-poppins">
+            <div className="mt-10 flex w-full justify-center pb-12">
                 {/* client form wrapper */}
                 <Form id={id} />
             </div>
