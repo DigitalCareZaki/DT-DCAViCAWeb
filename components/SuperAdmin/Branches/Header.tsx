@@ -27,8 +27,8 @@ const Header: ClientComponentProps<HeaderProps> = ({ data }) => {
   }, 1000);
 
   return (
-    <div className="mt-8 flex w-full items-center justify-between">
-      <div className="w-full">
+    <div className="mt-8 flex w-full items-center gap-4">
+      <div className="w-full max-w-xl">
         <InputBasic
           placeholder="Search"
           icon="IoSearch"
@@ -36,10 +36,15 @@ const Header: ClientComponentProps<HeaderProps> = ({ data }) => {
           onChange={onChange}
         />
       </div>
-      <div className="flex w-fit gap-4">
-        <div className="w-32">
+      <div className="ml-auto flex shrink-0 items-center gap-4">
+        <div className="w-36">
           <Link prefetch href="/superadmin/branches/add" passHref>
-            <ButtonPrimary variant="icon" name="Add Branch" icon="IoMdAdd" />
+            <ButtonPrimary
+              variant="icon"
+              name="Add Branch"
+              icon="IoMdAdd"
+              className="h-12 text-sm whitespace-nowrap"
+            />
           </Link>
         </div>
         <ExportButton
