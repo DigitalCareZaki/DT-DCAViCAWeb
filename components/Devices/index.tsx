@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from './Home/Header';
 import Table from './Home/Table';
@@ -8,7 +8,6 @@ import getDevices from 'service/device/getDevices';
 import getAllDevicesForPatient from 'service/device/getAllDevicesForPatient';
 import { setDevices } from 'store/devices.slice';
 import type { ReduxProps } from 'store/types';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 interface DevicesProps {
   patient?: string | null;
 }
@@ -40,9 +39,9 @@ const Devices = ({ patient }: DevicesProps) => {
   if (!user?.role) return null;
 
   return (
-    <div className="flex h-screen w-full flex-col gap-4 px-6 pt-4">
+    <div className="flex w-full flex-col gap-4 overflow-x-hidden px-6 py-4">
       <Header userRole={user.role?.toLowerCase()} data={devices} />
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="w-full">
         <Table userRole={user.role?.toLowerCase()} patient={patient} />
       </div>
     </div>

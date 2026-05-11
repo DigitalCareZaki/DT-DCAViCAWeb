@@ -17,6 +17,7 @@ interface TableProps {
 const Table = ({ userRole, patient }: TableProps) => {
   const dispatch = useDispatch();
   const devices = useSelector((state: ReduxProps) => state.devices.devices);
+  const pageDevices = devices.slice(0, 10);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({
     totalItems: 0,
@@ -62,26 +63,29 @@ const Table = ({ userRole, patient }: TableProps) => {
 
   return (
     <div className="flex h-full w-full flex-col items-end gap-4">
-      <div className="relative w-full pb-12 shadow-md sm:rounded-lg">
-        <ClientTable
-          heads={[
-            'Title',
-            'Serial',
-            'Description',
-            'Category',
-            'Added By',
-            'Branch',
-            'Monitoring',
-            'Sync',
-            'Status',
-            'Added On',
-            'Action',
-          ]}
-        >
-          <RenderTable userRole={userRole} data={devices} />
-        </ClientTable>
+      <div className="relative w-full overflow-hidden bg-white shadow-md sm:rounded-lg">
+        <div className="w-full overflow-x-auto">
+          <ClientTable
+            className="min-w-[1080px]"
+            heads={[
+              'Title',
+              'Serial',
+              'Description',
+              'Category',
+              'Added By',
+              'Branch',
+              'Monitoring',
+              'Sync',
+              'Status',
+              'Added On',
+              'Action',
+            ]}
+          >
+            <RenderTable userRole={userRole} data={pageDevices} />
+          </ClientTable>
+        </div>
         {!patient && (
-          <div className="flex items-center justify-center gap-4 py-6">
+          <div className="flex items-center justify-center gap-4 border-t border-gray-100 bg-white py-4">
             <button
               disabled={!pagination.hasPrevPage}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
