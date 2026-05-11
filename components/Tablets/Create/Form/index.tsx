@@ -164,7 +164,6 @@ const Form: ClientComponentProps<CreateTabletProps> = ({ data }) => {
         type='button'
         title={'Close'}
         name={'Close'}
-        loading={loading}
         onClick={() => router.back()}
         className='h-12 px-4 py-2 text-lg sm:text-xl lg:text-xl'
       />
