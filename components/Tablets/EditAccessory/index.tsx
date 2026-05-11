@@ -11,9 +11,9 @@ const EditAccessory: ServerComponentProps<EditAccessoryProps> = async ({
     data,
 }) => {
     return (
-        <div className="mt-10 flex h-full flex-col gap-6 overflow-y-scroll pb-96 font-poppins">
+        <div className="mt-10 flex flex-col gap-6 font-poppins">
             <PageInfo />
-            <div className="mt-10 flex h-full w-full justify-center pb-40">
+            <div className="mt-10 flex w-full justify-center pb-12">
                 <Form data={data} />
             </div>
         </div>
