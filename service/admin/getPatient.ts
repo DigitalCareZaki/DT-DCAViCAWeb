@@ -21,7 +21,7 @@ async function getPatient(page = 1, limit = 10, search?: string): Promise<{
   let url = `/api/v1/web/admin/patient?page=${page}&limit=${limit}`;
 
   if (search) {
-    url += `&search=${search}`;
+    url += `&search=${encodeURIComponent(search)}`;
   }
 
   const res = await fetch(url);
