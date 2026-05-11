@@ -1,6 +1,5 @@
 'use server';
 
-import { PageInfo } from '@common';
 import { getOrganizationUsers } from '@service';
 
 import Header from './Header';
@@ -17,11 +16,12 @@ const Users: ServerComponentProps<Props> = async ({ role }) => {
   if (!res.success) return <></>;
 
   return (
-    <div className="mt-10 flex w-full flex-col gap-6 pl-4 pb-6 font-poppins">
-      {/* <PageInfo /> */}
+    <div className="flex h-full min-h-0 w-full min-w-0 flex-col gap-5 overflow-hidden py-4 pl-4 pr-4 font-poppins">
       <Chart data={res.data} />
       <Header />
-      <Table data={res.data} />
+      <div className="min-h-0 flex-1">
+        <Table data={res.data} />
+      </div>
     </div>
   );
 };

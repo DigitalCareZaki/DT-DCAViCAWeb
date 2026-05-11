@@ -145,6 +145,12 @@ body {
   display: none;
 }
 
+
+.hide-horizontal-scrollbar::-webkit-scrollbar:horizontal {
+  display: none;
+  height: 0;
+}
+
 .doctor-scrollbar::-webkit-scrollbar {
   width: 6px;
 }

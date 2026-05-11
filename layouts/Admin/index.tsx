@@ -26,6 +26,13 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
     zoom: 0.67, // Natively scales the layout, avoiding bounds overlapping
   } as React.CSSProperties;
 
+  const usersMainStyle = {
+    transform: 'scale(0.67)',
+    transformOrigin: 'top left',
+    width: '150%',
+    height: '150%',
+  } as React.CSSProperties;
+
   if (route?.includes('/admin/chat')) {
     return (
       <div className="relative h-screen w-screen overflow-hidden">
@@ -85,20 +92,28 @@ const AdminLayout: ClientComponentProps<Props> = ({ user, children }) => {
   // }
 
   if (route?.includes('/admin/users')) {
+    const isUsersList = route === '/admin/users';
+
     return (
       <div className="relative h-screen w-screen overflow-hidden">
         <main
-          style={mainStyle}
-          className="relative flex flex-col h-full w-full gap-4 p-6 overflow-y-auto overflow-x-hidden"
+          style={usersMainStyle}
+          className="flex flex-col h-screen w-full bg-background"
         >
-          <div className="sticky top-0 z-50 bg-background pb-4">
+          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
             <PrimaryHeader user={user!} />
           </div>
-          <div className="flex flex-grow w-full">
-            <div className="flex-shrink-0 sticky top-16 self-start">
-              <DynamicSidebar renderKey="users" />
-            </div>
-            <div className="flex-grow min-w-0">
+          <div
+            className={`flex flex-grow h-0 w-full px-6 ${
+              isUsersList ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden'
+            }`}
+          >
+            <DynamicSidebar renderKey="users" />
+            <div
+              className={`h-full min-w-0 flex-grow ${
+                isUsersList ? 'overflow-hidden' : ''
+              }`}
+            >
               {children}
             </div>
           </div>

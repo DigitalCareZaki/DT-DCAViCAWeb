@@ -14,12 +14,6 @@ async function getPatchHistory(patchSn: string, userName: string): Promise<GetPa
     });
 
     const data = await res.json();
-    console.log('Device Usage History API response:', {
-        status: res.status,
-        ok: res.ok,
-        params: Object.fromEntries(params.entries()),
-        data,
-    });
 
     if (!res.ok) {
         return {

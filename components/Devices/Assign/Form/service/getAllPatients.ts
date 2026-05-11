@@ -10,32 +10,6 @@ import {
 import type { AllPatientsRes } from '../types';
 import type { SuperAdminPatientListProps } from '@types';
 import type { PatientListingData } from '@types-services';
-import type { PatientData } from '../types';
-
-const patientMatchesSearch = (patient: PatientData, search?: string): boolean => {
-  const value = search?.trim().toLowerCase();
-  if (!value) return true;
-
-  const fullName = [
-    patient.first_name,
-    patient.middle_name,
-    patient.last_name,
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-
-  return [
-    patient.first_name,
-    patient.middle_name,
-    patient.last_name,
-    patient.email,
-    fullName,
-  ].some((field) => field?.toLowerCase().includes(value));
-};
-
-const filterPatients = (patients: PatientData[], search?: string): PatientData[] =>
-  patients.filter((patient) => patientMatchesSearch(patient, search));
 
 // services for each user returns a different response
 // make a uniform response for all users
@@ -50,9 +24,9 @@ const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
   let res: any = undefined;
 
   if (userType === 'SUPERADMIN') {
-    res = await getOrganizationPatients(1, search ? 100 : 10, search);
+    res = await getOrganizationPatients(1, 10, search);
   } else if (userType === 'ADMIN') {
-    res = await getAdminPatient(1, search ? 100 : 10, search);
+    res = await getAdminPatient(1, 10, search);
   } else if (userType === 'DOCTOR') {
     res = await getPatientList(userType.toLowerCase());
   } else if (userType === 'NURSE') {
@@ -86,25 +60,36 @@ const getAllPatients = async (search?: string): Promise<AllPatientsRes> => {
       email: el.patient.email,
     }));
 
+    if (search && (userType === 'DOCTOR' || userType === 'NURSE')) {
+      const lowerSearch = search.toLowerCase();
+      return {
+        success: true,
+        data: mappedData.filter(
+          (patient) =>
+            patient.first_name?.toLowerCase().includes(lowerSearch) ||
+            patient.middle_name?.toLowerCase().includes(lowerSearch) ||
+            patient.last_name?.toLowerCase().includes(lowerSearch) ||
+            patient.email?.toLowerCase().includes(lowerSearch)
+        ),
+      };
+    }
+
     return {
       success: true,
-      data: filterPatients(mappedData, search),
+      data: mappedData,
     };
   } else if (userType === 'ADMIN') {
     const patients: SuperAdminPatientListProps[] = res.data;
 
     return {
       success: true,
-      data: filterPatients(
-        patients?.map((el) => ({
-          id: el.id,
-          first_name: el.first_name,
-          middle_name: el.middle_name,
-          last_name: el.last_name,
-          email: el.email,
-        })),
-        search
-      ),
+      data: patients?.map((el) => ({
+        id: el.id,
+        first_name: el.first_name,
+        middle_name: el.middle_name,
+        last_name: el.last_name,
+        email: el.email,
+      })),
     };
   } else {
     return {
