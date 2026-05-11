@@ -80,6 +80,8 @@ const SuperAdminLayout: ClientComponentProps<Props> = ({
   }
 
   if (route?.includes('/superadmin/users')) {
+    const isUsersList = route === '/superadmin/users';
+
     return (
       <div className="relative h-screen w-screen overflow-hidden">
         <main
@@ -91,9 +93,19 @@ const SuperAdminLayout: ClientComponentProps<Props> = ({
             <PrimaryHeader user={user!} />
           </div>
           {/* Scrollable Content */}
-          <div className="flex flex-grow h-0 w-full overflow-y-auto px-6">
+          <div
+            className={`flex flex-grow h-0 w-full px-6 ${
+              isUsersList ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden'
+            }`}
+          >
             <DynamicSidebar renderKey="users" />
-            <div className="h-full flex-grow">{children}</div>
+            <div
+              className={`h-full min-w-0 flex-grow ${
+                isUsersList ? 'overflow-hidden' : ''
+              }`}
+            >
+              {children}
+            </div>
           </div>
           <ModalBottom />
         </main>

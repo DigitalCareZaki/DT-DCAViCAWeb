@@ -192,6 +192,7 @@ const Form: ClientComponent = () => {
           className="w-full"
         />
         <ButtonPrimary
+          type="button"
           title={'Close'}
           name={'Close'}
           onClick={() => router.back()}
