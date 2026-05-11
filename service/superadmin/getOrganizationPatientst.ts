@@ -11,7 +11,7 @@ const getOrganizationPatients = async (
   let url = `/api/v1/web/organization/web-patients?page=${page}&limit=${limit}`;
 
   if (search) {
-    url += `&search=${search}`;
+    url += `&search=${encodeURIComponent(search)}`;
   }
 
   const res = await fetch(url);
