@@ -58,7 +58,7 @@ const Form: ClientComponentProps<EditAccessoryProps> = ({ data }) => {
                 title="Update"
                 name="Update"
                 loading={loading}
-                className="h-10 px-4 py-2 text-xs"
+                className="h-10 px-4 py-2 text-sm"
             />
 
             {/* Close Button */}
@@ -68,7 +68,7 @@ const Form: ClientComponentProps<EditAccessoryProps> = ({ data }) => {
                 name='Close'
                 loading={loading}
                 onClick={() => router.back()}
-                className="h-10 px-4 py-2 text-xs"
+                className="h-10 px-4 py-2 text-sm"
             />
         </form>
     );
