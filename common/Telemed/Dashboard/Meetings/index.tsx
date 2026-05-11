@@ -76,7 +76,7 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
   }
 
   return (
-    <div className="hidescrollbar flex h-full w-full flex-col gap-6 overflow-y-scroll px-4 relative">
+    <div className="relative flex h-full w-full flex-col gap-6 overflow-y-scroll px-4">
       {/* <PrimaryHeader user={user as any} /> */}
       <Topbar
         userType={userType as UserRole}
