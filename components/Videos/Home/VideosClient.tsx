@@ -33,12 +33,12 @@ const VideosClient: React.FC<VideosClientProps> = ({ data, userRole }) => {
                 </div>
 
                 {userRole && (
-                    <div className="w-40 sm:w-48">
+                    <div className="w-40 sm:w-40">
                         <Link passHref href={`/${userRole.toLowerCase()}/videos/add`}>
                             <ButtonPrimary
                                 title="Add Video"
                                 name="Add video"
-                                className="h-16 px-4 py-2 text-lg sm:text-xl lg:text-2xl"
+                                className="h-12 px-4 py-2 text-lg sm:text-xs lg:text-xl"
                             />
                         </Link>
                     </div>
