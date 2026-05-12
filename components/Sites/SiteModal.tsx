@@ -3,7 +3,10 @@ import { InputBasic, ButtonPrimary } from '@common';
 import { countries } from './countries';
 import { IoClose, IoChevronDown } from 'react-icons/io5';
 
-import type { SiteProps } from '@types';
+import { getSuperAdminBranches } from '@service';
+import { useUser } from '@selectors';
+
+import type { SiteProps, BranchesDataProps } from '@types';
 
 interface SiteModalProps {
     isOpen: boolean;
@@ -20,20 +23,26 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState('');
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [branchSearchTerm, setBranchSearchTerm] = useState('');
+    const [branchDropdownOpen, setBranchDropdownOpen] = useState(false);
+    const [branches, setBranches] = useState<BranchesDataProps[]>([]);
+    const [branchId, setBranchId] = useState<string>('');
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const branchWrapperRef = useRef<HTMLDivElement>(null);
+    const [user] = useUser();
 
     // Click outside handler
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-                setDropdownOpen(false);
-            }
+            const target = event.target as Node;
+            if (wrapperRef.current && !wrapperRef.current.contains(target)) setDropdownOpen(false);
+            if (branchWrapperRef.current && !branchWrapperRef.current.contains(target)) setBranchDropdownOpen(false);
         }
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [wrapperRef]);
+    }, [wrapperRef, branchWrapperRef]);
 
     // Reset or Populate when modal opens
     useEffect(() => {
@@ -43,6 +52,8 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
                 setDescription(initialData.description || '');
                 setCountryCode(initialData.countryCode || '');
                 setAddress(initialData.address || '');
+                const initialBranchId = initialData.branch?.id || initialData.branchId || '';
+                setBranchId(initialBranchId);
                 // Initial search term for country
                 if (initialData.countryCode) {
                     const found = countries.find(c => c.code === initialData.countryCode);
@@ -60,11 +71,36 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
                 setCountryCode('');
                 setAddress('');
                 setSearchTerm('');
+                setBranchSearchTerm('');
+                setBranchId('');
             }
             setError('');
             setDropdownOpen(false);
+            setBranchDropdownOpen(false);
         }
     }, [isOpen, initialData]);
+
+    useEffect(() => {
+        const fetchBranches = async () => {
+            if (!isOpen || user?.role !== 'SUPERADMIN') return;
+
+            try {
+                const res = await getSuperAdminBranches();
+                if (res?.success && Array.isArray(res.data)) {
+                    setBranches(res.data);
+                } else {
+                    setBranches([]);
+                }
+            } catch {
+                setBranches([]);
+            }
+        };
+
+        fetchBranches();
+    }, [isOpen, user]);
+
+    const selectedBranch = branches.find((branch) => branch.id === branchId);
+    const selectedBranchName = selectedBranch?.name || '';
 
     if (!isOpen) return null;
 
@@ -78,9 +114,17 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
             setError('Country Code is required');
             return;
         }
+        if (user?.role === 'SUPERADMIN' && !branchId) {
+            setError('Branch is required');
+            return;
+        }
 
         try {
-            await onSubmit({ name, description, countryCode, address });
+            const payload: any = { name, description, countryCode, address };
+            if (user?.role === 'SUPERADMIN' && branchId) {
+                payload.branchId = branchId;
+            }
+            await onSubmit(payload);
             onClose();
         } catch (err: any) {
             setError(err?.message || 'Failed to submit');
@@ -90,6 +134,10 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
     const filteredCountries = countries.filter(c =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.code.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const filteredBranches = branches.filter((branch) =>
+        branch.name.toLowerCase().includes(branchSearchTerm.toLowerCase())
     );
 
     return (
@@ -186,6 +234,56 @@ const SiteModal: React.FC<SiteModalProps> = ({ isOpen, onClose, onSubmit, initia
                             )}
                         </div>
                     </div>
+
+                    {user?.role === 'SUPERADMIN' && (
+                        <div className="flex items-center gap-4">
+                            <label className="w-32 text-right text-sm text-gray-600">
+                                Branch :
+                            </label>
+                            <div className="flex-1 max-w-lg relative" ref={branchWrapperRef}>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Please choose branch"
+                                        className="w-full h-10 border border-blue-400 rounded px-3 text-sm outline-none focus:border-blue-600"
+                                        value={branchSearchTerm || selectedBranchName}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            setBranchSearchTerm(value);
+                                            setBranchDropdownOpen(true);
+                                            if (value === '') setBranchId('');
+                                        }}
+                                        onClick={() => setBranchDropdownOpen(true)}
+                                    />
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                        <IoChevronDown size={18} />
+                                    </div>
+                                </div>
+
+                                {branchDropdownOpen && (
+                                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-[400px] overflow-y-auto">
+                                        {filteredBranches.length > 0 ? (
+                                            filteredBranches.map((branch) => (
+                                                <div
+                                                    key={branch.id}
+                                                    onClick={() => {
+                                                        setBranchId(branch.id);
+                                                        setBranchSearchTerm(branch.name);
+                                                        setBranchDropdownOpen(false);
+                                                    }}
+                                                    className="flex h-9 w-full cursor-pointer items-center px-4 hover:bg-gray-100 text-sm text-gray-700 hover:bg-blue-50"
+                                                >
+                                                    {branch.name}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="p-2 text-gray-400 text-sm">No branches found</div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Address */}
                     <div className="flex items-start gap-4">
