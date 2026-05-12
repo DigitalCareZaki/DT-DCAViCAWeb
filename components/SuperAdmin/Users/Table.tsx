@@ -70,7 +70,7 @@ const Table: ClientComponentProps<TableProps> = ({ data }) => {
       <div className="relative min-h-0 w-full min-w-0 flex-1 overflow-hidden bg-white shadow-md sm:rounded-lg">
         <div className="h-full w-full overflow-auto [scrollbar-gutter:stable]">
           <ClientTable
-            className="min-w-[1500px] [&_thead]:sticky [&_thead]:top-0 [&_thead]:z-10"
+            className="min-w-[1500px] [&_thead]:sticky [&_thead]:top-0 [&_thead]:z-10 [&_th]:!px-4 [&_td]:!px-4 [&_th]:!py-2 [&_td]:!py-2 [&_th]:!text-base [&_td]:!text-lg"
             heads={[
               'Name',
               'Email',
