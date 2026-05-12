@@ -17,8 +17,9 @@ const Table: ClientComponentProps<any> = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="relative mt-10 overflow-x-hidden overflow-y-hidden shadow-md sm:rounded-lg">
+    <div className="sms-history-table-wrapper relative mt-4 overflow-x-auto overflow-y-visible pb-2 shadow-md sm:rounded-lg">
       <ClientTable
+        className="sms-history-table"
         heads={[
           'To',
           'Body',

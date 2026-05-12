@@ -267,3 +267,20 @@ body {
 html, body {
   font-family: sans-serif;
 }
+
+.sms-history-table th,
+.sms-history-table td {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.sms-history-table thead th {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.sms-history-table-wrapper {
+  overflow-y: visible;
+  max-height: none;
+}

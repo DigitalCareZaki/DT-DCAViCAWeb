@@ -55,7 +55,7 @@ const SmsHistory: FC = () => {
   </div>;
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
+    <div className="flex h-full w-full flex-col gap-4 px-10 pr-0 pt-4">
       <div className="flex w-full justify-between">
         <span className="screen-title">Sms History</span>
       </div>
