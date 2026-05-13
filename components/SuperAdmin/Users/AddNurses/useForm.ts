@@ -20,6 +20,11 @@ import { showModalReducer } from '@slice';
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
+import {
+  formatPhoneNumberToE164,
+  getInternationalPhoneNumberError,
+  normalizePhoneNumberInput,
+} from '../../../../utils/phoneNumber';
 
 import type { AddNurseProps, useFormProps, SelectorsProps, UsernameStatus } from './types';
 import type {
@@ -124,6 +129,7 @@ const useFormHook = (): useFormProps => {
     formState: { errors },
     setValue,
     clearErrors,
+    setError: setFieldError,
   } = useForm<AddNurseProps>({
     resolver: vestResolver(validator),
     mode: 'onChange',
@@ -143,7 +149,7 @@ const useFormHook = (): useFormProps => {
             last_name: data.lastName,
             middle_name: data.middleName,
             username: data.username,
-            phone_number: data.phoneNumber,
+            phone_number: formatPhoneNumberToE164(data.phoneNumber),
             gender: data.gender,
             title: data.title,
             password: data.password,
@@ -221,6 +227,27 @@ const useFormHook = (): useFormProps => {
       }
     }, 600);
   }, []);
+
+  const handlePhoneNumberChange = useCallback((phoneNumber: string) => {
+    const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
+    setValue('phoneNumber', normalizedPhoneNumber, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+
+    const phoneError = getInternationalPhoneNumberError(normalizedPhoneNumber);
+
+    if (phoneError) {
+      setFieldError('phoneNumber', {
+        type: 'validate',
+        message: phoneError,
+      });
+      return;
+    }
+
+    clearErrors('phoneNumber');
+  }, [clearErrors, setFieldError, setValue]);
 
   const setDobValue = (value: Date | undefined | null) => {
     const iso = value ? new Date(value).toISOString() : '';
@@ -341,6 +368,7 @@ const useFormHook = (): useFormProps => {
     validator,
     usernameStatus,
     handleUsernameChange,
+    handlePhoneNumberChange,
   ];
 };
 
