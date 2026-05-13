@@ -50,6 +50,7 @@ const Form: ClientComponent = () => {
     getLoadingStepInfo,
     usernameStatus,
     handleUsernameChange,
+    handlePhoneNumberChange,
   ] = useForm();
 
   const [showDob, setShowDob] = useState<boolean>(false);
@@ -220,7 +221,12 @@ const Form: ClientComponent = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('phoneNumber')}
+            hookProps={{
+              ...register('phoneNumber'),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                handlePhoneNumberChange(e.target.value);
+              },
+            }}
             error={!!errors.phoneNumber?.message}
             errorMessage={errors.phoneNumber?.message || '&'}
             disabled={loading}

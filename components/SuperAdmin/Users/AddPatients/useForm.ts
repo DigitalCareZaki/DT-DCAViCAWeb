@@ -22,6 +22,11 @@ import { showModalReducer } from '@slice';
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
+import {
+  formatPhoneNumberToE164,
+  getInternationalPhoneNumberError,
+  normalizePhoneNumberInput,
+} from '../../../../utils/phoneNumber';
 
 import type { AddPatientProps, useFormProps, SelectorsProps, UsernameStatus } from './types';
 import type {
@@ -157,6 +162,7 @@ const useFormHook = (): useFormProps => {
     formState: { errors },
     setValue,
     clearErrors,
+    setError: setFieldError,
     getValues,
   } = useForm<AddPatientProps>({
     resolver: vestResolver(validator),
@@ -233,6 +239,7 @@ const useFormHook = (): useFormProps => {
 
       // Get current form values to ensure we have the latest state
       const currentValues = getValues();
+      const phoneNumber = formatPhoneNumberToE164(currentValues.phoneNumber);
 
       // Use selector values for proper data mapping
       const payload = {
@@ -241,7 +248,7 @@ const useFormHook = (): useFormProps => {
         last_name: currentValues.lastName,
         middle_name: currentValues.middleName,
         username: currentValues.username,
-        phone_number: currentValues.phoneNumber,
+        phone_number: phoneNumber,
         gender: selectors.gender.title, // Use selector title instead of form value
         title: selectors.title.title, // Use selector title instead of form value
         password: currentValues.password,
@@ -332,6 +339,27 @@ const useFormHook = (): useFormProps => {
       }
     }, 600);
   }, []);
+
+  const handlePhoneNumberChange = useCallback((phoneNumber: string) => {
+    const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
+    setValue('phoneNumber', normalizedPhoneNumber, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+
+    const phoneError = getInternationalPhoneNumberError(normalizedPhoneNumber);
+
+    if (phoneError) {
+      setFieldError('phoneNumber', {
+        type: 'validate',
+        message: phoneError,
+      });
+      return;
+    }
+
+    clearErrors('phoneNumber');
+  }, [clearErrors, setFieldError, setValue]);
 
   const handleSelect =
     (type: string) => (title: string | undefined, id: string | undefined) => {
@@ -518,6 +546,7 @@ const useFormHook = (): useFormProps => {
     getLoadingStepInfo,
     usernameStatus,
     handleUsernameChange,
+    handlePhoneNumberChange,
   ];
 };
 

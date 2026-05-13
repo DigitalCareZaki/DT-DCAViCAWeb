@@ -32,6 +32,7 @@
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
+    "libphonenumber-js": "^1.13.1",
     "next": "^14.2.5",
     "papaparse": "^5.4.1",
     "plotly.js": "^2.35.2",
