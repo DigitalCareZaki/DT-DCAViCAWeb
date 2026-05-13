@@ -115,4 +115,5 @@ export type useFormProps = [
   getLoadingStepInfo: (step: LoadingStep) => LoadingStepInfo,
   usernameStatus: UsernameStatus,
   handleUsernameChange: (username: string) => void,
+  handlePhoneNumberChange: (phoneNumber: string) => void,
 ];
