@@ -87,6 +87,7 @@ export type useFormProps = [
   validator: Suite,
   usernameStatus: UsernameStatus,
   handleUsernameChange: (username: string) => void,
+  handlePhoneNumberChange: (phoneNumber: string) => void,
 ];
 
 export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';

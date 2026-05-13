@@ -1,5 +1,6 @@
 import { create, test, enforce, mode, Modes, only } from 'vest';
 
+import { getInternationalPhoneNumberError } from '../../../../utils/phoneNumber';
 import type { AddAdminProps } from './types';
 
 export const validator = create((data: AddAdminProps) => {
@@ -98,9 +99,10 @@ export const validator = create((data: AddAdminProps) => {
   });
 
   test('phoneNumber', 'Invalid phone number', () => {
-    const phoneRegex = /^\+[0-9]{1,3}[0-9]{10}$/;
-    if (!phoneRegex.test(data.phoneNumber)) {
-      throw new Error('Invalid phone number format');
+    const phoneError = getInternationalPhoneNumberError(data.phoneNumber);
+
+    if (phoneError) {
+      throw new Error(phoneError);
     }
 
     return true;
