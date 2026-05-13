@@ -1,6 +1,12 @@
 export type UserProps = {
   address?: string;
   phone_number?: string;
+  associated_branches?: {
+    id?: string;
+    name?: string;
+  }[];
+  branch_id?: string;
+  branchId?: string;
   title?: UserTitle;
   gender?: UserGender;
   id: string | undefined;

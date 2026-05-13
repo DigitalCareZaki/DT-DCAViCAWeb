@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import getSites from "../../service/superadmin/getSites";
 import createSite from "../../service/superadmin/createSite";
 import updateSite from "../../service/superadmin/updateSite";
@@ -8,6 +8,7 @@ import { MdEdit } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 import type { SiteProps } from '@types';
 import { ButtonPrimary } from '@common';
+import { useUser } from '@selectors';
 import SiteModal from './SiteModal';
 import { toast } from 'react-hot-toast';
 
@@ -20,17 +21,26 @@ const mainStyle = {
 };
 
 const SitesClient = () => {
+    const [user] = useUser();
     const [sites, setSites] = useState<SiteProps[]>([]);
     const [pagination, setPagination] = useState<any>(null);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSite, setSelectedSite] = useState<SiteProps | null>(null);
+    const adminBranchId = user?.associated_branches?.[0]?.id || user?.branch_id || user?.branchId;
+    const sitesBranchId = user?.role === 'ADMIN' ? adminBranchId : undefined;
 
-    const fetchSites = async () => {
+    const fetchSites = useCallback(async () => {
+        if (!user?.role || (user.role === 'ADMIN' && !sitesBranchId)) {
+            setSites([]);
+            setPagination(null);
+            return;
+        }
+
         setLoading(true);
         try {
-            const res = await getSites(page, 10);
+            const res = await getSites(page, 10, sitesBranchId);
             if (res.success && res.data) {
                 setSites(res.data.data);
                 setPagination(res.data.pagination);
@@ -40,11 +50,11 @@ const SitesClient = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [page, sitesBranchId, user?.role]);
 
     useEffect(() => {
         fetchSites();
-    }, [page]);
+    }, [fetchSites]);
 
     const handleSiteSubmit = async (data: any) => {
         let res;
