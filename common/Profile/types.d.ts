@@ -44,4 +44,5 @@ export type useFormProps = [
   loading: boolean,
   error: string,
   handleProfilePicture: (props: File) => void,
+  handlePhoneNumberChange: (phoneNumber: string) => void,
 ];

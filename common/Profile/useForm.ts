@@ -11,6 +11,11 @@ import { useUser } from '@selectors';
 import { showModalReducer, setUserReducer } from '@slice';
 
 import { validator } from './validator';
+import {
+  formatPhoneNumberToE164,
+  getInternationalPhoneNumberError,
+  normalizePhoneNumberInput,
+} from '../../utils/phoneNumber';
 
 import type { Props, useFormProps } from './types';
 import type { DoctorProfileProps } from '@types';
@@ -28,8 +33,11 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
     handleSubmit,
     formState: { errors },
     setValue,
+    clearErrors,
+    setError: setFieldError,
   } = useForm<Props>({
     resolver: vestResolver(validator),
+    mode: 'onChange',
   });
 
   const handleProfilePicture = useCallback((props: File) => {
@@ -74,7 +82,7 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
         middle_name: data.middleName,
         last_name: data.lastName,
         address: data.address,
-        phone_number: data.phoneNumber,
+        phone_number: formatPhoneNumberToE164(data.phoneNumber),
       };
 
       let updatedUri = user?.uri || '';
@@ -113,7 +121,7 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
         middle_name: data.middleName,
         last_name: data.lastName,
         address: data.address,
-        phone_number: data.phoneNumber,
+        phone_number: formatPhoneNumberToE164(data.phoneNumber),
         uri: updatedUri,
       };
 
@@ -150,7 +158,36 @@ const useFormHook = (data: DoctorProfileProps): useFormProps => {
     }
   });
 
-  return [onSubmit, register, errors, loading, error, handleProfilePicture];
+  const handlePhoneNumberChange = useCallback((phoneNumber: string) => {
+    const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
+    setValue('phoneNumber', normalizedPhoneNumber, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+
+    const phoneError = getInternationalPhoneNumberError(normalizedPhoneNumber);
+
+    if (phoneError) {
+      setFieldError('phoneNumber', {
+        type: 'validate',
+        message: phoneError,
+      });
+      return;
+    }
+
+    clearErrors('phoneNumber');
+  }, [clearErrors, setFieldError, setValue]);
+
+  return [
+    onSubmit,
+    register,
+    errors,
+    loading,
+    error,
+    handleProfilePicture,
+    handlePhoneNumberChange,
+  ];
 };
 
 export default useFormHook;

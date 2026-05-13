@@ -13,6 +13,11 @@ import { useImagePicker } from '@clienthooks';
 import { uploadFile, getUser } from '@service';
 
 import { validator } from './validator';
+import {
+  formatPhoneNumberToE164,
+  getInternationalPhoneNumberError,
+  normalizePhoneNumberInput,
+} from '../../../utils/phoneNumber';
 
 import type { PatientProps, UseFormProps, SelectorProps } from './types';
 import type { PatientProfileData } from '@types';
@@ -47,8 +52,10 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     formState: { errors },
     setValue,
     clearErrors,
+    setError: setFieldError,
   } = useForm<PatientProps>({
     resolver: vestResolver(validator),
+    mode: 'onChange',
   });
 
   const lastHydratedRef = useRef<string>('');
@@ -82,7 +89,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
             middle_name: data.middle_name,
             last_name: data.last_name,
             uri: data.uri,
-            phone_number: data.phone_number,
+            phone_number: formatPhoneNumberToE164(data.phone_number),
             gender: selectedGender,
             title: selectedTitle,
             weight: data.weight,
@@ -128,7 +135,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
               first_name: data.first_name,
               middle_name: data.middle_name,
               last_name: data.last_name,
-              phone_number: data.phone_number,
+              phone_number: formatPhoneNumberToE164(data.phone_number),
               gender: selectedGender,
               title: selectedTitle,
               uri: updatedUri,
@@ -148,6 +155,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
               success: true,
               updatedData: {
                 ...data,
+                phone_number: formatPhoneNumberToE164(data.phone_number),
                 uri: updatedUri,
                 gender: selectedGender,
                 title: selectedTitle,
@@ -244,6 +252,27 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     }));
   }, [selectedImage]);
 
+  const handlePhoneNumberChange = (phoneNumber: string) => {
+    const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
+    setValue('phone_number', normalizedPhoneNumber, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+
+    const phoneError = getInternationalPhoneNumberError(normalizedPhoneNumber);
+
+    if (phoneError) {
+      setFieldError('phone_number', {
+        type: 'validate',
+        message: phoneError,
+      });
+      return;
+    }
+
+    clearErrors('phone_number');
+  };
+
   return [
     register,
     onSubmit,
@@ -254,6 +283,7 @@ const useFormHook = (data: PatientProfileData): UseFormProps => {
     selectors,
     handleFilePicker,
     setSelectors,
+    handlePhoneNumberChange,
   ];
 };
 

@@ -13,8 +13,15 @@ import type { FormProps } from './types';
 
 const Form: ClientComponentProps<FormProps> = ({ data }) => {
   const router = useRouter();
-  const [onSubmit, register, errors, loading, error, handleFileProps] =
-    useForm(data);
+  const [
+    onSubmit,
+    register,
+    errors,
+    loading,
+    error,
+    handleFileProps,
+    handlePhoneNumberChange,
+  ] = useForm(data);
   const [user] = useUser();
 
   const handleClose = () => {
@@ -190,7 +197,12 @@ const Form: ClientComponentProps<FormProps> = ({ data }) => {
               placeholder="Enter phone number"
               borderTheme
               defaultBorder
-              hookProps={register('phoneNumber')}
+              hookProps={{
+                ...register('phoneNumber'),
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                  handlePhoneNumberChange(e.target.value);
+                },
+              }}
               error={!!errors.phoneNumber?.message?.length}
               errorMessage={errors.phoneNumber?.message || '&'}
             />

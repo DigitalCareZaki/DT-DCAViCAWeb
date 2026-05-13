@@ -34,6 +34,7 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
     selectors,
     handleFilePicker,
     setSelectors,
+    handlePhoneNumberChange,
   ] = useForm(data);
 
   useEffect(() => {
@@ -141,7 +142,12 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('phone_number')}
+            hookProps={{
+              ...register('phone_number'),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                handlePhoneNumberChange(e.target.value);
+              },
+            }}
             error={!!errors.phone_number?.message}
             errorMessage={errors.phone_number?.message || '&'}
           />
