@@ -47,4 +47,5 @@ export type UseFormProps = [
   selectors: SelectorProps,
   handleFilePicker: (accept?: string) => void,
   setSelectors: React.Dispatch<React.SetStateAction<SelectorProps>>,
+  handlePhoneNumberChange: (phoneNumber: string) => void,
 ];

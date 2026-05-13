@@ -1,5 +1,6 @@
 import { create, test, enforce } from 'vest';
 
+import { getInternationalPhoneNumberError } from '../../../utils/phoneNumber';
 import type { PatientProps } from './types';
 
 export const validator = create((data: PatientProps) => {
@@ -32,9 +33,10 @@ export const validator = create((data: PatientProps) => {
   });
 
   test('phone_number', 'Invalid phone number', () => {
-    const phoneRegex = /^\+[0-9]{1,3}[0-9]{10}$/;
-    if (!phoneRegex.test(data.phone_number)) {
-      throw new Error('Invalid phone number format');
+    const phoneError = getInternationalPhoneNumberError(data.phone_number);
+
+    if (phoneError) {
+      throw new Error(phoneError);
     }
 
     return true;
