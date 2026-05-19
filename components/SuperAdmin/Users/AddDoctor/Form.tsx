@@ -152,6 +152,7 @@ const Form: React.FC = () => {
 
   const phoneNumberField = register('phoneNumber');
   const emailField = register('email');
+  const usernameField = register('username');
   const npiNumberField = register('npi_number');
   const pmdcNumberField = register('pmdc_number');
 
@@ -396,14 +397,17 @@ const Form: React.FC = () => {
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={{
-              ...register('username'),
+              ...usernameField,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                register('username').onChange(e);
+                usernameField.onChange(e);
                 handleUsernameChange(e.target.value);
               },
             }}
-            error={!!errors.username?.message}
-            errorMessage={errors.username?.message || '&'}
+            loading={uniqueChecking.username}
+            error={!!errors.username?.message || !!uniqueErrors.username}
+            errorMessage={
+              errors.username?.message || uniqueErrors.username || '&'
+            }
           />
           {usernameStatus === 'checking' && (
             <div className="mt-1 flex items-center gap-1.5 text-xs text-blue-500">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
@@ -11,7 +11,6 @@ import {
   getCountries,
   getCities,
   addAdmin,
-  checkUsername,
 } from '@service';
 
 import { useUser } from '@selectors';
@@ -19,6 +18,7 @@ import { useUser } from '@selectors';
 import { showModalReducer } from '@slice';
 
 import { validator } from './validator';
+import useUniqueUserCheck from '../useUniqueUserCheck';
 import {
   formatPhoneNumberToE164,
   getInternationalPhoneNumberError,
@@ -26,6 +26,7 @@ import {
 } from '../../../../utils/phoneNumber';
 
 import type { AddAdminProps, useFormProps, SelectorsProps, UsernameStatus } from './types';
+import type { UserUniqueFormField } from '../useUniqueUserCheck';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -33,6 +34,12 @@ import type {
 } from '@types';
 
 import { ModalState } from '@store-types';
+
+const adminUniqueFields: UserUniqueFormField[] = [
+  'email',
+  'phoneNumber',
+  'username',
+];
 
 const useFormHook = (): useFormProps => {
   const dispatch = useDispatch();
@@ -43,7 +50,6 @@ const useFormHook = (): useFormProps => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [usernameStatus, setUsernameStatus] = useState<UsernameStatus>('idle');
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [selectors, setSelectors] = useState<SelectorsProps>({
     gender: {
@@ -99,6 +105,7 @@ const useFormHook = (): useFormProps => {
     setValue,
     clearErrors,
     setError: setFieldError,
+    getValues,
   } = useForm<AddAdminProps>({
     resolver: vestResolver(validator),
     mode: 'onChange',
@@ -107,9 +114,31 @@ const useFormHook = (): useFormProps => {
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
 
+  const {
+    uniqueErrors,
+    uniqueChecking,
+    hasUniqueConflict,
+    checkUniqueValues,
+    handleUniqueFieldChange,
+  } = useUniqueUserCheck<AddAdminProps>({
+    role: 'ADMIN',
+    fields: adminUniqueFields,
+    getValues,
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
+      const hasDuplicateUserField = await checkUniqueValues();
+
+      if (hasDuplicateUserField) {
+        handleShowModal({
+          message: 'Please resolve duplicate fields before submitting',
+          type: 'ERROR',
+          show: true,
+        });
+        return;
+      }
 
       const res = await addAdmin(
         btoa(
@@ -159,29 +188,9 @@ const useFormHook = (): useFormProps => {
     };
 
   const handleUsernameChange = useCallback((username: string) => {
-    if (!username || username.trim().length < 3) {
-      setUsernameStatus('idle');
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      return;
-    }
-
-    setUsernameStatus('checking');
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const res = await checkUsername(username.trim());
-        if (res.success) {
-          setUsernameStatus(res.exists ? 'exists' : 'available');
-        } else {
-          setUsernameStatus('idle');
-        }
-      } catch {
-        setUsernameStatus('idle');
-      }
-    }, 600);
-  }, []);
+    setUsernameStatus('idle');
+    handleUniqueFieldChange('username', username);
+  }, [handleUniqueFieldChange]);
 
   const handlePhoneNumberChange = useCallback((phoneNumber: string) => {
     const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
@@ -268,6 +277,10 @@ const useFormHook = (): useFormProps => {
     usernameStatus,
     handleUsernameChange,
     handlePhoneNumberChange,
+    uniqueErrors,
+    uniqueChecking,
+    hasUniqueConflict,
+    handleUniqueFieldChange,
   ];
 };
 

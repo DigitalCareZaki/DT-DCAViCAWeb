@@ -204,4 +204,5 @@ export { default as updateSite } from './superadmin/updateSite';
 export { default as getSiteDoctors } from './superadmin/getSiteDoctors';
 export { default as checkUsername } from './superadmin/checkUsername';
 export { default as checkDoctorUnique } from './superadmin/checkDoctorUnique';
+export { default as checkUserUnique } from './superadmin/checkUserUnique';
 

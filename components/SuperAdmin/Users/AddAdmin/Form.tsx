@@ -44,9 +44,16 @@ const Form: ClientComponent = () => {
     usernameStatus,
     handleUsernameChange,
     handlePhoneNumberChange,
+    uniqueErrors,
+    uniqueChecking,
+    hasUniqueConflict,
+    handleUniqueFieldChange,
   ] = useForm();
 
   const [showDob, setShowDob] = useState<boolean>(false);
+  const phoneNumberField = register('phoneNumber');
+  const emailField = register('email');
+  const usernameField = register('username');
 
   const dobOptions: IOptions = {
     autoHide: true,
@@ -138,13 +145,17 @@ const Form: ClientComponent = () => {
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={{
-              ...register('phoneNumber'),
+              ...phoneNumberField,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 handlePhoneNumberChange(e.target.value);
+                handleUniqueFieldChange('phoneNumber', e.target.value);
               },
             }}
-            error={!!errors.phoneNumber?.message}
-            errorMessage={errors.phoneNumber?.message || '&'}
+            loading={uniqueChecking.phoneNumber}
+            error={!!errors.phoneNumber?.message || !!uniqueErrors.phoneNumber}
+            errorMessage={
+              errors.phoneNumber?.message || uniqueErrors.phoneNumber || '&'
+            }
           />
         </div>
       </div>
@@ -159,9 +170,16 @@ const Form: ClientComponent = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('email')}
-            error={!!errors.email?.message}
-            errorMessage={errors.email?.message || '&'}
+            hookProps={{
+              ...emailField,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                emailField.onChange(e);
+                handleUniqueFieldChange('email', e.target.value);
+              },
+            }}
+            loading={uniqueChecking.email}
+            error={!!errors.email?.message || !!uniqueErrors.email}
+            errorMessage={errors.email?.message || uniqueErrors.email || '&'}
           />
         </div>
         <div className="w-1/2">
@@ -293,14 +311,17 @@ const Form: ClientComponent = () => {
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={{
-              ...register('username'),
+              ...usernameField,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                register('username').onChange(e);
+                usernameField.onChange(e);
                 handleUsernameChange(e.target.value);
               },
             }}
-            error={!!errors.username?.message}
-            errorMessage={errors.username?.message || '&'}
+            loading={uniqueChecking.username}
+            error={!!errors.username?.message || !!uniqueErrors.username}
+            errorMessage={
+              errors.username?.message || uniqueErrors.username || '&'
+            }
           />
           {usernameStatus === 'checking' && (
             <div className="mt-1 flex items-center gap-1.5 text-xs text-blue-500">
@@ -423,7 +444,12 @@ const Form: ClientComponent = () => {
       </div>
 
       <div className="col-span-2 flex w-full flex-col gap-4 mt-6">
-        <ButtonPrimary title="Save" name="Save" className="rounded-lg" />
+        <ButtonPrimary
+          title="Save"
+          name="Save"
+          className="rounded-lg"
+          disabled={Object.values(uniqueChecking).some(Boolean) || hasUniqueConflict}
+        />
         <Link passHref href="/superadmin/users">
           <ButtonPrimary
             name="Close"

@@ -7,6 +7,11 @@ import type {
   SelectUserProps,
   SiteProps,
 } from '@types';
+import type {
+  UserUniqueChecking,
+  UserUniqueErrors,
+  UserUniqueFormField,
+} from '../useUniqueUserCheck';
 
 export interface AddPatientProps {
   firstName: string;
@@ -116,4 +121,11 @@ export type useFormProps = [
   usernameStatus: UsernameStatus,
   handleUsernameChange: (username: string) => void,
   handlePhoneNumberChange: (phoneNumber: string) => void,
+  uniqueErrors: UserUniqueErrors,
+  uniqueChecking: UserUniqueChecking,
+  hasUniqueConflict: boolean,
+  handleUniqueFieldChange: (
+    field: UserUniqueFormField,
+    value: string
+  ) => void,
 ];

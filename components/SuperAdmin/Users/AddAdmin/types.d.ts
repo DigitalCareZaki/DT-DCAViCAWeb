@@ -6,6 +6,11 @@ import type {
   SelectOrganizationBranches,
   SelectOrganizationDepartments,
 } from '@types';
+import type {
+  UserUniqueChecking,
+  UserUniqueErrors,
+  UserUniqueFormField,
+} from '../useUniqueUserCheck';
 
 export interface AddAdminProps {
   firstName: string;
@@ -67,6 +72,13 @@ export type useFormProps = [
   usernameStatus: UsernameStatus,
   handleUsernameChange: (username: string) => void,
   handlePhoneNumberChange: (phoneNumber: string) => void,
+  uniqueErrors: UserUniqueErrors,
+  uniqueChecking: UserUniqueChecking,
+  hasUniqueConflict: boolean,
+  handleUniqueFieldChange: (
+    field: UserUniqueFormField,
+    value: string
+  ) => void,
 ];
 
 export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';

@@ -13,8 +13,7 @@ import {
   addDoctor,
   getOrganizationDepartments,
   getSites,
-  checkUsername,
-  checkDoctorUnique,
+  checkUserUnique,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -39,9 +38,9 @@ import type {
   DoctorUniqueFormField,
 } from './types';
 import type {
-  CheckDoctorUniqueParams,
-  DoctorUniqueField,
-} from '../../../../service/superadmin/checkDoctorUnique';
+  CheckUserUniqueParams,
+  UserUniqueField,
+} from '../../../../service/superadmin/checkUserUnique';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -55,6 +54,7 @@ import { ModalState } from '@store-types';
 const emptyUniqueErrors: DoctorUniqueErrors = {
   email: '',
   phoneNumber: '',
+  username: '',
   npi_number: '',
   pmdc_number: '',
 };
@@ -62,6 +62,7 @@ const emptyUniqueErrors: DoctorUniqueErrors = {
 const emptyUniqueExists: Record<DoctorUniqueFormField, boolean> = {
   email: false,
   phoneNumber: false,
+  username: false,
   npi_number: false,
   pmdc_number: false,
 };
@@ -69,13 +70,15 @@ const emptyUniqueExists: Record<DoctorUniqueFormField, boolean> = {
 const emptyUniqueChecking: DoctorUniqueChecking = {
   email: false,
   phoneNumber: false,
+  username: false,
   npi_number: false,
   pmdc_number: false,
 };
 
-const formFieldByApiField: Record<DoctorUniqueField, DoctorUniqueFormField> = {
+const formFieldByApiField: Record<UserUniqueField, DoctorUniqueFormField> = {
   email: 'email',
   phone_number: 'phoneNumber',
+  username: 'username',
   npi_number: 'npi_number',
   pmdc_number: 'pmdc_number',
 };
@@ -83,6 +86,7 @@ const formFieldByApiField: Record<DoctorUniqueField, DoctorUniqueFormField> = {
 const fallbackUniqueMessages: DoctorUniqueErrors = {
   email: 'Email already exists',
   phoneNumber: 'Phone number already exists',
+  username: 'Username already exists',
   npi_number: 'NPI number already exists',
   pmdc_number: 'PMDC number already exists',
 };
@@ -97,7 +101,6 @@ const useFormHook = (): useFormProps => {
   const [error, setError] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
   const [usernameStatus, setUsernameStatus] = useState<UsernameStatus>('idle');
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const uniqueDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const uniqueCheckRequestIdRef = useRef<number>(0);
   const [uniqueErrors, setUniqueErrors] =
@@ -202,7 +205,7 @@ const useFormHook = (): useFormProps => {
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
 
-  const getUniqueCheckParams = useCallback((): CheckDoctorUniqueParams => {
+  const getUniqueCheckParams = useCallback((): CheckUserUniqueParams => {
     const values = getValues();
     const normalizedPhoneNumber = normalizePhoneNumberInput(
       values.phoneNumber || ''
@@ -210,10 +213,13 @@ const useFormHook = (): useFormProps => {
     const phoneNumber = getInternationalPhoneNumberError(normalizedPhoneNumber)
       ? ''
       : formatPhoneNumberToE164(normalizedPhoneNumber);
-    const params: CheckDoctorUniqueParams = {};
+    const params: CheckUserUniqueParams = {
+      role: 'DOCTOR',
+    };
 
     if (values.email?.trim()) params.email = values.email.trim();
     if (phoneNumber?.trim()) params.phone_number = phoneNumber.trim();
+    if (values.username?.trim()) params.username = values.username.trim();
     if (values.npi_number?.trim()) {
       params.npi_number = values.npi_number.trim();
     }
@@ -240,7 +246,7 @@ const useFormHook = (): useFormProps => {
   ) => {
     const params = getUniqueCheckParams();
 
-    if (!Object.values(params).some((value) => value?.trim())) {
+    if (!Object.entries(params).some(([key, value]) => key !== 'role' && value?.trim())) {
       setUniqueErrors(emptyUniqueErrors);
       setUniqueExists(emptyUniqueExists);
       setUniqueChecking(emptyUniqueChecking);
@@ -259,7 +265,7 @@ const useFormHook = (): useFormProps => {
     );
 
     try {
-      const res = await checkDoctorUnique(params);
+      const res = await checkUserUnique(params);
 
       if (uniqueCheckRequestIdRef.current !== requestId) {
         return false;
@@ -278,7 +284,7 @@ const useFormHook = (): useFormProps => {
 
         Object.entries(res.fields).forEach(([apiField, result]) => {
           const formField =
-            formFieldByApiField[apiField as DoctorUniqueField];
+            formFieldByApiField[apiField as UserUniqueField];
 
           if (!formField || !result.checked) return;
 
@@ -295,7 +301,7 @@ const useFormHook = (): useFormProps => {
 
         Object.entries(res.fields).forEach(([apiField, result]) => {
           const formField =
-            formFieldByApiField[apiField as DoctorUniqueField];
+            formFieldByApiField[apiField as UserUniqueField];
 
           if (!formField || !result.checked) return;
 
@@ -521,29 +527,9 @@ const useFormHook = (): useFormProps => {
     };
 
   const handleUsernameChange = useCallback((username: string) => {
-    if (!username || username.trim().length < 3) {
-      setUsernameStatus('idle');
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      return;
-    }
-
-    setUsernameStatus('checking');
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const res = await checkUsername(username.trim());
-        if (res.success) {
-          setUsernameStatus(res.exists ? 'exists' : 'available');
-        } else {
-          setUsernameStatus('idle');
-        }
-      } catch {
-        setUsernameStatus('idle');
-      }
-    }, 600);
-  }, []);
+    setUsernameStatus('idle');
+    handleUniqueFieldChange('username', username);
+  }, [handleUniqueFieldChange]);
 
   const handlePhoneNumberChange = useCallback((phoneNumber: string) => {
     const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
@@ -568,7 +554,6 @@ const useFormHook = (): useFormProps => {
 
   useEffect(() => {
     return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
       if (uniqueDebounceRef.current) clearTimeout(uniqueDebounceRef.current);
     };
   }, []);
