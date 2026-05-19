@@ -1,17 +1,22 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 
 import { updateMeetingStatus } from '@service';
 import { showModalReducer } from '@slice';
+import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
 
 const UpdateStatus: ClientComponentProps<{ id: string }> = ({ id }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [user] = useUser();
   const timeoutRef = useRef<any | null>(null);
   const [isHover, setIsHover] = useState<boolean>(false);
 
@@ -60,6 +65,8 @@ const UpdateStatus: ClientComponentProps<{ id: string }> = ({ id }) => {
               type: 'SUCCESS',
             })
           );
+          const rolePath = user.role?.toLowerCase() ?? pathname?.split('/')[1] ?? 'doctor';
+          router.replace(`/${rolePath}/telemed/meetings`);
         } catch (err) {
           dispatch(
             showModalReducer({
@@ -138,7 +145,6 @@ const UpdateStatus: ClientComponentProps<{ id: string }> = ({ id }) => {
             </div>
           </motion.div>
         )}
-        ƒ
       </AnimatePresence>
     </div>
   );
