@@ -36,6 +36,7 @@ export interface AddDoctorProps {
 export type DoctorUniqueFormField =
   | 'email'
   | 'phoneNumber'
+  | 'username'
   | 'npi_number'
   | 'pmdc_number';
 

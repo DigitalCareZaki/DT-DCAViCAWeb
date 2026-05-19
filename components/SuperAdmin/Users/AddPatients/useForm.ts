@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
@@ -15,13 +15,13 @@ import {
   getOrganizationNurses,
   getSites,
   getSiteDoctors,
-  checkUsername,
 } from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
+import useUniqueUserCheck from '../useUniqueUserCheck';
 import {
   formatPhoneNumberToE164,
   getInternationalPhoneNumberError,
@@ -29,6 +29,7 @@ import {
 } from '../../../../utils/phoneNumber';
 
 import type { AddPatientProps, useFormProps, SelectorsProps, UsernameStatus } from './types';
+import type { UserUniqueFormField } from '../useUniqueUserCheck';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -38,6 +39,12 @@ import type {
 } from '@types';
 
 import { ModalState } from '@store-types';
+
+const patientUniqueFields: UserUniqueFormField[] = [
+  'email',
+  'phoneNumber',
+  'username',
+];
 
 // Define loading step types
 export type LoadingStep =
@@ -67,7 +74,6 @@ const useFormHook = (): useFormProps => {
   const [error, setError] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
   const [usernameStatus, setUsernameStatus] = useState<UsernameStatus>('idle');
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [selectors, setSelectors] = useState<SelectorsProps>({
     gender: {
@@ -172,6 +178,18 @@ const useFormHook = (): useFormProps => {
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
 
+  const {
+    uniqueErrors,
+    uniqueChecking,
+    hasUniqueConflict,
+    checkUniqueValues,
+    handleUniqueFieldChange,
+  } = useUniqueUserCheck<AddPatientProps>({
+    role: 'PATIENT',
+    fields: patientUniqueFields,
+    getValues,
+  });
+
   // Function to get loading step information
   const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
     const steps: Record<LoadingStep, LoadingStepInfo> = {
@@ -235,6 +253,18 @@ const useFormHook = (): useFormProps => {
 
       // Simulate validation step
       await new Promise(resolve => setTimeout(resolve, 500));
+      const hasDuplicateUserField = await checkUniqueValues();
+
+      if (hasDuplicateUserField) {
+        setCurrentStep('error');
+        handleShowModal({
+          message: 'Please resolve duplicate fields before submitting',
+          type: 'ERROR',
+          show: true,
+        });
+        return;
+      }
+
       setCurrentStep('preparing');
 
       // Get current form values to ensure we have the latest state
@@ -316,29 +346,9 @@ const useFormHook = (): useFormProps => {
   });
 
   const handleUsernameChange = useCallback((username: string) => {
-    if (!username || username.trim().length < 3) {
-      setUsernameStatus('idle');
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      return;
-    }
-
-    setUsernameStatus('checking');
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const res = await checkUsername(username.trim());
-        if (res.success) {
-          setUsernameStatus(res.exists ? 'exists' : 'available');
-        } else {
-          setUsernameStatus('idle');
-        }
-      } catch {
-        setUsernameStatus('idle');
-      }
-    }, 600);
-  }, []);
+    setUsernameStatus('idle');
+    handleUniqueFieldChange('username', username);
+  }, [handleUniqueFieldChange]);
 
   const handlePhoneNumberChange = useCallback((phoneNumber: string) => {
     const normalizedPhoneNumber = normalizePhoneNumberInput(phoneNumber);
@@ -547,6 +557,10 @@ const useFormHook = (): useFormProps => {
     usernameStatus,
     handleUsernameChange,
     handlePhoneNumberChange,
+    uniqueErrors,
+    uniqueChecking,
+    hasUniqueConflict,
+    handleUniqueFieldChange,
   ];
 };
 
