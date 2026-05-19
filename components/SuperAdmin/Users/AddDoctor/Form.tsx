@@ -46,6 +46,11 @@ const Form: React.FC = () => {
     usernameStatus,
     handleUsernameChange,
     handlePhoneNumberChange,
+    uniqueErrors,
+    uniqueChecking,
+    hasUniqueConflict,
+    handleUniqueFieldChange,
+    handleUniqueFieldBlur,
   ] = useForm();
 
   const [showDob, setShowDob] = useState<boolean>(false);
@@ -145,6 +150,11 @@ const Form: React.FC = () => {
     );
   };
 
+  const phoneNumberField = register('phoneNumber');
+  const emailField = register('email');
+  const npiNumberField = register('npi_number');
+  const pmdcNumberField = register('pmdc_number');
+
   return (
     <form
       onSubmit={onSubmit}
@@ -212,13 +222,21 @@ const Form: React.FC = () => {
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={{
-              ...register('phoneNumber'),
+              ...phoneNumberField,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 handlePhoneNumberChange(e.target.value);
+                handleUniqueFieldChange('phoneNumber', e.target.value);
+              },
+              onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                phoneNumberField.onBlur(e);
+                handleUniqueFieldBlur('phoneNumber', e.target.value);
               },
             }}
-            error={!!errors.phoneNumber?.message}
-            errorMessage={errors.phoneNumber?.message || '&'}
+            loading={uniqueChecking.phoneNumber}
+            error={!!errors.phoneNumber?.message || !!uniqueErrors.phoneNumber}
+            errorMessage={
+              errors.phoneNumber?.message || uniqueErrors.phoneNumber || '&'
+            }
           />
         </div>
       </div>
@@ -233,9 +251,20 @@ const Form: React.FC = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('email')}
-            error={!!errors.email?.message}
-            errorMessage={errors.email?.message || '&'}
+            hookProps={{
+              ...emailField,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                emailField.onChange(e);
+                handleUniqueFieldChange('email', e.target.value);
+              },
+              onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                emailField.onBlur(e);
+                handleUniqueFieldBlur('email', e.target.value);
+              },
+            }}
+            loading={uniqueChecking.email}
+            error={!!errors.email?.message || !!uniqueErrors.email}
+            errorMessage={errors.email?.message || uniqueErrors.email || '&'}
           />
         </div>
         <div className="w-1/2">
@@ -638,9 +667,22 @@ const Form: React.FC = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('npi_number')}
-            error={!!errors.npi_number?.message}
-            errorMessage={errors.npi_number?.message || '&'}
+            hookProps={{
+              ...npiNumberField,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                npiNumberField.onChange(e);
+                handleUniqueFieldChange('npi_number', e.target.value);
+              },
+              onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                npiNumberField.onBlur(e);
+                handleUniqueFieldBlur('npi_number', e.target.value);
+              },
+            }}
+            loading={uniqueChecking.npi_number}
+            error={!!errors.npi_number?.message || !!uniqueErrors.npi_number}
+            errorMessage={
+              errors.npi_number?.message || uniqueErrors.npi_number || '&'
+            }
           />
         </div>
 
@@ -653,9 +695,22 @@ const Form: React.FC = () => {
             borderTheme
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
-            hookProps={register('pmdc_number')}
-            error={!!errors.pmdc_number?.message}
-            errorMessage={errors.pmdc_number?.message || '&'}
+            hookProps={{
+              ...pmdcNumberField,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                pmdcNumberField.onChange(e);
+                handleUniqueFieldChange('pmdc_number', e.target.value);
+              },
+              onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                pmdcNumberField.onBlur(e);
+                handleUniqueFieldBlur('pmdc_number', e.target.value);
+              },
+            }}
+            loading={uniqueChecking.pmdc_number}
+            error={!!errors.pmdc_number?.message || !!uniqueErrors.pmdc_number}
+            errorMessage={
+              errors.pmdc_number?.message || uniqueErrors.pmdc_number || '&'
+            }
           />
         </div>
       </div>
@@ -677,7 +732,11 @@ const Form: React.FC = () => {
           title={loading ? "Processing..." : "Save"}
           name={loading ? "Processing..." : "Save"}
           className="rounded-lg relative"
-          disabled={loading}
+          disabled={
+            loading ||
+            Object.values(uniqueChecking).some(Boolean) ||
+            hasUniqueConflict
+          }
           type="submit"
         >
           {loading && (

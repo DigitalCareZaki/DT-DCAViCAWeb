@@ -11,6 +11,8 @@ async function getVlPatients(): Promise<GetVLAllPatients> {
 
   const data = await res.json();
 
+  console.log('Fetched VL patients:', data);
+
   return {
     success: res.ok,
     data,

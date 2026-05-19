@@ -14,6 +14,7 @@ import {
   getOrganizationDepartments,
   getSites,
   checkUsername,
+  checkDoctorUnique,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -26,7 +27,21 @@ import {
   normalizePhoneNumberInput,
 } from '../../../../utils/phoneNumber';
 
-import type { AddDoctorProps, useFormProps, SelectorsProps, LoadingStep, LoadingStepInfo, UsernameStatus } from './types';
+import type {
+  AddDoctorProps,
+  useFormProps,
+  SelectorsProps,
+  LoadingStep,
+  LoadingStepInfo,
+  UsernameStatus,
+  DoctorUniqueErrors,
+  DoctorUniqueChecking,
+  DoctorUniqueFormField,
+} from './types';
+import type {
+  CheckDoctorUniqueParams,
+  DoctorUniqueField,
+} from '../../../../service/superadmin/checkDoctorUnique';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -36,6 +51,41 @@ import type {
 } from '@types';
 
 import { ModalState } from '@store-types';
+
+const emptyUniqueErrors: DoctorUniqueErrors = {
+  email: '',
+  phoneNumber: '',
+  npi_number: '',
+  pmdc_number: '',
+};
+
+const emptyUniqueExists: Record<DoctorUniqueFormField, boolean> = {
+  email: false,
+  phoneNumber: false,
+  npi_number: false,
+  pmdc_number: false,
+};
+
+const emptyUniqueChecking: DoctorUniqueChecking = {
+  email: false,
+  phoneNumber: false,
+  npi_number: false,
+  pmdc_number: false,
+};
+
+const formFieldByApiField: Record<DoctorUniqueField, DoctorUniqueFormField> = {
+  email: 'email',
+  phone_number: 'phoneNumber',
+  npi_number: 'npi_number',
+  pmdc_number: 'pmdc_number',
+};
+
+const fallbackUniqueMessages: DoctorUniqueErrors = {
+  email: 'Email already exists',
+  phoneNumber: 'Phone number already exists',
+  npi_number: 'NPI number already exists',
+  pmdc_number: 'PMDC number already exists',
+};
 
 const useFormHook = (): useFormProps => {
   const dispatch = useDispatch();
@@ -48,6 +98,14 @@ const useFormHook = (): useFormProps => {
   const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
   const [usernameStatus, setUsernameStatus] = useState<UsernameStatus>('idle');
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const uniqueDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const uniqueCheckRequestIdRef = useRef<number>(0);
+  const [uniqueErrors, setUniqueErrors] =
+    useState<DoctorUniqueErrors>(emptyUniqueErrors);
+  const [uniqueExists, setUniqueExists] =
+    useState<Record<DoctorUniqueFormField, boolean>>(emptyUniqueExists);
+  const [uniqueChecking, setUniqueChecking] =
+    useState<DoctorUniqueChecking>(emptyUniqueChecking);
 
   const [selectors, setSelectors] = useState<SelectorsProps>({
     gender: {
@@ -132,6 +190,7 @@ const useFormHook = (): useFormProps => {
     clearErrors,
     setError: setFieldError,
     reset,
+    getValues,
   } = useForm<AddDoctorProps>({
     defaultValues: {
       phoneNumber: '+92',
@@ -142,6 +201,156 @@ const useFormHook = (): useFormProps => {
 
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
+
+  const getUniqueCheckParams = useCallback((): CheckDoctorUniqueParams => {
+    const values = getValues();
+    const normalizedPhoneNumber = normalizePhoneNumberInput(
+      values.phoneNumber || ''
+    );
+    const phoneNumber = getInternationalPhoneNumberError(normalizedPhoneNumber)
+      ? ''
+      : formatPhoneNumberToE164(normalizedPhoneNumber);
+    const params: CheckDoctorUniqueParams = {};
+
+    if (values.email?.trim()) params.email = values.email.trim();
+    if (phoneNumber?.trim()) params.phone_number = phoneNumber.trim();
+    if (values.npi_number?.trim()) {
+      params.npi_number = values.npi_number.trim();
+    }
+    if (values.pmdc_number?.trim()) {
+      params.pmdc_number = values.pmdc_number.trim();
+    }
+
+    return params;
+  }, [getValues]);
+
+  const clearUniqueField = useCallback((field: DoctorUniqueFormField) => {
+    setUniqueErrors((prev) => ({
+      ...prev,
+      [field]: '',
+    }));
+    setUniqueExists((prev) => ({
+      ...prev,
+      [field]: false,
+    }));
+  }, []);
+
+  const checkDoctorUniqueValues = useCallback(async (
+    activeField?: DoctorUniqueFormField
+  ) => {
+    const params = getUniqueCheckParams();
+
+    if (!Object.values(params).some((value) => value?.trim())) {
+      setUniqueErrors(emptyUniqueErrors);
+      setUniqueExists(emptyUniqueExists);
+      setUniqueChecking(emptyUniqueChecking);
+      return false;
+    }
+
+    const requestId = uniqueCheckRequestIdRef.current + 1;
+    uniqueCheckRequestIdRef.current = requestId;
+    setUniqueChecking(
+      activeField
+        ? {
+          ...emptyUniqueChecking,
+          [activeField]: true,
+        }
+        : emptyUniqueChecking
+    );
+
+    try {
+      const res = await checkDoctorUnique(params);
+
+      if (uniqueCheckRequestIdRef.current !== requestId) {
+        return false;
+      }
+
+      if (!res.success) {
+        return false;
+      }
+
+      const hasConflict = Object.values(res.fields).some(
+        (result) => result.checked && result.exists
+      );
+
+      setUniqueErrors((prev) => {
+        const next = { ...prev };
+
+        Object.entries(res.fields).forEach(([apiField, result]) => {
+          const formField =
+            formFieldByApiField[apiField as DoctorUniqueField];
+
+          if (!formField || !result.checked) return;
+
+          next[formField] = result.exists
+            ? result.message || fallbackUniqueMessages[formField]
+            : '';
+        });
+
+        return next;
+      });
+
+      setUniqueExists((prev) => {
+        const next = { ...prev };
+
+        Object.entries(res.fields).forEach(([apiField, result]) => {
+          const formField =
+            formFieldByApiField[apiField as DoctorUniqueField];
+
+          if (!formField || !result.checked) return;
+
+          next[formField] = result.exists;
+        });
+
+        return next;
+      });
+
+      return hasConflict;
+    } catch {
+      return false;
+    } finally {
+      if (uniqueCheckRequestIdRef.current === requestId) {
+        setUniqueChecking(emptyUniqueChecking);
+      }
+    }
+  }, [getUniqueCheckParams]);
+
+  const scheduleUniqueCheck = useCallback((field: DoctorUniqueFormField) => {
+    if (uniqueDebounceRef.current) clearTimeout(uniqueDebounceRef.current);
+
+    uniqueDebounceRef.current = setTimeout(() => {
+      checkDoctorUniqueValues(field);
+    }, 500);
+  }, [checkDoctorUniqueValues]);
+
+  const handleUniqueFieldChange = useCallback(
+    (field: DoctorUniqueFormField, value: string) => {
+      uniqueCheckRequestIdRef.current += 1;
+
+      const cleanValue =
+        field === 'phoneNumber'
+          ? normalizePhoneNumberInput(value)
+          : value.trim();
+      const shouldClear =
+        !cleanValue ||
+        (field === 'phoneNumber' &&
+          !!getInternationalPhoneNumberError(cleanValue));
+
+      if (shouldClear) {
+        clearUniqueField(field);
+      }
+
+      scheduleUniqueCheck(field);
+    },
+    [clearUniqueField, scheduleUniqueCheck]
+  );
+
+  const handleUniqueFieldBlur = useCallback(
+    (field: DoctorUniqueFormField, value: string) => {
+      handleUniqueFieldChange(field, value);
+    },
+    [handleUniqueFieldChange]
+  );
 
   // Function to get loading step information
   const getLoadingStepInfo = (step: LoadingStep): LoadingStepInfo => {
@@ -206,6 +415,18 @@ const useFormHook = (): useFormProps => {
 
       // Simulate validation step
       await new Promise(resolve => setTimeout(resolve, 500));
+      const hasDuplicateDoctorField = await checkDoctorUniqueValues();
+
+      if (hasDuplicateDoctorField) {
+        setCurrentStep('error');
+        handleShowModal({
+          message: 'Please resolve duplicate doctor fields before submitting',
+          type: 'ERROR',
+          show: true,
+        });
+        return;
+      }
+
       setCurrentStep('preparing');
 
       // Simulate data preparation step
@@ -345,6 +566,13 @@ const useFormHook = (): useFormProps => {
     clearErrors('phoneNumber');
   }, [clearErrors, setFieldError, setValue]);
 
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (uniqueDebounceRef.current) clearTimeout(uniqueDebounceRef.current);
+    };
+  }, []);
+
   const setDobValue = (value: Date | undefined | null) => {
     const iso = value ? new Date(value).toISOString() : '';
     setValue('dob', iso as any, { shouldValidate: true });
@@ -465,6 +693,11 @@ const useFormHook = (): useFormProps => {
     usernameStatus,
     handleUsernameChange,
     handlePhoneNumberChange,
+    uniqueErrors,
+    uniqueChecking,
+    Object.values(uniqueExists).some(Boolean),
+    handleUniqueFieldChange,
+    handleUniqueFieldBlur,
   ];
 };
 
