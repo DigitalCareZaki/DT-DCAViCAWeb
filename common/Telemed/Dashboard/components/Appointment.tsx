@@ -353,7 +353,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
                 <button
                   key={opt}
                   role="menuitem"
-                  onClick={() => handleAccept(opt as any)}
+                  onClick={() => handleAccept(opt as any, true)}
                   className={twMerge(
                     'flex h-10 w-full items-center justify-between rounded-lg px-3 transition-colors hover:bg-black/5 focus:bg-black/5 focus:outline-none',
                     text,
