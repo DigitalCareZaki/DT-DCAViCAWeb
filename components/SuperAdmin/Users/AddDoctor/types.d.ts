@@ -33,6 +33,16 @@ export interface AddDoctorProps {
   avicardia_monitoring: string;
 }
 
+export type DoctorUniqueFormField =
+  | 'email'
+  | 'phoneNumber'
+  | 'npi_number'
+  | 'pmdc_number';
+
+export type DoctorUniqueErrors = Record<DoctorUniqueFormField, string>;
+
+export type DoctorUniqueChecking = Record<DoctorUniqueFormField, boolean>;
+
 export interface SelectorsProps {
   gender: {
     title: string | undefined;
@@ -92,6 +102,14 @@ export type useFormProps = [
   usernameStatus: UsernameStatus,
   handleUsernameChange: (username: string) => void,
   handlePhoneNumberChange: (phoneNumber: string) => void,
+  uniqueErrors: DoctorUniqueErrors,
+  uniqueChecking: DoctorUniqueChecking,
+  hasUniqueConflict: boolean,
+  handleUniqueFieldChange: (
+    field: DoctorUniqueFormField,
+    value: string
+  ) => void,
+  handleUniqueFieldBlur: (field: DoctorUniqueFormField, value: string) => void,
 ];
 
 export type UsernameStatus = 'idle' | 'checking' | 'exists' | 'available';
