@@ -121,8 +121,20 @@ export const validator = create((data: AddDoctorProps) => {
     enforce(data.department).isNotEmpty();
   });
 
+  test('avicardia_monitoring', 'AViCardia Monitoring is required', () => {
+    enforce(data.avicardia_monitoring).isNotEmpty();
+  });
+
+  test('site', 'Cardiac Monitoring Site is required', () => {
+    enforce(data.site).isNotEmpty();
+  });
+
   test('dob', 'Date of birth is required', () => {
     enforce(data.dob).isNotEmpty();
+  });
+
+  test('address', 'Address is required', () => {
+    enforce(data.address).isNotEmpty();
   });
 
   test('npi_number', 'NPI number is required', () => {
@@ -131,6 +143,18 @@ export const validator = create((data: AddDoctorProps) => {
 
   test('employee_id', 'Employee ID is required', () => {
     enforce(data.employee_id).isNotEmpty();
+  });
+
+  test('Institute', 'Institute is required', () => {
+    enforce(data.Institute).isNotEmpty();
+  });
+
+  test('Contract', 'Contract is required', () => {
+    enforce(data.Contract).isNotEmpty();
+  });
+
+  test('pmdc_number', 'PMDC Number is required', () => {
+    enforce(data.pmdc_number).isNotEmpty();
   });
 
   test('phoneNumber', 'Invalid phone number', () => {

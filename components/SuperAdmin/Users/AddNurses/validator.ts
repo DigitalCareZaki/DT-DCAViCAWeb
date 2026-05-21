@@ -56,8 +56,16 @@ export const validator = create((data: AddNurseProps) => {
     enforce(data.department).isNotEmpty();
   });
 
+  test('site', 'Cardiac Monitoring Site is required', () => {
+    enforce(data.site).isNotEmpty();
+  });
+
   test('dob', 'Date of birth is required', () => {
     enforce(data.dob).isNotEmpty();
+  });
+
+  test('address', 'Address is required', () => {
+    enforce(data.address).isNotEmpty();
   });
 
   test('npi_number', 'NPI number is required', () => {

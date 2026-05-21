@@ -52,12 +52,36 @@ export const validator = create((data: AddPatientProps) => {
     enforce(data.branch).isNotEmpty();
   });
 
+  test('weight', 'Weight is required', () => {
+    enforce(data.weight).isNotEmpty();
+  });
+
+  test('height', 'Height is required', () => {
+    enforce(data.height).isNotEmpty();
+  });
+
   test('dob', 'Date of birth is required', () => {
     enforce(data.dob).isNotEmpty();
   });
 
+  test('address', 'Address is required', () => {
+    enforce(data.address).isNotEmpty();
+  });
+
   test('cardiac_monitoring', 'AViCardia Monitoring is required', () => {
     enforce(data.cardiac_monitoring).isNotEmpty();
+  });
+
+  test('site', 'Cardiac Monitoring Site is required', () => {
+    enforce(data.site).isNotEmpty();
+  });
+
+  test('doctor', 'Doctor is required', () => {
+    enforce(data.doctor).isNotEmpty();
+  });
+
+  test('nurse', 'Nurse is required', () => {
+    enforce(data.nurse).isNotEmpty();
   });
 
   test('phoneNumber', 'Invalid phone number', () => {
