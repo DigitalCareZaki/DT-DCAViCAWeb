@@ -60,6 +60,18 @@ export const validator = create((data: AddPatientProps) => {
     enforce(data.cardiac_monitoring).isNotEmpty();
   });
 
+  test('site', 'Cardiac Monitoring Site is required', () => {
+    enforce(data.site).isNotEmpty();
+  });
+
+  test('doctor', 'Doctor is required', () => {
+    enforce(data.doctor).isNotEmpty();
+  });
+
+  test('nurse', 'Nurse is required', () => {
+    enforce(data.nurse).isNotEmpty();
+  });
+
   test('phoneNumber', 'Invalid phone number', () => {
     const phoneError = getInternationalPhoneNumberError(data.phoneNumber);
 
