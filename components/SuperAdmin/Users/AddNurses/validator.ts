@@ -64,6 +64,10 @@ export const validator = create((data: AddNurseProps) => {
     enforce(data.dob).isNotEmpty();
   });
 
+  test('address', 'Address is required', () => {
+    enforce(data.address).isNotEmpty();
+  });
+
   test('npi_number', 'NPI number is required', () => {
     enforce(data.npi_number).isNotEmpty();
   });

@@ -98,6 +98,10 @@ export const validator = create((data: AddAdminProps) => {
     enforce(data.dob).isNotEmpty();
   });
 
+  test('address', 'Address is required', () => {
+    enforce(data.address).isNotEmpty();
+  });
+
   test('phoneNumber', 'Invalid phone number', () => {
     const phoneError = getInternationalPhoneNumberError(data.phoneNumber);
 
