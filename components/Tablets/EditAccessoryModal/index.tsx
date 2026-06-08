@@ -35,6 +35,15 @@ const EditAccessoryModal = ({ tabletId, onClose, onSuccess }: EditAccessoryModal
         dispatch(showModalReducer(payload));
     };
 
+    const getApiErrorMessage = (res: any, fallback = 'Something went wrong') => {
+        return (
+            res?.message?.toString?.()?.trim?.() ||
+            res?.data?.message?.toString?.()?.trim?.() ||
+            res?.error?.toString?.()?.trim?.() ||
+            fallback
+        );
+    };
+
     // Fetch tablet data when modal opens
     useEffect(() => {
         const fetchTabletData = async () => {
@@ -86,7 +95,7 @@ const EditAccessoryModal = ({ tabletId, onClose, onSuccess }: EditAccessoryModal
             if (!res.success) {
                 handleShowModal({
                     type: 'ERROR',
-                    message: res?.message ?? 'Unable to update accessory',
+                    message: getApiErrorMessage(res),
                     show: true,
                 });
                 return;
@@ -100,10 +109,10 @@ const EditAccessoryModal = ({ tabletId, onClose, onSuccess }: EditAccessoryModal
 
             onSuccess();
             onClose();
-        } catch (err) {
+        } catch (err: any) {
             handleShowModal({
                 type: 'ERROR',
-                message: 'Error updating accessory',
+                message: err?.message?.toString?.()?.trim?.() || 'Something went wrong',
                 show: true,
             });
         } finally {

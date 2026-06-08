@@ -102,6 +102,14 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  const getApiErrorMessage = (res: any, fallback = 'Something went wrong') => {
+    return (
+      res?.message?.toString?.()?.trim?.() ||
+      res?.data?.message?.toString?.()?.trim?.() ||
+      res?.error?.toString?.()?.trim?.() ||
+      fallback
+    );
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -119,41 +127,18 @@ const useFormHook = (
       }
       const isSuperadmin = (user?.role as any) === 'SUPERADMIN';
 
-      const res = isSuperadmin
-        ? await createTabletSuperadmin(btoa(JSON.stringify(payload)))
-        : await createTablet(btoa(JSON.stringify(payload)));
-
-
-
-
       // create case
       if (!prevData) {
-        // const res = await createTablet(
-        //   btoa(
-        //     JSON.stringify({
-        //       title: data.title,
-        //       serial_number: data.serial_number,
-        //       category: "ECG",
-        //     })
-        //   )
-        // );
-        // console.log('res >>>>>', res);
+        const res = isSuperadmin
+          ? await createTabletSuperadmin(btoa(JSON.stringify(payload)))
+          : await createTablet(btoa(JSON.stringify(payload)));
 
         if (!res.success) {
-          // Check for duplicate error message
-          if (res?.message) {
-            handleShowModal({
-              type: 'ERROR',
-              message: 'Accessory already exists in your organization.',
-              show: true,
-            });
-          } else {
-            handleShowModal({
-              type: 'ERROR',
-              message: res?.message ?? 'Accessory already exists.',
-              show: true,
-            });
-          }
+          handleShowModal({
+            type: 'ERROR',
+            message: getApiErrorMessage(res),
+            show: true,
+          });
           return;
         } else {
           // Handle success case
@@ -182,7 +167,7 @@ const useFormHook = (
         if (!res.success) {
           handleShowModal({
             type: 'ERROR',
-            message: res?.message ?? 'Unable to update Accessory',
+            message: getApiErrorMessage(res),
             show: true,
           });
           return;
@@ -196,7 +181,12 @@ const useFormHook = (
       }
 
 
-    } catch (err) {
+    } catch (err: any) {
+      handleShowModal({
+        type: 'ERROR',
+        message: err?.message?.toString?.()?.trim?.() || 'Something went wrong',
+        show: true,
+      });
     } finally {
       setLoading(false);
     }
