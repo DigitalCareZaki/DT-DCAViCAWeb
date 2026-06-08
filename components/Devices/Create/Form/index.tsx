@@ -12,7 +12,7 @@ import {
 } from '@common';
 import { useUser } from '@selectors';
 import useForm from './useForm';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { ClientComponentProps } from '@types';
 import type { CreateDeviceProps } from './types';
 import { FaCalendarAlt, FaSpinner, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
@@ -22,7 +22,14 @@ import type { LoadingStep, LoadingStepInfo } from './types';
 const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
   const router = useRouter();
+  const pathname = usePathname();
   const [user] = useUser();
+  const currentRole = pathname?.split('/').filter(Boolean)[0];
+  const devicesRoute = user?.role?.toLocaleLowerCase()
+    ? `/${user.role.toLocaleLowerCase()}/devices`
+    : currentRole
+      ? `/${currentRole}/devices`
+      : '/devices';
   // const [selectedSerial, setSelectedSerial] = useState<string[]>([]);
   const categories = useMemo(
     () => [
@@ -359,7 +366,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         type="button"
         title={'Close'}
         name={'Close'}
-        onClick={() => router.back()}
+        onClick={() => router.push(devicesRoute)}
         className="h-12 px-4 py-2 text-lg sm:text-xl lg:text-xl"
       />
     </form>

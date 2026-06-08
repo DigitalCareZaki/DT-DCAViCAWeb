@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
@@ -29,6 +29,7 @@ const useFormHook = (
 ): any => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const [user] = useUser();
 
   const [selectedSerial, setSelectedSerial] = useState<string>('');
@@ -115,10 +116,21 @@ const useFormHook = (
     dispatch(showModalReducer(payload));
   };
 
+  const getDevicesRoute = useCallback(() => {
+    const role = user?.role?.toLocaleLowerCase();
+    const currentRole = pathname?.split('/').filter(Boolean)[0];
+    return role
+      ? `/${role}/devices`
+      : currentRole
+        ? `/${currentRole}/devices`
+        : '/devices';
+  }, [pathname, user?.role]);
+
   const dismissLoadingOverlay = useCallback(() => {
     setLoading(false);
     setCurrentStep('idle');
-  }, []);
+    router.push(getDevicesRoute());
+  }, [getDevicesRoute, router]);
 
   const getSyncErrorMessage = (res: any) => {
     const vivalinkError =
@@ -317,7 +329,7 @@ const useFormHook = (
             show: true,
           });
           setTimeout(() => {
-            router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
+            router.push(getDevicesRoute());
           }, 2000);
           return;
 
@@ -374,8 +386,8 @@ const useFormHook = (
             show: true,
           });
           setTimeout(() => {
-            router.push(`/${user.role?.toLocaleLowerCase()}/devices`);
-          }, 2000);
+            router.push(getDevicesRoute());
+          }, 1000);
           return;
 
         }
