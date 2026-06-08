@@ -46,6 +46,15 @@ const useFormHook = (
         dispatch(showModalReducer(payload));
     };
 
+    const getApiErrorMessage = (res: any, fallback = 'Something went wrong') => {
+        return (
+            res?.message?.toString?.()?.trim?.() ||
+            res?.data?.message?.toString?.()?.trim?.() ||
+            res?.error?.toString?.()?.trim?.() ||
+            fallback
+        );
+    };
+
     const onSubmit = handleSubmit(async (data) => {
         try {
             setLoading(true);
@@ -74,7 +83,7 @@ const useFormHook = (
             if (!res.success) {
                 handleShowModal({
                     type: 'ERROR',
-                    message: res?.message ?? 'Unable to update Accessory',
+                    message: getApiErrorMessage(res),
                     show: true,
                 });
                 return;
@@ -88,10 +97,10 @@ const useFormHook = (
 
             router.push(`/${user.role?.toLocaleLowerCase()}/tablets`);
 
-        } catch (err) {
+        } catch (err: any) {
             handleShowModal({
                 type: 'ERROR',
-                message: 'Error updating accessory',
+                message: err?.message?.toString?.()?.trim?.() || 'Something went wrong',
                 show: true,
             });
         } finally {

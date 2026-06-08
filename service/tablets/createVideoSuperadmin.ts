@@ -32,6 +32,7 @@ const createTabletSuperadmin = async (data: any): Promise<any> => {
         return {
             success: false,
             data: null,
+            message: err?.message,
         };
     }
 };
