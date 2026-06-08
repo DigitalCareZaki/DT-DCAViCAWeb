@@ -35,13 +35,13 @@ const Export: ClientComponentProps<ExportProps<Record<string, any>>> = (
   };
 
   return (
-    <div className="relative w-40 z-10">
+    <div className="relative z-50 w-40">
       <ButtonPrimary
         onMouseEnter={onFocus}
         onMouseLeave={onBlur}
         title="Export"
         name="Export"
-        className="h-12 rounded-lg text-lg lg:text-xl xl:text-2xl whitespace-nowrap"
+        className="h-10 rounded-lg text-lg lg:text-xl xl:text-2xl whitespace-nowrap"
       />
 
       <AnimatePresence>
@@ -49,19 +49,19 @@ const Export: ClientComponentProps<ExportProps<Record<string, any>>> = (
           <motion.div
             initial={{
               opacity: 0,
-              top: '30px',
+              top: '36px',
             }}
             animate={{
               opacity: 1,
-              top: '64px',
+              top: '48px',
             }}
             exit={{
-              top: '80px',
+              top: '56px',
               opacity: 0,
             }}
             onMouseEnter={onFocus}
             onMouseLeave={onBlur}
-            className="absolute top-16 z-50 flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
+            className="absolute right-0 z-50 flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
           >
             <CsvLink {...props} />
             <PdfLink {...props} />
