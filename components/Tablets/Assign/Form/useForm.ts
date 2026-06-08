@@ -49,7 +49,12 @@ const useFormHook = (tabletId: string): UseFormProps => {
   };
 
   const onChange = debounce(async (event: ChangeEvent<HTMLInputElement>[]) => {
-    const value = event[0]?.target.value;
+    const value = event[0]?.target.value?.trim() ?? '';
+
+    if (!value) {
+      setPatients([]);
+      return;
+    }
 
     try {
       setSearching(true);
