@@ -150,7 +150,7 @@ const useFormHook = (
           } else {
             handleShowModal({
               type: 'ERROR',
-              message: res?.message ?? 'Unable to create a new Accessory',
+              message: res?.message ?? 'Accessory already exists.',
               show: true,
             });
           }
