@@ -41,7 +41,7 @@ const validator = create((data: AddBranchProps) => {
       throw new Error();
     }
 
-    if (data.email.length > 25) throw new Error();
+    // if (data.email.length > 25) throw new Error();
 
     return true;
   });
