@@ -89,13 +89,20 @@ const useFormHook = (): UseFormProps => {
       const res = await createDepartment(btoa(JSON.stringify(payload)));
 
       if (!res.success) {
-        throw new Error(res.message || 'Cannot create department');
+        dispatch(
+          showModalReducer({
+            type: 'ERROR',
+            message: res.message,
+            show: true,
+          })
+        );
+        return;
       }
 
       dispatch(
         showModalReducer({
           type: 'SUCCESS',
-          message: 'Department created successfully',
+          message: 'Department Created Successfully',
           show: true,
         })
       );
@@ -105,7 +112,7 @@ const useFormHook = (): UseFormProps => {
       dispatch(
         showModalReducer({
           type: 'ERROR',
-          message: err?.message || 'Cannot create department',
+          message: err?.message,
           show: true,
         })
       );

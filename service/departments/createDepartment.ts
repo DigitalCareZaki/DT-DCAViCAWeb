@@ -6,12 +6,18 @@ import '@init-globals';
 
 import type { AddDataProps } from '../types';
 
-const getErrorMessage = (body: any): string => {
+const getApiMessage = (body: any): string | undefined => {
   if (Array.isArray(body?.message)) {
     return body.message.join(', ');
   }
 
-  return body?.message || body?.error || 'Cannot create department';
+  return body?.message || body?.error || JSON.stringify(body);
+};
+
+const isApiError = (res: Response, body: any): boolean => {
+  const statusCode = Number(body?.statusCode ?? res.status);
+
+  return !res.ok || statusCode >= 400;
 };
 
 async function addDepartment(data: any): Promise<AddDataProps> {
@@ -28,14 +34,15 @@ async function addDepartment(data: any): Promise<AddDataProps> {
 
     const body = await res.json();
 
+    const message = getApiMessage(body);
 
-
-    if (res.status !== 201) {
-      throw new Error(getErrorMessage(body));
+    if (isApiError(res, body)) {
+      throw new Error(message);
     }
 
     return {
       success: true,
+      message,
     };
   } catch (err: any) {
     return {
