@@ -485,7 +485,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
                 y: 10,
                 opacity: 0,
               }}
-              className="absolute right-0 top-full z-[1001] flex h-fit w-48 flex-col gap-1 rounded-lg bg-white p-2 text-lg shadow-md 2xl:text-2xl border border-gray-200"
+              className="absolute right-0 top-full z-[1001] flex h-fit w-64 flex-col gap-1 rounded-lg border border-gray-200 bg-white p-2 text-lg shadow-md 2xl:text-2xl"
             >
               <Link
                 className="h-full w-full"
