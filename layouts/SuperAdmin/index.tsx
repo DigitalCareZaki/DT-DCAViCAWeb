@@ -44,7 +44,7 @@ const SuperAdminLayout: ClientComponentProps<Props> = ({
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
+          <div className="sticky top-0 z-[1000] bg-background px-6 pt-4 pb-2">
             <PrimaryHeader user={user!} />
           </div>
           {/* Scrollable Content */}
@@ -65,7 +65,7 @@ const SuperAdminLayout: ClientComponentProps<Props> = ({
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+          <div className="sticky top-0 z-[1000] bg-background p-6 pb-2">
             <PrimaryHeader user={user!} />
           </div>
           {/* Scrollable Content */}
@@ -89,7 +89,7 @@ const SuperAdminLayout: ClientComponentProps<Props> = ({
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+          <div className="sticky top-0 z-[1000] bg-background p-6 pb-2">
             <PrimaryHeader user={user!} />
           </div>
           {/* Scrollable Content */}
@@ -120,7 +120,7 @@ const SuperAdminLayout: ClientComponentProps<Props> = ({
         className="flex flex-col h-screen w-full bg-background"
       >
         {/* Sticky Header */}
-        <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+        <div className="sticky top-0 z-[1000] bg-background p-6 pb-2">
           <PrimaryHeader user={user!} />
         </div>
         {/* Scrollable Content */}
