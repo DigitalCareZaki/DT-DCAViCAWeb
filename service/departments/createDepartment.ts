@@ -6,6 +6,14 @@ import '@init-globals';
 
 import type { AddDataProps } from '../types';
 
+const getErrorMessage = (body: any): string => {
+  if (Array.isArray(body?.message)) {
+    return body.message.join(', ');
+  }
+
+  return body?.message || body?.error || 'Cannot create department';
+};
+
 async function addDepartment(data: any): Promise<AddDataProps> {
   try {
     const decodedData = await JSON.parse(
@@ -20,8 +28,10 @@ async function addDepartment(data: any): Promise<AddDataProps> {
 
     const body = await res.json();
 
+
+
     if (res.status !== 201) {
-      throw new Error(body?.message?.toString());
+      throw new Error(getErrorMessage(body));
     }
 
     return {

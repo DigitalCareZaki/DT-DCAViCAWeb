@@ -86,7 +86,12 @@ const useFormHook = (): UseFormProps => {
       };
 
       // btoa;
-      await createDepartment(btoa(JSON.stringify(payload)));
+      const res = await createDepartment(btoa(JSON.stringify(payload)));
+
+      if (!res.success) {
+        throw new Error(res.message || 'Cannot create department');
+      }
+
       dispatch(
         showModalReducer({
           type: 'SUCCESS',
@@ -96,11 +101,11 @@ const useFormHook = (): UseFormProps => {
       );
 
       router.push(`/${user.role?.toLocaleLowerCase()}/departments`);
-    } catch (err) {
+    } catch (err: any) {
       dispatch(
         showModalReducer({
           type: 'ERROR',
-          message: 'Cannot create department',
+          message: err?.message || 'Cannot create department',
           show: true,
         })
       );
@@ -116,7 +121,7 @@ const useFormHook = (): UseFormProps => {
       if (!res.success) return;
 
       setBranches(res.data);
-    } catch (err) {}
+    } catch (err) { }
   }, []);
 
   const handleFetchAndSetCities = useCallback(async () => {
@@ -126,7 +131,7 @@ const useFormHook = (): UseFormProps => {
       if (!res.success) return;
 
       setCities(res.data);
-    } catch (err) {}
+    } catch (err) { }
   }, []);
 
   useEffect(() => {
