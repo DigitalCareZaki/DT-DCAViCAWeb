@@ -53,7 +53,7 @@ const Form: ClientComponent = () => {
           <InputBasic
             title="Department description"
             label="About"
-            placeholder="Enter department description"
+            placeholder="Enter department About"
             icon="SiNamecheap"
             borderTheme
             inputWrapperClassName="bg-background"

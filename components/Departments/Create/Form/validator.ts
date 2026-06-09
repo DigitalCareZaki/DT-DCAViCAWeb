@@ -7,6 +7,10 @@ export const validator = create((data: DepartmentProps) => {
     enforce(data.title).isNotEmpty();
   });
 
+  test('description', 'About is required', () => {
+    enforce(data.description).isNotEmpty();
+  });
+
   test('address', 'Address is missing', () => {
     enforce(data.address).isNotEmpty();
   });

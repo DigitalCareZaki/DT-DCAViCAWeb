@@ -397,7 +397,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
   };
 
   return (
-    <header className="sticky top-0 flex h-16 w-full items-center justify-between rounded-2xl bg-white p-4 shadow-sm border-b border-gray-200">
+    <header className="sticky top-0 z-[1000] flex h-16 w-full items-center justify-between rounded-2xl bg-white p-4 shadow-sm border-b border-gray-200">
       <Link passHref href="/">
         <LogoMainClient
           organizationName={organization.name}
@@ -485,7 +485,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
                 y: 10,
                 opacity: 0,
               }}
-              className="absolute left-0 top-full z-[99999] flex h-fit w-full flex-col gap-1 rounded-lg bg-white p-2 text-lg shadow-md 2xl:text-2xl border border-gray-200"
+              className="absolute right-0 top-full z-[1001] flex h-fit w-64 flex-col gap-1 rounded-lg border border-gray-200 bg-white p-2 text-lg shadow-md 2xl:text-2xl"
             >
               <Link
                 className="h-full w-full"
