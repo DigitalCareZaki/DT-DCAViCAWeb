@@ -374,17 +374,22 @@ export type BranchesDataProps = {
   name: string;
   email: string;
   phone_number: string;
+  organization_id?: string;
   location: {
+    id?: string;
     address: string;
     city: {
+      id?: string;
       name: string;
       country: {
+        id?: string;
         name: string;
       };
     };
   };
   created_by: string;
   created_at: Date;
+  updated_at?: Date;
 };
 
 export type PatientProfileData = {

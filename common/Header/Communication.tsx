@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useUser } from '@selectors';
 
@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 const Communication: ClientComponent = () => {
   const [user] = useUser();
   const [show, setShow] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const getPath = useCallback(
     (uri: string) => {
@@ -22,9 +23,30 @@ const Communication: ClientComponent = () => {
     setShow((prev) => !prev);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShow(false);
+      }
+    };
+
+    if (show) {
+      document.addEventListener('mousedown', handleClickOutside, true);
+      document.addEventListener('touchstart', handleClickOutside, true);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside, true);
+      document.removeEventListener('touchstart', handleClickOutside, true);
+    };
+  }, [show]);
+
   return (
-    <div className="relative flex flex-col">
-      <span onClick={handleToggle} className="text-link-primary">
+    <div ref={dropdownRef} className="relative flex flex-col">
+      <span onClick={handleToggle} className="cursor-pointer text-link-primary">
         Communication
       </span>
       <AnimatePresence mode="wait" key={show ? '1' : '0'}>

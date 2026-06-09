@@ -297,6 +297,11 @@ export type GetBranchesProps = {
   data: BranchesDataProps[];
 };
 
+export type GetBranchProps = {
+  success: boolean;
+  data: BranchesDataProps;
+};
+
 export type GetCurrentPatientProfile = {
   success: boolean;
   data: PatientProfileData;

@@ -40,6 +40,7 @@ export { default as addDoctor } from './superadmin/addDoctor';
 export { default as addAdmin } from './superadmin/addAdmin';
 export { default as getSuperAdminStats } from './superadmin/getStats';
 export { default as getSuperAdminBranches } from './superadmin/getBranches';
+export { default as getSuperAdminBranch } from './superadmin/getBranch';
 export { default as addSuperAdminBranch } from './superadmin/addBranch';
 export { default as getCurrentPatientProfile } from './patients/getCurrentPatientProfile';
 export { default as uploadFile } from './upload/file';
