@@ -41,14 +41,6 @@ export const validator = create((data: CreateMeasurementProps) => {
     enforce(data.title).isNotEmpty();
   });
 
-  test(
-    'title',
-    'Title is too long, must not be longer than 20 characters',
-    () => {
-      enforce(data.title).shorterThanOrEquals(20);
-    }
-  );
-
   test('type', 'Type is required', () => {
     enforce(data.type).isNotEmpty();
   });
@@ -87,38 +79,6 @@ export const validator = create((data: CreateMeasurementProps) => {
     enforce(data.value1).isNumeric();
   });
 
-  test('value1', 'SPO2 must be between 0 and 100', () => {
-    if (data.type === 'SPO2' && data.value1) {
-      const val = parseFloat(data.value1);
-      return !isNaN(val) && val >= 0 && val <= 100;
-    }
-    return true;
-  });
-
-  test('value1', 'Systolic must be between 40 and 300', () => {
-    if (data.type === 'BLOODPRESSURE' && data.value1) {
-      const val = parseFloat(data.value1);
-      return !isNaN(val) && val >= 40 && val <= 300;
-    }
-    return true;
-  });
-
-  test('value1', 'Blood Glucose must be between 10 and 1000', () => {
-    if (data.type === 'BLOODGLUCOSE' && data.value1) {
-      const val = parseFloat(data.value1);
-      return !isNaN(val) && val >= 10 && val <= 1000;
-    }
-    return true;
-  });
-
-  test('value1', 'Temperature must be between 90 and 110', () => {
-    if (data.type === 'TEMPERATURE' && data.value1) {
-      const val = parseFloat(data.value1);
-      return !isNaN(val) && val >= 90 && val <= 110;
-    }
-    return true;
-  });
-
   test('value2', 'Value is required', () => {
     if (data.type === 'BLOODPRESSURE') {
       return !!data.value2;
@@ -129,14 +89,6 @@ export const validator = create((data: CreateMeasurementProps) => {
   test('value2', 'Value must be a number', () => {
     if (data.type === 'BLOODPRESSURE' && data.value2) {
       return !isNaN(parseFloat(data.value2));
-    }
-    return true;
-  });
-
-  test('value2', 'Diastolic must be between 20 and 200', () => {
-    if (data.type === 'BLOODPRESSURE' && data.value2) {
-      const val = parseFloat(data.value2);
-      return !isNaN(val) && val >= 20 && val <= 200;
     }
     return true;
   });

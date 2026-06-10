@@ -33,8 +33,12 @@ const validator = create((data: AddBranchProps) => {
     enforce(data.country).isNotEmpty();
   });
 
+  test('email', 'Branch email is required', () => {
+    enforce(data.email).isNotEmpty();
+  });
+
   test('email', 'Invalid branch email', () => {
-    if (!data.email.length) return true;
+    if (!data.email) return true;
 
     const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     if (!emailRegex.test(data.email)) {
@@ -44,6 +48,10 @@ const validator = create((data: AddBranchProps) => {
     // if (data.email.length > 25) throw new Error();
 
     return true;
+  });
+
+  test('phoneNumber', 'Phone number is required', () => {
+    enforce(data.phoneNumber).isNotEmpty();
   });
 
   test('phoneNumber', 'Invalid phone number', () => {
