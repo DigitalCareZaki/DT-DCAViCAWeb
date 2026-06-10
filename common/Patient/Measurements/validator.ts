@@ -41,14 +41,6 @@ export const validator = create((data: CreateMeasurementProps) => {
     enforce(data.title).isNotEmpty();
   });
 
-  test(
-    'title',
-    'Title is too long, must not be longer than 20 characters',
-    () => {
-      enforce(data.title).shorterThanOrEquals(20);
-    }
-  );
-
   test('type', 'Type is required', () => {
     enforce(data.type).isNotEmpty();
   });
