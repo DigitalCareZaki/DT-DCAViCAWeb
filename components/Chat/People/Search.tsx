@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFetchingRoomsReducer, setRoomsReducer, setSelectedRoomReducer } from '@slice';
 import { InputBasic } from '@common';
 import { searchChatRooms } from '@service';
+import { getName } from '@init-globals';
 import { openOrCreateRoom } from './openOrCreateRoom';
 
 const Search = () => {
@@ -127,7 +128,11 @@ const Search = () => {
               className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"
               onClick={() => onOptionClick(option)}
             >
-              {option.users?.[0]?.first_name} {option.users?.[0]?.last_name}
+              {getName({
+                first_name: option.users?.[0]?.first_name,
+                middle_name: option.users?.[0]?.middle_name,
+                last_name: option.users?.[0]?.last_name,
+              })}
             </li>
           ))}
         </ul>
