@@ -38,11 +38,19 @@ const useFormHook = (patient: string, handleHideForm: () => void): useFormProps 
     formState: { errors },
     setValue,
     clearErrors,
+    reset,
   } = useForm<CreatePatientReadingAlertProps>({
     resolver: vestResolver(validator),
   });
 
-  // Add this
+  const handleReset = () => {
+    reset();
+    setSelectors({
+      type: undefined,
+    });
+    setError(undefined);
+  };
+
   const handleShowModal = (payload: ModalState) => {
     dispatch(showModalReducer(payload));
   };
@@ -84,6 +92,7 @@ const useFormHook = (patient: string, handleHideForm: () => void): useFormProps 
         return;
       }
 
+      handleReset();
       handleHideForm.call(this);
 
       handleShowModal({
@@ -106,7 +115,16 @@ const useFormHook = (patient: string, handleHideForm: () => void): useFormProps 
     clearErrors(type as any);
   };
 
-  return [register, onSubmit, errors, loading, error, handleSelect, selectors];
+  return [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    error,
+    handleSelect,
+    selectors,
+    handleReset,
+  ];
 };
 
 export default useFormHook;

@@ -33,4 +33,5 @@ export type useFormProps = [
   error: string | undefined,
   handleSelect: (type: string, val: string) => void,
   selectors: SelectorsProps,
+  handleReset: () => void,
 ];
