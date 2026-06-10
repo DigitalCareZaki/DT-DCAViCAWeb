@@ -29,7 +29,16 @@ const Form: ClientComponent = () => {
 
   const handleHideForm = () => dispatch(toggleDoctorPatientAlertReducer());
 
-  const [register, onSubmit, errors, loading, error, handleSelect, selectors] =
+  const [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    error,
+    handleSelect,
+    selectors,
+    handleReset,
+  ] =
     useForm(params?.get('patient')?.toString() ?? '', handleHideForm);
 
   return (
@@ -188,7 +197,10 @@ const Form: ClientComponent = () => {
               <ButtonPrimary
                 name="Close"
                 className="h-10 rounded-lg border bg-transparent text-gray-600"
-                onClick={handleHideForm}
+                onClick={() => {
+                  handleReset();
+                  handleHideForm();
+                }}
                 type="button"
                 outlined
               />
