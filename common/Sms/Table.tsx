@@ -26,9 +26,17 @@ const Table: ClientComponentProps<any> = ({ data }) => {
           'Created At',
         ]}
       >
-        <ClientGenerator data={sms ?? []}>
-          <Row />
-        </ClientGenerator>
+        {sms && sms.length > 0 ? (
+          <ClientGenerator data={sms ?? []}>
+            <Row />
+          </ClientGenerator>
+        ) : (
+          <tr className="border-b bg-white">
+            <td className="px-6 py-4 text-center" colSpan={3}>
+              No records found.
+            </td>
+          </tr>
+        )}
       </ClientTable>
     </div>
   );

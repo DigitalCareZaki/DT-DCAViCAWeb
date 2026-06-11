@@ -20,7 +20,7 @@ const SmsHistory: FC = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1); // Current page
-  const [limit] = useState(10); // Items per page
+  const [limit, setLimit] = useState<number>(10); // Items per page (sync with server if provided)
   const [pagination, setPagination] = useState<any>(null); // For totalPages, etc.
 
 
@@ -29,8 +29,31 @@ const SmsHistory: FC = () => {
       setLoading(true);
       const res = await getSmsHistory(page, limit);
       if (res.success) {
-        setData(res.data.data ?? []);
-        setPagination(res.data.pagination);
+        const rows = res.data.data ?? [];
+        const pag = res.data.pagination;
+
+        setData(rows);
+        setPagination(pag);
+
+        // Sync client limit with server perPage if provided
+        const serverPerPage = pag?.perPage;
+        if (serverPerPage && serverPerPage !== limit) {
+          setLimit(Number(serverPerPage));
+        }
+
+        // If server says there are pages but this page returned no rows,
+        // adjust the client page to the server-reported current/last page.
+        if ((rows.length === 0 || rows == null) && page > 1) {
+          const serverCurrent = pag?.currentPage ?? null;
+          const serverTotal = pag?.totalPages ?? null;
+
+          // Prefer serverCurrent if provided, otherwise use last page (totalPages)
+          const fallback = serverCurrent || serverTotal || 1;
+          if (fallback !== page) {
+            setPage(Number(fallback));
+            return; // avoid further processing — useEffect will re-run load
+          }
+        }
       }
     } catch (error) {
       console.error('Error loading emails:', error);
