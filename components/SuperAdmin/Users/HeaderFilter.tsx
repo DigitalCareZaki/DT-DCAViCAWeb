@@ -31,7 +31,7 @@ const HeaderFilter = () => {
   };
 
   return (
-    <div className="relative z-[60] w-40">
+    <div className="relative w-40">
       <ButtonPrimary
         onMouseEnter={onFocus}
         onMouseLeave={onBlur}
@@ -59,7 +59,7 @@ const HeaderFilter = () => {
             }}
             onMouseEnter={onFocus}
             onMouseLeave={onBlur}
-            className="absolute right-0 z-[60] flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
+            className="absolute right-0 z-20 flex h-fit w-full flex-col gap-2 rounded-lg bg-white p-2 shadow-md"
           >
             <Link
               passHref
