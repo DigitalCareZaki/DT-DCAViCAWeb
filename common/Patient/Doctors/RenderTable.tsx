@@ -25,7 +25,7 @@ const RenderTable: ClientComponent = () => {
           >
             {getName({ ...el.user })}
           </th>
-          <td className="px-6 py-4">{el.specialities[0]?.title}</td>
+          <td className="px-6 py-4">{el.departments[0]?.title}</td>
           {/* <td className="px-6 py-4">{el.departments[0]?.title}</td> */}
           <td className="px-6 py-4">{el.user.email}</td>
           <td className="px-6 py-4">{el.user.phone_number}</td>
