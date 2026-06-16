@@ -50,7 +50,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
+          <div className="sticky top-0 z-[10000] bg-background px-6 pt-4 pb-2">
             <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
@@ -83,7 +83,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+          <div className="sticky top-0 z-[10000] bg-background p-6 pb-2">
             <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
@@ -105,7 +105,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+          <div className="sticky top-0 z-[10000] bg-background p-6 pb-2">
             <PrimaryHeader user={currentUser!} />
           </div>
           {/* Scrollable Content */}
@@ -125,7 +125,7 @@ const DoctorLayout: ClientComponentProps<Props> = ({ user, children }) => {
         className="flex flex-col h-screen w-full bg-background"
       >
         {/* Sticky Header */}
-        <div className="sticky top-0 z-50 bg-background p-6 pb-2">
+        <div className="sticky top-0 z-[10000] bg-background p-6 pb-2">
           <PrimaryHeader user={currentUser!} />
         </div>
         {/* Scrollable Content */}
