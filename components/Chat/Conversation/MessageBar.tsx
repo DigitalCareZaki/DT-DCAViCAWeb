@@ -30,6 +30,8 @@ const MessageBar: ClientComponent = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [value, setValue] = useState<string>('');
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const isSendingRef = useRef<boolean>(false);
 
   const { selectedRooms } = useSelector<ReduxProps, StoreChatState>(
     (state) => state.chats
@@ -59,7 +61,7 @@ const MessageBar: ClientComponent = () => {
     file: File | undefined,
     user: UserProps,
     value: string
-  ) => {
+  ): Promise<boolean> => {
     try {
       let media: undefined | string = undefined;
 
@@ -70,6 +72,7 @@ const MessageBar: ClientComponent = () => {
 
         const res = await uploadFile(formdata);
         if (res.success) media = res.url;
+        else return false;
       }
 
       dispatch(
@@ -114,21 +117,33 @@ const MessageBar: ClientComponent = () => {
 
       setValue('');
       setFile(undefined);
-    } catch { }
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   const handleMessage = async (e: FormEvent<HTMLFormElement>) => {
-    console.log('submitting form');
     e?.preventDefault();
 
-    if (!value && !file) return;
+    if (isSendingRef.current || (!value.trim() && !file)) return;
 
-    await sentMessage(file, user, value);
+    isSendingRef.current = true;
+    setIsSending(true);
+
+    try {
+      await sentMessage(file, user, value.trim());
+    } finally {
+      isSendingRef.current = false;
+      setIsSending(false);
+    }
   };
 
 
 
   const onFileSelected = async () => {
+    if (isSendingRef.current) return;
+
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*'; // Accept all file types, you can specify if needed
@@ -153,15 +168,26 @@ const MessageBar: ClientComponent = () => {
               fill
               className="object-cover"
             />
+            {isSending && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              </div>
+            )}
           </div>
-          <FaTimes
-            className="cursor-pointer text-red-500 hover:text-red-700"
+          <button
+            type="button"
+            aria-label="Remove selected image"
+            disabled={isSending}
             onClick={() => setFile(undefined)}
-          />
+            className="text-red-500 transition duration-300 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <FaTimes />
+          </button>
         </div>
       )}
       <form
         onSubmit={handleMessage}
+        aria-busy={isSending}
         className="w-90 focus-within:theme-border-color flex h-14 items-center gap-4 rounded-lg border border-transparent bg-opacity-50 bg-gradient-to-br from-dark-secondary/50 to-dark-secondary/80 px-2 backdrop-blur-lg transition duration-300 focus-within:border mt-0 mb-0"
       >
         <div className="relative h-8 w-8 rounded-full">
@@ -178,16 +204,32 @@ const MessageBar: ClientComponent = () => {
             placeholder="Type your message.."
             onChange={onChange}
             value={value}
+            disabled={isSending}
             autoFocus
           />
         </div>
         <div className="flex h-10 w-[20%] items-center justify-end gap-4 text-white/80">
-          <FaImage
+          <button
+            type="button"
+            aria-label="Attach image"
             onClick={onFileSelected}
-            className="hover:theme-text-color cursor-pointer transition duration-300 hover:text-blue-500"
-          />
-          <button className="hover:theme-text-color flex h-full w-[40%] cursor-pointer items-center justify-center border-l border-gray-main/50 outline-none transition duration-300">
-            <IoSend />
+            disabled={isSending}
+            className="hover:theme-text-color cursor-pointer transition duration-300 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <FaImage />
+          </button>
+          <button
+            disabled={isSending || (!value.trim() && !file)}
+            className="hover:theme-text-color flex h-full w-[40%] cursor-pointer items-center justify-center border-l border-gray-main/50 outline-none transition duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isSending ? (
+              <div
+                aria-label="Sending message"
+                className="h-4 w-4 animate-spin rounded-full border-2 border-white/80 border-t-transparent"
+              />
+            ) : (
+              <IoSend />
+            )}
           </button>
         </div>
       </form>
