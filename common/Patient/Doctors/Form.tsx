@@ -53,7 +53,17 @@ const Form: ClientComponent = () => {
 
   const dispatch = useDispatch();
 
-  const handleHideForm = () => dispatch(toggleDoctorPatientDoctorReducer());
+  const resetForm = useCallback(() => {
+    setSelectedSpeciality(null);
+    setSelectedDoctor(null);
+    setDoctors([]);
+    setError('');
+  }, []);
+
+  const handleHideForm = useCallback(() => {
+    resetForm();
+    dispatch(toggleDoctorPatientDoctorReducer());
+  }, [dispatch, resetForm]);
   const pushIntoPatientDoctors = (doctors: PatientDoctorsProps) => {
     dispatch(pushIntoPatientDoctorListingReducer({ doctors }));
   };
