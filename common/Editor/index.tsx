@@ -175,7 +175,6 @@ const SlateEditor: ClientComponentProps<EditorProps> = ({
             <MarkButton format="bold" icon="FaBold" />
             <MarkButton format="italic" icon="FaItalic" />
             <MarkButton format="underline" icon="FaUnderline" />
-            <MarkButton format="code" icon="FaCode" />
 
             {/* <LinkButton /> */}
             {extraToolbarContent}
