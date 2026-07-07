@@ -3,13 +3,21 @@
 import { PatientMeasurement } from '@components';
 import Analytics from './Analytics';
 import Medication from '../Medications';
-import { getPatientMeasurements, getSinglePatientRag } from '@service';
+import CareTeam from './CareTeam';
+import {
+  getAssignedCareTeam,
+  getPatientMeasurements,
+  getSinglePatientRag,
+} from '@service';
 import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const Dashboard: ServerComponentProps<Props> = async ({ patient, type }) => {
-  const measurements = await getPatientMeasurements(patient, type, 1, 100);
-  const res = await getSinglePatientRag(patient);
+  const [measurements, res, careTeam] = await Promise.all([
+    getPatientMeasurements(patient, type, 1, 100),
+    getSinglePatientRag(patient),
+    getAssignedCareTeam(),
+  ]);
 
   if (!measurements.success || !res.success) return <></>;
 
@@ -30,6 +38,9 @@ const Dashboard: ServerComponentProps<Props> = async ({ patient, type }) => {
 
   return (
     <div className="mt-10 flex flex-col gap-6 overflow-y-scroll">
+      {careTeam.success && careTeam.data && (
+        <CareTeam careTeam={careTeam.data} />
+      )}
       {/* Analytics Section */}
       <div className="w-full">
         <Analytics data={rag as any} />
