@@ -160,6 +160,11 @@ export { default as getPatientReadingRange } from './readingRange/getPatientRead
 export { default as createPatientReadingRange } from './readingRange/createPatientReadingRange';
 
 export { default as getTodayMedicationAlerts } from './patients/getTodayMedicationAlerts';
+export { default as getAssignedCareTeam } from './patients/getAssignedCareTeam';
+export type {
+  AssignedCareTeam,
+  CareTeamMember,
+} from './patients/getAssignedCareTeam';
 
 // video
 export { default as getVideos } from './videos/getVideos';
