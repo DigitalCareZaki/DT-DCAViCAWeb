@@ -36,7 +36,7 @@ const Table: ClientComponentProps<any> = ({ data, patient }) => {
       page,
       pagination.perPage
     );
-    setData(appointments?.data, appointments?.data?.pagination);
+    setData(appointments?.data?.data ?? [], appointments?.data?.pagination);
     setPagination(appointments?.data?.pagination);
     setLoading(false);
   };
