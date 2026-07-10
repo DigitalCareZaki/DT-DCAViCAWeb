@@ -66,7 +66,10 @@ const RenderTable: ClientComponent = () => {
 
   return (
     <>
-      {setPatientAppointmentsListing?.map((el: any) => {
+      {(Array.isArray(setPatientAppointmentsListing)
+        ? setPatientAppointmentsListing
+        : []
+      ).map((el: any) => {
         const appointment = el?.appointment;
         const organizer = appointment?.organizer;
         const observation = appointment?.appointmentObservation;
