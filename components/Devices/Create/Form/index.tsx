@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import Category from './Category';
 
@@ -15,12 +15,13 @@ import useForm from './useForm';
 import { usePathname, useRouter } from 'next/navigation';
 import type { ClientComponentProps } from '@types';
 import type { CreateDeviceProps } from './types';
-import { FaCalendarAlt, FaSpinner, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
-import { FaLocationDot } from 'react-icons/fa6';
-import type { LoadingStep, LoadingStepInfo } from './types';
+import {
+  FaSpinner,
+  FaCheckCircle,
+  FaExclamationTriangle,
+} from 'react-icons/fa';
 
 const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
-
   const router = useRouter();
   const pathname = usePathname();
   const [user] = useUser();
@@ -57,10 +58,38 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
     []
   );
 
-  const [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo, dismissLoadingOverlay] =
-    useForm(data, categories);
+  const [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    selectedValues,
+    setValue,
+    handleSelect,
+    handleSelectByAbd,
+    serials,
+    setSelectedSerial,
+    selectedSerial,
+    selectors,
+    branches,
+    handleSelectBranch,
+    setSelectedValues,
+    sites,
+    handleSelectSite,
+    currentStep,
+    getLoadingStepInfo,
+    dismissLoadingOverlay,
+  ] = useForm(data, categories);
 
-  const isEcgMonitoringOption = (value?: string) => value === 'YES' || value === 'NO' || value === 'LATER';
+  const isSuperAdmin = user?.role === 'SUPERADMIN';
+  const isEcgMonitoringOption = (value?: string) =>
+    value === 'YES' || value === 'NO' || value === 'LATER';
+  const selectedBranchName =
+    (branches as any)?.find((branch: any) => branch.id === selectors.branch_id)
+      ?.name || '';
+  const selectedSiteName =
+    sites?.find((site: any) => site.id === selectors.site_id)?.name || '';
+  const isSiteDisabled = isSuperAdmin && !selectors.branch_id;
 
   const handleSelectField = (field: string, value: any) => {
     setSelectedValues((prev: any) => {
@@ -70,8 +99,14 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
       };
 
       // Auto-set ECGRec_ prefix when cardiac_monitoring is selected and category=ECG
-      const hasEcgMonitoringOption = field === 'cardiac_monitoring' ? isEcgMonitoringOption(value.value) : isEcgMonitoringOption(prev.cardiac_monitoring?.value);
-      const isEcg = field === 'category' ? value.value === 'ECG' : prev.category?.value === 'ECG';
+      const hasEcgMonitoringOption =
+        field === 'cardiac_monitoring'
+          ? isEcgMonitoringOption(value.value)
+          : isEcgMonitoringOption(prev.cardiac_monitoring?.value);
+      const isEcg =
+        field === 'category'
+          ? value.value === 'ECG'
+          : prev.category?.value === 'ECG';
 
       if (hasEcgMonitoringOption && isEcg) {
         setValue('serial_number', 'ECGRec_');
@@ -92,8 +127,11 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
 
   // Sync serial number prefix when category changes via handleSelectByAbd
   useEffect(() => {
-    if (!data) { // only for create (not edit)
-      const hasEcgMonitoringOption = isEcgMonitoringOption(selectedValues?.cardiac_monitoring?.value);
+    if (!data) {
+      // only for create (not edit)
+      const hasEcgMonitoringOption = isEcgMonitoringOption(
+        selectedValues?.cardiac_monitoring?.value
+      );
       const isEcg = selectedValues?.category?.value === 'ECG';
       if (hasEcgMonitoringOption && isEcg) {
         setValue('serial_number', 'ECGRec_');
@@ -101,18 +139,21 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         setValue('serial_number', '');
       }
     }
-  }, [selectedValues?.category?.value, selectedValues?.cardiac_monitoring?.value]);
+  }, [
+    selectedValues?.category?.value,
+    selectedValues?.cardiac_monitoring?.value,
+  ]);
   // Progressive loading overlay component
   const ProgressiveLoadingOverlay = () => {
     const stepInfo = getLoadingStepInfo(currentStep);
 
     return (
-      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-2xl">
-        <div className="flex flex-col items-center gap-6 text-center max-w-md">
+      <div className="absolute inset-0 z-50 flex items-center justify-center rounded-2xl bg-white/90 backdrop-blur-sm">
+        <div className="flex max-w-md flex-col items-center gap-6 text-center">
           {/* Progress Bar */}
-          <div className="w-64 bg-gray-200 rounded-full h-3">
+          <div className="h-3 w-64 rounded-full bg-gray-200">
             <div
-              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500 ease-out"
+              className="h-3 rounded-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500 ease-out"
               style={{ width: `${stepInfo?.progress || 0}%` }}
             ></div>
           </div>
@@ -134,7 +175,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           </h3>
 
           {/* Step Description */}
-          <p className="text-sm text-gray-600 leading-relaxed px-4">
+          <p className="px-4 text-sm leading-relaxed text-gray-600">
             {stepInfo?.description}
           </p>
 
@@ -144,20 +185,36 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           </div>
 
           {/* Step Indicators */}
-          <div className="flex items-center gap-2 mt-4">
-            {['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].map((step, index) => {
+          <div className="mt-4 flex items-center gap-2">
+            {[
+              'validating',
+              'preparing',
+              'submitting',
+              'processing',
+              'syncing',
+              'success',
+            ].map((step, index) => {
               const isActive = currentStep === step;
-              const isCompleted = ['validating', 'preparing', 'submitting', 'processing', 'syncing', 'success'].indexOf(currentStep) > index || (currentStep === 'success');
+              const isCompleted =
+                [
+                  'validating',
+                  'preparing',
+                  'submitting',
+                  'processing',
+                  'syncing',
+                  'success',
+                ].indexOf(currentStep) > index || currentStep === 'success';
 
               return (
                 <div
                   key={step}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${isCompleted
-                    ? 'bg-green-500'
-                    : isActive
-                      ? 'bg-blue-500'
-                      : 'bg-gray-300'
-                    }`}
+                  className={`h-3 w-3 rounded-full transition-all duration-300 ${
+                    isCompleted
+                      ? 'bg-green-500'
+                      : isActive
+                        ? 'bg-blue-500'
+                        : 'bg-gray-300'
+                  }`}
                 />
               );
             })}
@@ -180,10 +237,13 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative flex w-full max-w-3xl flex-col gap-5 rounded-2xl bg-white p-4 sm:p-6 mx-auto"
+      className="relative mx-auto flex w-full max-w-3xl flex-col gap-5 rounded-2xl bg-white p-4 sm:p-6"
       // Disable keyboard navigation during loading
       onKeyDown={(e) => {
-        if (loading && (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ')) {
+        if (
+          loading &&
+          (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ')
+        ) {
           e.preventDefault();
         }
       }}
@@ -192,7 +252,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
       {loading && <ProgressiveLoadingOverlay />}
 
       {/* First row: Device title and description */}
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
         <div className="w-full sm:w-1/2">
           <InputBasic
             title="Device title"
@@ -223,7 +283,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
         </div>
       </div>
       {/* Second row: Device serial and category */}
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
         <div className="w-full sm:w-1/2">
           <DropdownSecondary
             title="Select device category"
@@ -267,12 +327,18 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
           </DropdownSecondary>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
         <div className="w-full sm:w-1/2">
           <InputBasic
             title="Serial number"
             label="Serial number"
-            placeholder={isEcgMonitoringOption(selectedValues?.cardiac_monitoring?.value) && selectedValues?.category?.value === 'ECG' ? 'ECGRec_...' : 'Enter device serial number'}
+            placeholder={
+              isEcgMonitoringOption(
+                selectedValues?.cardiac_monitoring?.value
+              ) && selectedValues?.category?.value === 'ECG'
+                ? 'ECGRec_...'
+                : 'Enter device serial number'
+            }
             icon="SiNamecheap"
             borderTheme
             inputWrapperClassName="bg-background"
@@ -280,7 +346,10 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             hookProps={{
               ...register('serial_number'),
               onChange: (e: any) => {
-                const isEcgWithMonitoring = isEcgMonitoringOption(selectedValues?.cardiac_monitoring?.value) && selectedValues?.category?.value === 'ECG';
+                const isEcgWithMonitoring =
+                  isEcgMonitoringOption(
+                    selectedValues?.cardiac_monitoring?.value
+                  ) && selectedValues?.category?.value === 'ECG';
                 if (isEcgWithMonitoring) {
                   const prefix = 'ECGRec_';
                   if (!e.target.value.startsWith(prefix)) {
@@ -294,64 +363,93 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             errorMessage={errors.serial_number?.message || '&'}
           />
         </div>
-        <div className="w-full sm:w-1/2">
-          <DropdownSecondary
-            title="Select Site"
-            label="Select Site"
-            borderTheme
-            inputWrapperClassName="bg-background"
-            icon="FaLocationDot"
-            error={!!errors.site_id?.message?.length}
-            errorMessage={(errors as any).site_id?.message || '&'}
-            selected={sites?.find((s: any) => s.id === selectors.site_id)?.name || ''}
-          >
-            {Array.isArray(sites) && sites.length > 0 ? (
-              sites.map((site: any) => (
-                <div
-                  key={site.id}
-                  onClick={() => handleSelectSite(site.id)}
-                  className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                >
-                  <span className="font-medium">{site.name}</span>
-                </div>
-              ))
-            ) : (
-              <div className="p-2 text-gray-400">No sites found</div>
-            )}
-          </DropdownSecondary>
-        </div>
+        {isSuperAdmin ? (
+          <div className="w-full sm:w-1/2">
+            <DropdownSecondary
+              title="Branch"
+              label="Branch"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              icon="FaLocationDot"
+              error={!!errors.branch_id?.message?.length}
+              errorMessage={(errors as any).branch_id?.message || '&'}
+              selected={selectedBranchName}
+            >
+              {Array.isArray(branches) && branches.length > 0 ? (
+                branches.map((branch: any) => (
+                  <div
+                    key={branch.id}
+                    onClick={() => handleSelectBranch(branch.id)}
+                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                  >
+                    <span className="font-medium">{branch.name}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="p-2 text-gray-400">No branches found</div>
+              )}
+            </DropdownSecondary>
+          </div>
+        ) : (
+          <div className="w-full sm:w-1/2">
+            <DropdownSecondary
+              title="Select Site"
+              label="Select Site"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              icon="FaLocationDot"
+              error={!!errors.site_id?.message?.length}
+              errorMessage={(errors as any).site_id?.message || '&'}
+              selected={selectedSiteName}
+            >
+              {Array.isArray(sites) && sites.length > 0 ? (
+                sites.map((site: any) => (
+                  <div
+                    key={site.id}
+                    onClick={() => handleSelectSite(site.id)}
+                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                  >
+                    <span className="font-medium">{site.name}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="p-2 text-gray-400">No sites found</div>
+              )}
+            </DropdownSecondary>
+          </div>
+        )}
       </div>
-      {user?.role === 'SUPERADMIN' && (
-        <div className="flex flex-col sm:flex-row gap-5 sm:gap-10">
-          {/* Branch Code Start  */}
-          {selectors && branches && (
-            <div className="w-full sm:w-1/2">
-              <DropdownSecondary
-                title="Branch"
-                label="Branch"
-                borderTheme
-                inputWrapperClassName="bg-background"
-                error={!!errors.branch_id?.message?.length}
-                errorMessage={(errors as any).branch_id?.message || '&'}
-                selected={(branches as any)?.find((b: any) => b.id === selectors.branch_id)?.name || ''}
-              >
-                {Array.isArray(branches) && branches.length > 0 ? (
-                  branches.map((branch: any) => (
-                    <div
-                      key={branch.id}
-                      onClick={() => handleSelectBranch(branch.id)}
-                      className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                    >
-                      <span className="font-medium">{branch.name}</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-2 text-gray-400">No branches found</div>
-                )}
-              </DropdownSecondary>
-            </div>
-          )}
-          {/* Branch Code End  */}
+      {isSuperAdmin && (
+        <div className="flex flex-col gap-5 sm:flex-row sm:gap-10">
+          <div className="w-full sm:w-1/2">
+            <DropdownSecondary
+              title="Select Site"
+              label="Select Site"
+              borderTheme
+              inputWrapperClassName="bg-background"
+              icon="FaLocationDot"
+              error={!!errors.site_id?.message?.length}
+              errorMessage={(errors as any).site_id?.message || '&'}
+              selected={selectedSiteName}
+              disabled={isSiteDisabled}
+              disableMessage="Please select branch first"
+            >
+              {Array.isArray(sites) && sites.length > 0 ? (
+                sites.map((site: any) => (
+                  <div
+                    key={site.id}
+                    onClick={() => handleSelectSite(site.id)}
+                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
+                  >
+                    <span className="font-medium">{site.name}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="p-2 text-gray-400">No sites found</div>
+              )}
+            </DropdownSecondary>
+          </div>
+          <div className="hidden sm:block sm:w-1/2" />
         </div>
       )}
 
