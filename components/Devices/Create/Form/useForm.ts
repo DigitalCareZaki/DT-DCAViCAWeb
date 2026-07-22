@@ -8,22 +8,35 @@ import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import { useDispatch } from 'react-redux';
 
-import { createDevice, updateDevice, getSuperAdminBranches, createDeviceSuperadmin, getSites, getDoctorSites } from '@service';
+import {
+  createDevice,
+  updateDevice,
+  getSuperAdminBranches,
+  createDeviceSuperadmin,
+  getSites,
+  getDoctorSites,
+} from '@service';
 import { showModalReducer } from '@slice';
 
 import { useUser } from '@selectors';
 
 import { validator } from './validator';
 
-import type { UseFormProps, SelectedValuesProps, DeviceProps, LoadingStep, LoadingStepInfo } from './types';
+import type {
+  UseFormProps,
+  SelectedValuesProps,
+  DeviceProps,
+  LoadingStep,
+  LoadingStepInfo,
+} from './types';
 import type { ModalState } from '@store-types';
 import type { MeasurementType } from '@types';
 
 const useFormHook = (
   prevData:
     | (DeviceProps & {
-      id: string;
-    })
+        id: string;
+      })
     | undefined,
   categories: { name: string; value: string }[]
 ): any => {
@@ -78,26 +91,29 @@ const useFormHook = (
       }));
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/devices/devices/${value}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user?.token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/web/devices/devices/${value}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        );
 
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Something went wrong');
-        const serials = data?.map((item: any) => item.serial_number).filter(Boolean);
+        const serials = data
+          ?.map((item: any) => item.serial_number)
+          .filter(Boolean);
         setSerials(serials);
       } catch (error) {
-
         setSerials([]);
       }
     },
     [setValue, clearErrors, user?.token]
   );
-
 
   const handleSelect = useCallback((name: string, value: string) => {
     setValue('category', value as MeasurementType);
@@ -138,7 +154,9 @@ const useFormHook = (
       res?.data?.vivalink_sync?.error?.toString?.()?.trim?.();
     const backendMessage = res?.message?.toString?.()?.trim?.();
 
-    return vivalinkError || backendMessage || 'Unable to sync device with Vivalink.';
+    return (
+      vivalinkError || backendMessage || 'Unable to sync device with Vivalink.'
+    );
   };
 
   const isDeviceSynced = (res: any) => {
@@ -156,7 +174,11 @@ const useFormHook = (
 
   const isEcgMonitoringOption = (value?: string | null) => {
     const normalizedValue = value?.toUpperCase();
-    return normalizedValue === 'YES' || normalizedValue === 'NO' || normalizedValue === 'LATER';
+    return (
+      normalizedValue === 'YES' ||
+      normalizedValue === 'NO' ||
+      normalizedValue === 'LATER'
+    );
   };
 
   // Function to get loading step information
@@ -201,7 +223,9 @@ const useFormHook = (
       success: {
         step: 'success',
         title: 'Success!',
-        description: prevData ? 'Device updated successfully' : 'Device created successfully',
+        description: prevData
+          ? 'Device updated successfully'
+          : 'Device created successfully',
         progress: 100,
       },
       error: {
@@ -227,10 +251,14 @@ const useFormHook = (
     fetchBranches();
   }, [user]);
 
-  const handleSelectSite = useCallback((siteId: string) => {
-    setSelectors((prev: any) => ({ ...prev, site_id: siteId }));
-    setValue('site_id' as any, siteId as any);
-  }, [setValue]);
+  const handleSelectSite = useCallback(
+    (siteId: string) => {
+      setSelectors((prev: any) => ({ ...prev, site_id: siteId }));
+      setValue('site_id' as any, siteId as any);
+      clearErrors('site_id' as any);
+    },
+    [clearErrors, setValue]
+  );
 
   // Fetch sites
   useEffect(() => {
@@ -246,6 +274,18 @@ const useFormHook = (
             handleSelectSite(sitesArray[0].id);
           }
         }
+      } else if (user?.role === 'SUPERADMIN') {
+        if (!selectors.branch_id) {
+          setSites([]);
+          return;
+        }
+
+        const res = await getSites(1, 1000, selectors.branch_id);
+        if (res?.success && res.data?.data) {
+          setSites(res.data.data);
+        } else {
+          setSites([]);
+        }
       } else {
         const res = await getSites(1, 1000);
         if (res?.success && res.data?.data) {
@@ -254,15 +294,31 @@ const useFormHook = (
       }
     };
     fetchSites();
-  }, [user?.role, handleSelectSite, selectors.site_id, prevData]);
+  }, [
+    user?.role,
+    handleSelectSite,
+    selectors.branch_id,
+    selectors.site_id,
+    prevData,
+  ]);
 
-  const handleSelectBranch = useCallback((branchId: string) => {
-    setSelectors((prev: any) => ({ ...prev, branch_id: branchId }));
-    try {
-      // Extend form values to include optional branch_id for submission convenience
-      setValue('branch_id' as any, branchId as any);
-    } catch (_) { }
-  }, [setValue]);
+  const handleSelectBranch = useCallback(
+    (branchId: string) => {
+      setSelectors((prev: any) => ({
+        ...prev,
+        branch_id: branchId,
+        site_id: undefined,
+      }));
+      try {
+        // Extend form values to include optional branch_id for submission convenience
+        setValue('branch_id' as any, branchId as any);
+        setValue('site_id' as any, undefined as any);
+        clearErrors('branch_id' as any);
+        clearErrors('site_id' as any);
+      } catch (_) {}
+    },
+    [clearErrors, setValue]
+  );
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -270,7 +326,7 @@ const useFormHook = (
       setCurrentStep('validating');
 
       // Simulate validation
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setCurrentStep('preparing');
 
       // create case
@@ -290,18 +346,20 @@ const useFormHook = (
 
         setCurrentStep('submitting');
         const encoded = btoa(JSON.stringify(payload));
-        const res = (user?.role as any) === 'SUPERADMIN'
-          ? await createDeviceSuperadmin(encoded)
-          : await createDevice(encoded);
+        const res =
+          (user?.role as any) === 'SUPERADMIN'
+            ? await createDeviceSuperadmin(encoded)
+            : await createDevice(encoded);
 
         setCurrentStep('processing');
         if (!res.success) {
           setCurrentStep('error');
           handleShowModal({
             type: 'ERROR',
-            message: data.cardiac_monitoring === 'YES'
-              ? getSyncErrorMessage(res)
-              : (res?.message ?? 'Unable to create a new device'),
+            message:
+              data.cardiac_monitoring === 'YES'
+                ? getSyncErrorMessage(res)
+                : (res?.message ?? 'Unable to create a new device'),
             show: true,
           });
           return;
@@ -317,22 +375,22 @@ const useFormHook = (
               return;
             }
             setCurrentStep('syncing');
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
           }
           setCurrentStep('success');
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: data.cardiac_monitoring === 'YES'
-              ? 'Device synced successfully.'
-              : 'Device created successfully',
+            message:
+              data.cardiac_monitoring === 'YES'
+                ? 'Device synced successfully.'
+                : 'Device created successfully',
             show: true,
           });
           setTimeout(() => {
             router.push(getDevicesRoute());
           }, 2000);
           return;
-
         }
       } else {
         setCurrentStep('submitting');
@@ -346,6 +404,7 @@ const useFormHook = (
               serial_number: data.serial_number,
               cardiac_monitoring: data.cardiac_monitoring,
               site_id: selectors.site_id,
+              branch_id: selectors.branch_id,
             })
           ),
           prevData.id
@@ -356,9 +415,10 @@ const useFormHook = (
           setCurrentStep('error');
           handleShowModal({
             type: 'ERROR',
-            message: data.cardiac_monitoring === 'YES'
-              ? getSyncErrorMessage(res)
-              : (res?.message ?? 'Unable to update device'),
+            message:
+              data.cardiac_monitoring === 'YES'
+                ? getSyncErrorMessage(res)
+                : (res?.message ?? 'Unable to update device'),
             show: true,
           });
           return;
@@ -374,22 +434,22 @@ const useFormHook = (
               return;
             }
             setCurrentStep('syncing');
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
           }
           setCurrentStep('success');
           // Handle success case
           handleShowModal({
             type: 'SUCCESS',
-            message: data.cardiac_monitoring === 'YES'
-              ? 'Device synced successfully.'
-              : 'Device updated successfully',
+            message:
+              data.cardiac_monitoring === 'YES'
+                ? 'Device synced successfully.'
+                : 'Device updated successfully',
             show: true,
           });
           setTimeout(() => {
             router.push(getDevicesRoute());
           }, 1000);
           return;
-
         }
       }
     } catch (err) {
@@ -407,10 +467,14 @@ const useFormHook = (
   useEffect(() => {
     if (prevData) {
       const isEcgWithMonitoring =
-        isEcgMonitoringOption(prevData.cardiac_monitoring) && prevData.category === 'ECG';
-      const serialNumber = isEcgWithMonitoring && prevData.serial_number && !prevData.serial_number.startsWith('ECGRec_')
-        ? `ECGRec_${prevData.serial_number}`
-        : prevData.serial_number || '';
+        isEcgMonitoringOption(prevData.cardiac_monitoring) &&
+        prevData.category === 'ECG';
+      const serialNumber =
+        isEcgWithMonitoring &&
+        prevData.serial_number &&
+        !prevData.serial_number.startsWith('ECGRec_')
+          ? `ECGRec_${prevData.serial_number}`
+          : prevData.serial_number || '';
 
       reset({
         ...prevData,
@@ -427,15 +491,37 @@ const useFormHook = (
         },
         cardiac_monitoring: {
           name: prevData.cardiac_monitoring?.toUpperCase() || undefined,
-          value: (prevData.cardiac_monitoring?.toUpperCase() as any) || undefined,
+          value:
+            (prevData.cardiac_monitoring?.toUpperCase() as any) || undefined,
         },
       });
     }
 
-    return () => { };
+    return () => {};
   }, [prevData]);
 
-  return [register, onSubmit, errors, loading, selectedValues, setValue, handleSelect, handleSelectByAbd, serials, setSelectedSerial, selectedSerial, selectors, branches, handleSelectBranch, setSelectedValues, sites, handleSelectSite, currentStep, getLoadingStepInfo, dismissLoadingOverlay];
+  return [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    selectedValues,
+    setValue,
+    handleSelect,
+    handleSelectByAbd,
+    serials,
+    setSelectedSerial,
+    selectedSerial,
+    selectors,
+    branches,
+    handleSelectBranch,
+    setSelectedValues,
+    sites,
+    handleSelectSite,
+    currentStep,
+    getLoadingStepInfo,
+    dismissLoadingOverlay,
+  ];
 };
 
 export default useFormHook;
