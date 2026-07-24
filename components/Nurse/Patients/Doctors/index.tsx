@@ -6,7 +6,7 @@ import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
 
 const DoctorsWrapper: ServerComponentProps<Props> = async ({ patient }) => {
-  return <PatientDoctors patient={patient} />;
+  return <PatientDoctors patient={patient} userType="nurse" />;
 };
 
 export default DoctorsWrapper;
