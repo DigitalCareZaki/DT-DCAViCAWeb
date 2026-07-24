@@ -11,10 +11,13 @@ import { InputBasic, ButtonPrimary } from '@common';
 import { debounce } from '@init-globals';
 import { getPatientDoctors } from '@service';
 
-import type { ClientComponent, PatientDoctorsProps } from '@types';
+import type { ClientComponentProps, PatientDoctorsProps } from '@types';
 import type { ChangeEvent } from 'react';
+import type { Props } from './types';
 
-const DoctorPatientDoctorsHeader: ClientComponent = () => {
+const DoctorPatientDoctorsHeader: ClientComponentProps<
+  Pick<Props, 'userType'>
+> = ({ userType = 'doctor' }) => {
   const dispatch = useDispatch();
   const params = useSearchParams();
 
@@ -28,11 +31,14 @@ const DoctorPatientDoctorsHeader: ClientComponent = () => {
   const onChange = debounce(async (e: ChangeEvent<HTMLInputElement>[]) => {
     try {
       const value = e[0].target.value;
-      const res = await getPatientDoctors(params?.get('patient') || '', value);
-
+      const res = await getPatientDoctors(
+        params?.get('patient') || '',
+        value,
+        userType
+      );
 
       setData(res.data);
-    } catch (err) { }
+    } catch (err) {}
   }, 1000);
 
   return (

@@ -22,7 +22,7 @@ const mainStyle = {
   overflow: 'hidden', // Prevents overflow due to scaling
 };
 
-const DoctorPatientDoctors: FC<Props> = ({ patient }) => {
+const DoctorPatientDoctors: FC<Props> = ({ patient, userType = 'doctor' }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PatientDoctorsProps[]>([]);
@@ -33,7 +33,7 @@ const DoctorPatientDoctors: FC<Props> = ({ patient }) => {
 
       try {
         setLoading(true);
-        const res = await getPatientDoctors(patient, undefined, 'doctor');
+        const res = await getPatientDoctors(patient, undefined, userType);
 
         if (res.success) {
           setData(res?.data || []);
@@ -47,22 +47,25 @@ const DoctorPatientDoctors: FC<Props> = ({ patient }) => {
     };
 
     loadDoctors();
-  }, [patient, dispatch]);
+  }, [patient, userType, dispatch]);
 
   if (!patient) return <div>Patient id not define</div>;
-  if (loading) return <div
-    style={mainStyle} // Apply the zoom-out effect here
-    className="flex h-full w-screen items-center justify-center bg-background"
-  >
-    <div
-      className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-      role="status"
-    ></div>
-  </div>;
+  if (loading)
+    return (
+      <div
+        style={mainStyle} // Apply the zoom-out effect here
+        className="flex h-full w-screen items-center justify-center bg-background"
+      >
+        <div
+          className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+          role="status"
+        ></div>
+      </div>
+    );
 
   return (
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
-      <Header />
+      <Header userType={userType} />
       <Table data={data} />
       <Form />
     </div>
