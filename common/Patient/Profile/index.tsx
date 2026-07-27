@@ -17,8 +17,59 @@ const PatientProfile: ServerComponentProps<Props> = async ({ patient }) => {
 
   if (!res.success) return <></>;
 
+  const profileFields = [
+    {
+      label: 'EMR',
+      placeholder: 'Patient EMR',
+      title: 'EMR',
+      value: res.data.emr,
+    },
+    {
+      label: 'Date of birth',
+      placeholder: 'Patient date of birth',
+      title: 'Patient date of birth',
+      value: new Date(res.data.user.dob).toLocaleDateString(),
+    },
+    {
+      label: 'First Name',
+      placeholder: 'Patient first name',
+      title: 'Patient first name',
+      value: res.data.user.first_name,
+    },
+    {
+      label: 'Last Name',
+      placeholder: 'Patient last name',
+      title: 'Patient last name',
+      value: res.data.user.last_name,
+    },
+    {
+      label: 'Email',
+      placeholder: 'Patient email',
+      title: 'Patient email',
+      value: res.data.user.email,
+    },
+    {
+      label: 'Phone',
+      placeholder: 'Patient phone number',
+      title: 'Patient phone number',
+      value: res.data.user.phone_number,
+    },
+    {
+      label: 'Weight',
+      placeholder: 'Patient weight',
+      title: 'Patient weight',
+      value: res.data.weight?.getWeight() ?? 'N/A',
+    },
+    {
+      label: 'Height',
+      placeholder: 'Patient height',
+      title: 'Patient height',
+      value: res.data.height?.getHeight() ?? 'N/A',
+    },
+  ];
+
   return (
-    <div className="flex h-full w-full flex-col items-center gap-10 overflow-y-scroll px-10 pb-40 pr-0 pt-20">
+    <div className="flex h-full w-full flex-col items-center gap-10 overflow-y-scroll px-10 pb-40 pt-20">
       <div className="flex flex-col items-center gap-4 text-gray-600">
         <div className="relative h-32 w-32 rounded-full">
           <Image
@@ -34,174 +85,20 @@ const PatientProfile: ServerComponentProps<Props> = async ({ patient }) => {
           })}
         </span>
       </div>
-      <div className="flex w-[80%] flex-col gap-6">
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
+      <div className="flex w-full max-w-6xl flex-col gap-6">
+        <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
+          {profileFields.map((field) => (
             <InputBasic
-              label="Social Security Number"
-              placeholder="Patient social security number"
-              title="Patient social security number"
+              key={field.label}
+              label={field.label}
+              placeholder={field.placeholder}
               disabled
               hideInfo
               labelVariant="tiny"
-              value={res.data.emr}
+              title={field.title}
+              value={field.value}
             />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Date of birth"
-              placeholder="Patient date of birth"
-              title="Patient date of birth"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              value={new Date(res.data.user.dob).toLocaleDateString()}
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
-            <InputBasic
-              label="Contract Identifier"
-              placeholder="Patient contract identifier"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient contract identifier"
-              value="131424-336-2764"
-            />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Weight"
-              placeholder="Patient weight"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient weight"
-              value={res.data.weight?.getWeight() ?? 'N/A'}
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
-            <InputBasic
-              label="Subscriber ID"
-              placeholder="Patient subscriber id"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient subscriber id"
-              value="1234-XYZ"
-            />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Height"
-              placeholder="Patient height"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient height"
-              value={res.data.height?.getHeight() ?? 'N/A'}
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
-            <InputBasic
-              label="First Name"
-              placeholder="Patient first name"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient first name"
-              value={res.data.user.first_name}
-            />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Language"
-              placeholder="Patient language"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient language"
-              value="English"
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
-            <InputBasic
-              label="Last Name"
-              placeholder="Patient last name"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient last name"
-              value={res.data.user.last_name}
-            />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Measurement system"
-              placeholder="Patient measurement system"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient measurement system"
-              value="Standard"
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
-            <InputBasic
-              label="Email"
-              placeholder="Patient email"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient email"
-              value={res.data.user.email}
-            />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Time Zone"
-              placeholder="Patient time zone"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient time zone"
-              value={res.data.user.user_meta_data[0]?.timezone ?? 'N/A'}
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <div className="w-1/2">
-            <InputBasic
-              label="Phone"
-              placeholder="Patient phone number"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient phone number"
-              value={res.data.user.phone_number}
-            />
-          </div>
-          <div className="w-1/2">
-            <InputBasic
-              label="Ethnicity"
-              placeholder="Patient ethnicity"
-              disabled
-              hideInfo
-              labelVariant="tiny"
-              title="Patient ethnicity"
-              value="N/A"
-            />
-          </div>
+          ))}
         </div>
         <div className="flex w-full flex-col">
           <div className="relative h-44 w-full rounded-md bg-black">
