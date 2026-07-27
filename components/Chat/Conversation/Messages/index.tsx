@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { twMerge } from 'tailwind-merge';
 import { MdMessage } from '@react-icons/all-files/md/MdMessage';
@@ -14,6 +14,14 @@ import Message from './Message';
 import type { ClientComponent } from '@types';
 import type { ReduxProps, StoreChatState } from '@store-types';
 
+const getMessageTime = (createdAt: unknown): number => {
+  if (typeof createdAt === 'number') return createdAt;
+  if (typeof createdAt === 'string') return new Date(createdAt).getTime();
+  if (createdAt instanceof Date) return createdAt.getTime();
+
+  return 0;
+};
+
 const Messages: ClientComponent = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
@@ -22,6 +30,17 @@ const Messages: ClientComponent = () => {
   );
   const [{ role: userType }] = useUser();
   const [loading, setLoading] = useState<boolean>(false);
+  const sortedChats = useMemo(
+    () => {
+      const roomChats = selectedRooms?.id ? chats[selectedRooms.id] ?? [] : [];
+
+      return [...roomChats].sort(
+        (current, next) =>
+          getMessageTime(current.created_at) - getMessageTime(next.created_at)
+      );
+    },
+    [chats, selectedRooms?.id]
+  );
 
   // useEffect(() => {
   //   if (!selectedRooms?.id) return;
@@ -49,7 +68,7 @@ const Messages: ClientComponent = () => {
         },
       })
     );
-  }, [selectedRooms]);
+  }, [dispatch, selectedRooms?.id]);
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -79,7 +98,7 @@ const Messages: ClientComponent = () => {
         userType?.toLowerCase() === 'nurse' && 'nurse-scrollbar'
       )}
     >
-      <ClientGenerator data={chats[selectedRooms?.id] ?? []}>
+      <ClientGenerator data={sortedChats}>
         <Message />
       </ClientGenerator>
     </div>
