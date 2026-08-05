@@ -34,17 +34,35 @@ export default function Promotion(): JSX.Element {
 
       <div className="flex w-full flex-col items-center font-normal tracking-wider">
         <span className="text-sm font-normal tracking-wider text-secondary">Available on</span>
-        <div className="mt-6 flex items-center gap-4">
-          <ButtonPromotion
-            heading="AppStore"
-            name="Download on the"
-            iconName="FaApple"
-          />
-          <ButtonPromotion
-            heading="Google Play"
-            name="GET IT ON"
-            iconName="BiLogoPlayStore"
-          />
+        <div className="mt-6 flex flex-wrap items-center gap-2 justify-center">
+          <Link passHref href="#" target="_blank" rel="noopener noreferrer">
+            <ButtonPromotion
+              heading="AppStore"
+              name="Download Staff App"
+              iconName="FaApple"
+            />
+          </Link>
+          <Link passHref href="https://play.google.com/store/apps/details?id=com.AvicaPatient&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+            <ButtonPromotion
+              heading="Google Play"
+              name="GET Patient App"
+              iconName="BiLogoPlayStore"
+            />
+          </Link>
+          <Link passHref href="#" target="_blank" rel="noopener noreferrer">
+            <ButtonPromotion
+              heading="AppStore"
+              name="Download Patient App"
+              iconName="FaApple"
+            />
+          </Link>
+          <Link passHref href="https://play.google.com/store/apps/details?id=com.optimum.AvicaStaff&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+            <ButtonPromotion
+              heading="Google Play"
+              name="GET Staff App"
+              iconName="BiLogoPlayStore"
+            />
+          </Link>
         </div>
       </div>
     </>
