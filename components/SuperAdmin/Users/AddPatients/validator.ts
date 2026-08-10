@@ -8,10 +8,6 @@ export const validator = create((data: AddPatientProps) => {
     enforce(data.firstName).isNotEmpty();
   });
 
-  test('middleName', 'Middle name is required', () => {
-    enforce(data.middleName).isNotEmpty();
-  });
-
   test('lastName', 'Last name is required', () => {
     enforce(data.lastName).isNotEmpty();
   });
@@ -36,10 +32,6 @@ export const validator = create((data: AddPatientProps) => {
     enforce(data.gender).isNotEmpty();
   });
 
-  test('title', 'Title is required', () => {
-    enforce(data.title).isNotEmpty();
-  });
-
   test('country', 'Country is required', () => {
     enforce(data.country).isNotEmpty();
   });
@@ -52,20 +44,8 @@ export const validator = create((data: AddPatientProps) => {
     enforce(data.branch).isNotEmpty();
   });
 
-  test('weight', 'Weight is required', () => {
-    enforce(data.weight).isNotEmpty();
-  });
-
-  test('height', 'Height is required', () => {
-    enforce(data.height).isNotEmpty();
-  });
-
   test('dob', 'Date of birth is required', () => {
     enforce(data.dob).isNotEmpty();
-  });
-
-  test('address', 'Address is required', () => {
-    enforce(data.address).isNotEmpty();
   });
 
   test('cardiac_monitoring', 'AViCardia Monitoring is required', () => {

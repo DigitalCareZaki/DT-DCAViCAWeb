@@ -8,10 +8,6 @@ export const validator = create((data: AddNurseProps) => {
     enforce(data.firstName).isNotEmpty();
   });
 
-  test('middleName', 'Middle name is required', () => {
-    enforce(data.middleName).isNotEmpty();
-  });
-
   test('lastName', 'Last name is required', () => {
     enforce(data.lastName).isNotEmpty();
   });
@@ -36,10 +32,6 @@ export const validator = create((data: AddNurseProps) => {
     enforce(data.gender).isNotEmpty();
   });
 
-  test('title', 'Title is required', () => {
-    enforce(data.title).isNotEmpty();
-  });
-
   test('country', 'Country is required', () => {
     enforce(data.country).isNotEmpty();
   });
@@ -62,10 +54,6 @@ export const validator = create((data: AddNurseProps) => {
 
   test('dob', 'Date of birth is required', () => {
     enforce(data.dob).isNotEmpty();
-  });
-
-  test('address', 'Address is required', () => {
-    enforce(data.address).isNotEmpty();
   });
 
   test('npi_number', 'NPI number is required', () => {
