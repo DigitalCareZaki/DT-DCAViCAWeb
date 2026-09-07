@@ -109,7 +109,9 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
   if (deviceLoading)
     return (
-      <div className="flex flex-col items-center pt-40">Loading devices...</div>
+      <div className="flex h-full w-full items-center justify-center text-gray-300">
+        Loading devices...
+      </div>
     );
 
   return (
@@ -152,11 +154,6 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
             )}
           </div>
         )}
-      </div>
-      {/* Floating control bar placeholder */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-4 z-20 flex items-center gap-4 bg-black/70 rounded-full px-6 py-3 shadow-lg animate-fade-in">
-        {/* TODO: Replace with <Control /> component for actual controls */}
-        {/* <span className="text-white text-lg font-semibold opacity-60">Controls go here</span> */}
       </div>
     </div>
   );

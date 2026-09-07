@@ -30,7 +30,7 @@ const Discussion: ClientComponent = () => {
   return (
     <div
       ref={scrollRef}
-      className="hidescrollbar flex h-full w-full flex-grow-0 flex-col gap-4 overflow-y-scroll rounded-xl bg-dark-main p-4"
+      className="hidescrollbar flex min-h-0 w-full flex-1 flex-col gap-4 overflow-y-auto rounded-xl bg-dark-main p-4"
     >
       <ClientGenerator data={chats} currentUserId={user.id}>
         <Chat />
