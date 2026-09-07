@@ -6,7 +6,7 @@ import type { PageProps } from '@types';
 
 export default function Page({ params }: PageProps): JSX.Element {
   return (
-    <main className="flex h-full w-full flex-col p-6">
+    <main className="flex h-full min-h-0 w-full flex-col p-6">
       <Meeting id={params?.appointment?.toString() ?? ''} />
     </main>
   );

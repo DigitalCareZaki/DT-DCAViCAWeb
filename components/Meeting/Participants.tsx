@@ -60,15 +60,15 @@ const Discussion: ClientComponentProps<ParticipantsProps> = ({ id }) => {
   }, [user]);
 
   return (
-    <div className="flex h-[50%] w-full flex-col gap-4 rounded-xl bg-dark-secondary p-5">
-      <div className="flex w-full items-center gap-2">
+    <div className="flex h-full min-h-0 w-full flex-col gap-4 rounded-xl bg-dark-secondary p-5">
+      <div className="flex w-full shrink-0 items-center gap-2">
         <span className=" font-semibold text-white">Participants</span>
         <div className="theme-bg-color flex h-6 w-6 items-center justify-center rounded-md text-xs font-semibold text-white">
           <span>{data?.length}</span>
         </div>
       </div>
 
-      <div className="flex w-full flex-col h-[10rem] overflow-scroll-y">
+      <div className="flex w-full min-h-0 flex-1 flex-col overflow-y-auto">
         <ClientGenerator data={data}>
           <Participant />
         </ClientGenerator>

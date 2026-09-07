@@ -43,7 +43,7 @@ export default function Discussion({ id }: DiscussionProps) {
 
 
   return (
-    <div className="flex h-[28rem] w-full flex-grow-0 flex-col justify-between gap-4 rounded-xl bg-dark-secondary p-5">
+    <div className="flex h-full min-h-0 w-full flex-col justify-between gap-4 rounded-xl bg-dark-secondary p-5">
       <div className="flex w-full shrink-0 flex-col">
         <span className=" font-semibold text-white">Discussion</span>
         <div className="flex items-center gap-2">

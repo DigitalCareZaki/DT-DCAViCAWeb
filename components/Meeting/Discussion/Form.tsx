@@ -74,7 +74,7 @@ const Form: ClientComponentProps<DiscussionProps> = ({ id }) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="meeting-input-field w-full">
+    <form onSubmit={onSubmit} className="meeting-input-field w-full shrink-0">
       <InputBasic
         icon="FaImage"
         placeholder="Write Message"
