@@ -8,7 +8,6 @@ import AgoraRTC, {
   IAgoraRTCClient,
   IAgoraRTCRemoteUser,
   LocalVideoTrack,
-  RemoteUser,
   useJoin,
   useLocalCameraTrack,
   useLocalMicrophoneTrack,
@@ -16,6 +15,7 @@ import AgoraRTC, {
   usePublish,
   useRTCClient,
   useRemoteAudioTracks,
+  useRemoteUserTrack,
   useRemoteUsers,
 } from 'agora-rtc-react';
 import { createTheToken } from '@service';
@@ -24,6 +24,26 @@ import { useUser } from '@selectors';
 import type { ClientComponentProps } from '@types';
 import type { StoreMeetingState, ReduxProps } from '@store-types';
 import type { AgoraCallProps } from './types';
+
+// agora-rtc-react's <RemoteUser> always plays remote video with the SDK's
+// default "cover" fit, which crops a portrait phone stream to fill a
+// landscape tile. Playing the track ourselves lets us request "contain" so
+// the full frame (whatever its orientation) stays visible, letterboxed
+// instead of cropped.
+function RemoteVideoTile({ user }: { user: IAgoraRTCRemoteUser }) {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const { track } = useRemoteUserTrack(user, 'video');
+
+  useEffect(() => {
+    if (!track || !container) return;
+    track.play(container, { fit: 'contain' });
+    return () => {
+      track.stop();
+    };
+  }, [track, container]);
+
+  return <div ref={setContainer} className="w-full h-full" />;
+}
 
 function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClient, token: string | null; uid: string | number }) {
   const { muteCamera, muteMic, screenSharing } = useSelector<ReduxProps, StoreMeetingState>(
@@ -128,7 +148,7 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
               className="w-full h-full flex items-center justify-center transition-all duration-500 bg-black rounded-2xl shadow-2xl border-2 border-gray-700 overflow-hidden"
               key={String(user.uid ?? idx)}
             >
-              <RemoteUser user={user} />
+              <RemoteVideoTile user={user} />
             </div>
           ))
         ) : (
