@@ -16,9 +16,3 @@ export interface TopbarProps {
   onDateChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onClearDate?: () => void;
 }
-
-export interface DateFieldProps {
-  placeholder: string;
-  value?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}

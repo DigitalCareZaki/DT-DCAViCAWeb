@@ -9,3 +9,4 @@ export { default as DropdownSecondary } from './DropdownSecondary';
 export { default as TextArea } from './TextArea';
 export { default as FilePicker } from './FilePicker';
 export { default as DropDownWithoutState } from './DropDownWithoutState';
+export { default as InputDateFilter } from './DateFilter';

@@ -120,3 +120,16 @@ export interface FilePickerProps {
   accept?: string;
   handleFileChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+export interface DateFieldProps {
+  placeholder: string;
+  value?: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface DateFilterProps {
+  value?: string; // YYYY-MM-DD, empty when unset
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onClear?: () => void;
+  placeholder?: string;
+}
