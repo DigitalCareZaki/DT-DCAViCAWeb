@@ -173,7 +173,7 @@ const Header: ClientComponentProps<HeaderProps> = ({ user: userProp }) => {
               className={`text-link-primary text-lg 2xl:text-2xl border-b-4 border-solid ${isActive(getPath('/emr')) ? '' : 'border-transparent'}`}
               style={isActive(getPath('/emr')) ? { borderColor: themeColor, borderRadius: 0 } : { borderRadius: 0 }}
             >
-              Lab Reports
+              PHR
             </span>
           </Link>
         ) : (
