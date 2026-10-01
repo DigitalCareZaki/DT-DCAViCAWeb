@@ -4,7 +4,7 @@ import Promotion from '../Promotion';
 
 export default function Form(): JSX.Element {
   return (
-    <form className="w-[70%] flex flex-col items-center gap-6 font-poppins">
+    <form className="w-[90%] sm:w-[70%] flex flex-col items-center gap-6 font-poppins">
       <h2 className="font-bold text-primary text-2xl">Enter Pin</h2>
       <div className="w-full flex flex-col gap-6 text-sm text-secondary">
         <div className="flex flex-col gap-2">

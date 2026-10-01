@@ -13,7 +13,7 @@ export default function Form(): JSX.Element {
   return (
     <form
       onSubmit={onSubmit}
-      className="z-10 flex w-[70%] flex-col gap-6 font-poppins"
+      className="z-10 flex w-[90%] flex-col gap-6 font-poppins sm:w-[70%]"
     >
       <h2 className="text-3xl font-bold text-primary">Login</h2>
       <InputPrimary
