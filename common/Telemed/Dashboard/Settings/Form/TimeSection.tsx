@@ -45,6 +45,49 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
     return `${hours}:${minutes}`;
   }
 
+  // current time truncated to the minute, since the inputs have minute precision
+  function currentMinute() {
+    const now = new Date();
+    now.setSeconds(0, 0);
+    return now;
+  }
+
+  function isToday(dateLike: Date | string | number | undefined) {
+    if (!dateLike) return false;
+    const d = new Date(dateLike);
+    const now = new Date();
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
+  }
+
+  // only today has already-passed times; other dates in the range are unrestricted
+  function minTimeFor(dateLike: Date | string | number | undefined) {
+    return isToday(dateLike) ? getTimeValue(currentMinute()) : undefined;
+  }
+
+  // "HH:mm" strings compare correctly as plain strings
+  function latestOf(...times: (string | undefined)[]) {
+    return times.filter(Boolean).sort().pop();
+  }
+
+  // a time that has already passed today is moved up to the current minute
+  function notInPast(value: Date): Date {
+    const now = currentMinute();
+    if (!isToday(value) || value.getTime() >= now.getTime()) return value;
+
+    setError('Past time cannot be selected. Time set to the current time.');
+    window.setTimeout(() => setError(null), 3000);
+    const clamped = new Date(value);
+    clamped.setHours(now.getHours(), now.getMinutes(), 0, 0);
+    return clamped;
+  }
+
+  const startMin = latestOf(min, minTimeFor(slot?.startTime ?? baseDate));
+  const endMin = latestOf(
+    min,
+    minTimeFor(slot?.endTime ?? baseDate),
+    slot?.startTime ? getTimeValue(slot.startTime) : undefined
+  );
+
   function format12h(dateLike: Date | string | number) {
     const d = new Date(dateLike);
     // [] = use default locale; force hour12 for AM/PM
@@ -93,10 +136,10 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
                 type="time"
                 className="rounded-md bg-fuchsia-200 p-2 text-xs font-semibold"
                 value={getTimeValue(slot?.startTime)}
-                min={min}
+                min={startMin}
                 max={max}
                 onChange={(e) => {
-                  const startTime = setTimeOnDate(slot?.startTime, e.target.value); // no "am" append
+                  const startTime = notInPast(setTimeOnDate(slot?.startTime, e.target.value)); // no "am" append
                   setSlot({ ...(slot || {}), startTime });
                 }}
               />
@@ -107,10 +150,10 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
                 type="time"
                 className="rounded-md bg-fuchsia-200 p-2 text-xs font-semibold"
                 value={getTimeValue(slot?.endTime)}
-                min={min}
+                min={endMin}
                 max={max}
                 onChange={(e) => {
-                  const endTime = setTimeOnDate(slot?.endTime, e.target.value); // no "am" append
+                  const endTime = notInPast(setTimeOnDate(slot?.endTime, e.target.value)); // no "am" append
                   setSlot({ ...(slot || {}), endTime });
                 }}
               />
@@ -165,6 +208,13 @@ const TimeSection: ClientComponentProps<TimeSectionProps> = ({
 
                 if (e.getTime() <= s.getTime()) {
                   setError('End time must be after start time');
+                  window.setTimeout(() => setError(null), 3000);
+                  return;
+                }
+
+                // the popup may have stayed open long enough for the start time to pass
+                if (isToday(s) && s.getTime() < currentMinute().getTime()) {
+                  setError('Start time has already passed. Please choose a later time.');
                   window.setTimeout(() => setError(null), 3000);
                   return;
                 }
