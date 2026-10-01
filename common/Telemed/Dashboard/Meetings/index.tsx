@@ -1,75 +1,85 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { PrimaryHeader, ClientGenerator } from "@common";
+import { useEffect, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
+import { twMerge } from "tailwind-merge";
+import { ClientGenerator } from "@common";
 import Topbar from "./Topbar";
 import Patient from "../components/Appointment";
 import { getRequestedAppointments, getUser } from '@service';
 import type { UserRole } from "@types";
-import { BiLoaderAlt } from "react-icons/bi";
 import PatientLoader from "../../../Loader/PatientLoader";
-import { debounce, getName } from "@init-globals";
 
-async function fetchAppointments() {
-  const appointmentsRes = await getRequestedAppointments();
-  return appointmentsRes;
-}
+import type { AppointmentFilters } from "./types";
 
-async function fetchUser() {
-  const userRes = await getUser();
-  return userRes;
-}
+const initialFilters: AppointmentFilters = { search: '', date: '' };
 
 const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
 
   const [appointments, setAppointments] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchLoading, setSearchLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [filters, setFilters] = useState<AppointmentFilters>(initialFilters);
+  // Only the latest request may update the list, so a slow stale response can't overwrite newer results
+  const latestRequest = useRef(0);
 
   useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      const [appointmentsRes, userRes] = await Promise.all([
-        fetchAppointments(),
-        fetchUser(),
-      ]);
-      setAppointments(appointmentsRes.data || []);
-      setUser(userRes || null);
-      setLoading(false);
-    }
-    loadData();
+    getUser().then((userRes) => setUser(userRes || null));
   }, []);
 
-  const handleSearch = debounce((e: any) => {
-    setSearchTerm(e[0].target.value);
-    setSearchLoading(false);
-  }, 500);
+  // Debounce typing so the API is only hit once the user pauses
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const search = searchInput.trim();
+      setFilters((prev) => (prev.search === search ? prev : { ...prev, search }));
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-  const onSearch = (e: any) => {
-    setSearchLoading(true);
-    handleSearch(e);
+  // Empty filters are dropped by the service, so no filters returns all appointments
+  useEffect(() => {
+    const requestId = ++latestRequest.current;
+    setFetching(true);
+
+    getRequestedAppointments({ pending: false, ...filters })
+      .then((res) => {
+        if (requestId !== latestRequest.current) return;
+        setAppointments(res.success && Array.isArray(res.data) ? res.data : []);
+      })
+      .catch(() => {
+        if (requestId === latestRequest.current) setAppointments([]);
+      })
+      .finally(() => {
+        if (requestId !== latestRequest.current) return;
+        setFetching(false);
+        setLoading(false);
+      });
+  }, [filters]);
+
+  const onDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const date = e.target.value;
+    setFilters((prev) => ({ ...prev, date }));
   };
 
-  const filteredAppointments = appointments.filter((appt) => {
-    if (!searchTerm) return true;
-    const term = searchTerm.toLowerCase();
+  const clearDate = () => {
+    setFilters((prev) => ({ ...prev, date: '' }));
+  };
 
-    const appointment = appt.appointment;
+  // Clear the applied search right away instead of waiting for the debounce
+  const clearSearch = () => {
+    setSearchInput('');
+    setFilters((prev) => (prev.search ? { ...prev, search: '' } : prev));
+  };
 
-    if (!appointment) return false;
+  const clearFilters = () => {
+    setSearchInput('');
+    setFilters(initialFilters);
+  };
 
-    const organizerName = appointment.organizer ? getName(appointment.organizer).toLowerCase() : '';
-
-    return (
-      appointment.title?.toLowerCase().includes(term) ||
-      appointment.description?.toLowerCase().includes(term) ||
-      appointment.about?.toLowerCase().includes(term) ||
-      appointment.type?.toLowerCase().includes(term) ||
-      organizerName.includes(term)
-    );
-  });
+  const hasFilters = !!(searchInput.trim() || filters.date);
+  const searching = fetching || searchInput.trim() !== filters.search;
 
   if (loading) {
     return <PatientLoader />;
@@ -80,14 +90,39 @@ const MeetingsClient = ({ userType }: { userType: UserRole | null }) => {
       {/* <PrimaryHeader user={user as any} /> */}
       <Topbar
         userType={userType as UserRole}
-        onSearch={onSearch}
-        loading={searchLoading}
+        search={searchInput}
+        onSearch={(e) => setSearchInput(e.target.value)}
+        onClearSearch={clearSearch}
+        loading={searching}
+        date={filters.date}
+        onDateChange={onDateChange}
+        onClearDate={clearDate}
       />
-      <div className="grid w-full grid-cols-4 flex-wrap gap-4 1000:grid-cols-3 1300:grid-cols-4 1600:grid-cols-5">
-        <ClientGenerator data={filteredAppointments} dynamicWidth>
-          <Patient />
-        </ClientGenerator>
-      </div>
+      {appointments.length > 0 ? (
+        <div
+          className={twMerge(
+            "grid w-full grid-cols-4 flex-wrap gap-4 transition-opacity 1000:grid-cols-3 1300:grid-cols-4 1600:grid-cols-5",
+            fetching && "opacity-60"
+          )}
+        >
+          <ClientGenerator data={appointments} dynamicWidth>
+            <Patient />
+          </ClientGenerator>
+        </div>
+      ) : (
+        <div className="flex w-full flex-col items-center justify-center gap-2 py-20 text-sm font-medium text-gray-500">
+          {hasFilters ? 'No appointments match your filters.' : 'No appointments found.'}
+          {hasFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="theme-text-color font-semibold hover:underline"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
