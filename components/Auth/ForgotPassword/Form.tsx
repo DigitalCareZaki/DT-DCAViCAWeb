@@ -139,7 +139,7 @@ export default function Form(): JSX.Element {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex w-[70%] flex-col items-center gap-6 font-poppins"
+      className="flex w-[90%] flex-col items-center gap-6 font-poppins sm:w-[70%]"
     >
       <h2 className="text-2xl font-bold text-primary">
         {step === 'step-1' ? 'Forgot your password?' : 'Reset your password'}
