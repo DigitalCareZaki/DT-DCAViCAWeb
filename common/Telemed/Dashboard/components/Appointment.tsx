@@ -84,7 +84,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleAccept = useCallback(
-    async (props = 'ACTIVE', redirectToMeetings = false) => {
+    async (props = 'ACTIVE', redirectToMeetings = false, redirectToView = false) => {
       try {
         if (user.role !== 'DOCTOR' || !appointment || !id) return;
 
@@ -105,7 +105,9 @@ const Appointment: ClientComponentProps<Appointment> = ({
         });
         setStatusState(props);
         setShowOptions(false);
-        if (redirectToMeetings) {
+        if (redirectToView) {
+          router.push(`/${user.role.toLowerCase()}/telemed/meetings/view/${appointment.id}`);
+        } else if (redirectToMeetings) {
           router.replace(`/${user.role.toLowerCase()}/telemed/meetings`);
         }
       } catch (err: any) {
@@ -304,7 +306,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
             statusState === 'PENDING' && 'hover:shadow-xl',
             user.role !== 'DOCTOR' && 'opacity-50 cursor-not-allowed'
           )}
-          onClick={() => handleAccept('ACTIVE', true)}
+          onClick={() => statusState === 'PENDING' && handleAccept('ACTIVE', false, true)}
           disabled={user.role !== 'DOCTOR'}
         >
           {loading ? (
@@ -373,20 +375,32 @@ const Appointment: ClientComponentProps<Appointment> = ({
         </AnimatePresence>
       </div>
       <div className="flex w-full items-center">
-        <Link
-          passHref
-          href={`/${user.role?.toLowerCase()}/telemed/meetings/view/${appointment?.id}`}
-          className="w-full"
-        >
+        {statusState === 'ACTIVE' ? (
           <button
             className={twMerge(
-              'flex h-11 w-full cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300 hover:shadow-xl',
+              'flex h-11 w-full cursor-not-allowed items-center justify-center rounded-lg p-4 py-3 text-sm text-white opacity-50 outline-none',
               secondary
             )}
+            disabled
           >
             View
           </button>
-        </Link>
+        ) : (
+          <Link
+            passHref
+            href={`/${user.role?.toLowerCase()}/telemed/meetings/view/${appointment?.id}`}
+            className="w-full"
+          >
+            <button
+              className={twMerge(
+                'flex h-11 w-full cursor-pointer items-center justify-center rounded-lg p-4 py-3 text-sm text-white outline-none duration-300 hover:shadow-xl',
+                secondary
+              )}
+            >
+              View
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );
