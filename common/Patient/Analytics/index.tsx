@@ -1,7 +1,6 @@
 'use server';
 
 import { getPatientNurses, getUserTypeHeaders } from '@actions';
-import Header from './Header';
 import Table from './Table';
 import Form from './Form';
 
@@ -14,7 +13,7 @@ const AnalyticsTab: ServerComponentProps<any> = async ({ }) => {
 
   return (
     <div className="flex h-full w-full flex-col gap-6 px-10 pr-0 pt-6">
-      <Header />
+      {/* Table renders the header too, since the search and date filters drive its data */}
       <Table />
       {/* <Form /> */}
     </div>
