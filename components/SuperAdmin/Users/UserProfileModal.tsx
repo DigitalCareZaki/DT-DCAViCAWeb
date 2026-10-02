@@ -96,7 +96,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
                 {renderField('Country', user.location?.country?.name ?? user.location?.country?.title)}
                 {renderField('City', user.location?.city?.name ?? user.location?.city?.title)}
                 {renderField('Weight (KG)', user.patient?.weight)}
-                {renderField('Height (M)', user.patient?.height)}
+                {renderField('Height (cm)', user.patient?.height)}
                 {renderField('Assigned Doctor', assignedDoctorName)}
                 {renderField('Assigned Nurse', assignedNurseName)}
                 {renderField('Address', user.location?.address)}

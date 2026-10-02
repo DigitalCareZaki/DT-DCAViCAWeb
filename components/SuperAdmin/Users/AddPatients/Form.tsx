@@ -520,12 +520,14 @@ const Form: ClientComponent = () => {
         </div>
         <div className="w-1/2">
           <InputBasic
-            title="Enter patient height in meters"
-            label="Height - Meters"
-            placeholder="Enter patient height"
+            title="Enter patient height in cm"
+            label="Height - cm"
+            placeholder="Enter patient height in centimeters"
             icon="TbRulerMeasure"
             borderTheme
             type="number"
+            step="any"
+            inputMode="decimal"
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={register('height')}
