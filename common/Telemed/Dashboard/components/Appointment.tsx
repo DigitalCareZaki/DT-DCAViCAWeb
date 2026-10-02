@@ -73,6 +73,12 @@ const Appointment: ClientComponentProps<Appointment> = ({
 
   const { primary, secondary, text, border, ring } = useMemo(() => theme, [theme]);
 
+  // View is only available for active meetings scheduled for today
+  const isTodayMeeting =
+    !!appointment?.start_date &&
+    new Date(appointment.start_date).toDateString() === new Date().toDateString();
+  const canView = statusState === 'ACTIVE' && isTodayMeeting;
+
 
   const handleShowModal = useCallback(
     (props: ModalState) => {
@@ -84,7 +90,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleAccept = useCallback(
-    async (props = 'ACTIVE', redirectToMeetings = false, redirectToView = false) => {
+    async (props = 'ACTIVE', redirectToMeetings = false) => {
       try {
         if (user.role !== 'DOCTOR' || !appointment || !id) return;
 
@@ -105,9 +111,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
         });
         setStatusState(props);
         setShowOptions(false);
-        if (redirectToView) {
-          router.push(`/${user.role.toLowerCase()}/telemed/meetings/view/${appointment.id}`);
-        } else if (redirectToMeetings) {
+        if (redirectToMeetings) {
           router.replace(`/${user.role.toLowerCase()}/telemed/meetings`);
         }
       } catch (err: any) {
@@ -306,7 +310,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
             statusState === 'PENDING' && 'hover:shadow-xl',
             user.role !== 'DOCTOR' && 'opacity-50 cursor-not-allowed'
           )}
-          onClick={() => statusState === 'PENDING' && handleAccept('ACTIVE', false, true)}
+          onClick={() => statusState === 'PENDING' && handleAccept('ACTIVE', true)}
           disabled={user.role !== 'DOCTOR'}
         >
           {loading ? (
@@ -375,7 +379,7 @@ const Appointment: ClientComponentProps<Appointment> = ({
         </AnimatePresence>
       </div>
       <div className="flex w-full items-center">
-        {statusState === 'ACTIVE' ? (
+        {!canView ? (
           <button
             className={twMerge(
               'flex h-11 w-full cursor-not-allowed items-center justify-center rounded-lg p-4 py-3 text-sm text-white opacity-50 outline-none',
