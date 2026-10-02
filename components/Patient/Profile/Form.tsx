@@ -356,11 +356,14 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
       <div className="flex w-full items-center justify-between gap-10">
         <div className="w-1/2">
           <InputBasic
-            title="Weight"
-            label="Weight"
-            placeholder="Patient weight"
+            title="Patient weight in KG"
+            label="Weight - KG"
+            placeholder="Patient weight in KG"
             icon="TbRulerMeasure"
             borderTheme
+            type="number"
+            step="any"
+            inputMode="decimal"
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={register('weight')}
@@ -370,11 +373,14 @@ const Form: ClientComponentProps<PatientProfileData> = ({ ...data }) => {
         </div>
         <div className="w-1/2">
           <InputBasic
-            title="Height"
-            label="Height"
-            placeholder="Patient height"
+            title="Patient height in cm"
+            label="Height - cm"
+            placeholder="Patient height in centimeters"
             icon="TbRulerMeasure"
             borderTheme
+            type="number"
+            step="any"
+            inputMode="decimal"
             inputWrapperClassName="bg-background"
             inputClassName="bg-background"
             hookProps={register('height')}
