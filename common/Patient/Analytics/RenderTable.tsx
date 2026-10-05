@@ -23,6 +23,9 @@ const normalizeRating = (value: number | string | null | undefined): number | nu
   return parsedRating;
 };
 
+const isToday = (value: Date | string | null | undefined): boolean =>
+  !!value && new Date(value).toDateString() === new Date().toDateString();
+
 // Inline star rating display for analytics
 const StarRating = ({ rating }: { rating: number | null }) => {
   if (!rating) {
@@ -127,6 +130,9 @@ const RenderTable: ClientComponent = () => {
         // Support both flat and nested feedback structures
         const rawFeedbackRating = el?.appointment?.rating ?? el?.rating ?? null;
         const feedbackRating = normalizeRating(rawFeedbackRating);
+        // Call is only available for active meetings scheduled for today
+        const canJoin =
+          !!appointment?.id && el?.status === 'ACTIVE' && isToday(appointment?.start_date);
 
         return (
           <tr
@@ -167,12 +173,12 @@ const RenderTable: ClientComponent = () => {
                 </div>
                 <div
                   onClick={() => {
-                    if (appointment?.id && user?.type) {
+                    if (canJoin && user?.type) {
                       router.push(`/${user.type.toLowerCase()}/telemed/meetings/view/${appointment.id}`);
                     }
                   }}
-                  className={`bg-green-500 flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!appointment?.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                  title={appointment?.id ? 'Join Meeting' : 'Meeting not available'}
+                  className={`bg-green-500 flex h-8 w-8 items-center justify-center rounded-full text-white transition duration-200 hover:scale-[110%] ${!canJoin ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                  title={canJoin ? 'Join Meeting' : 'Meeting not available'}
                 >
                   <FaPhone size={16} />
                 </div>
