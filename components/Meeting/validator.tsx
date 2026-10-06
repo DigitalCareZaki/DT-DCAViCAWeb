@@ -1,5 +1,6 @@
-import { create, test, enforce } from 'vest';
+import { create, test, enforce, omitWhen } from 'vest';
 
+// Only observations and diagnosis are required; the other fields are optional
 export const telemedReportValidator = create((data = {}) => {
     test('observations', 'Observations are required', () => {
         enforce(data.observations).isNotBlank();
@@ -9,19 +10,9 @@ export const telemedReportValidator = create((data = {}) => {
         enforce(data.diagnosis).isNotBlank();
     });
 
-    test('prescribedMedications', 'Prescribed Medications are required', () => {
-        enforce(data.prescribedMedications).isNotBlank();
-    });
-
-    test('procedureRecommended', 'Procedure Recommended is required', () => {
-        enforce(data.procedureRecommended).isNotBlank();
-    });
-
-    test('followupDate', 'Follow Up Date is required', () => {
-        enforce(data.followupDate).isNotEmpty();
-    });
-
-    test('followupDate', 'Follow Up Date must be a valid date', () => {
-        enforce(new Date(data.followupDate).toString()).notEquals('Invalid Date');
+    omitWhen(!data.followupDate, () => {
+        test('followupDate', 'Follow Up Date must be a valid date', () => {
+            enforce(new Date(data.followupDate).toString()).notEquals('Invalid Date');
+        });
     });
 });
