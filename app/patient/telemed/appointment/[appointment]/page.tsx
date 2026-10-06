@@ -13,6 +13,6 @@ export default function Page({ params }: PageProps): JSX.Element {
 }
 
 export const metadata: Metadata = {
-  title: 'Avica | Doctor Appointment Live',
-  description: 'Avica | Doctor Appointment Live',
+  title: 'Avica | Patient Appointment Live',
+  description: 'Avica | Patient Appointment Live',
 };
