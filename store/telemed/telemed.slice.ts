@@ -1,17 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import initialState from './telemed.init';
-import { setAppointmentsList } from './telemed.reducer';
+import { setAppointmentsList, appointmentUpdated } from './telemed.reducer';
 
 const telemedSlice = createSlice({
   name: 'telemed',
   initialState,
   reducers: {
     setAppointmentsList,
+    appointmentUpdated,
   },
 });
 
-export const { setAppointmentsList: setAppointmentsListReducer } =
-  telemedSlice.actions;
+export const {
+  setAppointmentsList: setAppointmentsListReducer,
+  appointmentUpdated: appointmentUpdatedReducer,
+} = telemedSlice.actions;
 
 export default telemedSlice.reducer;
