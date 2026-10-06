@@ -5,6 +5,6 @@ export default function Page(): JSX.Element {
 }
 
 export const metadata: Metadata = {
-  title: 'Avica | Doctor TeleMed',
-  description: 'Avica | Doctor TeleMed',
+  title: 'Avica | Nurse TeleMed',
+  description: 'Avica | Nurse TeleMed',
 };

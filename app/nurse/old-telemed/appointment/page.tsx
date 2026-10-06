@@ -11,6 +11,6 @@ export default function Page(): JSX.Element {
 }
 
 export const metadata: Metadata = {
-  title: 'Avica | Doctor TeleMed Appointment',
-  description: 'Avica | Doctor TeleMed Appointment',
+  title: 'Avica | Nurse TeleMed Appointment',
+  description: 'Avica | Nurse TeleMed Appointment',
 };

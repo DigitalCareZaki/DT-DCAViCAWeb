@@ -15,6 +15,6 @@ export default function Page(props: PageProps): JSX.Element {
 }
 
 export const metadata: Metadata = {
-  title: 'Avica | Doctor Education',
-  description: 'Avica | Doctor Education',
+  title: 'Avica | Nurse Education',
+  description: 'Avica | Nurse Education',
 };
