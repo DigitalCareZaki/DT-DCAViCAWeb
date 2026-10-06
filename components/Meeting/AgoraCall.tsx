@@ -1,17 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import AgoraRTC, {
   AgoraRTCProvider,
   IAgoraRTCClient,
   IAgoraRTCRemoteUser,
+  ILocalVideoTrack,
   LocalVideoTrack,
+  useIsConnected,
   useJoin,
   useLocalCameraTrack,
   useLocalMicrophoneTrack,
-  useLocalScreenTrack,
   usePublish,
   useRTCClient,
   useRemoteAudioTracks,
@@ -20,6 +21,7 @@ import AgoraRTC, {
 } from 'agora-rtc-react';
 import { createTheToken } from '@service';
 import { useUser } from '@selectors';
+import { setScreenSharingReducer } from '@slice';
 
 import type { ClientComponentProps } from '@types';
 import type { StoreMeetingState, ReduxProps } from '@store-types';
@@ -50,21 +52,14 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     (state) => state.meeting
   );
   const { AppID, channelName, Client, token, uid } = props;
+  const dispatch = useDispatch();
 
   const [user] = useUser();
 
   const { isLoading: isLoadingMic, localMicrophoneTrack } = useLocalMicrophoneTrack();
   const { isLoading: isLoadingCam, localCameraTrack } = useLocalCameraTrack();
-
-  // Add screen sharing track
-  const {
-    isLoading: isLoadingScreen,
-    screenTrack: localScreenTrack
-  } = useLocalScreenTrack(
-    screenSharing,  // ready flag
-    {},    // optional config
-    "disable", // audio option
-  );
+  const [screenTrack, setScreenTrack] = useState<ILocalVideoTrack | null>(null);
+  const isConnected = useIsConnected();
   const remoteUsers = useRemoteUsers();
 
   const { audioTracks } = useRemoteAudioTracks(remoteUsers);
@@ -84,11 +79,9 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     // console.log('User ID (uid):', user?.id);
   }, [token, channelName, AppID, remoteUsers, audioTracks, localMicrophoneTrack, localCameraTrack, muteMic, muteCamera, user]);
 
-  // Always publish mic + (camera or screen)
-  usePublish([
-    localMicrophoneTrack,
-    screenSharing ? localScreenTrack : localCameraTrack
-  ]);
+  // The camera and the screen share one video slot, managed below, so only the
+  // mic goes through usePublish.
+  usePublish([localMicrophoneTrack]);
 
   useJoin({
     appid: AppID,
@@ -116,12 +109,89 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     });
   }, [audioTracks]);
 
-  // Only enable/disable tracks, do not publish/unpublish manually
+  // Switching between camera and screen takes several awaited SDK calls, so
+  // run the steps one at a time to stop a quick toggle from interleaving them.
+  const videoQueue = useRef<Promise<void>>(Promise.resolve());
+  const runVideoStep = useCallback((step: () => Promise<void>) => {
+    videoQueue.current = videoQueue.current.then(step).catch(console.error);
+  }, []);
+
+  // Capture the screen while sharing is on. Sharing can also end outside our
+  // button (the picker is dismissed, or the browser's own "Stop sharing" bar is
+  // used), so those paths reset the shared state too.
+  useEffect(() => {
+    if (!screenSharing) return;
+
+    let active = true;
+    let track: ILocalVideoTrack | null = null;
+
+    runVideoStep(async () => {
+      if (!active) return;
+      let created: ILocalVideoTrack;
+      try {
+        created = await AgoraRTC.createScreenVideoTrack(
+          { encoderConfig: '1080p_1', optimizationMode: 'detail' },
+          'disable'
+        );
+      } catch (error) {
+        console.warn('Screen share not started:', error);
+        if (active) dispatch(setScreenSharingReducer(false));
+        return;
+      }
+      if (!active) {
+        created.close();
+        return;
+      }
+      created.on('track-ended', () => dispatch(setScreenSharingReducer(false)));
+      track = created;
+      setScreenTrack(created);
+    });
+
+    return () => {
+      active = false;
+      setScreenTrack(null);
+      runVideoStep(async () => {
+        const ended = track;
+        if (!ended) return;
+        track = null;
+        try {
+          if (Client.localTracks.includes(ended)) await Client.unpublish(ended);
+        } finally {
+          ended.close();
+        }
+      });
+    };
+  }, [screenSharing, Client, dispatch, runVideoStep]);
+
+  // Agora lets a client publish only one video track, so the camera and the
+  // screen take turns: the camera is unpublished and switched off while
+  // sharing, then switched back on and republished once sharing stops.
   useEffect(() => {
     if (!localCameraTrack) return;
-    console.log('📹 Camera track enabled:', !muteCamera && !screenSharing);
-    localCameraTrack.setEnabled(!muteCamera && !screenSharing);
-  }, [muteCamera, localCameraTrack, screenSharing]);
+
+    runVideoStep(async () => {
+      if (screenTrack) {
+        if (Client.localTracks.includes(localCameraTrack)) {
+          await Client.unpublish(localCameraTrack);
+        }
+        await localCameraTrack.setEnabled(false);
+        if (isConnected && !Client.localTracks.includes(screenTrack)) {
+          await Client.publish(screenTrack);
+        }
+        return;
+      }
+
+      await localCameraTrack.setEnabled(!muteCamera);
+      if (isConnected && !muteCamera && !Client.localTracks.includes(localCameraTrack)) {
+        await Client.publish(localCameraTrack);
+      }
+    });
+  }, [isConnected, localCameraTrack, screenTrack, muteCamera, Client, runVideoStep]);
+
+  // A share left on when the call unmounts shouldn't restart in the next call
+  useEffect(() => () => {
+    dispatch(setScreenSharingReducer(false));
+  }, [dispatch]);
 
   useEffect(() => {
     if (!localMicrophoneTrack) return;
@@ -129,13 +199,7 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     localMicrophoneTrack.setEnabled(!muteMic);
   }, [muteMic, localMicrophoneTrack]);
 
-  useEffect(() => {
-    if (!localScreenTrack) return;
-    console.log('🖥️ Screen track enabled:', screenSharing);
-    localScreenTrack.setEnabled(screenSharing);
-  }, [screenSharing, localScreenTrack]);
-
-  const deviceLoading = isLoadingMic || isLoadingCam || isLoadingScreen;
+  const deviceLoading = isLoadingMic || isLoadingCam;
 
   if (deviceLoading)
     return (
@@ -169,9 +233,9 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
         {/* Local video as floating tile with glow (only if not in grid mode) */}
         {remoteUsers.length <= 1 && (
           <div className="absolute bottom-8 right-8 w-48 h-32 rounded-xl shadow-xl overflow-hidden border-2 border-white/80 bg-black/80 animate-fade-in ring-4 ring-blue-500/30">
-            {screenSharing && localScreenTrack ? (
+            {screenTrack ? (
               <LocalVideoTrack
-                track={localScreenTrack}
+                track={screenTrack}
                 play={true}
                 className="w-full h-full object-cover rounded-xl"
               />
