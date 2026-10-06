@@ -169,21 +169,23 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
   // Agora lets a client publish only one video track, so the camera and the
   // screen take turns: the camera is unpublished and switched off while
   // sharing, then switched back on and republished once sharing stops.
+  // Without a camera (none attached, or access denied) the screen goes out alone.
   useEffect(() => {
-    if (!localCameraTrack) return;
-
     runVideoStep(async () => {
       if (screenTrack) {
-        if (Client.localTracks.includes(localCameraTrack)) {
-          await Client.unpublish(localCameraTrack);
+        if (localCameraTrack) {
+          if (Client.localTracks.includes(localCameraTrack)) {
+            await Client.unpublish(localCameraTrack);
+          }
+          await localCameraTrack.setEnabled(false);
         }
-        await localCameraTrack.setEnabled(false);
         if (isConnected && !Client.localTracks.includes(screenTrack)) {
           await Client.publish(screenTrack);
         }
         return;
       }
 
+      if (!localCameraTrack) return;
       await localCameraTrack.setEnabled(!muteCamera);
       if (isConnected && !muteCamera && !Client.localTracks.includes(localCameraTrack)) {
         await Client.publish(localCameraTrack);
