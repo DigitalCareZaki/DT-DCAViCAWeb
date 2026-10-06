@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@selectors';
+import closeMeetingTab from './closeMeetingTab';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -95,7 +96,7 @@ const FeedbackModal = ({ isOpen, onClose, appointmentId }: FeedbackModalProps) =
 
   const navigate = () => {
     const type = user?.type?.toLowerCase() ?? 'patient';
-    router.push(`/${type}/telemed`);
+    closeMeetingTab(() => router.push(`/${type}/telemed`));
   };
 
   const handleSubmit = async () => {
