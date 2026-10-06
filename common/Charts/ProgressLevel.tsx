@@ -23,11 +23,7 @@ export default function ProgressLevel({
   const { selected } = useSelector<ReduxProps, StoreComplianceState>(
     (state) => state.compliance
   );
-  const [compliance, setCompliance] = useState<PatientCompliance>({});
-
-  useEffect(() => {
-    setCompliance(selected.data ?? {});
-  }, [selected.id]);
+  const compliance: PatientCompliance = selected.data ?? {};
 
   useEffect(() => {
     if (!chartContainer.current) return;

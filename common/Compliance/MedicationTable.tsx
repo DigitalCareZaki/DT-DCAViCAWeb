@@ -53,8 +53,8 @@ const RenderTable = ({
     <tr
       key={el.id}
       className={twMerge(
-        'cursor-pointer border-b odd:bg-white even:bg-gray-50 hover:bg-gray-200',
-        selected === el.id ? 'bg-blue-400' : ''
+        'cursor-pointer border-b hover:bg-gray-200',
+        selected === el.id ? 'bg-blue-400' : 'odd:bg-white even:bg-gray-50'
       )}
       onClick={() => setMed(el.id, el.compliance)}
     >
@@ -105,7 +105,7 @@ const MedicationTable: ClientComponent = () => {
   useEffect(() => {
     // Map medications to include created_at and start/end dates from compliance data
     setMedications(
-      data.medications.map((med: any) => {
+      (data.medications ?? []).map((med: any) => {
         const { startDate, endDate } = getComplianceDateRange(med.compliance);
         return {
           ...med,
@@ -115,7 +115,8 @@ const MedicationTable: ClientComponent = () => {
         };
       })
     );
-  }, [data.user.id]);
+    setCurrentPage(1);
+  }, [data]);
 
   useEffect(() => {
     setSelectedId(selected.id ?? '');
