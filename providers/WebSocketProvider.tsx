@@ -14,6 +14,8 @@ import {
   // chat
   applyRoomUpdateReducer,
   setInboxReducer,
+  // telemed
+  appointmentUpdatedReducer,
 } from '@slice';
 import { fetchRoomChats, getInbox } from '@service';
 
@@ -120,18 +122,31 @@ const WebSocketProvider: ClientComponentProps<ChildrenComponentProps> = ({
       console.log('[WS] Listening for:', inboxEvent);
       socket.current.on(inboxEvent, inboxHandler);
 
-      // CLEANUP: Remove the event listener on unmount or user change
+      // Listen for appointment changes so open telemed dashboards refetch
+      const appointmentHandler = () => {
+        dispatch(appointmentUpdatedReducer());
+      };
+      const appointmentEvent = `${user.id}:appointment_update`;
+      console.log('[WS] Listening for:', appointmentEvent);
+      socket.current.on(appointmentEvent, appointmentHandler);
+
+      // CLEANUP: Remove the event listeners and close this socket on unmount or user change
       return () => {
         notificationEvents.forEach((event) => {
           socket.current?.off(event, handler);
         });
         socket.current?.off(`${user.id}:inbox_update`, inboxHandler);
+        socket.current?.off(appointmentEvent, appointmentHandler);
+        socket.current?.disconnect();
       };
     }
 
     // If not connecting, still return a cleanup function
     return () => { };
-  }, [user]);
+    // Keyed on the id, not the object: router.refresh() re-renders the layout with a
+    // new `user` object, which would otherwise open a new socket on every refresh
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   useEffect(() => {
     if (!socket.current) return;
