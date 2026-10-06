@@ -14,7 +14,6 @@ import AgoraRTC, {
   useLocalCameraTrack,
   useLocalMicrophoneTrack,
   usePublish,
-  useRTCClient,
   useRemoteAudioTracks,
   useRemoteUserTrack,
   useRemoteUsers,
@@ -129,8 +128,12 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
       if (!active) return;
       let created: ILocalVideoTrack;
       try {
+        // 1920×1080 at 30 fps. Screen presets differ from camera presets:
+        // "1080p_1" here caps capture at 5 fps, too choppy for switching tabs.
+        // "detail" keeps text sharp, dropping frame rate rather than
+        // resolution when bandwidth runs short.
         created = await AgoraRTC.createScreenVideoTrack(
-          { encoderConfig: '1080p_1', optimizationMode: 'detail' },
+          { encoderConfig: '1080p_2', optimizationMode: 'detail' },
           'disable'
         );
       } catch (error) {
@@ -256,7 +259,9 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
 
 const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
-  const client = useRTCClient(
+  // Created once: a fresh client on every render would swap the provider's
+  // client mid-call, leaving the hooks below on a client that never joined.
+  const [client] = useState(() =>
     // Prefer H.264 to maximize interoperability with native mobile SDKs.
     AgoraRTC.createClient({ codec: 'h264', mode: 'rtc' })
   );
