@@ -89,8 +89,8 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         appointmentId: id,
         observations: data?.observations,
         diagnosis: data?.diagnosis,
+        medications: data?.prescribedMedications,
         // Optional fields are left out when blank rather than sent empty
-        medications: data?.prescribedMedications || undefined,
         procedure: data?.procedureRecommended || undefined,
         follow_up_date: data?.followupDate ? new Date(data.followupDate) : undefined,
       };
@@ -207,7 +207,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
               name="prescribedMedications"
               placeholder="Prescribed Medications"
               label="Prescribed Medications"
-              hookProps={register("prescribedMedications")}
+              hookProps={register('prescribedMedications', { required: "Prescribed Medications are required" })}
               error={!!errors?.prescribedMedications}
               errorMessage={errors?.prescribedMedications?.message}
             />

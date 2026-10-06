@@ -5,7 +5,6 @@ import { getTelemedDetails } from '@service';
 import Header from '../components/Header';
 import Topbar from './Topbar';
 import Participant from './Participants';
-import Discussion from './Discussion';
 
 import type { ServerComponentProps } from '@types';
 import type { Props } from './types';
@@ -19,7 +18,7 @@ const ViewMeeting: ServerComponentProps<Props> = async ({ id }) => {
       <Topbar {...res.data} appointment_id={id} />
       <div className="flex h-[60vh] w-full items-center gap-4">
         <Participant participants={res.data.participants} />
-        <div className="h-[60vh] w-[50%] rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
+        <div className="h-[60vh] flex-1 rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
               <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +55,6 @@ const ViewMeeting: ServerComponentProps<Props> = async ({ id }) => {
             </div>
           )}
         </div>
-        <Discussion id={id} />
       </div>
     </div>
   );

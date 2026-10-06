@@ -13,7 +13,6 @@ const AgoraCall = dynamic(() => import('./AgoraCall'), {
 });
 
 import Participants from './Participants';
-import Discussion from './Discussion';
 import Topbar from './Topbar';
 import Control, { Modal, ControlPropsWithModal } from './Control';
 import Counter from './Counter';

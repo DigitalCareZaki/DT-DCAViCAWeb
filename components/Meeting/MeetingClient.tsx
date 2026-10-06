@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import Control, { Modal } from './Control';
 import Participants from './Participants';
-import Discussion from './Discussion';
 import Topbar from './Topbar';
 import Counter from './Counter';
 import VitalsServerWrapper from './Vitals/ServerWrapper';
@@ -40,9 +39,6 @@ export default function MeetingClient({ id }: { id: string }) {
             <div className="col-span-1 flex h-full min-h-0 w-full flex-col gap-4">
                 <div className="flex-1 min-h-0 rounded-2xl bg-dark-secondary shadow-xl flex flex-col overflow-hidden">
                     <Participants id={id} />
-                </div>
-                <div className="flex-1 min-h-0 rounded-2xl bg-dark-secondary shadow-xl overflow-hidden flex flex-col mt-2">
-                    <Discussion id={id} />
                 </div>
             </div>
             <VitalsServerWrapper id={id} />
