@@ -34,6 +34,16 @@ import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 
+// Dark field styling shared by every report input, matching the call's chat box
+const reportFieldProps = {
+  borderTheme: true,
+  hideInfo: true,
+  inputWrapperClassName: 'rounded-lg border border-white/10',
+  inputClassName: 'bg-transparent text-white placeholder:text-gray-500 text-sm sm:text-base px-2 py-1 w-full',
+  labelClassName: 'text-gray-300 text-sm sm:text-base',
+  errorClassName: 'text-rose-400 text-xs sm:text-sm',
+};
+
 // Modal Component
 const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; id: string }) => {
 
@@ -79,9 +89,10 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         appointmentId: id,
         observations: data?.observations,
         diagnosis: data?.diagnosis,
-        medications: data?.prescribedMedications,
-        procedure: data?.procedureRecommended,
-        follow_up_date: new Date(data?.followupDate)
+        // Optional fields are left out when blank rather than sent empty
+        medications: data?.prescribedMedications || undefined,
+        procedure: data?.procedureRecommended || undefined,
+        follow_up_date: data?.followupDate ? new Date(data.followupDate) : undefined,
       };
 
 
@@ -135,16 +146,19 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-      <div className="mx-auto rounded-2xl bg-white shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-gray-200">
-        <div className="bg-white pt-4 px-4 flex justify-between items-center border-b border-gray-100 pb-2 rounded-t-2xl">
-          <h2 className="text-lg sm:text-xl font-semibold text-black">
+    // Light dim only, so the doctor can still see the call while writing the report
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      {/* color-scheme: dark gives the date picker a light icon and a dark popup */}
+      <div className="mx-4 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-dark-secondary shadow-[0_32px_80px_rgba(0,0,0,0.55)] [color-scheme:dark]">
+        <div className="theme-bg-color h-[3px]" />
+        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-white">
             Avica Teleconsultation Report
           </h2>
           {/* Cancel Icon */}
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-black rounded-full p-1 transition"
+            className="rounded-full p-1 text-gray-400 transition hover:bg-white/10 hover:text-white"
             aria-label="Close modal"
           >
             <svg
@@ -165,83 +179,58 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full"
+          className="meeting-input-field w-full"
         >
-          <div className="flex w-full flex-col gap-2 sm:gap-3 px-4 py-3 sm:py-4">
+          <div className="flex w-full flex-col gap-2 sm:gap-3 px-5 py-3 sm:py-4">
             <InputBasic
+              {...reportFieldProps}
               name="observations"
               placeholder="Enter Observations"
-              defaultBorder
-              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
               label="Observations"
-              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-sm sm:text-base px-2 py-1 focus:border-black w-full"
-              hideInfo
-              labelClassName="text-black text-sm sm:text-base"
               hookProps={register('observations', { required: "Observations are required" })}
               error={!!errors?.observations}
               errorMessage={errors?.observations?.message}
-              errorClassName="text-red-500 text-xs sm:text-sm"
             />
 
             <InputBasic
+              {...reportFieldProps}
               name="diagnosis"
               placeholder="Enter Diagnosis"
-              defaultBorder
-              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
               label="Diagnosis"
-              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-sm sm:text-base px-2 py-1 focus:border-black w-full"
-              hideInfo
-              labelClassName="text-black text-sm sm:text-base"
               hookProps={register('diagnosis', { required: "Diagnosis is required" })}
               error={!!errors?.diagnosis}
               errorMessage={errors?.diagnosis?.message}
-              errorClassName="text-red-500 text-xs sm:text-sm"
             />
 
             <InputBasic
+              {...reportFieldProps}
               name="prescribedMedications"
               placeholder="Prescribed Medications"
-              defaultBorder
-              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
               label="Prescribed Medications"
-              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-sm sm:text-base px-2 py-1 focus:border-black w-full"
-              hideInfo
-              labelClassName="text-black text-sm sm:text-base"
-              hookProps={register("prescribedMedications", { required: "Prescribed Medications are required" })}
+              hookProps={register("prescribedMedications")}
               error={!!errors?.prescribedMedications}
               errorMessage={errors?.prescribedMedications?.message}
-              errorClassName="text-red-500 text-xs sm:text-sm"
             />
 
             <InputBasic
+              {...reportFieldProps}
               name="procedureRecommended"
               placeholder="Procedure Recommended"
-              defaultBorder
-              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
               label="Procedure Recommended"
-              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-sm sm:text-base px-2 py-1 focus:border-black w-full"
-              hideInfo
-              labelClassName="text-black text-sm sm:text-base"
-              hookProps={register("procedureRecommended", { required: "Procedure Recommended is required" })}
+              hookProps={register("procedureRecommended")}
               error={!!errors?.procedureRecommended}
               errorMessage={errors?.procedureRecommended?.message}
-              errorClassName="text-red-500 text-xs sm:text-sm"
             />
 
             <InputBasic
+              {...reportFieldProps}
               type='date'
               name="followupDate"
               placeholder="Follow Up Date"
-              defaultBorder
-              inputWrapperClassName="border border-gray-400 rounded-lg focus-within:border-black"
               label="Follow Up Date"
-              inputClassName="bg-transparent placeholder:text-gray-300 text-black text-sm sm:text-base px-2 py-1 focus:border-black w-full"
-              hideInfo
-              labelClassName="text-black text-sm sm:text-base"
-              hookProps={register("followupDate", { required: "Follow Up Date is required" })}
+              hookProps={register("followupDate")}
               error={!!errors?.followupDate}
               errorMessage={errors?.followupDate?.message}
-              errorClassName="text-red-500 text-xs sm:text-sm"
             />
 
             <div className="w-full mt-2 sm:mt-4 pb-4 flex justify-center">
