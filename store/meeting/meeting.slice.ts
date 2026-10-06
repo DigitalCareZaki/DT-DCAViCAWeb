@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import initialState from './meeting.init';
-import { toggleCamera, toggleMic, addToChats, toggleScreenSharing } from './meeting.reducer';
+import {
+  toggleCamera,
+  toggleMic,
+  addToChats,
+  toggleScreenSharing,
+  setScreenSharing,
+} from './meeting.reducer';
 
 const meetingSlice = createSlice({
   name: 'meeting',
@@ -11,6 +17,7 @@ const meetingSlice = createSlice({
     toggleMic,
     addToChats,
     toggleScreenSharing,
+    setScreenSharing,
   },
 });
 
@@ -19,6 +26,7 @@ export const {
   toggleMic: toggleMicReducer,
   addToChats: addToChatsReducer,
   toggleScreenSharing: toggleScreenSharingReducer,
+  setScreenSharing: setScreenSharingReducer,
 } = meetingSlice.actions;
 
 export default meetingSlice.reducer;

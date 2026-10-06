@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaPhone } from '@react-icons/all-files/fa/FaPhone';
 import { FaMicrophone } from '@react-icons/all-files/fa/FaMicrophone';
 import { FaHandPaper } from '@react-icons/all-files/fa/FaHandPaper';
@@ -24,7 +24,7 @@ import { useUser } from '@selectors';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import type { ClientComponentProps } from '@types';
-import type { ModalState } from '@store-types';
+import type { ModalState, ReduxProps, StoreMeetingState } from '@store-types';
 import { telemedReportValidator } from './validator';
 import closeMeetingTab from './closeMeetingTab';
 import { toast } from 'react-hot-toast';
@@ -267,11 +267,14 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
   const router = useRouter();
   const dispatch = useDispatch();
   const [user] = useUser();
+  // Read from the store: sharing can also be stopped by the browser, not just this button
+  const { screenSharing } = useSelector<ReduxProps, StoreMeetingState>(
+    (state) => state.meeting
+  );
   const [controlls, setControlls] = useState({
     muteMicrophone: false,
     muteCamera: false,
     handControl: false,
-    screenSharing: false,
   });
 
   const handleCancelMeeting = () => {
@@ -309,7 +312,6 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
 
   const handleToggleS = () => {
     dispatch(toggleScreenSharingReducer());
-    setControlls((prev) => ({ ...prev, screenSharing: !prev.screenSharing }));
 
     if (!user.id) return;
 
@@ -321,7 +323,7 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
           raised: controlls.handControl,
           camera: !controlls.muteCamera,
           microphone: !controlls.muteMicrophone,
-          screenSharing: !!controlls.screenSharing,
+          screenSharing: !screenSharing,
         },
         event: 'meeting-controlls',
       })
@@ -342,7 +344,7 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
           raised: controlls.handControl,
           camera: !controlls.muteCamera,
           microphone: !!controlls.muteMicrophone,
-          screenSharing: !controlls.screenSharing,
+          screenSharing,
         },
         event: 'meeting-controlls',
       })
@@ -360,7 +362,7 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
           raised: !controlls.handControl,
           camera: !controlls.muteCamera,
           microphone: !controlls.muteMicrophone,
-          screenSharing: !!controlls.screenSharing,
+          screenSharing,
         },
         event: 'meeting-controlls',
       })
@@ -424,7 +426,7 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
         title="Share"
         className={twMerge(
           'meeting-bar-btn',
-          !controlls.screenSharing ? 'bg-dark-main' : 'theme-bg-color'
+          !screenSharing ? 'bg-dark-main' : 'theme-bg-color'
         )}
       >
         <MdOutlineScreenShare size={16} />
