@@ -26,6 +26,7 @@ import { vestResolver } from '@hookform/resolvers/vest';
 import type { ClientComponentProps } from '@types';
 import type { ModalState } from '@store-types';
 import { telemedReportValidator } from './validator';
+import closeMeetingTab from './closeMeetingTab';
 import { toast } from 'react-hot-toast';
 
 import type { ControlProps } from './types';
@@ -279,7 +280,7 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
       setShowFeedbackModal(true);
     } else {
       const userType = user?.type?.toLowerCase() ?? 'doctor';
-      router.push(`/${userType}/telemed`);
+      closeMeetingTab(() => router.push(`/${userType}/telemed`));
     }
   };
 

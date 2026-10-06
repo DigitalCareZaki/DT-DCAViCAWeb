@@ -94,6 +94,8 @@ const Counter: ClientComponentProps<CounterProps> = ({
             <Link
               passHref
               href={`/${user.role?.toLowerCase()}/telemed/appointment/${id}`}
+              target="_blank"
+              rel="noopener noreferrer"
               // className={twMerge(isActive ? 'flex' : 'hidden')} // TOOD: removed temporarily
             >
               <button className="mt-10 h-11 w-fit rounded-full bg-white/20 px-10 text-xs font-bold text-fuchsia-200 transition duration-300 hover:scale-[110%] hover:bg-white/40 hover:text-fuchsia-900">

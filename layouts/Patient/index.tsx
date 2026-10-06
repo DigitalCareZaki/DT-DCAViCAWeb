@@ -32,10 +32,10 @@ const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
     height: '150%', // Compensate for the reduced height due to scaling
   };
 
-  if (
-    route?.includes('/patient/telemed/appointment') ||
-    route?.includes('/patient/chat')
-  ) {
+  // Live call opens in its own tab, so it renders without the header
+  const isMeetingRoute = route?.includes('/patient/telemed/appointment');
+
+  if (isMeetingRoute || route?.includes('/patient/chat')) {
     return (
       <div className="relative h-screen w-screen overflow-hidden">
         <main
@@ -43,9 +43,11 @@ const PatientLayout: ClientComponentProps<Props> = ({ user, children }) => {
           className="flex flex-col h-screen w-full bg-background"
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
-            <PrimaryHeader user={currentUser!} />
-          </div>
+          {!isMeetingRoute && (
+            <div className="sticky top-0 z-50 bg-background px-6 pt-4 pb-2">
+              <PrimaryHeader user={currentUser!} />
+            </div>
+          )}
           {/* Scrollable Content */}
           <div className="flex flex-grow h-0 w-full overflow-hidden">
             {children}

@@ -97,6 +97,16 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     uid,
   });
 
+  // Closing the tab skips useJoin's unmount cleanup, so leave the channel
+  // explicitly to let the other participants see us drop straight away.
+  useEffect(() => {
+    const handlePageHide = () => {
+      Client.leave().catch(() => undefined);
+    };
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, [Client]);
+
   // Play remote audio tracks in effect
   useEffect(() => {
 
