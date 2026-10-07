@@ -16,7 +16,7 @@ const statusColors: any = {
   READING_NOT_TAKEN: "bg-rag-reading-not-set",
 };
 
-const measurementKeys = ["BLOODGLUCOSE", "BLOODPRESSURE", "TEMPERATURE", "SPO2", "ECG"];
+const measurementKeys = ["BLOODGLUCOSE", "BLOODPRESSURE", "TEMPERATURE", "SPO2"];
 
 const RenderTable = ({
   data,
