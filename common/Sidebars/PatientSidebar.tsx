@@ -113,7 +113,7 @@ const Sidebar: ClientComponent = () => {
           {sidebar ? <IoIosArrowBack /> : <IoIosArrowForward />}
         </div>
         <div title={getName({ ...(patient as any) })}>
-          <Link passHref href={getPath('/patient/profile')}>
+          {/* <Link passHref href={getPath('/patient/profile')}> */}
             <div className="relative h-7 w-7 rounded-full">
               <Image
                 src={getProfilePicture(patient?.uri)}
@@ -122,7 +122,7 @@ const Sidebar: ClientComponent = () => {
                 className="rounded-full object-cover"
               />
             </div>
-          </Link>
+          {/* </Link> */}
         </div>
         <div className="flex w-full flex-col items-center justify-center">
           <span
