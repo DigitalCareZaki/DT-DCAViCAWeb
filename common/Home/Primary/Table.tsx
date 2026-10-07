@@ -26,7 +26,6 @@ const Table: ClientComponentProps<any> = ({ userType, data, pagination, fetchDat
           'Temperature',
           // 'Medication',
           'SPO2',
-          'ECG',
         ]}
       >
         <RenderTable userType={userType} data={data} />

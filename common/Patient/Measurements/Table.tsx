@@ -142,7 +142,7 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
     <>
       <div className="w-full overflow-x-auto relative pb-12 shadow-md sm:rounded-lg">
         <div className="flex justify-between space-x-2 mb-4">
-          {['ALL', 'ECG', 'SPO2', 'BLOODPRESSURE', 'BLOODGLUCOSE', 'TEMPERATURE'].map((tab) => (
+          {['ALL', 'SPO2', 'BLOODPRESSURE', 'BLOODGLUCOSE', 'TEMPERATURE'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}

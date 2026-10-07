@@ -35,7 +35,6 @@ const Header: ClientComponentProps<any> = ({ data, searchTerm, setSearchTerm }) 
                 blood_pressure: el?.measurements?.BLOODPRESSURE?.status || '-',
                 temperature: el?.measurements?.TEMPERATURE?.status || '-',
                 spo2: el?.measurements?.SPO2?.status || '-',
-                ecg: el?.measurements?.ECG?.status || '-',
               };
             })}
             headers={[
@@ -67,11 +66,6 @@ const Header: ClientComponentProps<any> = ({ data, searchTerm, setSearchTerm }) 
               {
                 label: 'SPO2',
                 key: 'spo2',
-                width: '11%',
-              },
-              {
-                label: 'ECG',
-                key: 'ecg',
                 width: '11%',
               },
             ]}
