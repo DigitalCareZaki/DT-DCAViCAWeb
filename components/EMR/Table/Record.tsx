@@ -117,12 +117,12 @@ const Record: ClientComponentProps<any> = ({
         </div>
 
         {/* Delete Button */}
-        <div
+        {/* <div
           onClick={handleDelete}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white transition duration-200 hover:scale-[110%]"
         >
           <IoMdTrash size={16} />
-        </div>
+        </div> */}
       </td>
     </tr>
   );
