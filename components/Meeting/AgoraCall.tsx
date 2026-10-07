@@ -25,6 +25,7 @@ import { setScreenSharingReducer } from '@slice';
 import type { ClientComponentProps } from '@types';
 import type { StoreMeetingState, ReduxProps } from '@store-types';
 import type { AgoraCallProps } from './types';
+import { MAX_MEETING_MINUTES } from './constants';
 
 // agora-rtc-react's <RemoteUser> always plays remote video with the SDK's
 // default "cover" fit, which crops a portrait phone stream to fill a
@@ -46,11 +47,11 @@ function RemoteVideoTile({ user }: { user: IAgoraRTCRemoteUser }) {
   return <div ref={setContainer} className="w-full h-full" />;
 }
 
-function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClient, token: string | null; uid: string | number }) {
+function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClient, token: string | null; uid: string | number; onStart: () => void }) {
   const { muteCamera, muteMic, screenSharing } = useSelector<ReduxProps, StoreMeetingState>(
     (state) => state.meeting
   );
-  const { AppID, channelName, Client, token, uid } = props;
+  const { AppID, channelName, Client, token, uid, onStart } = props;
   const dispatch = useDispatch();
 
   const [user] = useUser();
@@ -98,6 +99,12 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
     window.addEventListener('pagehide', handlePageHide);
     return () => window.removeEventListener('pagehide', handlePageHide);
   }, [Client]);
+
+  // The time limit starts once someone else is in the channel, so time spent
+  // waiting for the other side to join doesn't count against the call.
+  useEffect(() => {
+    if (isConnected && remoteUsers.length > 0) onStart();
+  }, [isConnected, remoteUsers.length, onStart]);
 
   // Play remote audio tracks in effect
   useEffect(() => {
@@ -260,7 +267,7 @@ function Call(props: { channelName: string; AppID: string, Client: IAgoraRTCClie
 
 
 
-const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
+const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id, ended, onStart }) => {
   // Created once: a fresh client on every render would swap the provider's
   // client mid-call, leaving the hooks below on a client that never joined.
   const [client] = useState(() =>
@@ -312,6 +319,15 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
   }
 
 
+  // Unmounting <Call> ends the Agora session: useJoin's cleanup unpublishes and
+  // closes the camera and mic tracks, then leaves the channel.
+  if (ended)
+    return (
+      <div className="flex h-full w-full items-center justify-center px-6 text-center text-xl font-medium text-gray-300">
+        This meeting reached its {MAX_MEETING_MINUTES}-minute limit and has ended.
+      </div>
+    );
+
   if (!id || !token || agoraUid == null) return <></>;
 
   return (
@@ -322,6 +338,7 @@ const AgoraCall: ClientComponentProps<AgoraCallProps> = ({ id }) => {
         AppID={process.env.NEXT_PUBLIC_AGORA_APP_ID || 'b03a1cbf5d3e43ff973a26d84a726f85'}
         token={token}
         uid={agoraUid}
+        onStart={onStart}
       />
     </AgoraRTCProvider>
   );

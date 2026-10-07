@@ -1,52 +1,53 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { MdTimelapse } from '@react-icons/all-files/md/MdTimelapse';
 
-import type { ClientComponent } from '@types';
+import type { ClientComponentProps } from '@types';
+import type { CounterProps } from './types';
+import { MAX_MEETING_MS, MEETING_WARNING_MS } from './constants';
 
-const Counter: ClientComponent = () => {
-  const [uptime, setUptime] = useState<string>('00:00:00');
-  const [startTime, setStartTime] = useState<number | null>(null);
+// Counts down the time left in the call. The full time is shown until the
+// other side joins and the clock starts.
+const Counter: ClientComponentProps<CounterProps> = ({ startedAt, ended }) => {
+  const [now, setNow] = useState<number>(() => Date.now());
 
   const formatTime = (milliseconds: number) => {
-    const seconds = Math.floor((milliseconds / 1000) % 60);
-    const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
-    const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+    const totalSeconds = Math.ceil(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    return formattedTime;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   useEffect(() => {
-    if (startTime === null) {
-      setStartTime(Date.now());
-    }
-  }, [startTime]);
+    if (startedAt === null || ended) return;
 
-  useEffect(() => {
-    if (startTime !== null) {
-      const intervalId = setInterval(() => {
-        const elapsedTime = Date.now() - startTime;
-        const formattedTime = formatTime(elapsedTime);
-        setUptime(formattedTime);
-      }, 1000);
+    setNow(Date.now());
+    const intervalId = setInterval(() => setNow(Date.now()), 1000);
 
-      return () => clearInterval(intervalId);
-    }
-  }, [startTime]);
+    return () => clearInterval(intervalId);
+  }, [startedAt, ended]);
+
+  const remaining = ended
+    ? 0
+    : startedAt === null
+      ? MAX_MEETING_MS
+      : Math.min(MAX_MEETING_MS, Math.max(0, startedAt + MAX_MEETING_MS - now));
 
   return (
     <div
-      title="uptime"
-      className="theme-bg-color flex h-8 w-[85px] items-center justify-between gap-1 rounded-full px-2 text-ssx text-white"
+      title="Time remaining"
+      className={twMerge(
+        'flex h-8 w-[85px] items-center justify-between gap-1 rounded-full px-2 text-ssx text-white',
+        remaining <= MEETING_WARNING_MS ? 'bg-rose-500' : 'theme-bg-color'
+      )}
     >
       <MdTimelapse size={18} />
 
-      {uptime}
+      {formatTime(remaining)}
     </div>
   );
 };
