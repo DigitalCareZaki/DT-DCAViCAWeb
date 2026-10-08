@@ -6,12 +6,12 @@ import {
   DropdownSecondary,
   ButtonPrimary,
   ClientGenerator,
+  Icon,
 } from '@common';
 
 import Booking from '../components/Booking';
 import useForm from './useForm';
 import {
-  TypeSelector,
   StatusSelector,
   AboutSelector,
   SelectedUser,
@@ -118,24 +118,14 @@ const Form = ({ user, appointments, setAppointments }: any) => {
             errorClassName="text-rose-400"
           />
           <div className="flex w-full items-center gap-4">
-            <div className="w-1/2">
-              <DropdownSecondary
-                title="Select appointment type"
-                label="Appointment type"
-                borderTheme
-                icon="FaGenderless"
-                hideInfo
-                inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400 hover:bg-teal-50"
-                labelClassName="text-teal-900 text-lg"
-                titleClassName="text-teal-900 text-lg"
-                iconColor="#14b8a6"
-                error={!!errors?.type?.message?.length}
-                errorMessage={errors?.type?.message}
-                errorClassName="text-rose-400"
-                selected={selectors.type}
-              >
-                <TypeSelector handleSelect={handleSelect} />
-              </DropdownSecondary>
+            <div className="flex w-1/2 flex-col gap-2 text-lg">
+              <span className="text-lg font-medium text-teal-900">
+                Appointment type
+              </span>
+              <div className="flex h-10 w-full items-center gap-2 rounded-lg border border-teal-200 bg-white px-4 font-poppins">
+                <Icon size={20} name="FaGenderless" color="#14b8a6" />
+                <span className="text-lg text-teal-900">{selectors.type}</span>
+              </div>
             </div>
             <div className="w-1/2">
               <DropdownSecondary
