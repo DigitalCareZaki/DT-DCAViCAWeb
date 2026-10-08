@@ -8,25 +8,6 @@ import { IoClose } from '@react-icons/all-files/io5/IoClose';
 import type { ClientComponentProps, SearchTelemedResProps } from '@types';
 import { useState } from 'react';
 
-export const TypeSelector: ClientComponentProps<Props> = ({ handleSelect }) => {
-  return (
-    <>
-      <div
-        onClick={() => handleSelect('type', 'ONLINE')}
-        className="flex h-10 w-full cursor-pointer items-center rounded-lg px-4 text-lg font-semibold bg-white text-teal-900 transition duration-200 hover:bg-teal-100 hover:text-teal-900 active:bg-teal-200"
-      >
-        <span>ONLINE</span>
-      </div>
-      <div
-        onClick={() => handleSelect('type', 'OFFLINE')}
-        className="flex h-10 w-full cursor-pointer items-center rounded-lg px-4 text-lg font-semibold bg-white text-teal-900 transition duration-200 hover:bg-teal-100 hover:text-teal-900 active:bg-teal-200"
-      >
-        <span>OFFLINE</span>
-      </div>
-    </>
-  );
-};
-
 export const StatusSelector: ClientComponentProps<Props> = ({
   handleSelect,
 }) => {

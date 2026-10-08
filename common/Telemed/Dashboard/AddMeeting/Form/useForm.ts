@@ -31,7 +31,7 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
     type: string;
     about: string;
   }>({
-    type: '',
+    type: 'ONLINE',
     about: '',
   });
   const [selectedTime, setSelectedTime] = useState<{
@@ -63,6 +63,7 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
     clearErrors,
   } = useForm<AddAppointmentProps>({
     resolver: vestResolver(validator),
+    defaultValues: { type: 'ONLINE' },
   });
 
   const handleShowModal = (payload: ModalState) =>
