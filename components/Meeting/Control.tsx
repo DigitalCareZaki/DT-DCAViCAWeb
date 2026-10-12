@@ -207,7 +207,7 @@ const Modal = ({ isOpen, onClose, id }: { isOpen: boolean; onClose: () => void; 
               name="prescribedMedications"
               placeholder="Prescribed Medications"
               label="Prescribed Medications"
-              hookProps={register('prescribedMedications', { required: "Prescribed Medications are required" })}
+              hookProps={register('prescribedMedications')}
               error={!!errors?.prescribedMedications}
               errorMessage={errors?.prescribedMedications?.message}
             />
