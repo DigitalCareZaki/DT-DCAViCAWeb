@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useUser } from '@selectors';
 
 import type { ClientComponentProps } from '@types';
@@ -15,6 +16,7 @@ const Counter: ClientComponentProps<CounterProps> = ({
   id,
   status,
 }) => {
+  const router = useRouter();
   const [user] = useUser();
 
   const [value, setValue] = useState({
@@ -96,6 +98,8 @@ const Counter: ClientComponentProps<CounterProps> = ({
               href={`/${user.role?.toLowerCase()}/telemed/appointment/${id}`}
               target="_blank"
               rel="noopener noreferrer"
+              // The call opens in its own tab, so this tab goes back to the meetings list
+              onClick={() => router.replace(`/${user.role?.toLowerCase()}/telemed/meetings`)}
               // className={twMerge(isActive ? 'flex' : 'hidden')} // TOOD: removed temporarily
             >
               <button className="mt-10 h-11 w-fit rounded-full bg-white/20 px-10 text-xs font-bold text-fuchsia-200 transition duration-300 hover:scale-[110%] hover:bg-white/40 hover:text-fuchsia-900">
