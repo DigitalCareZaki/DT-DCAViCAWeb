@@ -18,7 +18,7 @@ const validMeasurementUnit: MeasurementUnit[] = [
   'FAHRENHEIT',
 ];
 
-function getAcceptableUnitsBasedOnMeasurementType(
+export function getAcceptableUnitsBasedOnMeasurementType(
   type: MeasurementType
 ): MeasurementUnit[] {
   if (type === 'ECG') {
