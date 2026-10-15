@@ -2,10 +2,8 @@
 
 import {
   InputBasic,
-  InputDropdown,
   DropdownSecondary,
   ButtonPrimary,
-  ClientGenerator,
   Icon,
 } from '@common';
 
@@ -14,9 +12,8 @@ import useForm from './useForm';
 import {
   StatusSelector,
   AboutSelector,
-  SelectedUser,
 } from '../components/Selectors';
-import SelectUser from '../components/SelectUser';
+import DoctorDropdown from '../components/DoctorDropdown';
 
 import type { UseFormProps } from './types';
 
@@ -35,7 +32,6 @@ const Form = ({ user, appointments, setAppointments }: any) => {
     users,
     handleSelectUser,
     selectedUsers,
-    handleRemove,
   ] = useForm({ setAppointments }) as ReturnType<any>;
 
   return (
@@ -50,45 +46,13 @@ const Form = ({ user, appointments, setAppointments }: any) => {
           </span>
         </div>
         <div className="flex w-full flex-col gap-4 p-4">
-          <div className="flex flex-col gap-2">
-            <div className="flex w-full items-end gap-4">
-              <div className="w-full">
-                <InputDropdown
-                  loading={searching}
-                  label="Select Doctor"
-                  placeholder="Select Doctor by searching their email"
-                  title="Select Doctor"
-                  overrideShow={0}
-                  hideInfo
-                  labelClassName="text-teal-900 text-lg"
-                  inputWrapperClassName="bg-white border border-teal-200 focus-within:border-teal-400 hover:bg-teal-50"
-                  inputClassName="bg-transparent placeholder:text-teal-900 text-teal-900 text-lg"
-                  icon="IoSearch"
-                  iconColor="#14b8a6"
-                  onChange={handleSearchUser}
-                  dropdownClassName="bg-teal-50"
-                >
-                  <ClientGenerator
-                    data={users}
-                    handleSelectUser={handleSelectUser}
-                  >
-                    <SelectUser />
-                  </ClientGenerator>
-                </InputDropdown>
-              </div>
-              <div className="h-10 w-32 shrink-0">
-                <ButtonPrimary
-                  className="w-full text-lg rounded-full text-white !bg-[#0d9488] hover:bg-emerald-600"
-                  name="Invite"
-                />
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <ClientGenerator data={selectedUsers} handleRemove={handleRemove}>
-                <SelectedUser />
-              </ClientGenerator>
-            </div>
-          </div>
+          <DoctorDropdown
+            users={users}
+            loading={searching}
+            selected={selectedUsers[0]}
+            onSearch={handleSearchUser}
+            handleSelectUser={handleSelectUser}
+          />
           <InputBasic
             name="title"
             placeholder="Enter appointment title"
