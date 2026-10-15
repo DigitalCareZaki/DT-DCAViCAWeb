@@ -31,8 +31,8 @@ const RenderUnitAndValueInputs = ({
       {selectors.type && (
         <>
           <DropdownSecondary
-            title="Measurement Type"
-            label="Measurement Type"
+            title="Unit"
+            label="Unit"
             borderTheme
             inputWrapperClassName="bg-background"
             icon="FaGenderless"
@@ -142,8 +142,8 @@ const Form: ClientComponent = () => {
                   errorMessage={errors.title?.message}
                 />
                 <DropdownSecondary
-                  title="Type"
-                  label="Type"
+                  title="Measurement Type"
+                  label="Measurement Type"
                   borderTheme
                   inputWrapperClassName="bg-background"
                   icon="FaGenderless"
