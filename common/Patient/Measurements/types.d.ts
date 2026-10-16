@@ -72,5 +72,4 @@ export type RenderUnitAndValueProps = {
   register: UseFormRegister<CreateMeasurementProps>;
   errors: FieldErrors<CreateMeasurementProps>;
   selectors: SelectorsProps;
-  handleSelect: (type: string) => (val: string) => void;
 };

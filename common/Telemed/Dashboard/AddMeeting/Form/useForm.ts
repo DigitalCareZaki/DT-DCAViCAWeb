@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useMemo, ChangeEvent, useEffect } from 'react';
+import { useCallback, useState, useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,6 @@ import { vestResolver } from '@hookform/resolvers/vest';
 
 import { showModalReducer } from '@slice';
 import { searchTelemedUsers, addTelemed } from '@service';
-import { debounce } from '@init-globals';
 import { getRequestedAppointments } from '@service';
 
 import { validator } from './validator';
@@ -49,6 +48,7 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
 
 
   const [searching, setSearching] = useState<boolean>(false);
+  const searchRequest = useRef<number>(0);
 
   const _selectors = useMemo(() => selectors, [selectors]);
   const _selectedTime = useMemo(() => selectedTime, [selectedTime]);
@@ -85,20 +85,22 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
     });
   }, []);
 
-  const onChange = debounce(async (event: ChangeEvent<HTMLInputElement>[]) => {
-    const value = event[0]?.target.value;
+  // Called with the debounced query; an empty query lists every available doctor.
+  // Only the latest request may update the list, since responses can arrive out of order.
+  const handleSearchUser = useCallback(async (query: string) => {
+    const request = ++searchRequest.current;
 
     try {
       setSearching(true);
-      const res = await searchTelemedUsers(value);
-      if (!res.success) return;
+      const res = await searchTelemedUsers(query);
+      if (request !== searchRequest.current || !res.success) return;
       setUsers(res?.data ?? []);
     } catch (err: any) {
       console.log(err?.message);
     } finally {
-      setSearching(false);
+      if (request === searchRequest.current) setSearching(false);
     }
-  }, 1000);
+  }, []);
 
   const handleSelectUser = useCallback(
     (user: SearchTelemedResProps) => {
@@ -106,10 +108,6 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
     },
     []
   );
-
-  const handleRemoveUser = useCallback((user: SearchTelemedResProps) => {
-    setSelectedUsers((prev) => prev.filter((u) => u.id !== user.id));
-  }, []);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -190,12 +188,11 @@ const useFormHook = ({ setAppointments }: UseFormOptions = {}) => {
     _selectors,
     _selectedTime,
     handleSelectTme,
-    onChange,
+    handleSearchUser,
     searching,
     _users,
     handleSelectUser,
     _selectedUsers,
-    handleRemoveUser,
   ];
 };
 

@@ -12,14 +12,17 @@ import {
   setPatientMeasurementListingReducer,
 } from '@slice';
 
-import { validator } from './validator';
+import {
+  validator,
+  getAcceptableUnitsBasedOnMeasurementType,
+} from './validator';
 
 import type {
   CreateMeasurementProps,
   useFormProps,
   SelectorsProps,
 } from './types';
-import type { PatientMeasurementProps } from '@types';
+import type { PatientMeasurementProps, MeasurementType } from '@types';
 import type { ModalState } from '@store-types';
 
 const useFormHook = (
@@ -122,22 +125,21 @@ const useFormHook = (
 
   const handleSelect = (type: string) => (val: string) => {
     if (type === 'type') {
+      // Each type accepts exactly one unit, so fill it in for the user
+      const [unit] = getAcceptableUnitsBasedOnMeasurementType(
+        val as MeasurementType
+      );
+
       setSelectors({
         ...selectors,
         type: val as any,
-        unit: undefined,
+        unit,
       });
       setValue('type', val as any);
-      setValue('unit', undefined as any);
+      setValue('unit', unit);
       setValue('value1', '');
       setValue('value2', '');
       clearErrors(['type', 'unit', 'value1', 'value2'] as any);
-    } else if (type === 'unit') {
-      setSelectors((prev) => ({ ...prev, unit: val as any }));
-      setValue('unit', val as any);
-      setValue('value1', '');
-      setValue('value2', '');
-      clearErrors(['unit', 'value1', 'value2'] as any);
     } else {
       setSelectors((prev) => ({ ...prev, [type]: val }));
       setValue(type as any, val);

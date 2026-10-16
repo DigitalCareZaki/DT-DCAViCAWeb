@@ -69,8 +69,8 @@ const Form: ClientComponent = () => {
               <div className="mt-10 flex h-full w-full flex-col gap-4">
                 <div className="flex w-full items-start gap-2">
                   <DropdownSecondary
-                    title="Medication Unit"
-                    label="Unit"
+                    title="Measurement Type"
+                    label="Measurement Type"
                     borderTheme
                     inputWrapperClassName="bg-background"
                     icon="IoSearch"

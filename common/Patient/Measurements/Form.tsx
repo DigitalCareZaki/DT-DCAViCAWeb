@@ -9,9 +9,6 @@ import { FaThermometerHalf } from '@react-icons/all-files/fa/FaThermometerHalf';
 import { FaWater } from '@react-icons/all-files/fa/FaWater';
 import { IoMdMedical as FaHandHoldingMedical } from '@react-icons/all-files/io/IoMdMedical';
 import { MdLocalGasStation as MdOutlinePropaneTank } from '@react-icons/all-files/md/MdLocalGasStation';
-import { RiRulerLine } from '@react-icons/all-files/ri/RiRulerLine';
-import { FaTemperatureHigh as WiFahrenheit } from '@react-icons/all-files/fa/FaTemperatureHigh';
-import { AiOutlinePercentage } from '@react-icons/all-files/ai/AiOutlinePercentage';
 
 import { useUser } from '@selectors';
 
@@ -28,14 +25,13 @@ const RenderUnitAndValueInputs = ({
   register,
   errors,
   selectors,
-  handleSelect,
 }: RenderUnitAndValueProps): JSX.Element => {
   return (
     <>
       {selectors.type && (
         <>
           <DropdownSecondary
-            title="Measurement Unit"
+            title="Unit"
             label="Unit"
             borderTheme
             inputWrapperClassName="bg-background"
@@ -43,57 +39,9 @@ const RenderUnitAndValueInputs = ({
             error={!!errors.unit?.message}
             errorMessage={errors.unit?.message}
             selected={selectors.unit}
-          >
-            <>
-              {selectors.type === 'SPO2' && (
-                <>
-                  <div
-                    onClick={() => handleSelect('unit')('PERCENTAGE')}
-                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                  >
-                    <span className="font-medium">PERCENTAGE</span>
-                    <AiOutlinePercentage size={18} />
-                  </div>
-                </>
-              )}
-
-              {selectors.type === 'BLOODPRESSURE' && (
-                <>
-                  <div
-                    onClick={() => handleSelect('unit')('MMHG')}
-                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                  >
-                    <span className="font-medium">MMHG</span>
-                    <RiRulerLine size={18} />
-                  </div>
-                </>
-              )}
-
-              {selectors.type === 'BLOODGLUCOSE' && (
-                <>
-                  <div
-                    onClick={() => handleSelect('unit')('MGDL')}
-                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                  >
-                    <span className="font-medium">MGDL</span>
-                    <RiRulerLine size={18} />
-                  </div>
-                </>
-              )}
-
-              {selectors.type === 'TEMPERATURE' && (
-                <>
-                  <div
-                    onClick={() => handleSelect('unit')('FAHRENHEIT')}
-                    className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg bg-white p-2 px-4 text-gray-500 transition duration-200 hover:bg-gray-200"
-                  >
-                    <span className="font-medium">FAHRENHEIT</span>
-                    <WiFahrenheit size={18} />
-                  </div>
-                </>
-              )}
-            </>
-          </DropdownSecondary>
+            disabled
+            disableMessage="Unit is set automatically from the type"
+          />
           <InputBasic
             label={selectors.type === 'BLOODPRESSURE' ? 'Systolic' : 'Value'}
             placeholder={`Enter ${selectors.type === 'BLOODPRESSURE' ? 'systolic' : ''} value`}
@@ -195,7 +143,7 @@ const Form: ClientComponent = () => {
                 />
                 <DropdownSecondary
                   title="Measurement Type"
-                  label="Type"
+                  label="Measurement Type"
                   borderTheme
                   inputWrapperClassName="bg-background"
                   icon="FaGenderless"
@@ -240,7 +188,6 @@ const Form: ClientComponent = () => {
                   register={register}
                   errors={errors}
                   selectors={selectors}
-                  handleSelect={handleSelect}
                 />
 
                 <div className="flex w-full flex-col text-ssx font-semibold text-red-500">

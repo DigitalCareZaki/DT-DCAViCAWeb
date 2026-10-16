@@ -19,12 +19,11 @@ export type UseFormProps = () => [
     endTime: Date | null;
   },
   handleSelectTime: (startDate: Date, endDate: Date) => void,
-  handleSearchUsers: (e: ChangeEvent<HTMLInputElement>) => void,
+  handleSearchUser: (query: string) => Promise<void>,
   searching: boolean,
   users: SearchTelemedResProps[],
   handleSelectUser: (user: SearchTelemedResProps) => void,
   selectedUsers: SearchTelemedResProps[],
-  handleRemove: (user: SearchTelemedResProps) => void,
 ];
 
 interface AddAppointmentProps {
