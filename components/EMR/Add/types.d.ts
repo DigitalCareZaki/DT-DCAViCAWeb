@@ -8,6 +8,7 @@ export type UseFormProps = [
   loading: boolean,
   handleSelecFile: (e: ChangeEvent<HTMLInputElement>) => void,
   selectedFile: undefined | File,
+  handleRemoveFile: () => void,
 ];
 
 export interface AddEMRRecordProps {
@@ -15,4 +16,5 @@ export interface AddEMRRecordProps {
   description: string;
   startDate: Date;
   endDate: Date;
+  file?: File;
 }
