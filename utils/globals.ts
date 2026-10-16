@@ -1,3 +1,5 @@
+import { defaultAvatar } from '@assets';
+
 String.prototype.convertURI = function (internal: boolean = false) {
   if (internal) {
 
@@ -128,7 +130,7 @@ export const formatDateTime = (
 
 export const getProfilePicture = (uri: string | undefined | null) => {
   if (!uri) {
-    return 'https://img.freepik.com/free-photo/portrait-man-laughing_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708387200&semt=ais';
+    return defaultAvatar.src;
   }
 
   return uri;
