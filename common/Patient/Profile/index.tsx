@@ -100,16 +100,6 @@ const PatientProfile: ServerComponentProps<Props> = async ({ patient }) => {
             />
           ))}
         </div>
-        <div className="flex w-full flex-col">
-          <div className="relative h-44 w-full rounded-md bg-black">
-            <Image
-              src="https://i.stack.imgur.com/LFBBq.png"
-              alt="map-image"
-              className="w-full rounded-md object-cover"
-              fill
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
