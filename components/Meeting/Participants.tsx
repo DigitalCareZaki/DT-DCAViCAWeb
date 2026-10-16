@@ -31,6 +31,9 @@ const Discussion: ClientComponentProps<ParticipantsProps> = ({ id }) => {
           middle_name: user.middle_name,
           role: user.role,
           uri: user.uri,
+          // The mobile app doesn't send this, which is how the call controls
+          // tell a participant on the app from one on the web
+          platform: 'web',
         },
         event: 'appointment',
       })

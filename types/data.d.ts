@@ -562,6 +562,8 @@ export interface MeetingParticipantsPropsSocket {
   role: UserRole;
   uri: string;
   user_id: string;
+  // 'web' when joined from the web; the mobile app leaves it unset
+  platform?: string;
 }
 
 export interface AppointmentChatProps {
