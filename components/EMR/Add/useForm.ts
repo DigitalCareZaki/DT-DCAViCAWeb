@@ -16,22 +16,34 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [selectedFile, setSelectedFile] = useState<undefined | File>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<AddEMRRecordProps>({
     resolver: vestResolver(validator),
   });
 
-  const handleSelectFile = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length) {
-      setSelectedFile(e.target.files[0]);
-    }
-  }, []);
+  const selectedFile = watch('file');
+
+  const handleSelectFile = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      // Reset so picking the same file again still fires onChange
+      e.target.value = '';
+
+      if (file) setValue('file', file, { shouldValidate: true });
+    },
+    [setValue]
+  );
+
+  const handleRemoveFile = useCallback(() => {
+    setValue('file', undefined, { shouldValidate: true });
+  }, [setValue]);
 
   const handleShowModal = (payload: ModalState) =>
     dispatch(showModalReducer(payload));
@@ -41,9 +53,9 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
       setLoading(true);
 
       let uri = null;
-      if (selectedFile) {
+      if (data.file) {
         const formdata = new FormData();
-        formdata.append('file', selectedFile);
+        formdata.append('file', data.file);
         const res = await uploadFile(formdata);
         if (!res.success) {
           throw new Error(res?.message ?? 'File upload failed');
@@ -85,7 +97,15 @@ const useFormHook = (type: string, patient_id: any): UseFormProps => {
     }
   });
 
-  return [register, onSubmit, errors, loading, handleSelectFile, selectedFile];
+  return [
+    register,
+    onSubmit,
+    errors,
+    loading,
+    handleSelectFile,
+    selectedFile,
+    handleRemoveFile,
+  ];
 };
 
 export default useFormHook;
