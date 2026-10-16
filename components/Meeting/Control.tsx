@@ -17,6 +17,7 @@ import {
   toggleCameraReducer,
   handleEventReducer,
   toggleScreenSharingReducer,
+  setScreenSharingReducer,
   showModalReducer,
 } from '@slice';
 
@@ -24,13 +25,13 @@ import { useUser } from '@selectors';
 import { useForm } from 'react-hook-form';
 import { vestResolver } from '@hookform/resolvers/vest';
 import type { ClientComponentProps } from '@types';
-import type { ModalState, ReduxProps, StoreMeetingState } from '@store-types';
+import type { ModalState, ReduxProps, StoreMeetingState, StoreSocketState } from '@store-types';
 import { telemedReportValidator } from './validator';
 import closeMeetingTab from './closeMeetingTab';
 import { toast } from 'react-hot-toast';
 
 import type { ControlProps } from './types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 
@@ -260,11 +261,27 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
   const { screenSharing } = useSelector<ReduxProps, StoreMeetingState>(
     (state) => state.meeting
   );
+  const { participants } = useSelector<ReduxProps, StoreSocketState>(
+    (state) => state.socket
+  );
+  // The mobile app can't share its screen, so the web doesn't offer sharing
+  // while anyone else in the call is on the app
+  const remoteOnMobileApp = participants?.some(
+    (p) => p.user_id !== user?.id && p.platform !== 'web'
+  );
   const [controlls, setControlls] = useState({
     muteMicrophone: false,
     muteCamera: false,
     handControl: false,
   });
+
+  // A share that was already running when they joined is stopped too, since
+  // its button is about to disappear
+  useEffect(() => {
+    if (!remoteOnMobileApp || !screenSharing) return;
+    dispatch(setScreenSharingReducer(false));
+    toast('Screen sharing stopped: a participant joined from the mobile app');
+  }, [remoteOnMobileApp, screenSharing, dispatch]);
 
   const handleCancelMeeting = () => {
     const isPatient = user?.role === 'PATIENT' || user?.type === 'PATIENT';
@@ -410,16 +427,18 @@ const Control: ClientComponentProps<ControlPropsWithModal> = ({ id, setIsModalOp
       >
         <MdCameraAlt size={16} />
       </button>
-      <button
-        onClick={handleToggleS}
-        title="Share"
-        className={twMerge(
-          'meeting-bar-btn',
-          !screenSharing ? 'bg-dark-main' : 'theme-bg-color'
-        )}
-      >
-        <MdOutlineScreenShare size={16} />
-      </button>
+      {!remoteOnMobileApp && (
+        <button
+          onClick={handleToggleS}
+          title="Share"
+          className={twMerge(
+            'meeting-bar-btn',
+            !screenSharing ? 'bg-dark-main' : 'theme-bg-color'
+          )}
+        >
+          <MdOutlineScreenShare size={16} />
+        </button>
+      )}
       <button
         onClick={toggleHandRaised}
         title="Raise Hand"
