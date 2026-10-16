@@ -35,7 +35,6 @@ const Table: ClientComponentProps<any> = ({ data, user, patient }) => {
     'Unit',
     'Source',
     'Patient',
-    'Created By',
   ];
 
   const filteredHeads = user?.role === 'PATIENT'

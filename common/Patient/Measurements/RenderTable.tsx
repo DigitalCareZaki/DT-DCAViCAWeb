@@ -177,42 +177,6 @@ const RenderTable: ClientComponentProps<{ user: UserProps }> = ({ user }) => {
               }
             </td>
           }
-
-          <td className="px-6 py-4 truncate max-w-[160px]" title={(() => {
-            if (el?.doctor) {
-              return 'Dr. ' + getName({
-                first_name: el.doctor.user.first_name,
-                middle_name: el.doctor.user.middle_name,
-                last_name: el.doctor.user.last_name,
-              });
-            } else if (el?.nurse) {
-              return 'RN ' + getName({
-                first_name: el.nurse.user.first_name,
-                middle_name: el.nurse.user.middle_name,
-                last_name: el.nurse.user.last_name,
-              });
-            } else {
-              return 'Self';
-            }
-          })()}>
-            {el?.doctor
-              ? 'Dr.' +
-              ' ' +
-              getName({
-                first_name: el.doctor.user.first_name,
-                middle_name: el.doctor.user.middle_name,
-                last_name: el.doctor.user.last_name,
-              })
-              : el?.nurse
-                ? 'RN' +
-                ' ' +
-                getName({
-                  first_name: el.nurse.user.first_name,
-                  middle_name: el.nurse.user.middle_name,
-                  last_name: el.nurse.user.last_name,
-                })
-                : 'Self'}
-          </td>
         </tr >
       ))}
 
