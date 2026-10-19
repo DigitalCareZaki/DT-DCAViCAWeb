@@ -102,8 +102,10 @@ const Record: ClientComponentProps<any> = ({
 
       {/* Title */}
       <td className="px-6 py-4">{title}</td>
-      {/* Description */}
-      <td className="px-6 py-4">{description ?? 'N/A'}</td>
+      {/* Description — overflow-wrap:anywhere (not break-words) so long unbroken text wraps inside the table */}
+      <td className="px-6 py-4">
+        <div className="min-w-48 max-w-xl [overflow-wrap:anywhere]">{description ?? 'N/A'}</div>
+      </td>
       {/* Created Time */}
       {/* <td className="px-6 py-4">{new Date(created).toLocaleDateString()}</td> */}
       {/* Date */}
