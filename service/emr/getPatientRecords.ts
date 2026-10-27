@@ -15,16 +15,16 @@ async function getUserPatientRecords(
   const query = new URLSearchParams();
 
   if (patient_id) {
-    query.set('patient_id', encodeURIComponent(patient_id));
-    query.set('page', encodeURIComponent(page?.toString() || '1'));
-    query.set('limit', encodeURIComponent(limit?.toString() || '10'));
+    query.set('patient_id', patient_id);
+    query.set('page', page?.toString() || '1');
+    query.set('limit', limit?.toString() || '10');
   }
 
   if (search) {
-    query.set('search', encodeURIComponent(search));
+    query.set('search', search);
   }
 
-  const res = await fetch(`/api/v1/web/emr?${query.toString()}`);
+  const res = await fetch(`/api/v1/web/emr/reports?${query.toString()}`);
 
   const data = await res.json();
 

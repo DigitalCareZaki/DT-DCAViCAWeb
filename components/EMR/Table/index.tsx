@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { setEmrRecordsSlice } from '@slice';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
@@ -9,33 +9,45 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import TableRender from './Table';
 
 import type { ClientComponentProps } from '@types';
-import type { TableProps } from './types';
-import { getAllPatientsReports, getPatientEMRRecords } from '@service';
+import type { ReduxProps, StoreEMRState } from '@store-types';
+import { getPatientEMRRecords } from '@service';
 
-const Table: ClientComponentProps<any> = ({ records, patient_id }: any) => {
+const Table: ClientComponentProps<any> = ({ patient_id }: any) => {
   const dispatch = useDispatch();
+  const { searchTerm } = useSelector<ReduxProps, StoreEMRState>((state) => state.emr);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [loading, setLoading] = useState(false); // ✅ loader state
-  const fetchReports = async (pageNumber: any) => {
-    setLoading(true); // ✅ start loader
-    const response = await getPatientEMRRecords(patient_id, pageNumber, 10);
+  const [loading, setLoading] = useState(false);
 
-    if (!response.success) {
-      setLoading(false); // ✅ stop loader
-      return;
-    }
-
-    if (response.success) {
-      setLoading(false); // ✅ stop loader
-      dispatch(setEmrRecordsSlice({ records: response?.data?.data }));
-      setHasNextPage(response.data.pagination?.hasNextPage);
-    }
-  };
+  // a new search always starts from the first page
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   useEffect(() => {
-    fetchReports(page);
-  }, [page]);
+    // drop responses for a page/search that is no longer current
+    let ignore = false;
+
+    const fetchReports = async () => {
+      setLoading(true);
+      const response = await getPatientEMRRecords(patient_id, page, 10, searchTerm);
+      if (ignore) return;
+
+      setLoading(false);
+      if (!response.success) return;
+
+      dispatch(setEmrRecordsSlice({ records: response.data?.data || [] }));
+      setTotalPages(response.data?.pagination?.totalPages || 1);
+      setHasNextPage(!!response.data?.pagination?.hasNextPage);
+    };
+
+    fetchReports();
+
+    return () => {
+      ignore = true;
+    };
+  }, [page, searchTerm]);
 
   const handleNext = () => {
     if (hasNextPage) setPage(prev => prev + 1);
@@ -44,12 +56,6 @@ const Table: ClientComponentProps<any> = ({ records, patient_id }: any) => {
   const handlePrevious = () => {
     if (page > 1) setPage(prev => prev - 1);
   };
-
-  useEffect(() => {
-    if (!records?.length) return;
-
-    dispatch(setEmrRecordsSlice({ records: records?.data?.data }));
-  }, [records]);
 
   return (
     <div className="h-full w-full">
@@ -62,21 +68,21 @@ const Table: ClientComponentProps<any> = ({ records, patient_id }: any) => {
       {!loading ? <TableRender /> : <></>}
 
       {!loading && (
-        <div className="mt-4 flex items-center justify-center gap-4">
+        <div className="mt-6 flex items-center justify-center gap-6">
           <button
             onClick={handlePrevious}
-            disabled={page === 1 || loading}
-            className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 flex items-center justify-center"
+            disabled={page === 1}
+            className="flex items-center justify-center rounded-full bg-gray-200 px-5 py-2.5 hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <FaArrowLeft className="w-5 h-5 text-gray-700" />
+            <FaArrowLeft className="h-5 w-5 text-gray-700" />
           </button>
-          <span>Page 1 of {page}</span>
+          <span className="text-lg text-black">Page {page} of {totalPages}</span>
           <button
             onClick={handleNext}
-            disabled={!hasNextPage || loading}
-            className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 flex items-center justify-center"
+            disabled={!hasNextPage}
+            className="flex items-center justify-center rounded-full bg-gray-200 px-5 py-2.5 hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <FaArrowRight className="w-5 h-5 text-gray-700" />
+            <FaArrowRight className="h-5 w-5 text-gray-700" />
           </button>
         </div>
       )}
