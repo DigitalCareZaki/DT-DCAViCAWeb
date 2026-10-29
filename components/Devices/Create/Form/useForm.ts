@@ -82,23 +82,20 @@ const useFormHook = (
     async (name: string, value: string) => {
       const prevCategory = getValues('category');
       const isEcg = value === 'ECG';
-      const wasEcg = prevCategory === 'ECG';
+      // AViCardia monitoring and site are only selectable for ECG devices:
+      // clear them when moving between ECG and other categories
+      const resetEcgFields = !!prevCategory && isEcg !== (prevCategory === 'ECG');
 
       setValue('category', value as MeasurementType);
       clearErrors('category');
 
-      // AViCardia monitoring and site are only selectable for ECG devices:
-      // force NO for other categories, and make the user choose again when
-      // switching to ECG
-      if (!isEcg) {
-        setValue('cardiac_monitoring', 'NO');
-        clearErrors('cardiac_monitoring');
-      } else if (!wasEcg) {
+      if (resetEcgFields) {
         setValue('cardiac_monitoring', null);
-        if (prevCategory) {
-          setSelectors((prev: any) => ({ ...prev, site_id: undefined }));
-          setValue('site_id', undefined);
-        }
+        setValue('site_id', undefined);
+        setSelectors((prev: any) => ({ ...prev, site_id: undefined }));
+      }
+      if (!isEcg) {
+        clearErrors(['cardiac_monitoring', 'site_id']);
       }
 
       setSelectedValues((prev) => ({
@@ -107,11 +104,9 @@ const useFormHook = (
           name,
           value: value as MeasurementType,
         },
-        ...(!isEcg
-          ? { cardiac_monitoring: { name: 'NO', value: 'NO' } }
-          : !wasEcg
-            ? { cardiac_monitoring: { name: undefined, value: undefined } }
-            : {}),
+        ...(resetEcgFields
+          ? { cardiac_monitoring: { name: undefined, value: undefined } }
+          : {}),
       }));
 
       try {
@@ -326,21 +321,6 @@ const useFormHook = (
     prevData,
   ]);
 
-  // Site is disabled for non-ECG devices, but the API still requires one:
-  // keep the current site or fall back to the first available site
-  useEffect(() => {
-    const category = selectedValues.category?.value;
-    if (!category || category === 'ECG' || selectors.site_id || !sites.length) {
-      return;
-    }
-    handleSelectSite(sites[0].id);
-  }, [
-    selectedValues.category?.value,
-    selectors.site_id,
-    sites,
-    handleSelectSite,
-  ]);
-
   const handleSelectBranch = useCallback(
     (branchId: string) => {
       setSelectors((prev: any) => ({
@@ -368,6 +348,14 @@ const useFormHook = (
       await new Promise((resolve) => setTimeout(resolve, 500));
       setCurrentStep('preparing');
 
+      // AViCardia monitoring and site are disabled for non-ECG devices, but
+      // the API still needs both: send NO and the current or first site
+      const isEcg = data.category === 'ECG';
+      const cardiacMonitoring = isEcg ? data.cardiac_monitoring : 'NO';
+      const siteId = isEcg
+        ? selectors.site_id
+        : selectors.site_id || sites[0]?.id;
+
       // create case
       if (!prevData) {
         const payload: any = {
@@ -375,8 +363,8 @@ const useFormHook = (
           description: data.description,
           category: data.category,
           serial_number: data.serial_number,
-          cardiac_monitoring: data.cardiac_monitoring,
-          site_id: selectors.site_id,
+          cardiac_monitoring: cardiacMonitoring,
+          site_id: siteId,
         };
 
         if ((user?.role as any) === 'SUPERADMIN') {
@@ -441,8 +429,8 @@ const useFormHook = (
               description: data.description,
               category: data.category,
               serial_number: data.serial_number,
-              cardiac_monitoring: data.cardiac_monitoring,
-              site_id: selectors.site_id,
+              cardiac_monitoring: cardiacMonitoring,
+              site_id: siteId,
               branch_id: selectors.branch_id,
             })
           ),
@@ -509,7 +497,7 @@ const useFormHook = (
       const cardiacMonitoring =
         prevData.category === 'ECG'
           ? (prevData.cardiac_monitoring?.toUpperCase() as any) || undefined
-          : 'NO';
+          : undefined;
       const isEcgWithMonitoring =
         isEcgMonitoringOption(prevData.cardiac_monitoring) &&
         prevData.category === 'ECG';

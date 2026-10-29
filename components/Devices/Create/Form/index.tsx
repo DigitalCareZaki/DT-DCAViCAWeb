@@ -87,9 +87,11 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
   const selectedBranchName =
     (branches as any)?.find((branch: any) => branch.id === selectors.branch_id)
       ?.name || '';
-  const selectedSiteName =
-    sites?.find((site: any) => site.id === selectors.site_id)?.name || '';
   const isEcgCategory = selectedValues?.category?.value === 'ECG';
+  // AViCardia monitoring and site stay empty while disabled for non-ECG devices
+  const selectedSiteName = isEcgCategory
+    ? sites?.find((site: any) => site.id === selectors.site_id)?.name || ''
+    : '';
   const isSiteDisabled =
     !isEcgCategory || (isSuperAdmin && !selectors.branch_id);
   const siteDisableMessage = !selectedValues?.category?.value
@@ -316,7 +318,9 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             icon="MdMonitorHeart"
             error={!!errors.cardiac_monitoring?.message?.length}
             errorMessage={(errors as any).cardiac_monitoring?.message || '&'}
-            selected={selectedValues?.cardiac_monitoring?.name}
+            selected={
+              isEcgCategory ? selectedValues?.cardiac_monitoring?.name : ''
+            }
             disabled={!isEcgCategory}
             disableMessage={
               selectedValues?.category?.value

@@ -36,25 +36,18 @@ export const validator = create((data: DeviceProps) => {
     }
   );
 
-  test('cardiac_monitoring', 'Cardiac monitoring option is required', () => {
-    enforce(data.cardiac_monitoring).isNotEmpty();
-  });
+  // AViCardia monitoring and site are only selectable for ECG devices
+  if (data.category === 'ECG') {
+    test('cardiac_monitoring', 'Cardiac monitoring option is required', () => {
+      enforce(data.cardiac_monitoring).isNotEmpty();
+    });
 
-  test('cardiac_monitoring', 'Invalid cardiac monitoring option', () => {
-    enforce(data.cardiac_monitoring).inside(['YES', 'NO', 'LATER']);
-  });
+    test('cardiac_monitoring', 'Invalid cardiac monitoring option', () => {
+      enforce(data.cardiac_monitoring).inside(['YES', 'NO', 'LATER']);
+    });
 
-  test(
-    'cardiac_monitoring',
-    'AViCardia Monitoring is only available for ECG devices',
-    () => {
-      if (data.category && data.category !== 'ECG') {
-        enforce(data.cardiac_monitoring).equals('NO');
-      }
-    }
-  );
-
-  test('site_id', 'Site is required', () => {
-    enforce(data.site_id).isNotEmpty();
-  });
+    test('site_id', 'Site is required', () => {
+      enforce(data.site_id).isNotEmpty();
+    });
+  }
 });
