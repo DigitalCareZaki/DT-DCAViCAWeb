@@ -44,6 +44,16 @@ export const validator = create((data: DeviceProps) => {
     enforce(data.cardiac_monitoring).inside(['YES', 'NO', 'LATER']);
   });
 
+  test(
+    'cardiac_monitoring',
+    'AViCardia Monitoring is only available for ECG devices',
+    () => {
+      if (data.category && data.category !== 'ECG') {
+        enforce(data.cardiac_monitoring).equals('NO');
+      }
+    }
+  );
+
   test('site_id', 'Site is required', () => {
     enforce(data.site_id).isNotEmpty();
   });

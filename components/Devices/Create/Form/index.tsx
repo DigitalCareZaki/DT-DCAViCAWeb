@@ -90,6 +90,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
   const selectedSiteName =
     sites?.find((site: any) => site.id === selectors.site_id)?.name || '';
   const isSiteDisabled = isSuperAdmin && !selectors.branch_id;
+  const isEcgCategory = selectedValues?.category?.value === 'ECG';
 
   const handleSelectField = (field: string, value: any) => {
     setSelectedValues((prev: any) => {
@@ -310,6 +311,12 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
             error={!!errors.cardiac_monitoring?.message?.length}
             errorMessage={(errors as any).cardiac_monitoring?.message || '&'}
             selected={selectedValues?.cardiac_monitoring?.name}
+            disabled={!isEcgCategory}
+            disableMessage={
+              selectedValues?.category?.value
+                ? 'AViCardia Monitoring is only available for ECG devices'
+                : 'Please select category first'
+            }
           >
             {[
               { name: 'YES', value: 'YES' },

@@ -68,6 +68,7 @@ const useFormHook = (
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     clearErrors,
     reset,
   } = useForm<DeviceProps>({
@@ -79,8 +80,20 @@ const useFormHook = (
 
   const handleSelectByAbd = useCallback(
     async (name: string, value: string) => {
+      const isEcg = value === 'ECG';
+      const wasEcg = getValues('category') === 'ECG';
+
       setValue('category', value as MeasurementType);
       clearErrors('category');
+
+      // AViCardia monitoring only applies to ECG devices: force NO for other
+      // categories, and make the user choose again when switching to ECG
+      if (!isEcg) {
+        setValue('cardiac_monitoring', 'NO');
+        clearErrors('cardiac_monitoring');
+      } else if (!wasEcg) {
+        setValue('cardiac_monitoring', null);
+      }
 
       setSelectedValues((prev) => ({
         ...prev,
@@ -88,6 +101,11 @@ const useFormHook = (
           name,
           value: value as MeasurementType,
         },
+        ...(!isEcg
+          ? { cardiac_monitoring: { name: 'NO', value: 'NO' } }
+          : !wasEcg
+            ? { cardiac_monitoring: { name: undefined, value: undefined } }
+            : {}),
       }));
 
       try {
@@ -112,7 +130,7 @@ const useFormHook = (
         setSerials([]);
       }
     },
-    [setValue, clearErrors, user?.token]
+    [setValue, getValues, clearErrors, user?.token]
   );
 
   const handleSelect = useCallback((name: string, value: string) => {
@@ -466,6 +484,11 @@ const useFormHook = (
   // for edit case
   useEffect(() => {
     if (prevData) {
+      // AViCardia monitoring only applies to ECG devices
+      const cardiacMonitoring =
+        prevData.category === 'ECG'
+          ? (prevData.cardiac_monitoring?.toUpperCase() as any) || undefined
+          : 'NO';
       const isEcgWithMonitoring =
         isEcgMonitoringOption(prevData.cardiac_monitoring) &&
         prevData.category === 'ECG';
@@ -479,7 +502,7 @@ const useFormHook = (
       reset({
         ...prevData,
         serial_number: serialNumber,
-        cardiac_monitoring: prevData.cardiac_monitoring?.toUpperCase() as any,
+        cardiac_monitoring: cardiacMonitoring,
       });
       setSelectors((prev: any) => ({ ...prev, site_id: prevData.site_id }));
       setSelectedValues({
@@ -490,9 +513,8 @@ const useFormHook = (
           value: prevData.category,
         },
         cardiac_monitoring: {
-          name: prevData.cardiac_monitoring?.toUpperCase() || undefined,
-          value:
-            (prevData.cardiac_monitoring?.toUpperCase() as any) || undefined,
+          name: cardiacMonitoring,
+          value: cardiacMonitoring,
         },
       });
     }
