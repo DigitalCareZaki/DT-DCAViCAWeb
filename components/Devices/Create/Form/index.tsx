@@ -89,8 +89,14 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
       ?.name || '';
   const selectedSiteName =
     sites?.find((site: any) => site.id === selectors.site_id)?.name || '';
-  const isSiteDisabled = isSuperAdmin && !selectors.branch_id;
   const isEcgCategory = selectedValues?.category?.value === 'ECG';
+  const isSiteDisabled =
+    !isEcgCategory || (isSuperAdmin && !selectors.branch_id);
+  const siteDisableMessage = !selectedValues?.category?.value
+    ? 'Please select category first'
+    : !isEcgCategory
+      ? 'Site is only available for ECG devices'
+      : 'Please select branch first';
 
   const handleSelectField = (field: string, value: any) => {
     setSelectedValues((prev: any) => {
@@ -408,6 +414,8 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
               error={!!errors.site_id?.message?.length}
               errorMessage={(errors as any).site_id?.message || '&'}
               selected={selectedSiteName}
+              disabled={isSiteDisabled}
+              disableMessage={siteDisableMessage}
             >
               {Array.isArray(sites) && sites.length > 0 ? (
                 sites.map((site: any) => (
@@ -439,7 +447,7 @@ const Form: ClientComponentProps<CreateDeviceProps> = ({ data }) => {
               errorMessage={(errors as any).site_id?.message || '&'}
               selected={selectedSiteName}
               disabled={isSiteDisabled}
-              disableMessage="Please select branch first"
+              disableMessage={siteDisableMessage}
             >
               {Array.isArray(sites) && sites.length > 0 ? (
                 sites.map((site: any) => (

@@ -80,19 +80,25 @@ const useFormHook = (
 
   const handleSelectByAbd = useCallback(
     async (name: string, value: string) => {
+      const prevCategory = getValues('category');
       const isEcg = value === 'ECG';
-      const wasEcg = getValues('category') === 'ECG';
+      const wasEcg = prevCategory === 'ECG';
 
       setValue('category', value as MeasurementType);
       clearErrors('category');
 
-      // AViCardia monitoring only applies to ECG devices: force NO for other
-      // categories, and make the user choose again when switching to ECG
+      // AViCardia monitoring and site are only selectable for ECG devices:
+      // force NO for other categories, and make the user choose again when
+      // switching to ECG
       if (!isEcg) {
         setValue('cardiac_monitoring', 'NO');
         clearErrors('cardiac_monitoring');
       } else if (!wasEcg) {
         setValue('cardiac_monitoring', null);
+        if (prevCategory) {
+          setSelectors((prev: any) => ({ ...prev, site_id: undefined }));
+          setValue('site_id', undefined);
+        }
       }
 
       setSelectedValues((prev) => ({
@@ -318,6 +324,21 @@ const useFormHook = (
     selectors.branch_id,
     selectors.site_id,
     prevData,
+  ]);
+
+  // Site is disabled for non-ECG devices, but the API still requires one:
+  // keep the current site or fall back to the first available site
+  useEffect(() => {
+    const category = selectedValues.category?.value;
+    if (!category || category === 'ECG' || selectors.site_id || !sites.length) {
+      return;
+    }
+    handleSelectSite(sites[0].id);
+  }, [
+    selectedValues.category?.value,
+    selectors.site_id,
+    sites,
+    handleSelectSite,
   ]);
 
   const handleSelectBranch = useCallback(
