@@ -277,7 +277,8 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
           <td className="px-4 py-4 text-center">
             {(() => {
               const status = el.vivalink_synced ? 'YES' : el.cardiac_monitoring;
-              const showSync = status !== 'YES';
+              // Vivalink sync only applies to ECG devices
+              const showSync = el.category === 'ECG' && status !== 'YES';
 
               if (!showSync) {
                 return <span className="text-gray-400">-</span>;
