@@ -296,10 +296,6 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
                         <p className="text-lg font-semibold text-gray-800">{selectedPatient?.samplingFrequency} <span className="text-xs font-normal">Hz</span></p>
                       </div>
                       <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
-                        <p className="text-xs text-gray-400 uppercase font-bold mb-1">Time Per Point</p>
-                        <p className="text-lg font-semibold text-gray-800">{selectedPatient?.timePerPoint}</p>
-                      </div>
-                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
                         <p className="text-xs text-gray-400 uppercase font-bold mb-1">Heart Rate</p>
                         <p className="text-lg font-bold text-red-600 flex items-center gap-1">
                           {selectedPatient?.otherAttributes?.vitals?.hr || 'N/A'}
