@@ -120,6 +120,7 @@ export { default as updateDevice } from './device/updateDevice';
 export { default as manageDevice } from './device/manageDevice';
 export { default as getAllDevicesForPatient } from './device/getAllDevicesForPatient';
 export { default as syncDevice } from './device/syncDevice';
+export { default as deleteDevice } from './device/deleteDevice';
 
 export { default as getEmailsHistory } from './emails/getEmailsHistory';
 export { default as resetPasswordRequest } from './user/resetPasswordRequest';

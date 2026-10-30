@@ -2,13 +2,15 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { FaEdit, FaSync, FaCheckCircle, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 import { CircleSpinner } from 'react-spinners-kit';
 
 import { getName } from '@init-globals';
-import { updateDevice, syncDevice } from '@service';
+import { updateDevice, syncDevice, deleteDevice } from '@service';
 import { showModalReducer } from '@slice';
+import { removeDevice } from 'store/devices.slice';
 
 import type { ClientComponentProps } from '@types';
 import type { Props } from './types';
@@ -34,6 +36,8 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
   const dispatch = useDispatch();
   const [syncingId, setSyncingId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<LoadingStep>('idle');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
 
   const StatusBadge = ({ status }: { status: string | boolean | undefined | null }) => {
     const isYes = status === true || status === 'YES';
@@ -240,9 +244,86 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
     }
   };
 
+  const confirmDelete = (el: any) => {
+    if (!el.vivalinkId) {
+      dispatch(showModalReducer({
+        type: 'WARNING',
+        message: 'This device is not synced with Vivalink',
+        show: true,
+      }));
+      return;
+    }
+
+    setDeleteTarget(el);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget?.vivalinkId) return;
+
+    try {
+      setDeletingId(deleteTarget.id);
+
+      const res = await deleteDevice(deleteTarget.vivalinkId);
+
+      if (!res.success) throw new Error(res.message || 'Cannot delete this device right now');
+
+      dispatch(removeDevice(deleteTarget.id));
+      dispatch(showModalReducer({
+        type: 'SUCCESS',
+        message: 'Device deleted successfully',
+        show: true,
+      }));
+    } catch (err: any) {
+      dispatch(showModalReducer({
+        type: 'ERROR',
+        message: err?.message || 'Cannot delete this device right now',
+        show: true,
+      }));
+    } finally {
+      setDeletingId(null);
+      setDeleteTarget(null);
+    }
+  };
+
   return (
     <>
       {syncingId && <ProgressiveLoadingOverlay />}
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="text-center">
+              <FaExclamationTriangle className="mx-auto mb-4 h-10 w-10 text-red-500" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Delete Device
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {`Do you want to delete device "${deleteTarget.title}"? This action cannot be undone.`}
+              </p>
+              <div className="flex justify-center space-x-4">
+                <button
+                  type="button"
+                  onClick={() => setDeleteTarget(null)}
+                  disabled={!!deletingId}
+                  className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={!!deletingId}
+                  className="flex items-center gap-2 px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors disabled:opacity-70"
+                >
+                  {deletingId && <CircleSpinner size={14} color="#ffffff" />}
+                  {deletingId ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
       {data.map((el: any) => (
         <tr
           key={el.id}
@@ -310,6 +391,23 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
                 className="hover:superadmin:text-theme-superadmin-primary hover:admin:text-theme-admin-primary hover:doctor:text-theme-doctor-primary hover:nurse:text-theme-nurse-primary cursor-pointer text-xl"
               />
             </Link>
+            {el.assigned ? (
+              <Link
+                passHref
+                href={`/${userRole}/devices/assign?id=${el.id}`}
+                className="px-3 py-1 rounded-md text-sm font-medium bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition"
+              >
+                Unpair
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => confirmDelete(el)}
+                className="px-3 py-1 rounded-md text-sm font-medium bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition"
+              >
+                Delete
+              </button>
+            )}
           </td>
         </tr>
       ))}
