@@ -244,26 +244,13 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
     }
   };
 
-  const confirmDelete = (el: any) => {
-    if (!el.vivalinkId) {
-      dispatch(showModalReducer({
-        type: 'WARNING',
-        message: 'This device is not synced with Vivalink',
-        show: true,
-      }));
-      return;
-    }
-
-    setDeleteTarget(el);
-  };
-
   const handleDelete = async () => {
-    if (!deleteTarget?.vivalinkId) return;
+    if (!deleteTarget) return;
 
     try {
       setDeletingId(deleteTarget.id);
 
-      const res = await deleteDevice(deleteTarget.vivalinkId);
+      const res = await deleteDevice(deleteTarget.id);
 
       if (!res.success) throw new Error(res.message || 'Cannot delete this device right now');
 
@@ -402,7 +389,7 @@ const RenderTable: ClientComponentProps<Props> = ({ userRole, data }) => {
             ) : (
               <button
                 type="button"
-                onClick={() => confirmDelete(el)}
+                onClick={() => setDeleteTarget(el)}
                 className="px-3 py-1 rounded-md text-sm font-medium bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition"
               >
                 Delete
