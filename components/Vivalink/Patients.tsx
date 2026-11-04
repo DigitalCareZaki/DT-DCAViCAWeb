@@ -54,12 +54,8 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
 
     if (!selectedPatient.name) return;
 
-    const patchSn = data[selectedPatient.name]?.[0]?.replace('/', '%2F');
-
-    if (!patchSn) return;
-
     try {
-      const res = await getDoctorSinglePatientFromVl(patchSn, duration);
+      const res = await getDoctorSinglePatientFromVl(selectedPatient.name, duration);
       setSelectedPatient({
         name: selectedPatient.name,
         ecg: res.data.ecg,
@@ -158,7 +154,7 @@ const Patients: ClientComponentProps<Props> = ({ data, avicaPatients = [], pagin
 
       // Fetch ECG data and History in parallel
       const [res, historyRes] = await Promise.all([
-        getDoctorSinglePatientFromVl(finalPatchSn, '1 minute'),
+        getDoctorSinglePatientFromVl(name, '1 minute'),
         getPatchHistory(finalPatchSn.replace('%2F', '/'), name)
       ]);
 
