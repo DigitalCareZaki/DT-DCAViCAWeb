@@ -55,6 +55,7 @@ const Form: ClientComponent = () => {
     uniqueChecking,
     hasUniqueConflict,
     handleUniqueFieldChange,
+    protocols,
   ] = useForm();
 
   const [showDob, setShowDob] = useState<boolean>(false);
@@ -603,8 +604,38 @@ const Form: ClientComponent = () => {
           </DropdownSecondary>
         </div>
       </div>
-      <div className="flex w-full items-center justify-between gap-10">
-        <div className="w-1/2">
+      <div className="grid w-full grid-cols-2 items-start gap-x-10 gap-y-5">
+        <div className="min-w-0">
+          <DropdownSecondary
+            title={protocols.loading ? 'Loading monitoring protocols...' : 'Select Monitring protocol'}
+            label="Monitring protocol"
+            borderTheme
+            inputWrapperClassName="bg-background"
+            icon="FaHeartbeat"
+            selected={selectors.monitring_protocol_id.title}
+            disabled={loading || protocols.loading}
+            disableMessage="Loading monitoring protocols..."
+            error={!!protocols.error}
+            errorMessage={protocols.error || '&'}
+          >
+            {protocols.data.length > 0 ? protocols.data.map((protocol) => (
+              <button
+                key={protocol.id}
+                type="button"
+                disabled={loading}
+                onClick={() => handleSelect('monitring_protocol_id')(protocol.name, protocol.id)}
+                className="flex min-h-10 w-full items-center rounded-lg bg-white p-2 px-4 text-left font-medium text-gray-500 transition duration-200 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {protocol.name}
+              </button>
+            )) : (
+              <p className="p-2 text-sm text-gray-500">
+                {protocols.error || 'No monitoring protocols available.'}
+              </p>
+            )}
+          </DropdownSecondary>
+        </div>
+        <div className="min-w-0">
           <DropdownSecondary
             title="Assign Doctor"
             label="Select Doctor"
@@ -641,7 +672,7 @@ const Form: ClientComponent = () => {
             )}
           </DropdownSecondary>
         </div>
-        <div className="w-1/2">
+        <div className="min-w-0">
           <DropdownSecondary
             title="Assign Nurse"
             label="Select Nurse"
@@ -659,9 +690,7 @@ const Form: ClientComponent = () => {
             </ClientGenerator>
           </DropdownSecondary>
         </div>
-      </div>
-      <div className="flex w-full items-start justify-between gap-10">
-        <div className="w-1/2">
+        <div className="min-w-0">
           <InputBasic
             title="Patient Current Address"
             label="Address"
@@ -677,7 +706,7 @@ const Form: ClientComponent = () => {
             disabled={loading}
           />
         </div>
-        <div className="w-1/2">
+        <div className="min-w-0">
           <div className="flex w-full flex-col gap-3 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-2">
               <span className="font-medium text-gray-500">

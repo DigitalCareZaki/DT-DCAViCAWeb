@@ -202,6 +202,7 @@ export { default as getThreadMessages } from './messages/getThreadMessages';
 
 export { default as createTheToken } from './agro/agro';
 export { default as syncVivalink } from './patients/syncVivalink';
+export { default as getPatientProtocols } from './patients/getPatientProtocols';
 
 // sites
 export { default as getDoctorSites } from './doctors/getDoctorSites';

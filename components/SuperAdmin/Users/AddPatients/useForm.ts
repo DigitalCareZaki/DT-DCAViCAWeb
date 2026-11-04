@@ -15,6 +15,7 @@ import {
   getOrganizationNurses,
   getSites,
   getSiteDoctors,
+  getPatientProtocols,
 } from '@service';
 import { showModalReducer } from '@slice';
 
@@ -30,6 +31,7 @@ import {
 
 import type { AddPatientProps, useFormProps, SelectorsProps, UsernameStatus } from './types';
 import type { UserUniqueFormField } from '../useUniqueUserCheck';
+import type { MonitoringProtocol } from '@types-services';
 import type {
   SelectOrganizationBranches,
   CountriesProps,
@@ -112,7 +114,17 @@ const useFormHook = (): useFormProps => {
       title: undefined,
       id: undefined,
     },
+    monitring_protocol_id: {
+      title: undefined,
+      id: undefined,
+    },
   });
+
+  const [protocols, setProtocols] = useState<{
+    loading: boolean;
+    data: MonitoringProtocol[];
+    error: string;
+  }>({ loading: true, data: [], error: '' });
 
   const [branches, setBranches] = useState<{
     loading: boolean;
@@ -293,6 +305,7 @@ const useFormHook = (): useFormProps => {
         doctor_id: selectors.doctor.id, // Use selector id for proper mapping
         nurse_id: selectors.nurse.id, // Use selector id for proper mapping
         cardiac_monitoring: selectors.cardiac_monitoring.title,
+        monitring_protocol_id: selectors.monitring_protocol_id.id,
       };
 
 
@@ -398,6 +411,33 @@ const useFormHook = (): useFormProps => {
     setValue('dob', iso as any, { shouldValidate: true });
     clearErrors('dob');
   };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await getPatientProtocols();
+        if (!cancelled) {
+          setProtocols({
+            loading: false,
+            data: res.success ? res.data : [],
+            error: res.success ? '' : 'Unable to load monitoring protocols.',
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setProtocols({
+            loading: false,
+            data: [],
+            error: 'Unable to load monitoring protocols.',
+          });
+        }
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -561,6 +601,7 @@ const useFormHook = (): useFormProps => {
     uniqueChecking,
     hasUniqueConflict,
     handleUniqueFieldChange,
+    protocols,
   ];
 };
 

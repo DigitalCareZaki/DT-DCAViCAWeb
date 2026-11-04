@@ -1,5 +1,6 @@
 import type { BaseSyntheticEvent } from 'react';
 import type { UseFormRegister, FieldErrors } from 'react-hook-form';
+import type { MonitoringProtocol } from '@types-services';
 import type {
   CitiesProps,
   CountriesProps,
@@ -35,6 +36,7 @@ export interface AddPatientProps {
   site: string;
   doctor: string;
   cardiac_monitoring: string;
+  monitring_protocol_id?: string;
 }
 
 export interface SelectorsProps {
@@ -71,6 +73,10 @@ export interface SelectorsProps {
     id: string | undefined;
   };
   cardiac_monitoring: {
+    title: string | undefined;
+    id: string | undefined;
+  };
+  monitring_protocol_id: {
     title: string | undefined;
     id: string | undefined;
   };
@@ -128,4 +134,5 @@ export type useFormProps = [
     field: UserUniqueFormField,
     value: string
   ) => void,
+  protocols: { loading: boolean; data: MonitoringProtocol[]; error: string },
 ];

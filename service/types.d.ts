@@ -702,3 +702,13 @@ export type GetPatchHistoryResponse = {
   success: boolean;
   data: PatchHistoryItem[];
 };
+
+export type MonitoringProtocol = {
+  id: string;
+  name: string;
+};
+
+export type GetPatientProtocolsResponse = {
+  success: boolean;
+  data: MonitoringProtocol[];
+};
